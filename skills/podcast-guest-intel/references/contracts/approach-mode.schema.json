@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://podcast-production.invalid/contracts/approach-mode.schema.json",
+  "title": "ApproachMode",
+  "description": "Um modo de abordagem do roteiro (ortogonal ao formato). Registro extensível em contracts/approach-modes.yaml: adicionar modo = 1 entrada. legal_risk=alto liga as recomendações de gate do guardian e de contraditório (recomendação + alerta; seguir contra exige aceite humano registrado).",
+  "type": "object",
+  "required": ["id", "label", "hook_style", "pacing", "source_rigor", "requires_counterpoint", "requires_guardian_gate", "legal_risk"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,40}$" },
+    "label": {
+      "type": "object",
+      "required": ["pt-BR", "en"],
+      "additionalProperties": false,
+      "properties": {
+        "pt-BR": { "type": "string" },
+        "en": { "type": "string" },
+        "es": { "type": "string" },
+        "zh": { "type": "string" }
+      }
+    },
+    "extends": { "type": "string", "description": "id de outro modo cujos defaults este herda." },
+    "description": { "type": "string" },
+    "hook_style": { "type": "string" },
+    "pacing": { "enum": ["lento", "moderado", "rapido"] },
+    "source_rigor": { "enum": ["padrao", "alto", "maximo"], "description": "maximo = afirmação sobre conduta de terceiro só como claim conduct_allegation=true; abaixo de tier 1 ou 2 fontes tier 2 independentes, a claim carrega advisory e o uso exige aceite humano (claim.schema.json, human-decision.schema.json)." },
+    "requires_counterpoint": { "type": "boolean" },
+    "requires_guardian_gate": { "type": "boolean" },
+    "legal_risk": { "enum": ["baixo", "medio", "alto"] },
+    "shelf_life": { "enum": ["evergreen", "timely", "misto"] },
+    "beats": {
+      "type": "array", "minItems": 1, "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,40}$" },
+      "description": "Movimentos de cada bloco do roteiro, em ordem (ex.: definicao, distincao, caso-pratico). Ausente: o roteiro usa contexto, desenvolvimento, pergunta."
+    },
+    "depth": { "enum": ["superficie", "media", "profunda"], "description": "Profundidade: perguntas por bloco (1, 2, 3). Ausente: derivada do pacing." },
+    "counterpoint_block": { "type": "boolean", "description": "true = o roteiro ganha um bloco de contraponto mesmo sem requires_counterpoint (opinião assumida como opinião)." }
+  },
+  "if": { "properties": { "legal_risk": { "const": "alto" } }, "required": ["legal_risk"] },
+  "then": {
+    "properties": {
+      "requires_guardian_gate": { "x-rule": "R-MODE-HIGH-RISK-GATE", "const": true },
+      "requires_counterpoint": { "x-rule": "R-MODE-HIGH-RISK-GATE", "const": true },
+      "source_rigor": { "x-rule": "R-MODE-HIGH-RISK-GATE", "const": "maximo" }
+    }
+  }
+}

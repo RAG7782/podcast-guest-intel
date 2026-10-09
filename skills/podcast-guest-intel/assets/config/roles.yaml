@@ -1,0 +1,399 @@
+# Roles & RBAC - Podcast Production Squad
+# Definição de papéis, responsabilidades e matriz RACI
+
+roles:
+  host:
+    title: "Host/Apresentador"
+    responsibilities:
+      - Conduzir episódios
+      - Definir tom e direção editorial
+      - Aprovar conteúdo final
+      - Representar o podcast publicamente
+    skills_required:
+      - Comunicação verbal excelente
+      - Conhecimento do tema
+      - Improvisação
+      - Gestão de entrevistas
+    time_commitment:
+      solo: "10-15h/semana"
+      studio: "15-25h/semana"
+      broadcast: "30-40h/semana"
+
+  co_host:
+    title: "Co-Host"
+    responsibilities:
+      - Apoiar host principal
+      - Trazer perspectiva complementar
+      - Backup do host em emergências
+      - Contribuir com research
+    skills_required:
+      - Química com host principal
+      - Expertise complementar
+      - Flexibilidade
+    time_commitment:
+      studio: "8-15h/semana"
+      broadcast: "15-25h/semana"
+
+  producer:
+    title: "Produtor"
+    responsibilities:
+      - Coordenar pipeline completo
+      - Gestão de cronograma
+      - Research e briefing
+      - Gestão de guests
+      - Decisões criativas
+      - Supervisão de qualidade
+    skills_required:
+      - Gestão de projetos
+      - Research
+      - Networking
+      - Visão criativa
+      - Comunicação
+    time_commitment:
+      studio: "20-30h/semana"
+      broadcast: "40h/semana"
+    reports_to: "Host/Owner"
+
+  editor:
+    title: "Editor de Áudio"
+    responsibilities:
+      - Edição de episódios
+      - Limpeza de áudio
+      - Inserção de música/efeitos
+      - Criação de clips
+      - QA técnico
+    skills_required:
+      - DAW proficiency (Descript, Logic, Pro Tools)
+      - Ear for audio quality
+      - Attention to detail
+      - Efficiency (múltiplos eps/semana)
+    time_commitment:
+      studio: "15-25h/semana"
+      broadcast: "40h/semana"
+    reports_to: "Producer"
+
+  engineer:
+    title: "Engenheiro de Áudio"
+    responsibilities:
+      - Setup técnico da gravação
+      - Monitoramento durante recording
+      - Mix e master final
+      - Troubleshooting técnico
+      - Manutenção de equipamento
+    skills_required:
+      - Audio engineering
+      - Mixing/mastering
+      - Spatial audio (tier broadcast)
+      - Hardware troubleshooting
+    time_commitment:
+      broadcast: "40h/semana"
+    reports_to: "Producer"
+    note: "Tier solo/studio: host ou editor assume"
+
+  designer:
+    title: "Designer Visual"
+    responsibilities:
+      - Cover art de episódios
+      - Thumbnails para plataformas
+      - Assets para social media
+      - Audiogramas
+      - Brand consistency
+    skills_required:
+      - Design gráfico
+      - Motion graphics (plus)
+      - Brand design
+      - Canva/Figma/Adobe
+    time_commitment:
+      studio: "5-10h/semana"
+      broadcast: "20-30h/semana"
+    reports_to: "Producer"
+    note: "Tier solo: pode ser freelancer ou AI tools"
+
+  growth:
+    title: "Growth/Marketing"
+    responsibilities:
+      - Estratégia de crescimento
+      - Social media management
+      - SEO de episódios
+      - Partnerships
+      - Analytics e otimização
+      - Newsletter
+    skills_required:
+      - Marketing digital
+      - SEO
+      - Social media
+      - Analytics
+      - Copywriting
+    time_commitment:
+      studio: "10-20h/semana"
+      broadcast: "40h/semana"
+    reports_to: "Host/Owner"
+
+  guest_coordinator:
+    title: "Coordenador de Guests"
+    responsibilities:
+      - Prospecção de guests
+      - Outreach e booking
+      - Briefing pre-gravação
+      - Logistics (tech check)
+      - Follow-up pós-episódio
+    skills_required:
+      - Networking
+      - Comunicação
+      - Organização
+      - Persistence
+    time_commitment:
+      studio: "5-15h/semana"
+      broadcast: "20-30h/semana"
+    reports_to: "Producer"
+    note: "Tier solo: producer assume"
+
+# Matriz RACI por processo
+# R = Responsible (executa), A = Accountable (aprova), C = Consulted, I = Informed
+
+raci_matrix:
+  gravacao:
+    prep_tech_setup:
+      R: [engineer, producer]
+      A: [producer]
+      I: [host]
+    briefing_guest:
+      R: [guest_coordinator, producer]
+      A: [host]
+      C: [producer]
+    conduzir_episodio:
+      R: [host, co_host]
+      A: [host]
+      C: [producer]
+      I: [engineer]
+    monitorar_tech:
+      R: [engineer, producer]
+      A: [engineer]
+    backup_files:
+      R: [engineer, producer]
+      A: [producer]
+
+  edicao:
+    edicao_rough_cut:
+      R: [editor]
+      A: [producer]
+      C: [host]
+    revisao_conteudo:
+      R: [host, producer]
+      A: [host]
+      C: [editor]
+    edicao_final:
+      R: [editor]
+      A: [producer]
+    mix_master:
+      R: [engineer, editor]
+      A: [engineer]
+      C: [producer]
+    criacao_clips:
+      R: [editor, designer]
+      A: [growth]
+      C: [host]
+
+  publicacao:
+    show_notes:
+      R: [producer, growth]
+      A: [producer]
+      C: [host]
+    transcricao:
+      R: [editor, producer]
+      A: [producer]
+    seo_metadata:
+      R: [growth]
+      A: [producer]
+      C: [host]
+    upload_plataformas:
+      R: [producer, growth]
+      A: [producer]
+    social_media:
+      R: [growth, designer]
+      A: [growth]
+      C: [host]
+    newsletter:
+      R: [growth]
+      A: [host]
+      C: [producer]
+
+  monetizacao:
+    negociacao_sponsors:
+      R: [host, producer]
+      A: [host]
+      C: [growth]
+    integracao_ads:
+      R: [editor, producer]
+      A: [producer]
+    gestao_membership:
+      R: [growth, producer]
+      A: [host]
+    reporting_financeiro:
+      R: [producer]
+      A: [host]
+      I: [growth]
+
+  crisis_management:
+    identificacao:
+      R: [growth, producer, host]
+      A: [host]
+    resposta_publica:
+      R: [host]
+      A: [host]
+      C: [producer, growth]
+    correcao_conteudo:
+      R: [editor, producer]
+      A: [host]
+    comunicacao_stakeholders:
+      R: [host, producer]
+      A: [host]
+
+# Permissões por ferramenta
+tool_permissions:
+  hosting_platform:
+    admin: [host, producer]
+    editor: [editor, growth]
+    viewer: [all]
+
+  daw_projects:
+    admin: [engineer, editor]
+    editor: [producer]
+    viewer: [host]
+
+  social_accounts:
+    admin: [host, growth]
+    editor: [designer]
+    viewer: [producer]
+
+  analytics:
+    admin: [host, producer, growth]
+    viewer: [all]
+
+  financial:
+    admin: [host]
+    editor: [producer]
+    viewer: [growth]
+
+# Decision workflows por nível
+decision_workflows:
+  low:
+    description: "Decisões operacionais do dia-a-dia"
+    examples:
+      - "Qual música usar na intro"
+      - "Timing de posts sociais"
+      - "Order de clips a publicar"
+    decision_maker: "Role responsável (R na RACI)"
+    approval_required: false
+    notification: "Informed roles"
+
+  medium:
+    description: "Decisões táticas que afetam qualidade/cronograma"
+    examples:
+      - "Mudar formato de episódio"
+      - "Adicionar novo segmento"
+      - "Investir em nova ferramenta"
+      - "Contratar freelancer"
+    decision_maker: "Producer"
+    approval_required: true
+    approver: "Host"
+    timeline: "24-48h"
+
+  high:
+    description: "Decisões estratégicas que afetam posicionamento/financeiro"
+    examples:
+      - "Mudar frequência de publicação"
+      - "Aceitar sponsor controverso"
+      - "Pivot de tema/audiência"
+      - "Expansão para novo formato (video)"
+    decision_maker: "Host"
+    approval_required: false
+    consultation_required: true
+    consulted: [producer, growth]
+    timeline: "1-2 semanas"
+
+  strategic:
+    description: "Decisões que afetam futuro do podcast"
+    examples:
+      - "Monetização (iniciar/mudar modelo)"
+      - "Sell/acquisition"
+      - "Rebrand completo"
+      - "Contratar equipe full-time"
+    decision_maker: "Host/Owner"
+    approval_required: false
+    consultation_required: true
+    consulted: [all_roles]
+    timeline: "1+ mês"
+
+# Backup plans
+backup_plans:
+  host_indisponivel:
+    immediate:
+      - "Co-host assume episódio (se houver)"
+      - "Producer grava solo com guest (interview format)"
+      - "Publicar episódio de backlog/best-of"
+    contingency_content:
+      - "Manter 2-3 episódios de buffer sempre"
+      - "Gravar episódios solo em lote"
+    communication:
+      - "Avisar audiência se atraso inevitável"
+      - "Transparência > desculpas genéricas"
+
+  editor_indisponivel:
+    immediate:
+      - "Produtor assume edição básica (Descript)"
+      - "Contratar editor freelancer de backup"
+      - "Usar buffer de episódios"
+    prevention:
+      - "Ter lista de freelancers confiáveis"
+      - "Descript permite qualquer pessoa editar por texto"
+
+  guest_cancelamento:
+    immediate:
+      - "Episódio solo pelo host"
+      - "Co-host interview"
+      - "Usar backlog de gravações"
+    prevention:
+      - "Gravar com 2+ semanas de antecedência"
+      - "Buffer de 2-3 episódios"
+      - "Guest backup list"
+
+  tech_failure_durante_gravacao:
+    immediate:
+      - "Dual recording (DAW + smartphone)"
+      - "Riverside local recording (backup automático)"
+      - "Restart e continuar"
+    prevention:
+      - "Tech check 15min antes"
+      - "Backup recording SEMPRE"
+      - "Equipamento redundante (broadcast tier)"
+
+# Tier-specific role assignments
+tier_assignments:
+  solo:
+    host: "1 pessoa"
+    producer: "Host assume"
+    editor: "Host assume (Descript AI-assist)"
+    designer: "Host assume (Canva templates) ou freelancer"
+    growth: "Host assume"
+    note: "1 pessoa faz tudo, AI tools reduzem carga"
+
+  studio:
+    host: "1-2 pessoas"
+    producer: "1 pessoa (pode ser host)"
+    editor: "1 pessoa ou freelancer"
+    designer: "Freelancer ou part-time"
+    growth: "1 pessoa part-time"
+    guest_coordinator: "Producer assume"
+    total_team: "2-4 pessoas"
+
+  broadcast:
+    host: "1-2 pessoas"
+    co_host: "0-2 pessoas"
+    producer: "1+ full-time"
+    editor: "1-2 full-time"
+    engineer: "1 full-time"
+    designer: "1 full-time"
+    growth: "1 full-time"
+    guest_coordinator: "1 part-time ou producer"
+    total_team: "5-10 pessoas"

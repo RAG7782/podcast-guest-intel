@@ -1,0 +1,171 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://podcast-production.invalid/contracts/script.schema.json",
+  "title": "Script",
+  "description": "Roteiro do episódio por modo de abordagem (manifesto HPF-3 squads/podcast-production/manifests/roteiro.md). Chaves, nesta ordem: meta, modo, roteiro, rastreabilidade, contraditorio, gate, status. O plugin recomenda e alerta; a decisão é humana: status pronto_para_gravar com recomendação desfavorável do @guardian (gate exigido e veredito diferente de aprovado) só vale com gate.human_decision em seguir_contra (R-SCRIPT-HUMAN-ACK). Em Python (scripts/roteiro_tools.py check): alertas calculados = gate.alertas; todo alerta de severidade atencao/alta coberto pelo aceite humano para pronto_para_gravar; refs a itens da pauta e a claims existem; rastreabilidade bate com o texto; modo e flags batem com contracts/approach-modes.yaml. pronto_para_gravar corresponde a episode-record.status ready_to_record.",
+  "type": "object",
+  "required": ["meta", "modo", "roteiro", "rastreabilidade", "contraditorio", "gate", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["script_id", "pauta_ref", "episode_ref", "duracao_alvo_min", "generated_at"],
+      "additionalProperties": false,
+      "properties": {
+        "script_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$" },
+        "pauta_ref": { "type": "string", "minLength": 1 },
+        "episode_ref": { "type": "string", "minLength": 1 },
+        "dossier_ref": { "type": "string" },
+        "host_profile_ref": { "type": "string" },
+        "format": { "type": "string", "description": "id em config/formats.yaml do squad." },
+        "locale": { "$ref": "show-profile.schema.json#/$defs/locale" },
+        "dossier_degraded": { "type": "boolean" },
+        "duracao_alvo_min": { "type": "integer", "minimum": 5, "maximum": 300 },
+        "modo_escolhido_pelo_humano": { "type": "boolean", "description": "true = o humano trocou o modo da pauta (o agente nunca troca)." },
+        "generated_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "modo": {
+      "type": "object",
+      "required": ["id", "extends_resolvido", "source_rigor", "requires_counterpoint", "requires_guardian_gate", "legal_risk", "hook_style", "pacing"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,40}$" },
+        "extends_resolvido": { "type": "array", "items": { "type": "string" }, "description": "Cadeia de extends resolvida (vazia = sem herança)." },
+        "source_rigor": { "enum": ["padrao", "alto", "maximo"] },
+        "requires_counterpoint": { "type": "boolean" },
+        "requires_guardian_gate": { "type": "boolean" },
+        "legal_risk": { "enum": ["baixo", "medio", "alto"] },
+        "hook_style": { "type": "string" },
+        "pacing": { "enum": ["lento", "moderado", "rapido"] },
+        "beats": { "type": "array", "items": { "type": "string" } },
+        "depth": { "enum": ["superficie", "media", "profunda"] }
+      }
+    },
+    "roteiro": {
+      "type": "array",
+      "minItems": 2,
+      "items": { "$ref": "#/$defs/bloco" },
+      "description": "Blocos em ordem: o primeiro é abertura e o último é encerramento."
+    },
+    "rastreabilidade": {
+      "type": "object",
+      "required": ["afirmacoes_total", "com_lastro", "cortadas"],
+      "additionalProperties": false,
+      "properties": {
+        "afirmacoes_total": { "type": "integer", "minimum": 0, "description": "Afirmações de natureza fato." },
+        "com_lastro": { "type": "integer", "minimum": 0 },
+        "cortadas": { "type": "integer", "minimum": 0, "description": "Afirmações cortadas na autoauditoria (declarado pelo agente)." }
+      }
+    },
+    "contraditorio": {
+      "type": ["array", "null"],
+      "items": { "$ref": "#/$defs/pedido_contraditorio" },
+      "description": "null quando o modo não recomenda contraditório."
+    },
+    "gate": {
+      "type": "object",
+      "required": ["exigido", "task", "veredito", "revisao_juridica", "alertas"],
+      "additionalProperties": false,
+      "properties": {
+        "exigido": { "type": "boolean", "description": "Espelha requires_guardian_gate do modo: a revisão é RECOMENDADA antes de gravar." },
+        "task": { "const": "fact-check-review" },
+        "veredito": { "enum": ["nao_aplicavel", "pendente", "aprovado", "aprovado_com_ajustes", "vetado"], "description": "Recomendação do @guardian (não é decisão)." },
+        "revisao_juridica": { "enum": ["nao_aplicavel", "pendente", "feita"] },
+        "alertas": { "type": "array", "items": { "$ref": "human-decision.schema.json#/$defs/alert" }, "description": "Alertas de responsabilidade calculados por roteiro_tools (refresh)." },
+        "human_decision": { "$ref": "human-decision.schema.json" }
+      }
+    },
+    "status": { "enum": ["rascunho", "aguardando_gate", "pronto_para_gravar"] }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": ["status", "gate"],
+        "properties": {
+          "status": { "const": "pronto_para_gravar" },
+          "gate": {
+            "required": ["exigido", "veredito"],
+            "properties": { "exigido": { "const": true }, "veredito": { "not": { "const": "aprovado" } } }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "gate": {
+            "x-rule": "R-SCRIPT-HUMAN-ACK",
+            "required": ["human_decision"],
+            "properties": {
+              "human_decision": {
+                "x-rule": "R-SCRIPT-HUMAN-ACK",
+                "required": ["decision"],
+                "properties": { "decision": { "x-rule": "R-SCRIPT-HUMAN-ACK", "const": "seguir_contra" } }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "bloco": {
+      "type": "object",
+      "required": ["ordem", "tipo", "titulo", "texto", "duracao_seg", "perguntas", "afirmacoes", "ressalvas"],
+      "additionalProperties": false,
+      "properties": {
+        "ordem": { "type": "integer", "minimum": 1 },
+        "tipo": { "enum": ["abertura", "bloco", "transicao", "contraponto", "encerramento"] },
+        "titulo": { "type": "string", "minLength": 1 },
+        "beat": { "type": "string", "description": "Movimento do modo que este bloco cumpre (approach-mode.beats)." },
+        "texto": { "type": "string", "minLength": 1, "description": "O que o host diz (fala de referência, não teatro)." },
+        "duracao_seg": { "type": "integer", "minimum": 5 },
+        "pauta_item_refs": { "type": "array", "items": { "type": "string" }, "description": "ids de itens da pauta (t1, c3, e1...)." },
+        "perguntas": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["texto", "tipo"],
+            "additionalProperties": false,
+            "properties": {
+              "texto": { "type": "string", "minLength": 1 },
+              "tipo": { "enum": ["ancora", "aprofundamento", "confirmacao", "contraponto"] },
+              "claim_ids": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        },
+        "afirmacoes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["texto", "natureza"],
+            "additionalProperties": false,
+            "properties": {
+              "texto": { "type": "string", "minLength": 1 },
+              "natureza": { "enum": ["fato", "opiniao", "hipotese"], "description": "fato exige lastro; opiniao é assumida como opinião; hipotese vira pergunta." },
+              "claim_ids": { "type": "array", "items": { "type": "string" } },
+              "fontes": { "type": "array", "items": { "type": "string", "format": "uri" } }
+            }
+          }
+        },
+        "ressalvas": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "pedido_contraditorio": {
+      "type": "object",
+      "required": ["parte", "canal", "prazo", "pedido_texto", "situacao"],
+      "additionalProperties": false,
+      "properties": {
+        "parte": { "type": "string", "minLength": 1 },
+        "canal": { "type": "string", "minLength": 1 },
+        "prazo": { "type": "string", "format": "date" },
+        "pedido_texto": { "type": "string", "minLength": 1, "description": "Pedido REDIGIDO pelo agente; quem envia é o humano (o agente nunca contata a parte)." },
+        "situacao": { "enum": ["redigido", "enviado", "respondido", "sem_resposta"] },
+        "enviado_por": { "type": "string", "description": "Humano que enviou (obrigatório fora de redigido)." },
+        "pedido_em": { "type": "string", "format": "date" },
+        "resposta": { "type": "string" }
+      },
+      "if": { "properties": { "situacao": { "enum": ["enviado", "respondido", "sem_resposta"] } }, "required": ["situacao"] },
+      "then": { "x-rule": "R-SCRIPT-CONTRADITORIO-ENVIO", "required": ["enviado_por", "pedido_em"] }
+    }
+  }
+}

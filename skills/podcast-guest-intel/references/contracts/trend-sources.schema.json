@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://podcast-production.invalid/contracts/trend-sources.schema.json",
+  "title": "TrendSources",
+  "description": "Registro de fontes de tendência. keyless funciona sem chave (fallback). byok usa chave do próprio usuário, verificada ao ser fornecida. O contrato NUNCA guarda o valor da chave: só a referência (variável de ambiente ou caminho no cofre) e o resultado da verificação.",
+  "type": "object",
+  "required": ["version", "sources"],
+  "additionalProperties": false,
+  "properties": {
+    "version": { "type": "integer", "minimum": 1 },
+    "sources": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/source" } }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "required": ["id", "kind", "provider", "priority", "enabled"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,40}$" },
+        "kind": { "enum": ["keyless", "byok"] },
+        "provider": { "type": "string" },
+        "priority": { "type": "integer", "minimum": 1, "description": "1 = consultar primeiro." },
+        "enabled": { "type": "boolean" },
+        "endpoint_template": { "type": "string", "description": "URL com placeholders {geo}, {query}, {hl}." },
+        "notes": { "type": "string" },
+        "credential": { "$ref": "#/$defs/credential" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "const": "byok" } } },
+          "then": { "x-rule": "R-TREND-BYOK-CREDENTIAL", "required": ["credential"] }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "keyless" } } },
+          "then": { "x-rule": "R-TREND-KEYLESS-NO-CREDENTIAL", "not": { "required": ["credential"] }, "required": ["endpoint_template"] }
+        }
+      ]
+    },
+    "credential": {
+      "type": "object",
+      "x-rule": "R-TREND-NO-SECRET-VALUE",
+      "description": "Somente referência + verificação. Qualquer outra chave (api_key, token, value, secret...) é recusada.",
+      "required": ["ref", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "ref": {
+          "type": "object",
+          "required": ["store", "name"],
+          "additionalProperties": false,
+          "properties": {
+            "store": { "enum": ["env", "vault"] },
+            "name": { "type": "string", "pattern": "^[A-Za-z0-9_./:-]{1,128}$", "description": "Nome da variável de ambiente ou caminho no cofre — nunca o valor." }
+          }
+        },
+        "status": { "enum": ["not_provided", "unverified", "valid", "invalid", "expired", "revoked"] },
+        "verified_at": { "type": "string", "format": "date-time" },
+        "verification_note": { "type": "string", "maxLength": 200 }
+      },
+      "if": { "properties": { "status": { "enum": ["valid", "invalid", "expired", "revoked"] } } },
+      "then": { "x-rule": "R-TREND-VERIFIED-AT", "required": ["verified_at"] }
+    }
+  }
+}

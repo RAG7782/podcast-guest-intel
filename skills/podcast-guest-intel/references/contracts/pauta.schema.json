@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://podcast-production.invalid/contracts/pauta.schema.json",
+  "title": "Pauta",
+  "description": "Pauta ranqueada em 3 troncos: trend (tendência x perfil), continuity (catálogo/memória), editorial (linha do host). Cada item aponta para claims, episódios ou tendências que o sustentam. dossier_degraded copia guest-dossier.degraded para baixar a confiança. Cada tronco tem no máximo max_items_per_trunk itens (default 5, faixa 1-10; conferido em Python: R-PAUTA-MAX-ITEMS).",
+  "type": "object",
+  "required": ["pauta_id", "episode_ref", "show_ref", "approach_mode", "format", "dossier_degraded", "trunks"],
+  "additionalProperties": false,
+  "properties": {
+    "pauta_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$" },
+    "episode_ref": { "type": "string" },
+    "show_ref": { "type": "string" },
+    "host_profile_ref": { "type": "string" },
+    "dossier_ref": { "type": "string" },
+    "approach_mode": { "type": "string", "description": "id em contracts/approach-modes.yaml." },
+    "format": { "type": "string", "description": "id em config/formats.yaml do squad." },
+    "dossier_degraded": { "type": "boolean" },
+    "max_items_per_trunk": {
+      "type": "integer", "minimum": 1, "maximum": 10, "default": 5, "x-rule": "R-PAUTA-MAX-RANGE",
+      "description": "Teto de itens por tronco aplicado nesta pauta. Vem de show-profile.pauta_max_items_per_trunk ou de parâmetro do usuário; ausente = 5."
+    },
+    "locale": { "$ref": "show-profile.schema.json#/$defs/locale" },
+    "trunks": {
+      "type": "object",
+      "required": ["trend", "continuity", "editorial"],
+      "additionalProperties": false,
+      "properties": {
+        "trend": { "type": "array", "maxItems": 10, "items": { "$ref": "#/$defs/item" } },
+        "continuity": { "type": "array", "maxItems": 10, "items": { "$ref": "#/$defs/item" } },
+        "editorial": { "type": "array", "maxItems": 10, "items": { "$ref": "#/$defs/item" } }
+      }
+    },
+    "generated_at": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "item": {
+      "type": "object",
+      "required": ["id", "title", "rationale", "rank"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string", "minLength": 1 },
+        "rationale": { "type": "string", "minLength": 1 },
+        "rank": { "type": "integer", "minimum": 1 },
+        "score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "questions": { "type": "array", "items": { "type": "string" } },
+        "claim_ids": { "type": "array", "items": { "type": "string" } },
+        "episode_refs": { "type": "array", "items": { "type": "string" } },
+        "trend_refs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["source_id", "observed_at"],
+            "additionalProperties": false,
+            "properties": {
+              "source_id": { "type": "string" },
+              "url": { "type": "string", "format": "uri" },
+              "observed_at": { "type": "string", "format": "date-time" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

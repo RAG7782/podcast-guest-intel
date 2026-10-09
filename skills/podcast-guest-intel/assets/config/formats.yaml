@@ -1,0 +1,438 @@
+# Episode Formats - Podcast Production Squad
+# Especificações detalhadas por formato de episódio
+
+interview:
+  title: "Entrevista"
+  description: "Formato clássico host + guest"
+  duration: "45-60 min"
+  tracks: 2
+  difficulty: "Medium"
+  best_for:
+    - "Authority building (trazer experts)"
+    - "Network expansion"
+    - "Diverse perspectives"
+    - "Audience growth via guest's audience"
+
+  structure:
+    cold_open:
+      duration: "30-60s"
+      content: "Trecho mais impactante da entrevista (teaser)"
+      purpose: "Hook imediato, mostrar valor"
+
+    intro:
+      duration: "30-60s"
+      content:
+        - "Apresentação do podcast (breve)"
+        - "Apresentação do guest"
+        - "Value promise do episódio"
+      avoid: "Intro > 90s = dobro da taxa de abandono"
+
+    main_interview:
+      duration: "35-50 min"
+      blocks:
+        - name: "Background/Context"
+          duration: "5-10 min"
+          purpose: "Estabelecer credibilidade do guest"
+
+        - name: "Core Content"
+          duration: "25-35 min"
+          purpose: "Deep dive no tema principal"
+          structure: "3-5 blocos temáticos"
+
+        - name: "Actionable Insights"
+          duration: "5-10 min"
+          purpose: "Takeaways práticos para audiência"
+
+      pacing:
+        - "Variar energia: alto → médio → alto"
+        - "Transition music entre blocos (15-30s)"
+        - "Evitar blocos > 15 min sem break"
+
+    rapid_fire:
+      duration: "3-5 min"
+      content: "5-10 perguntas rápidas (opcional)"
+      purpose: "Humanizar guest, lighter tone"
+      examples:
+        - "Livro que mudou sua vida"
+        - "Conselho para você 10 anos atrás"
+        - "Ferramenta que você não vive sem"
+
+    outro:
+      duration: "1-2 min"
+      content:
+        - "Resumo de 1-2 key takeaways"
+        - "Como seguir o guest (social, website)"
+        - "CTA (newsletter, review, próximo episódio)"
+      avoid: "Outro longo com agradecimentos genéricos"
+
+  prep_requirements:
+    research: "4-8 horas"
+    questions: "15-25 perguntas preparadas (usar 8-12)"
+    tech_check: "15 min com guest 2 dias antes"
+    briefing: "Enviar 2 dias antes com overview + tom"
+
+  common_mistakes:
+    - "Não fazer research do guest (entrevista genérica)"
+    - "Interromper respostas constantemente"
+    - "Perguntas sim/não em vez de abertas"
+    - "Não adaptar ao flow (preso ao script)"
+    - "Esquecer de pedir exemplos concretos"
+
+solo:
+  title: "Solo/Monólogo"
+  description: "Host sozinho, narrativa direta"
+  duration: "20-40 min"
+  tracks: 1
+  difficulty: "Hard (requer storytelling strong)"
+  best_for:
+    - "Authority positioning"
+    - "Ensinar conceitos complexos"
+    - "Personal takes/commentary"
+    - "Episódios time-sensitive"
+
+  structure:
+    hook:
+      duration: "15-30s"
+      content: "Promessa específica de valor"
+      examples:
+        - "Neste episódio você vai aprender X que vai Y"
+        - "Descobri Z fazendo A, vou mostrar como"
+      avoid: "Hook genérico ('hoje vamos falar sobre...')"
+
+    intro:
+      duration: "30-45s"
+      content:
+        - "Contexto do tema (por que importa)"
+        - "Personal connection (por que você é autoridade)"
+      keep_tight: "Solo = sem guest para carregar, host precisa entregar valor constante"
+
+    main_content:
+      duration: "15-30 min"
+      structure_options:
+        framework_based:
+          name: "Framework/Lista"
+          example: "5 passos para X"
+          blocks: "1 bloco por item (3-7 min cada)"
+
+        story_based:
+          name: "Story Arc"
+          blocks:
+            - "Setup (problema/contexto)"
+            - "Development (tentativas/learnings)"
+            - "Resolution (solução/takeaway)"
+
+        debate_based:
+          name: "Argument"
+          blocks:
+            - "Thesis (posição)"
+            - "Evidence (dados/exemplos)"
+            - "Counterarguments (reconhecer)"
+            - "Conclusion (reforçar)"
+
+      pacing:
+        - "Mudar energia a cada 5-7 min"
+        - "Usar music beds para transitions"
+        - "Exemplos concretos a cada 3-5 min"
+        - "NUNCA monotonia > 10 min"
+
+    cta:
+      duration: "1-2 min"
+      content:
+        - "Resumo de 1 key takeaway"
+        - "Action step (o que fazer agora)"
+        - "CTAs (newsletter, community, next episode)"
+
+  prep_requirements:
+    research: "2-6 horas"
+    outline: "Detailed (solo = fácil perder flow)"
+    rehearsal: "Recommended (at least intro/hook)"
+    B_roll_content: "Considerar examples/data to display (se video)"
+
+  common_mistakes:
+    - "Rambling sem estrutura clara"
+    - "Monotonia (mesma energia durante todo episódio)"
+    - "Over-reliance em notes (soar como leitura)"
+    - "Falta de examples concretos"
+    - "Episódio > 40 min (audiência cansa sem guest interaction)"
+
+narrative:
+  title: "Narrativo/Storytelling"
+  description: "Produção estilo documentary, multi-layered"
+  duration: "30-45 min"
+  tracks: "Multi-track (narração + entrevistas + ambience + music)"
+  difficulty: "Very Hard"
+  best_for:
+    - "Investigative content"
+    - "Historical deep-dives"
+    - "True crime, business case studies"
+    - "Premium positioning"
+
+  structure:
+    act_1_setup:
+      duration: "8-12 min"
+      purpose: "Estabelecer stakes e hook"
+      elements:
+        - "Cold open (inciting incident)"
+        - "Narração: contexto/background"
+        - "Introduce characters/players"
+        - "Setup do conflito/questão central"
+      music: "Atmospheric, builds tension"
+
+    act_2_development:
+      duration: "15-25 min"
+      purpose: "Explorar complexidade, twists"
+      elements:
+        - "Entrevistas (múltiplas perspectivas)"
+        - "Narração weaving story"
+        - "Evidence/data presentation"
+        - "Complications/obstacles"
+      pacing: "Ondas de revelação, maintain mystery"
+
+    act_3_resolution:
+      duration: "7-10 min"
+      purpose: "Payoff, conclusão, meaning"
+      elements:
+        - "Climax (revelação principal)"
+        - "Resolução (o que aconteceu)"
+        - "Reflection (o que isso significa)"
+        - "Broader implications"
+      music: "Resolve tension, reflective"
+
+  production_elements:
+    narration:
+      style: "Scripted, ensaiado, múltiplos takes"
+      delivery: "Conversational mas polished"
+      pacing: "Deliberado, pausas intencionais"
+
+    interviews:
+      count: "3-7 por episódio"
+      duration: "30s-3min cada clip (edited)"
+      purpose: "Humanizar, multiple POVs, credibility"
+
+    sound_design:
+      ambience: "Background sounds para imersão"
+      sfx: "Punctuate momentos-chave"
+      music: "Original score ou library (licensed)"
+      mix: "Camadas balanceadas, clear narration"
+
+  prep_requirements:
+    research: "20-40 horas"
+    script: "Fully scripted (3000-5000 palavras)"
+    interviews: "Gravar 5-10, usar 3-7"
+    production_time: "3-5x mais que outros formatos"
+
+  tier_requirements:
+    minimum: "Studio (recursos + tempo)"
+    ideal: "Broadcast (equipe dedicada)"
+    investment: "Alto, usar estrategicamente"
+
+round_table:
+  title: "Mesa-Redonda"
+  description: "3-5 participantes, discussão multi-perspectiva"
+  duration: "45-60 min"
+  tracks: "3-5"
+  difficulty: "Hard (moderação complexa)"
+  best_for:
+    - "Temas controversos (múltiplas opiniões)"
+    - "Expertise complementar"
+    - "Entertainment (chemistry entre participantes)"
+    - "Community building"
+
+  structure:
+    intro:
+      duration: "2-3 min"
+      content:
+        - "Apresentação do tema"
+        - "Apresentação de cada participante (30s cada)"
+        - "Setup do formato/regras"
+
+    blocks_tematicos:
+      count: "3-5 blocos"
+      duration: "10-15 min cada"
+      structure:
+        - "Moderador introduz tópico"
+        - "Cada participante contribui"
+        - "Discussão aberta"
+        - "Moderador resume/transiciona"
+
+    lightning_round:
+      duration: "5-10 min"
+      content: "Quick takes de cada um em tópicos rápidos"
+      purpose: "Energia, variety, quotable moments"
+
+    closing:
+      duration: "3-5 min"
+      content:
+        - "Cada participante: 1 key takeaway"
+        - "Moderador: síntese"
+        - "CTAs"
+
+  moderation_rules:
+    moderator_role:
+      - "Facilitar, não dominar"
+      - "Garantir todos participam igualmente"
+      - "Manter on-topic"
+      - "Inject questions quando estagnar"
+      - "Manage conflitos construtivamente"
+
+    participant_guidelines:
+      - "Evitar interrupções"
+      - "Build on others' points"
+      - "Disagree respectfully"
+      - "Self-moderate (não monopolizar)"
+
+  tech_considerations:
+    recording: "Separate tracks essencial (edição)"
+    platform: "Riverside, Zencastr (supports 3-5)"
+    backup: "Zoom recording como backup"
+    monitoring: "Producer monitora levels de todos"
+
+  common_mistakes:
+    - "Moderador passivo (discussão vira caos)"
+    - "1-2 pessoas dominam, outros silenciosos"
+    - "Off-topic tangents sem direcionamento"
+    - "Muitos participantes (>5 = difícil acompanhar)"
+    - "Falta de prep (participantes improvisam demais)"
+
+miniseries:
+  title: "Minissérie"
+  description: "Arco narrativo multi-episódio (3-8 eps)"
+  duration: "30-40 min por episódio"
+  tracks: "Varia por formato base"
+  difficulty: "Very Hard (planejamento extenso)"
+  best_for:
+    - "Deep-dive em tema complexo"
+    - "Launch de novo podcast (testar receptividade)"
+    - "Premium content (membership)"
+    - "Event-based (conference, product launch)"
+
+  structure:
+    episode_1_intro:
+      purpose: "Hook + setup completo"
+      extra_time: "+5 min vs episódios restantes"
+      content:
+        - "Apresentação da série"
+        - "Por que este tema importa"
+        - "O que esperar em cada episódio"
+        - "Conteúdo do Ep1"
+
+    middle_episodes:
+      structure: "Cada episódio = um aspecto/ângulo"
+      consistency:
+        - "Mesma intro music/branding"
+        - "Recap rápido (30s) do episódio anterior"
+        - "Teaser do próximo no final"
+
+    final_episode:
+      purpose: "Conclusão + síntese"
+      content:
+        - "Recap da jornada"
+        - "Conclusões/takeaways gerais"
+        - "Next steps para audiência"
+        - "CTA (continuar acompanhando podcast)"
+
+  planning:
+    pre_production: "Planejar série completa ANTES de lançar Ep1"
+    cadence: "Semanal ou bi-semanal (consistência > velocidade)"
+    buffer: "Gravar 2-3 episódios antes de lançar Ep1"
+
+  marketing:
+    pre_launch: "Teaser 1-2 semanas antes"
+    launch: "Drop Ep1+2 juntos (hook audience)"
+    during: "Clips + discussion em community"
+    post: "Compile em single feed ou 'binge' playlist"
+
+live:
+  title: "Live/Ao Vivo"
+  description: "Gravação ao vivo com audiência"
+  duration: "60-90 min"
+  tracks: "2+ (host + guests + audience Q&A)"
+  difficulty: "Very Hard (imprevisível)"
+  best_for:
+    - "Community engagement"
+    - "Events (conference, milestone)"
+    - "Time-sensitive (breaking news)"
+    - "Cross-promotion (guest's audience presente)"
+
+  structure:
+    pre_show:
+      duration: "10-15 min"
+      content: "Music, chat aberto, countdown"
+      purpose: "Audiência se acomoda, hype building"
+
+    show:
+      intro: "2-3 min (energético, acknowledge live audience)"
+      main_content: "40-60 min (formato flexível)"
+      audience_interaction: "15-20 min (Q&A, polls, comments)"
+      outro: "5 min (recap, CTAs, thank audience)"
+
+  platforms:
+    primary: [YouTube Live, Twitch]
+    secondary: [LinkedIn Live, Twitter Spaces]
+    simultaneous: "StreamYard, Restream (multi-platform)"
+
+  tech_stack:
+    streaming: "OBS, StreamYard, Restream"
+    recording: "Separate local recording (backup + podcast version)"
+    interaction: "Chat moderation (dedicated moderator)"
+    backup: "Backup internet (mobile hotspot)"
+
+  post_live:
+    podcast_version:
+      - "Editar Q&A (manter melhores 3-5 perguntas)"
+      - "Remover dead air/tech issues"
+      - "Adicionar intro/outro padrão"
+      - "Publicar como episódio regular"
+    clips: "Highlights do chat/reações"
+    replay: "Disponibilizar no YouTube"
+
+bonus:
+  title: "Bonus/Behind-the-Scenes"
+  description: "Conteúdo extra, informal"
+  duration: "10-20 min"
+  difficulty: "Easy"
+  best_for:
+    - "Membership perks"
+    - "Buffer entre episódios principais"
+    - "Humanizar hosts"
+    - "Repurpose outtakes"
+
+  types:
+    bts: "Bastidores da gravação, bloopers"
+    ama: "Ask Me Anything com audiência"
+    micro: "Mini-episódio em tópico específico"
+    commentary: "Host reage a episódio antigo"
+    update: "Novidades do podcast/comunidade"
+
+  production:
+    quality: "Lower bar (informal é feature, não bug)"
+    editing: "Mínimo (keep authentic)"
+    cadence: "Irregular, quando há conteúdo"
+
+# Format selection guide
+selection_guide:
+  starting_out:
+    recommended: [interview, solo]
+    avoid: [narrative, live]
+    reason: "Formatos simples, menor investment, aprender craft"
+
+  established:
+    experiment_with: [round_table, miniseries]
+    reason: "Audiência existente, recursos para investir"
+
+  premium:
+    signature_format: [narrative, live, miniseries]
+    reason: "Diferenciação, production value alto"
+
+# Mix recommendations
+format_mix:
+  solo_podcast:
+    main: "Solo (70%)"
+    variety: "Interview (20%), Bonus (10%)"
+
+  interview_podcast:
+    main: "Interview (80%)"
+    variety: "Solo (15%), Bonus (5%)"
+
+  variety_show:
+    mix: "Interview (40%), Solo (30%), Round-table (20%), Bonus (10%)"

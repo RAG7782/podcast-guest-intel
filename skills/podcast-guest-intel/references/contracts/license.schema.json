@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://podcast-production.invalid/contracts/license.schema.json",
+  "title": "License",
+  "description": "Licença do servidor MCP remoto (F9) como sai do store para admin, suporte e export (mcp-server/admin.py `list --json`). A chave NUNCA aparece: o banco guarda só sha256(chave) e `key_hint` (8 primeiros caracteres, para o suporte reconhecer a chave que o cliente lê). Dados pessoais mínimos (LGPD): e-mail e plano. Ver docs/LICENSING.md.",
+  "type": "object",
+  "required": ["license_id", "key_hint", "plan", "status", "created_at"],
+  "additionalProperties": false,
+  "properties": {
+    "license_id": { "type": "string", "pattern": "^lic_[0-9a-f]{16}$" },
+    "key_hint": { "type": "string", "pattern": "^pgi_[A-Za-z0-9_-]{4}$", "description": "Prefixo de 8 caracteres; nunca a chave inteira." },
+    "plan": { "enum": ["free", "individual_solo", "individual_duo", "enterprise_10", "enterprise_20"], "description": "Chave de pricing/plans.yaml." },
+    "status": { "enum": ["active", "suspended", "revoked"] },
+    "email": { "type": "string", "format": "email" },
+    "parent_id": { "type": "string", "pattern": "^lic_[0-9a-f]{16}$", "description": "Presente só em assento de Enterprise: a licença do dono." },
+    "provider": { "enum": ["admin", "paddle", "polar", "lemonsqueezy", "hotmart"] },
+    "subscription_ref": { "type": "string", "minLength": 1, "description": "Id da assinatura no provedor (ex.: sub_...). Não é segredo." },
+    "expires_at": { "type": "string", "format": "date-time", "description": "Fim do reverse trial; depois cai para o Free (não é recusa)." },
+    "revoked_reason": { "type": "string", "minLength": 1, "description": "refund, chargeback, canceled, seat_removed, admin." },
+    "extra_seats": { "type": "integer", "minimum": 0, "description": "Expansão +5/+10 sobre Enterprise." },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

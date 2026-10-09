@@ -1,0 +1,374 @@
+# AI Pipeline - Podcast Production Squad
+# Stack de IA integrada para otimização do workflow
+
+# OVERVIEW
+philosophy:
+  principle: "AI augments, não substitui, decisões humanas"
+  goals:
+    - "Reduzir trabalho manual repetitivo"
+    - "Manter controle criativo humano"
+    - "Acelerar workflow sem sacrificar qualidade"
+
+  human_vs_ai:
+    ai_excels:
+      - "Transcrição"
+      - "Noise reduction"
+      - "Clip detection"
+      - "Metadata generation"
+      - "Repetitive editing tasks"
+
+    human_critical:
+      - "Creative direction"
+      - "Tone e messaging"
+      - "Guest interaction"
+      - "Final QA"
+      - "Strategic decisions"
+
+# PIPELINE STEP-BY-STEP
+pipeline:
+  step_1_recording:
+    tool: "Riverside"
+    ai_features:
+      local_capture:
+        description: "Grava localmente em cada participante"
+        benefit: "Studio quality mesmo com internet ruim"
+
+      noise_reduction:
+        description: "AI noise reduction em tempo real"
+        benefit: "Clean audio desde a captura"
+
+      auto_leveling:
+        description: "Normaliza levels entre participantes"
+        benefit: "Consistent volume"
+
+    human_role:
+      - "Conduzir conversa"
+      - "Monitorar tech issues"
+      - "Ajustar if AI settings inadequados"
+
+  step_2_editing:
+    tool: "Descript"
+    ai_features:
+      edit_by_text:
+        description: "Edita áudio editando transcrição"
+        time_saved: "60% vs DAW tradicional"
+        workflow:
+          - "AI transcreve automaticamente"
+          - "Editor marca erros/silêncios no texto"
+          - "Delete text = delete audio"
+
+      filler_removal:
+        description: "Detecta e remove 'ãh', 'hm', 'tipo', etc"
+        settings: "Adjustable (aggressive vs conservative)"
+        caution: "Pode remover thinking pauses naturais"
+
+      ai_noise_reduction:
+        description: "Studio Sound (1-click noise/echo removal)"
+        quality: "Impressionante para remote recordings"
+        limitation: "Não milagre se audio muito ruim"
+
+      voice_clone_fix:
+        description: "Overdub - clona voz para corrigir erros"
+        use_case: "Corrigir nome mispronounced, add words"
+        ethical: "Disclose se usado extensivamente"
+
+    human_role:
+      - "Decidir o que cortar (conteúdo)"
+      - "Estruturar narrativa"
+      - "Ajustar pacing"
+      - "QA final (AI pode introduzir artifacts)"
+
+  step_3_clips:
+    tool: "Opus Clip"
+    ai_features:
+      virality_scoring:
+        description: "Score 0-100 de potencial viral"
+        factors: [hook, retention, call-to-action, trendy_topics]
+        accuracy: "~70-80% aligned com performance real"
+
+      auto_clip_detection:
+        description: "Identifica best moments para clips"
+        duration: "30-120s ideais para social"
+        edits: "Cuts automáticos para remover gaps"
+
+      caption_generation:
+        description: "Legendas com 97% accuracy"
+        styles: "Templates customizáveis (cores, fonts)"
+        benefit: "Accessibility + retention (85% watch sem som)"
+
+      resize_automation:
+        description: "Auto-resize para cada plataforma"
+        outputs: ["16:9 (YouTube)", "9:16 (Shorts/Reels)", "1:1 (feed)"]
+
+    human_role:
+      - "Review scores (AI não é perfeito)"
+      - "Select final clips (3-5 de 10+ sugestões)"
+      - "Ajustar branding (cores, logos)"
+      - "Schedule posting strategy"
+
+  step_4_transcription:
+    tool_primary: "Whisper (local)"
+    tool_secondary: "Riverside/Descript built-in"
+
+    ai_features:
+      speaker_labeling:
+        description: "Identifica quem está falando"
+        accuracy: "90-95% se voices distintas"
+
+      timestamps:
+        description: "Timestamp por frase/parágrafo"
+        formats: ["SRT", "VTT", "JSON"]
+
+      multi_language:
+        description: "Whisper suporta 50+ idiomas"
+        use_case: "Episódios em inglês ou multilingual"
+
+    human_role:
+      - "Review e correção (AI erra nomes próprios)"
+      - "Clean up (remover fillers da transcrição)"
+      - "Format para publicação"
+
+  step_5_content:
+    tool: "Podsqueeze"
+    ai_features:
+      show_notes_generation:
+        description: "Gera show notes de episódio"
+        output: "Resumo + key points + quotes"
+        quality: "80% ready, 20% human polish"
+
+      social_posts:
+        description: "Draft posts para cada plataforma"
+        platforms: [Twitter, LinkedIn, Instagram, Facebook]
+        customization: "Tom ajustável por plataforma"
+
+      timestamps:
+        description: "Identifica tópicos + timestamps"
+        format: "00:00 Intro | 05:30 Tópico X | ..."
+        benefit: "Navegação + SEO (YouTube)"
+
+      blog_post:
+        description: "Converte episódio em artigo"
+        use_case: "SEO + audiência que prefere ler"
+
+    human_role:
+      - "Edit para brand voice"
+      - "Add CTAs específicos"
+      - "SEO optimization (keywords)"
+
+  step_6_analytics:
+    tool: "Platform analytics + custom"
+    ai_features:
+      drop_off_analysis:
+        description: "Identifica onde audiência abandona"
+        insight: "Pode indicar pacing issues, tópicos fracos"
+        action: "Ajustar estrutura em próximos eps"
+
+      sentiment_analysis:
+        description: "Analisa comentários (positivo/negativo/neutro)"
+        sources: [YouTube, Spotify, social media]
+        benefit: "Understand audiência sentiment"
+
+      audience_clustering:
+        description: "Agrupa audiência por interesses"
+        data_source: "Listening patterns, demographics"
+        use_case: "Targeted content strategy"
+
+    human_role:
+      - "Interpretar insights"
+      - "Decidir strategic adjustments"
+      - "Balance data vs creative intuition"
+
+# AUTOMATION WORKFLOWS
+automation_workflows:
+  post_recording:
+    trigger: "Recording finalizada"
+    steps:
+      - "Riverside auto-upload raw files para cloud"
+      - "Descript import + transcribe"
+      - "Notification para editor: 'Ready to edit'"
+    time_to_ready: "15-30 min (depende duração)"
+
+  post_editing:
+    trigger: "Master WAV exportado"
+    steps:
+      - "Opus Clip auto-generate clips"
+      - "Podsqueeze generate show notes"
+      - "Notification: 'Clips + show notes ready for review'"
+    time_to_ready: "30-60 min"
+
+  post_publish:
+    trigger: "Episódio publicado"
+    steps:
+      - "Buffer schedule social posts (draft by AI)"
+      - "Substack send newsletter (draft by AI)"
+      - "Community notification (Discord/Telegram)"
+    time_to_execution: "Scheduled by human"
+
+# TIME SAVINGS ESTIMATION
+time_savings:
+  transcription:
+    traditional: "60 min episódio = 180-240 min transcrição manual"
+    ai: "60 min episódio = 10-15 min (AI) + 15-30 min (review)"
+    savings: "75-85% reduction"
+
+  editing:
+    traditional: "60 min episódio = 4-8h edição em DAW"
+    ai_descript: "60 min episódio = 2-3h edit-by-text"
+    savings: "50-60% reduction"
+
+  clip_selection:
+    traditional: "Listen full episode + manually cut = 2-3h"
+    ai_opus: "Review 10 AI clips + select 3-5 = 20-30 min"
+    savings: "80-90% reduction"
+
+  show_notes:
+    traditional: "Write from scratch = 1-2h"
+    ai_podsqueeze: "Review + edit AI draft = 15-30 min"
+    savings: "70-80% reduction"
+
+  total_per_episode:
+    traditional: "12-20h"
+    ai_assisted: "5-8h"
+    savings: "60% reduction"
+
+# COST ANALYSIS
+cost_analysis:
+  tools:
+    riverside: "$15/mo"
+    descript: "$24/mo"
+    opus_clip: "$15/mo"
+    podsqueeze: "$10/mo"
+    whisper: "Free (local) ou $0.006/min (API)"
+    total: "~$65/mo (+ electricity for local Whisper)"
+
+  roi:
+    cost: "R$325/mês (tools)"
+    time_saved: "7-12h/episódio"
+    hourly_value: "R$50/h (low) to R$200/h (high)"
+    savings_per_episode: "R$350-2400"
+    break_even: "1 episódio/mês"
+
+# QUALITY CONSIDERATIONS
+quality_balance:
+  ai_strengths:
+    - "Consistency (não se cansa)"
+    - "Speed (10x+ faster)"
+    - "Scalability (mesma qualidade em 1 ou 100 eps)"
+
+  ai_limitations:
+    - "Pode introduzir artifacts (audio processing)"
+    - "Não entende contexto/humor (text generation)"
+    - "Erra nomes próprios/termos técnicos (transcription)"
+
+  quality_control:
+    - "SEMPRE human QA antes de publicar"
+    - "Não usar AI voice clone sem disclosure"
+    - "Review all AI-generated content (show notes, social)"
+    - "Trust but verify (AI scores úteis mas não absolutos)"
+
+# ETHICAL CONSIDERATIONS
+ethics:
+  transparency:
+    - "Disclose se usar AI voice clone extensivamente"
+    - "Não passar AI content como 100% human-written (se asked)"
+
+  authenticity:
+    - "AI para efficiency, não fake authenticity"
+    - "Voice clone para fix apenas, não create fake content"
+
+  data_privacy:
+    - "Ler ToS de cada tool (quem tem acesso ao áudio?)"
+    - "Cuidado com episódios sensíveis (guest privacy)"
+    - "Prefer local processing (Whisper) quando possível"
+
+# TIER-SPECIFIC RECOMMENDATIONS
+tier_recommendations:
+  solo:
+    essential: [Descript, Whisper]
+    optional: [Opus Clip, Podsqueeze]
+    reason: "Focus em editing efficiency, social pode ser manual"
+    cost: "$25/mo + time"
+
+  studio:
+    essential: [Riverside, Descript, Opus Clip, Podsqueeze]
+    optional: [Chartable, custom analytics]
+    reason: "Full automation, AI handles repetitive tasks"
+    cost: "$65/mo"
+
+  broadcast:
+    full_stack: "All tools + custom AI integrations"
+    additions:
+      - "Custom AI models (fine-tuned Whisper)"
+      - "Automated QA (detect audio issues)"
+      - "Predictive analytics (forecast performance)"
+    cost: "$100-500/mo (includes custom solutions)"
+
+# FUTURE AI OPPORTUNITIES
+future:
+  emerging:
+    - "AI host (synthetic voice, conversational AI)"
+    - "Real-time translation (multi-language simultaneous)"
+    - "Personalized episodes (AI remixes per listener)"
+    - "AI-generated music (royalty-free, custom)"
+
+  experimental:
+    - "AI guest scheduling (analyze availability, automate booking)"
+    - "AI-powered SEO (optimize metadata em tempo real)"
+    - "Deepfake detection (protect against malicious use)"
+
+  timeline:
+    2026: "Current tools mature, lower prices"
+    2027: "Real-time translation mainstream"
+    2028: "AI co-hosts common"
+
+# PROMPT TEMPLATES (AI text generation)
+prompt_templates:
+  show_notes:
+    template: |
+      Crie show notes profissionais para este episódio de podcast:
+
+      Título: [TÍTULO]
+      Duração: [DURAÇÃO]
+      Guest: [GUEST/SOLO]
+      Transcrição: [TRANSCRIÇÃO]
+
+      Inclua:
+      1. Resumo de 2-3 parágrafos
+      2. Timestamps dos tópicos principais
+      3. 3-5 key takeaways
+      4. Links mencionados
+      5. Bio do guest (se aplicável)
+
+      Tom: [PROFISSIONAL/CASUAL/EDUCACIONAL]
+
+  social_post:
+    template: |
+      Crie post para [PLATAFORMA] sobre este episódio:
+
+      Título: [TÍTULO]
+      Guest: [GUEST]
+      Key insight: [INSIGHT]
+
+      Requisitos:
+      - Máximo [CHARS] caracteres
+      - Include hook nos primeiros 10 palavras
+      - 1-2 hashtags relevantes
+      - CTA para ouvir
+
+      Tom: [CASUAL/PROFISSIONAL]
+
+  newsletter:
+    template: |
+      Escreva newsletter anunciando este episódio:
+
+      Título: [TÍTULO]
+      Guest: [GUEST]
+      Tópicos: [LISTA]
+
+      Estrutura:
+      1. Subject line (50 chars)
+      2. Preview text (100 chars)
+      3. Body (300-500 palavras)
+      4. CTAs (listen + subscribe)
+
+      Tom: Conversacional, value-first

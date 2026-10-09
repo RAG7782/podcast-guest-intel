@@ -1,0 +1,248 @@
+{
+  "locale": "pt-BR",
+  "needs_native_review": false,
+  "text_version": "pt-BR/v1",
+  "form": {
+    "title": "Convidado(a) do {{show.name}}",
+    "description_essencial": "Leva uns 2 minutos. Com isso a gente prepara uma conversa boa para você, sem surpresa.",
+    "description_completo": "Leva uns 8 minutos. Quase tudo é opcional: pule o que não quiser responder.",
+    "confirmation": "Obrigado! Se você autorizou o e-mail, o kit do convidado chega em instantes. Para mandar arquivos (PDF, slides, fotos), é só responder a esse e-mail com os anexos.",
+    "sections": {
+      "about": "Sobre você",
+      "content": "A conversa",
+      "logistics": "Gravação",
+      "channels": "Como falamos com você",
+      "consent": "Seus dados e esta entrevista",
+      "sensitive": "Dados sensíveis (opcional)",
+      "localization": "Outros idiomas (opcional)"
+    },
+    "fields": {
+      "guest.full_name": { "title": "Nome completo", "help": "" },
+      "guest.preferred_name": { "title": "Como quer ser chamado(a) no ar?", "help": "Ex.: Ana, Dra. Ana, Professor Silva." },
+      "guest.name_pronunciation": { "title": "Como se pronuncia seu nome?", "help": "Só se houver risco de errarmos." },
+      "guest.pronouns": { "title": "Pronomes", "help": "Opcional. Ex.: ela/dela." },
+      "guest.role_title": { "title": "Cargo ou ocupação", "help": "" },
+      "guest.photo_url": { "title": "Link de uma foto sua para a divulgação", "help": "Opcional. Um link público (site, LinkedIn, Drive aberto)." },
+      "bio.short": { "title": "Mini-bio em até 2 linhas", "help": "É o que vamos ler na abertura." },
+      "bio.long": { "title": "Bio completa", "help": "Opcional." },
+      "links": { "title": "Seus links principais", "help": "Site, perfis, portfólio. Um por linha." },
+      "social_handles": { "title": "@ para marcarmos na divulgação", "help": "Um por linha, no formato rede: @usuario (ex.: instagram: @ana)." },
+      "previous_interviews": { "title": "Entrevistas que você já deu", "help": "Links, um por linha. Ajuda a não repetir perguntas." },
+      "key_ideas": { "title": "Até 3 ideias que você quer deixar para o público", "help": "Uma por linha." },
+      "stories_to_tell": { "title": "Histórias que você gosta de contar", "help": "Uma por linha." },
+      "controversies.accepts": { "title": "Temas polêmicos que você topa discutir", "help": "Um por linha." },
+      "controversies.declines": { "title": "Temas polêmicos que prefere evitar", "help": "Um por linha." },
+      "off_limits_topics": { "title": "Assuntos proibidos", "help": "Não vamos tocar nesses temas. Um por linha." },
+      "wants_to_promote": { "title": "Algo que quer divulgar?", "help": "Livro, curso, evento, projeto. Um por linha." },
+      "dream_questions": { "title": "Perguntas que você adoraria receber", "help": "Uma por linha." },
+      "conflicts_of_interest.details": { "title": "Conflitos de interesse ou patrocínios ligados aos temas", "help": "Deixe em branco se não houver." },
+      "companion.name": { "title": "Vai trazer acompanhante? Quem?", "help": "Deixe em branco se vier sozinho(a)." },
+      "materials": { "title": "Materiais de apoio (links)", "help": "Palestras, livros, artigos, vídeos. Um link por linha. Arquivos: responda ao e-mail do kit com os anexos." },
+      "recording_mode": { "title": "Como vai ser a gravação?", "help": "" },
+      "scheduled_at": { "title": "Data e hora já combinadas com a gente", "help": "Só se já combinou. Serve para o convite na agenda e o lembrete na véspera." },
+      "wants_prepublication_review": { "title": "Quer ver o episódio antes de publicarmos?", "help": "" },
+      "preferred_channel": { "title": "Canal preferido para falarmos com você", "help": "" },
+      "contacts.email": { "title": "Seu e-mail", "help": "" },
+      "contacts.whatsapp": { "title": "Seu WhatsApp", "help": "Opcional. Com código do país e DDD, ex.: +55 11 91234-5678." },
+      "automation_consents": { "title": "Posso usar estes canais para te mandar o kit e os lembretes?", "help": "Marque só o que quiser. Nada marcado = nada enviado por aquele canal." },
+      "image_voice": { "title": "Imagem e voz", "help": "" },
+      "consent.general": { "title": "Consentimento", "help": "" },
+      "consent.public_research": { "title": "Pesquisa em fontes públicas", "help": "" },
+      "consent.divulgacao": { "title": "Divulgação (opcional)", "help": "" },
+      "accessibility.needs": { "title": "DADO SENSÍVEL — Precisa de alguma adaptação de acessibilidade?", "help": "Opcional. Pode revelar informação de saúde: só será usado se você marcar o aceite logo abaixo." },
+      "accessibility.accept": { "title": "DADO SENSÍVEL — Aceite específico (acessibilidade)", "help": "" },
+      "sensitive.category": { "title": "DADO SENSÍVEL — Sobre o que é?", "help": "Opcional." },
+      "sensitive.value": { "title": "DADO SENSÍVEL — O que você quer que a gente saiba", "help": "Opcional. Escreva só o que quiser que entre na preparação." },
+      "sensitive.accept": { "title": "DADO SENSÍVEL — Aceite específico", "help": "" },
+      "localization.translation_text": { "title": "Legendas e textos traduzidos", "help": "" },
+      "localization.dub_generic_voice": { "title": "Dublagem com voz sintética genérica", "help": "" },
+      "localization.dub_voice_replica": { "title": "DADO SENSÍVEL — Réplica artificial da sua voz", "help": "" }
+    },
+    "choices": {
+      "recording_mode": { "presencial": "Presencial, no estúdio", "remoto": "Remota, online" },
+      "yes_no": { "yes": "Sim", "no": "Não" },
+      "preferred_channel": { "email": "E-mail", "whatsapp": "WhatsApp", "phone": "Telefone", "other": "Outro" },
+      "channels": {
+        "email": "E-mail: kit do convidado e lembrete na véspera",
+        "whatsapp": "WhatsApp: kit e lembrete na véspera",
+        "calendar": "Agenda: convite com data e endereço"
+      },
+      "sensitive_category": {
+        "origem_racial_etnica": "Origem racial ou étnica",
+        "conviccao_religiosa": "Convicção religiosa",
+        "opiniao_politica": "Opinião política",
+        "filiacao_sindical_religiosa_filosofica_politica": "Filiação a sindicato ou organização religiosa, filosófica ou política",
+        "saude": "Saúde",
+        "vida_sexual": "Vida sexual",
+        "genetico": "Dado genético",
+        "biometrico": "Dado biométrico"
+      }
+    }
+  },
+  "consent": {
+    "contact_email": "pelo e-mail {{email}}",
+    "contact_reply_to_email": "respondendo a qualquer e-mail deste programa (inclusive o convite ou o kit do convidado)",
+    "clauses": {
+      "BR-LGPD": {
+        "clause_id": "BR-LGPD/v1",
+        "legal_review": "pendente",
+        "text": "{{controller.name}} (controlador dos dados{{#controller.document_id}}, {{controller.document_id}}{{/controller.document_id}}; contato: {{controller.contact}}) vai usar as respostas deste formulário somente para as finalidades abaixo, ligadas à sua entrevista no {{show.name}}: {{purposes}}.\n\nPara preparar perguntas melhores, também vamos consultar informações que você mesmo(a) tornou públicas (site, redes, entrevistas e textos publicados). Tudo o que entrar no material de preparo terá a fonte indicada.\n\nNão vamos usar nem guardar dados sensíveis (saúde, religião, opinião política, vida sexual, origem racial ou étnica, entre outros), a menos que você mesmo(a) os escreva na seção opcional de dados sensíveis e marque o aceite específico de cada um. A decisão é sua.\n\nOs dados são apagados até {{retention_days}} dias após a publicação do episódio; guardamos só o registro deste consentimento, como prova. A qualquer momento e sem custo você pode pedir acesso, correção ou exclusão, ou retirar este consentimento, {{controller.contact}}. Se não quiser consentir, basta não enviar o formulário: a entrevista ainda pode acontecer, sem o uso dele."
+      },
+      "EU-GDPR": {
+        "clause_id": "EU-GDPR/v1",
+        "legal_review": "pendente",
+        "text": "{{controller.name}} (controlador dos dados{{#controller.document_id}}, {{controller.document_id}}{{/controller.document_id}}; contato: {{controller.contact}}) vai tratar as respostas deste formulário com base no seu consentimento, somente para: {{purposes}}.\n\nTambém vamos consultar informações que você tornou publicamente acessíveis (site, redes, entrevistas, textos publicados), sempre com a fonte indicada.\n\nDados de categorias especiais (saúde, religião, opinião política, vida sexual, origem racial ou étnica, entre outros) só serão tratados se você os escrever na seção opcional e der o consentimento explícito de cada um.\n\nOs dados são apagados até {{retention_days}} dias após a publicação do episódio. Você tem direito de acesso, retificação, apagamento, limitação, portabilidade e oposição, e pode retirar o consentimento a qualquer momento ({{controller.contact}}), sem afetar o tratamento já feito. Você também pode reclamar a uma autoridade de controle."
+      },
+      "other": {
+        "clause_id": "other/v1",
+        "legal_review": "pendente",
+        "text": "{{controller.name}} (contato: {{controller.contact}}) vai usar as respostas deste formulário somente para: {{purposes}}. Também vamos consultar informações que você tornou públicas, sempre com fonte. Dados sensíveis só entram se você os escrever na seção opcional e marcar o aceite específico. Os dados são apagados até {{retention_days}} dias após a publicação. Para acessar, corrigir, apagar ou retirar o consentimento: {{controller.contact}}."
+      }
+    },
+    "purposes": {
+      "preparo_entrevista": "preparar a sua entrevista",
+      "dossie": "montar o material de preparo (com fontes)",
+      "memoria_episodio": "registrar o episódio no arquivo do programa",
+      "divulgacao": "divulgar o episódio com sua mini-bio, foto e @"
+    },
+    "general_accept": "Li o texto acima e concordo com o uso das minhas respostas para essas finalidades.",
+    "public_research_accept": "Estou ciente de que haverá consulta a informações que eu mesmo(a) tornei públicas, sempre com fonte indicada.",
+    "divulgacao_accept": "Também autorizo usar minha mini-bio, foto e @ na divulgação do episódio.",
+    "image_voice_accept": "Autorizo a gravação e a publicação da minha imagem e voz neste episódio.",
+    "sensitive_intro": "Esta seção é totalmente opcional e a decisão é sua. Tudo aqui é DADO SENSÍVEL (LGPD, art. 11): só será usado se você escrever e marcar o aceite específico logo abaixo de cada campo. Sem o aceite, a informação é descartada e não é guardada.",
+    "sensitive_accept": "DADO SENSÍVEL — Autorizo, de forma específica e destacada, o uso da informação que escrevi acima apenas para preparar e conduzir esta entrevista.",
+    "accessibility_accept": "DADO SENSÍVEL (pode revelar saúde) — Autorizo usar a necessidade de acessibilidade acima apenas para organizar a logística da gravação.",
+    "sensitive_purpose": "preparar e conduzir esta entrevista",
+    "accessibility_purpose": "organizar a logística da gravação",
+    "localization_intro": "Esta seção é opcional e cada autorização é separada: marque só o que quiser. Nenhuma delas é condição para a entrevista, e nenhuma vem marcada. Você pode retirar qualquer uma a qualquer momento, sem custo, pelo mesmo contato indicado na seção de dados.",
+    "translation_accept": "Autorizo transcrever minha fala e publicar legendas e textos traduzidos deste episódio (inclusive a descrição) em: {{locales}}.",
+    "dub_generic_accept": "Autorizo uma versão dublada deste episódio com voz sintética genérica (não é a minha voz), dizendo a tradução da minha fala, identificada ao público como dublagem por IA, em: {{locales}}.",
+    "dub_replica_accept": "DADO SENSÍVEL (LGPD, art. 11) — Autorizo, de forma específica e destacada, criar uma réplica artificial da minha voz somente para dublar ESTE episódio em {{locales}}, pelo provedor {{provider}} ({{country}}), com o modelo da minha voz apagado em até {{days}} dias após a dublagem. A versão dublada será identificada ao público como feita por IA. Posso revogar a qualquer momento.",
+    "dub_replica_purpose": "dublar este episódio com réplica artificial da voz do titular"
+  },
+  "kit": {
+    "title": "Kit do convidado",
+    "greeting": "Olá, {{guest.preferred_name}}!",
+    "thanks": "Que bom ter você no {{show.name}}. Este kit junta o que você precisa saber antes da gravação. Leia com calma, quando puder.",
+    "about_heading": "O que é o {{show.name}}",
+    "pillars_heading": "Os temas que circulam por aqui",
+    "when_heading": "Quando",
+    "when_tbd": "A data ainda vai ser combinada com a produção.",
+    "where_heading": "Onde (gravação presencial)",
+    "address_label": "Endereço",
+    "landmarks_label": "Pontos de referência",
+    "gps_label": "No GPS ou no app de transporte, digite",
+    "parking_label": "Estacionamento",
+    "arrive": "Chegue de {{arrive.min}} a {{arrive.max}} minutos antes, para tomar uma água e testar o som sem pressa.",
+    "remote_heading": "Gravação remota: o que você precisa",
+    "remote_default": [
+      "Fone de ouvido (com fio, se tiver)",
+      "Lugar silencioso e com pouco eco",
+      "Internet estável; se puder, cabo em vez de Wi-Fi",
+      "Computador carregado ou na tomada"
+    ],
+    "conduct_heading": "Para você ficar tranquilo(a)",
+    "conduct_default": [
+      "Não existe resposta errada: é uma conversa, não uma prova.",
+      "Se travar ou quiser refazer uma resposta, é só dizer. A gente edita.",
+      "Você pode pedir para não falar de um assunto a qualquer momento.",
+      "Água à vontade, e pausas também."
+    ],
+    "materials_heading": "Materiais (opcional)",
+    "materials_text": "Quer mandar slides, PDFs, fotos ou links? Responda a este e-mail com os anexos. Não precisa criar conta em lugar nenhum.",
+    "privacy_heading": "Seus dados",
+    "privacy_text": "Usamos suas respostas só para preparar esta entrevista. Para acessar, corrigir, apagar ou retirar o consentimento: {{controller.contact}}.",
+    "signoff": "Até já!",
+    "parking": {
+      "disponivel": "disponível no local",
+      "indisponivel": "não há estacionamento no local",
+      "pago_proximo": "estacionamento pago nas proximidades",
+      "pendente": "a confirmar com a produção"
+    }
+  },
+  "messages": {
+    "email_subject": "Kit do convidado · {{show.name}}",
+    "owner_subject": "Novo formulário de convidado: {{guest.preferred_name}}",
+    "calendar_title": "Gravação {{show.name}} com {{guest.preferred_name}}",
+    "calendar_remote_location": "Online (o link vem da produção)",
+    "calendar_description": "Kit do convidado enviado por e-mail. Dúvidas: {{controller.contact}}.",
+    "whatsapp_kit": "Olá, {{guest.preferred_name}}! Aqui é do {{show.name}}. Recebemos seu formulário, obrigado! O kit do convidado com todos os detalhes foi para o seu e-mail.{{#address_line}} Endereço: {{address_line}}.{{/address_line}}{{#gps_hint}} No GPS, digite: {{gps_hint}}.{{/gps_hint}}",
+    "reminder_subject": "Amanhã: gravação no {{show.name}}",
+    "reminder_body": "Olá, {{guest.preferred_name}}! Lembrete: a gravação no {{show.name}} é amanhã, {{scheduled_text}}.{{#address_line}} Endereço: {{address_line}}.{{/address_line}}{{#gps_hint}} No GPS, digite: {{gps_hint}}.{{/gps_hint}}{{#arrive}} Chegue de {{arrive.min}} a {{arrive.max}} minutos antes.{{/arrive}} Qualquer coisa, é só responder."
+  },
+  "invitation": {
+    "subject": "Convite oficial · {{show.name}}",
+    "preheader": "{{show.name}} convida você para uma conversa. Data, local e formulário aqui dentro.",
+    "title": "Convite oficial",
+    "greeting": "Olá, {{guest.name}}!",
+    "intro": {
+      "formal": "Temos a honra de convidar você para participar como convidado(a) do {{show.name}}.",
+      "cordial": "É uma alegria convidar você para uma conversa no {{show.name}}.",
+      "descontraido": "Bora gravar? A gente quer muito você no {{show.name}}."
+    },
+    "when_label": "Data e horário",
+    "when_tbd": "a combinar com a produção",
+    "where_label": "Local",
+    "gps_label": "No GPS ou no app de transporte, digite",
+    "arrival_label": "Como chegar",
+    "arrive": "Chegue de {{arrive.min}} a {{arrive.max}} minutos antes.",
+    "remote_label": "Gravação remota, link da sala",
+    "remote_link_tbd": "o link da sala chega por e-mail antes da gravação",
+    "about_heading": "O que é o {{show.name}}",
+    "cta_intro": {
+      "essencial": "Para prepararmos uma conversa à sua altura, preencha o formulário do convidado. Leva uns 2 minutos.",
+      "completo": "Para prepararmos uma conversa à sua altura, preencha o formulário do convidado. Leva uns 8 minutos, e quase tudo é opcional."
+    },
+    "cta_button": "Preencher o formulário",
+    "cta_fallback": "Se o botão não abrir, copie e cole este endereço no navegador:",
+    "signoff": "Com apreço,",
+    "footer_controller": "Quem envia: {{controller.name}}, controlador dos dados. Contato: {{controller.contact}}.",
+    "footer_purpose": "Você recebeu este convite porque {{signature.name}} indicou você como convidado(a). Usamos seu nome e e-mail só para este convite e para organizar a entrevista; o kit do convidado chega depois que você responder ao formulário.",
+    "footer_optout": "Não quer receber mais mensagens do {{show.name}}? Responda a este e-mail com a palavra SAIR e não enviaremos mais nada.",
+    "ics_description": "Convite oficial do {{show.name}}. Formulário do convidado: {{form_url}}"
+  },
+  "decision": {
+    "ack": {
+      "v1": "Li os alertas acima. Entendo que o plugin apenas recomenda: a decisão de seguir contra a recomendação é minha, e a responsabilidade editorial e jurídica pelo que for gravado e publicado é minha (ou de quem eu represento), não do plugin nem dos seus autores."
+    },
+    "alerts": {
+      "R-CLAIM-CONDUTA-FONTES": "Esta afirmação sobre a conduta de alguém não tem o lastro recomendado (status verificado com 1 fonte primária ou 2 fontes de imprensa independentes). Usá-la no ar pode gerar responsabilidade por difamação.",
+      "R-CLAIM-CONDUTA-INDEPENDENCIA": "As fontes de imprensa desta afirmação sobre conduta podem não ser independentes (mesmo domínio, autor ou agência). Confira autor, veículo e agência antes de decidir.",
+      "R-ROTEIRO-GATE-PENDENTE": "A revisão do @guardian (fact-check) ainda não foi feita para um modo que a recomenda antes de gravar.",
+      "R-ROTEIRO-GATE-AJUSTES": "O @guardian recomendou ajustes que ainda não constam como aplicados.",
+      "R-ROTEIRO-GATE-VETADO": "O @guardian recomendou NÃO gravar este roteiro como está. Gravar contra essa recomendação é decisão e responsabilidade sua.",
+      "R-ROTEIRO-CONTRADITORIO": "Este modo recomenda ouvir a parte citada antes de gravar, e não há pedido de contraditório registrado.",
+      "R-ROTEIRO-REVISAO-JURIDICA": "Este modo tem risco jurídico alto e a revisão jurídica humana recomendada ainda está pendente.",
+      "R-ROTEIRO-SEM-LASTRO": "Há afirmações de fato sem claim do dossiê nem fonte. Dizer no ar algo sem lastro é risco editorial seu.",
+      "R-ROTEIRO-INFERENCIA-COMO-FATO": "Uma inferência (hipótese) aparece como afirmação de fato. O recomendado é transformá-la em pergunta ou hipótese.",
+      "R-ROTEIRO-RIGOR": "O modo pede fonte para números, datas e citações, e esta afirmação se apoia só no que foi autodeclarado.",
+      "R-ROTEIRO-DEGRADADO": "O dossiê veio incompleto e este bloco usa afirmações dele sem ressalva de confirmação com o convidado.",
+      "R-ROTEIRO-TIMING": "A soma dos tempos dos blocos se afasta mais de 15% da duração alvo.",
+      "R-FACTCHECK-SEM-FONTE": "O fact-check não encontrou fonte para esta afirmação.",
+      "R-FACTCHECK-DISCLOSURE": "Falta a identificação de publicidade ou patrocínio recomendada (CONAR / CDC art. 36).",
+      "R-LOCALIZACAO-REVISAO-HUMANA": "Tradução automática: revise original e tradução lado a lado (nomes, números, termos do glossário) antes de publicar.",
+      "R-LOCALIZACAO-SEM-ACEITE-TRADUCAO": "Não há aceite registrado do convidado para legendas e textos traduzidos neste idioma. Publicar assim é decisão e responsabilidade sua.",
+      "R-LOCALIZACAO-SEM-ACEITE-VOZ-GENERICA": "Não há aceite registrado do convidado para dublagem com voz sintética genérica neste idioma. Publicar assim é decisão e responsabilidade sua.",
+      "R-LOCALIZACAO-AGENTE-POLITICO": "O convidado foi marcado como candidato ou agente político. Conteúdo sintético com voz de candidatos tem regras próprias da Justiça Eleitoral (Res. TSE 23.732/2024; fonte secundária, conferir o texto vigente): verifique calendário eleitoral e rotulagem antes de publicar a dublagem.",
+      "R-LOCALIZACAO-GLOSSARIO": "Termos do glossário do show não aparecem como esperado na tradução (nome próprio, sigla ou termo que não se traduz).",
+      "R-LOCALIZACAO-NUMEROS": "Há números do original (datas, alíquotas, artigos de lei) que não aparecem na tradução.",
+      "R-LOCALIZACAO-CPS": "Algumas legendas passam do limite de leitura (caracteres por segundo).",
+      "R-FACTCHECK-LGPD": "Há dado pessoal de terceiro citado sem base clara de tratamento. (Dado sensível não autodeclarado não é alerta: é proibido.)",
+      "R-PUBLICACAO-GATE": "O quality gate do episódio não recomendou a publicação (REQUEST CHANGES ou HOLD).",
+      "R-MEMORIA-ROTEIRO-PENDENTE": "Nenhum roteiro ligado a este episódio está pronto para gravar (pronto_para_gravar). Gravar assim é decisão e responsabilidade sua."
+    }
+  },
+  "localization": {
+    "language_names": {
+      "pt-BR": "português",
+      "en": "inglês",
+      "es": "espanhol",
+      "zh": "chinês"
+    },
+    "disclosure": {
+      "subtitles": "Tradução automática revisada por {{show}}.",
+      "dub_generic": "Versão dublada por inteligência artificial a partir do episódio original em {{source_language}}. As vozes são sintéticas.",
+      "dub_replica": "Versão dublada por inteligência artificial, com réplica autorizada da voz dos participantes, a partir do episódio original em {{source_language}}."
+    }
+  }
+}

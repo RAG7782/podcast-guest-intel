@@ -1,0 +1,166 @@
+# Financial Model - Podcast Production Squad
+# Modelo de custos e receitas por tier.
+#
+# STATUS DOS NUMEROS: todos os valores em R$ abaixo sao ESTIMATIVAS SEM FONTE
+# (premissas de exemplo, cambio aprox. R$5/US$). Precos de SaaS e de mercado mudam:
+# cotar antes de usar em proposta, orcamento ou decisao. As projecoes de receita
+# da versao anterior (lucro de R$1M+/ano etc.) foram removidas: nao tinham fonte e
+# tinham erro de conta (ex.: 1 sponsor x CPM 70 x 2.000 downloads = R$140, nao R$1.400).
+# Use as FORMULAS com os seus dados reais (performance-report / analytics).
+
+formulas:
+  ads_revenue: "sponsors x (downloads_por_episodio / 1000) x CPM x episodios_no_mes"
+  membership_revenue: "membros x preco_mensal"
+  amortized_one_time: "custo_unico_total / meses_de_amortizacao"
+  monthly_burn: "custos_mensais + amortized_one_time"
+  breakeven: "primeiro mes em que receita_mensal >= monthly_burn"
+  roi: "(receita_acumulada - custo_acumulado) / investimento_inicial"
+  notes:
+    - "CPM e taxa de preenchimento de anuncio dependem de nicho e audiencia: medir, nao supor"
+    - "Downloads por episodio vem do host/analytics (padrao IAB v2.x quando o host for certificado)"
+
+# TIER SOLO
+tier_solo:
+  description: "1 pessoa fazendo tudo, AI-assist tools, side project ou hobbyist"
+  monthly_costs:  # estimativa, sem fonte
+    hosting: {item: "Plano basico de hosting de podcast", cost: 60}
+    editing: {item: "Editor baseado em texto (plano creator)", cost: 120}
+    recording: {item: "Plataforma de gravacao remota (plano basico)", cost: 75}
+    design: {item: "Ferramenta de design (plano pro)", cost: 55}
+    social: {item: "Agendador de posts", cost: 75}
+    domain_site: {item: "Dominio + site simples", cost: 30}
+    total_monthly: 415
+  one_time_costs:  # estimativa, sem fonte
+    microphone: {item: "Microfone dinamico USB/XLR", cost: 500}
+    interface: {item: "Interface de audio 1 canal (opcional se USB)", cost: 600}
+    headphones: {item: "Fone fechado de monitoracao", cost: 750}
+    total_one_time: 1850
+    amortized_monthly: 154
+    note: "Amortizado em 12 meses"
+  total_monthly_including_amortization: 569
+  revenue_levers:
+    - "Membership (primeira receita tipica neste tier)"
+    - "1 sponsor pequeno quando houver audiencia mensuravel"
+    - "Consultoria/servicos gerados pelo podcast"
+  breakeven:
+    calculation: "Receita mensal >= R$569 (burn estimado)"
+    timeline: "A calcular com dados reais; nao ha benchmark com fonte"
+  notes:
+    - "Solo tier e investimento de tempo > dinheiro"
+    - "Custos baixos tornam o projeto sustentavel mesmo com breakeven lento"
+
+# TIER STUDIO
+tier_studio:
+  description: "2-4 pessoas, producao profissional, pode ser full-time"
+  monthly_costs:  # estimativa, sem fonte
+    hosting: {item: "Hosting plano pro", cost: 120}
+    editing: {item: "Editor baseado em texto (plano pro)", cost: 240}
+    recording: {item: "Gravacao remota (plano pro)", cost: 150}
+    ai_tools: {item: "Cortes automaticos + show notes por IA", cost: 125}
+    design: {item: "Ferramentas de design", cost: 80}
+    social: {item: "Agendador + newsletter", cost: 150}
+    freelancers:
+      editor: {hours: 20, rate: 100, cost: 2000, note: "Editor part-time (20h x R$100/h)"}
+      designer: {projects: 4, rate: 250, cost: 1000, note: "Designer (4 eps x R$250)"}
+      total: 3000
+    marketing: {ads: 300, tools: 100, total: 400, note: "Social ads + SEO tools"}
+    total_monthly: 4265
+  one_time_costs:  # estimativa, sem fonte
+    equipment: {mics: 2000, interface: 1500, cameras: 3000, lighting: 1500, total: 8000}
+    software: {daw_license: 1000, plugins: 1000, total: 2000}
+    studio_setup: {acoustic_treatment: 2000, furniture: 1000, total: 3000}
+    total_one_time: 13000
+    amortized_monthly: 1083
+    note: "Amortizado em 12 meses"
+  total_monthly_including_amortization: 5348
+  revenue_levers:
+    - "Sponsors (host-read) — usar a formula ads_revenue com downloads reais"
+    - "Membership"
+    - "Consultoria, afiliados, eventos"
+  breakeven:
+    calculation: "Receita mensal >= R$5.348 (burn estimado)"
+    timeline: "A calcular com dados reais; nao ha benchmark com fonte"
+  team_salaries_alternative:  # estimativa, sem fonte
+    note: "Se contratar full-time em vez de freelancers"
+    editor_ft: 4000
+    designer_ft: 3500
+    producer_pt: 3000
+    total_salaries: 10500
+    total_monthly_with_salaries: 11265
+  notes:
+    - "Investimento medio; dependencia de freelancers e o principal risco operacional"
+
+# TIER BROADCAST
+tier_broadcast:
+  description: "5-10+ pessoas, broadcast quality, operacao comercial"
+  monthly_costs:  # estimativa, sem fonte
+    hosting: {item: "Hosting enterprise", cost: 500}
+    studio_space: {rent: 3000, utilities: 500, internet: 300, insurance: 200, total: 4000}
+    equipment_maintenance: {repairs: 500, total: 500, note: "Depreciacao entra em amortized_monthly (sem dupla contagem)"}
+    team_salaries:
+      producer: 8000
+      editor_1: 5000
+      editor_2: 5000
+      engineer: 6000
+      designer: 4500
+      growth_marketing: 5000
+      operations: 4000
+      total: 37500
+    software_tools: {daws: 200, plugins: 300, ai_tools: 500, analytics: 300, management: 200, total: 1500}
+    marketing: {paid_ads: 3000, pr_agency: 2000, total: 5000}
+    freelancers: {guest_coordinator: 2000, content_writers: 1500, total: 3500}
+    total_monthly: 52500
+  one_time_costs:  # estimativa, sem fonte
+    studio_buildout: {construction: 30000, acoustic_treatment: 15000, furniture: 10000, total: 55000}
+    equipment: {mics_interfaces: 15000, cameras_switcher: 25000, lighting: 10000, computers: 20000, total: 70000}
+    software_licenses: {daw_pro_tools: 3000, video_editing: 2000, plugins_suite: 5000, total: 10000}
+    total_one_time: 135000
+    amortized_monthly: 11250
+    note: "Amortizado em 12 meses"
+  total_monthly_including_amortization: 63750
+  revenue_levers:
+    - "Sponsors + insercao dinamica (DAI) — ver tasks/dai-setup.md"
+    - "Membership"
+    - "White-label (producao para terceiros), eventos, cursos, licenciamento"
+  breakeven:
+    calculation: "Receita mensal >= R$63.750 (burn estimado)"
+    timeline: "A calcular com dados reais; nao ha benchmark com fonte"
+  notes:
+    - "Alto risco: capital inicial significativo e burn alto"
+    - "Antes de montar este tier, validar receita contratada (sponsors/white-label), nao projetada"
+
+# COMPARATIVE SUMMARY (derivado dos custos estimados acima; sem receitas projetadas)
+comparative_summary:
+  initial_investment:
+    solo: "R$1,85K"
+    studio: "R$13K"
+    broadcast: "R$135K"
+  monthly_burn:
+    solo: "R$570"
+    studio: "R$5,3K"
+    broadcast: "R$63,8K"
+  breakeven_timeline: "Calcular por tier com formulas.breakeven e receita real"
+
+# RISK FACTORS
+risk_factors:
+  solo:
+    - "Breakeven lento"
+    - "Burnout (1 pessoa fazendo tudo)"
+    - "Crescimento limitado sem equipe"
+  studio:
+    - "Investimento medio upfront"
+    - "Dependencia de freelancers"
+    - "Concorrencia alta neste tier"
+  broadcast:
+    - "Investimento alto upfront"
+    - "Burn rate alto"
+    - "Complexidade operacional (gestao de equipe)"
+
+# SUCCESS METRICS BY TIER
+# Metas de downloads/receita da versao anterior removidas (sem fonte). Definir metas
+# a partir da linha de base propria do show, medida pelo @analyst (tasks/performance-report.md).
+success_metrics:
+  how_to_set:
+    - "Medir 8-12 episodios para obter linha de base de downloads e receita"
+    - "Meta = linha de base + crescimento acordado com o @producer, revisada por temporada"
+    - "Registrar a fonte de cada numero (host analytics, contrato de sponsor, plataforma)"

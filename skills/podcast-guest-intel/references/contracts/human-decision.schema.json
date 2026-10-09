@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://podcast-production.invalid/contracts/human-decision.schema.json",
+  "title": "HumanDecision",
+  "description": "Registro de uma decisão HUMANA sobre uma recomendação do plugin (research/00-escopo.md, 'a decisão é sempre humana'). O plugin recomenda e alerta; quem decide é o usuário. Seguir contra a recomendação exige este registro: quem decidiu, quando, quais alertas viu e qual versão do texto de responsabilidade aceitou. Os textos dos alertas e do aceite vivem em contracts/i18n/<locale>.json (decision.*); a chave tem de existir em pt-BR e en (conferido em Python: R-DECISION-I18N-KEY). Não se aplica a regra rígida (dado sensível só autodeclarado, credencial fora do repo, validade de schema): essas não aceitam decisão contra.",
+  "type": "object",
+  "required": ["decision_id", "subject_ref", "recommendation", "alerts", "decided_by", "decided_at", "decision", "acknowledgment_text_version"],
+  "additionalProperties": false,
+  "properties": {
+    "decision_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$" },
+    "subject_ref": { "type": "string", "minLength": 1, "description": "O que foi decidido: script_id, claim id, episode_id." },
+    "recommendation": {
+      "type": "object",
+      "required": ["by", "verdict"],
+      "additionalProperties": false,
+      "properties": {
+        "by": { "type": "string", "minLength": 1, "description": "Agente ou ferramenta que recomendou (ex.: @guardian, roteiro_tools check)." },
+        "verdict": { "type": "string", "minLength": 1, "description": "A recomendação em si (ex.: vetado, nao_gravar_ainda, reforcar_fontes)." },
+        "summary": { "type": "string" }
+      }
+    },
+    "alerts": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/alert" },
+      "description": "Os alertas de responsabilidade que o humano VIU antes de decidir."
+    },
+    "decided_by": { "type": "string", "minLength": 1, "description": "Pessoa que decidiu (nome ou id do usuário). Nunca um agente." },
+    "decided_at": { "type": "string", "format": "date-time" },
+    "decision": { "enum": ["seguir_recomendacao", "seguir_contra"] },
+    "acknowledgment_text_version": {
+      "type": "string",
+      "pattern": "^decision\\.ack\\.v[0-9]+$",
+      "description": "Chave do texto de aceite em contracts/i18n (ex.: decision.ack.v1). Texto novo = versão nova; a antiga não é reescrita."
+    },
+    "rationale": { "type": "string", "description": "Motivo do humano (opcional)." }
+  },
+  "$defs": {
+    "alert": {
+      "type": "object",
+      "required": ["code", "severity", "text_i18n_key"],
+      "additionalProperties": false,
+      "properties": {
+        "code": { "type": "string", "pattern": "^R-[A-Z0-9-]+$" },
+        "severity": { "enum": ["info", "atencao", "alta"], "description": "info não exige aceite; atencao e alta exigem aceite explícito para seguir contra." },
+        "text_i18n_key": { "type": "string", "pattern": "^decision\\.alerts\\.R-[A-Z0-9-]+$" },
+        "evidence": { "type": "string", "description": "O que o humano precisa ver para julgar (ex.: domínios, autores, veículos, agências das fontes)." }
+      }
+    }
+  }
+}

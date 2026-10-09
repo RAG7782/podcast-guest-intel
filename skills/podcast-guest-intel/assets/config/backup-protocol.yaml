@@ -1,0 +1,327 @@
+# Backup Protocol - Podcast Production Squad
+# Disaster recovery e proteção de assets
+
+# REGRA 3-2-1
+rule_3_2_1:
+  copies: 3
+  media: 2
+  offsite: 1
+  explanation:
+    - "3 cópias totais do arquivo (1 original + 2 backups)"
+    - "2 tipos de mídia diferentes (ex: local + cloud)"
+    - "1 cópia offsite (protege contra desastre local)"
+
+# DURANTE GRAVAÇÃO
+recording_backup:
+  primary:
+    method: "DAW recording no computador"
+    format: "WAV 48kHz/24bit"
+    location: "SSD local"
+
+  backup_1:
+    method: "Platform built-in (Riverside, Zencastr)"
+    feature: "Local recording em cada participante"
+    auto_upload: "Sim (após gravação)"
+    location: "Cloud do serviço"
+
+  backup_2:
+    method: "Smartphone/backup recorder"
+    device: "iPhone Voice Memos, Zoom H5, etc"
+    quality: "Menor, mas salvação se primário falhar"
+    location: "Device local"
+
+  redundancy_checklist:
+    - "Confirmar DAW recording ativo"
+    - "Confirmar platform backup enabled"
+    - "Smartphone em modo avião (não interromper) gravando"
+    - "Verificar storage disponível em todos devices"
+
+# PÓS-GRAVAÇÃO IMEDIATO
+immediate_backup:
+  sla: "Imediatamente após gravação (antes de desligar equipamento)"
+  priority: "CRITICAL"
+
+  step_1:
+    action: "Verificar integridade dos arquivos"
+    how:
+      - "Abrir em DAW, confirma playback"
+      - "Verificar duração (match esperado)"
+      - "Listen primeiros/últimos 30s"
+
+  step_2:
+    action: "Copy para segundo local"
+    destination: "NAS local ou external HDD"
+    method: "Manual copy (não move)"
+    verification: "Checksum ou re-open file"
+
+  step_3:
+    action: "Upload para cloud"
+    destination: "Google Drive, Dropbox, Backblaze B2"
+    timing: "Iniciar imediatamente (pode rodar em background)"
+
+# NAMING CONVENTION
+naming:
+  raw_files:
+    pattern: "S{SS}E{EE}_{titulo-kebab}_{speaker}_raw.wav"
+    examples:
+      - "S01E05_inteligencia-artificial_host_raw.wav"
+      - "S01E05_inteligencia-artificial_guest_raw.wav"
+
+  edited_files:
+    pattern: "S{SS}E{EE}_{titulo-kebab}_edit_v{N}.wav"
+    examples:
+      - "S01E05_inteligencia-artificial_edit_v1.wav"
+      - "S01E05_inteligencia-artificial_edit_v2.wav"
+
+  mix_files:
+    pattern: "S{SS}E{EE}_{titulo-kebab}_mix_v{N}.wav"
+    examples:
+      - "S01E05_inteligencia-artificial_mix_v1.wav"
+
+  master_files:
+    pattern: "S{SS}E{EE}_{titulo-kebab}_master_{platform}.{ext}"
+    examples:
+      - "S01E05_inteligencia-artificial_master_spotify.wav"
+      - "S01E05_inteligencia-artificial_master_rss.mp3"
+
+  clips:
+    pattern: "S{SS}E{EE}_{titulo-kebab}_clip{N}_{platform}.{ext}"
+    examples:
+      - "S01E05_inteligencia-artificial_clip1_youtube.mp4"
+      - "S01E05_inteligencia-artificial_clip2_instagram.mp4"
+
+# FOLDER STRUCTURE
+folder_structure:
+  root: "Podcast-Name/"
+  season: "Season-{SS}/"
+  episode: "S{SS}E{EE}-{titulo-kebab}/"
+  subfolders:
+    raw: "Audio bruto da gravação"
+    edit: "Work-in-progress da edição"
+    master: "Masters finais por plataforma"
+    clips: "Social media clips"
+    assets: "Cover art, thumbnails, graphics"
+    project: "DAW project files"
+    transcript: "Transcrições SRT/TXT"
+
+  example: |
+    Meu-Podcast/
+      Season-01/
+        S01E05-inteligencia-artificial/
+          raw/
+            S01E05_inteligencia-artificial_host_raw.wav
+            S01E05_inteligencia-artificial_guest_raw.wav
+          edit/
+            S01E05_inteligencia-artificial_edit_v1.wav
+            S01E05_inteligencia-artificial_edit_v2.wav
+          master/
+            S01E05_inteligencia-artificial_master_spotify.wav
+            S01E05_inteligencia-artificial_master_rss.mp3
+          clips/
+            S01E05_inteligencia-artificial_clip1_youtube.mp4
+            S01E05_inteligencia-artificial_clip2_instagram.mp4
+          assets/
+            S01E05_inteligencia-artificial_cover.jpg
+            S01E05_inteligencia-artificial_thumb_youtube.jpg
+          project/
+            S01E05_inteligencia-artificial.logic/
+          transcript/
+            S01E05_inteligencia-artificial_transcript.srt
+            S01E05_inteligencia-artificial_transcript.txt
+
+# STORAGE LOCATIONS
+storage_tiers:
+  tier_1_active:
+    location: "SSD local (working drive)"
+    content: "Projeto atual + últimos 3 episódios"
+    size: "500GB-1TB"
+    access: "Diário"
+
+  tier_2_nearline:
+    location: "NAS local ou external HDD"
+    content: "Season atual completa + archives"
+    size: "2-8TB"
+    access: "Semanal"
+    protocol: "RAID 1 ou superior (redundância)"
+
+  tier_3_cloud:
+    location: "Google Drive, Dropbox, Backblaze B2"
+    content: "Raw files + masters de TODOS episódios"
+    size: "Unlimited ou large plan"
+    access: "Recovery apenas"
+    upload: "Automático via sync tool"
+
+  tier_4_cold:
+    location: "External HDD offsite (casa de familiar, cofre)"
+    content: "Backup anual completo"
+    frequency: "Atualizar 1-2x/ano"
+    access: "Disaster recovery extremo"
+
+# RETENTION POLICY
+retention:
+  raw_files:
+    policy: "Keep forever"
+    reason: "Re-edit futuro, clips adicionais, archive value"
+
+  project_files:
+    policy: "Keep 2 anos"
+    reason: "Reabrir projeto se necessário, após 2 anos improvável"
+    exception: "Episódios especiais/milestone keep forever"
+
+  edit_versions:
+    policy: "Delete após master aprovado"
+    reason: "Work-in-progress, não tem valor após final"
+    exception: "Keep v1 e v_final para reference"
+
+  masters:
+    policy: "Keep forever"
+    reason: "Deliverable final, pode precisar re-upload"
+
+  clips:
+    policy: "Keep forever"
+    reason: "Asset marketing reutilizável"
+
+  assets:
+    policy: "Keep forever"
+    reason: "Archive + reuse potential"
+
+# VERIFICAÇÃO DE INTEGRIDADE
+integrity_checks:
+  method: "Checksum SHA-256"
+  frequency:
+    upload: "Calcular checksum antes e após upload"
+    monthly: "Verificar checksums de raw files"
+    annually: "Full integrity check de todo archive"
+
+  tools:
+    macos: "shasum -a 256 file.wav"
+    windows: "certutil -hashfile file.wav SHA256"
+    linux: "sha256sum file.wav"
+
+  checksum_storage:
+    format: "file.wav.sha256 (text file)"
+    location: "Same directory as original file"
+    content: "Hash + filename"
+
+# DISASTER RECOVERY SCENARIOS
+scenarios:
+  local_drive_failure:
+    impact: "Loss de working files"
+    recovery:
+      - "Retrieve de NAS local"
+      - "Se NAS failed, retrieve de cloud"
+    prevention: "NAS com RAID"
+
+  cloud_account_compromised:
+    impact: "Potential loss de cloud backup"
+    recovery:
+      - "Restore de NAS local"
+      - "Contact cloud provider"
+    prevention:
+      - "2FA habilitado"
+      - "Strong password"
+      - "Separate account para podcast (não pessoal)"
+
+  fire_flood_theft:
+    impact: "Loss de equipamento + local storage"
+    recovery:
+      - "Cloud backup intacto"
+      - "Tier 4 cold storage offsite"
+    prevention: "Offsite backup critical"
+
+  accidental_deletion:
+    impact: "File deletado por engano"
+    recovery:
+      - "Cloud trash (30 dias)"
+      - "NAS snapshots (se configurado)"
+      - "Time Machine (macOS)"
+    prevention:
+      - "Não usar 'rm -rf' sem double-check"
+      - "Versioning habilitado no cloud"
+
+  corrupted_file:
+    impact: "File não abre ou playback com erro"
+    recovery:
+      - "Backup copy de outro tier"
+      - "Se all copies corrupt, gravação perdida"
+    prevention:
+      - "Verificar integridade imediatamente após gravação"
+      - "Multiple backups"
+
+# AUTOMATION
+automation:
+  cloud_sync:
+    tool: "rclone, Google Drive Desktop, Dropbox sync"
+    schedule: "Continuous ou daily"
+    bandwidth: "Limit durante horário de trabalho"
+
+  local_backup:
+    tool: "rsync, Time Machine, Carbon Copy Cloner"
+    schedule: "Hourly ou daily"
+    destination: "NAS local"
+
+  checksum_generation:
+    script: "Bash script para calcular SHA-256 de novos files"
+    trigger: "Após cada upload"
+
+  cleanup:
+    script: "Delete edit versions após master aprovado"
+    manual_approval: "Sim (não delete automático sem review)"
+
+# TIER-SPECIFIC RECOMMENDATIONS
+tier_recommendations:
+  solo:
+    minimal:
+      - "Local SSD (working)"
+      - "Google Drive free 15GB (masters apenas)"
+      - "External HDD (archive)"
+    cost: "~R$500 initial (HDD) + R$0-30/mês (cloud)"
+
+  studio:
+    recommended:
+      - "Local SSD (working)"
+      - "NAS 4TB RAID 1"
+      - "Google Drive/Dropbox 2TB"
+      - "External HDD offsite (annual)"
+    cost: "~R$3-5k initial + R$50-100/mês (cloud)"
+
+  broadcast:
+    professional:
+      - "Local SSD RAID"
+      - "NAS 16TB+ RAID 5/6"
+      - "S3/Backblaze B2 unlimited"
+      - "LTO tape (cold archive)"
+      - "Offsite NAS replication"
+    cost: "~R$20-50k initial + R$500+/mês (cloud)"
+
+# BACKUP CHECKLIST (per episode)
+episode_backup_checklist:
+  recording_day:
+    - "[ ] Confirmar dual recording ativo"
+    - "[ ] Smartphone backup gravando"
+    - "[ ] Verificar storage disponível"
+
+  immediately_post_recording:
+    - "[ ] Verificar integridade (playback)"
+    - "[ ] Copy para NAS local"
+    - "[ ] Iniciar upload para cloud"
+    - "[ ] Calcular checksums"
+
+  during_editing:
+    - "[ ] Save incremental versions"
+    - "[ ] Sync DAW project para cloud"
+
+  post_master:
+    - "[ ] Masters em 3 locais"
+    - "[ ] Checksums verificados"
+    - "[ ] Delete edit versions (keep v1 + vFinal)"
+
+  monthly:
+    - "[ ] Verificar checksums de raw files"
+    - "[ ] Test restore de 1 file do cloud"
+    - "[ ] Verificar storage disponível"
+
+  annually:
+    - "[ ] Full integrity check"
+    - "[ ] Update cold storage offsite"
+    - "[ ] Review retention policy"

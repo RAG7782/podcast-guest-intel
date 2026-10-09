@@ -1,0 +1,377 @@
+# Monetization Models - Detailed Financial Calculations
+# Fórmulas e exemplos concretos por modelo de receita
+
+# HOST-READ ADS
+host_read_ads:
+  formula: "CPM x (downloads / 1000) = revenue per episode"
+
+  variables:
+    cpm:
+      us: "$25-50"
+      br: "R$50-100"
+      premium: "R$100-200+"
+
+  examples:
+    example_1:
+      downloads: 1000
+      cpm: 60
+      calculation: "R$60 x (1000 / 1000) = R$60/episode"
+      monthly: "R$60 x 4 eps = R$240"
+
+    example_2:
+      downloads: 5000
+      cpm: 80
+      calculation: "R$80 x (5000 / 1000) = R$400/episode"
+      monthly: "R$400 x 4 eps = R$1600"
+
+    example_3:
+      downloads: 20000
+      cpm: 100
+      calculation: "R$100 x (20000 / 1000) = R$2000/episode"
+      monthly: "R$2000 x 4 eps = R$8000"
+
+  ad_placement:
+    pre_roll:
+      timing: "0-60 seconds"
+      cpm: "100% baseline"
+      completion: "80-90%"
+
+    mid_roll:
+      timing: "15-25 min into episode"
+      cpm: "125-150% of pre-roll (premium)"
+      completion: "60-80%"
+
+    post_roll:
+      timing: "End of episode"
+      cpm: "50-75% of pre-roll (lower)"
+      completion: "20-40%"
+
+  deal_structure:
+    payment_terms: "Net 30-60 days"
+    contract_length: "3-6 months typical"
+    commitment: "X episodes or X dollars minimum"
+    reporting: "Monthly analytics report"
+
+# PROGRAMMATIC DAI (Dynamic Ad Insertion)
+programmatic_dai:
+  formula: "CPM x (impressions / 1000) x fill_rate"
+
+  variables:
+    cpm:
+      us: "$5-15"
+      br: "R$25-75"
+    fill_rate: "60-90% (ads servidas vs disponíveis)"
+
+  examples:
+    example_1:
+      downloads: 5000
+      impressions: 5000
+      cpm: 50
+      fill_rate: 0.7
+      calculation: "R$50 x (5000 / 1000) x 0.7 = R$175/episode"
+      monthly: "R$175 x 4 eps = R$700"
+
+    example_2:
+      downloads: 20000
+      impressions: 20000
+      cpm: 60
+      fill_rate: 0.8
+      calculation: "R$60 x (20000 / 1000) x 0.8 = R$960/episode"
+      monthly: "R$960 x 4 eps = R$3840"
+
+  catalog_monetization:
+    old_episodes: "100 episodes x 500 downloads/month each"
+    impressions: "50000/month"
+    cpm: 50
+    fill_rate: 0.6
+    calculation: "R$50 x (50000 / 1000) x 0.6 = R$1500/mês"
+    note: "Passive income de back-catalog"
+
+# MEMBERSHIP
+membership:
+  formula: "subscribers x price x (1 - platform_fee) x (1 - churn_rate)"
+
+  variables:
+    conversion_rate: "1-3% de ouvintes"
+    price_range: "R$15-50/mês"
+    churn_rate: "5-10% mensal"
+    platform_fees:
+      patreon: "5-12%"
+      supercast: "5%"
+      apple: "30% Y1, 15% após"
+      substack: "10%"
+
+  examples:
+    example_1:
+      listeners: 2000
+      conversion: 0.02
+      subscribers: 40
+      price: 25
+      platform_fee: 0.08
+      churn: 0.07
+      calculation: "40 x R$25 x 0.92 x 0.93 = R$856/mês"
+
+    example_2:
+      listeners: 10000
+      conversion: 0.025
+      subscribers: 250
+      price: 30
+      platform_fee: 0.08
+      churn: 0.06
+      calculation: "250 x R$30 x 0.92 x 0.94 = R$6486/mês"
+
+  tier_structure:
+    tier_1:
+      price: 15
+      perks: ["Ad-free"]
+      conversion: "2-3%"
+
+    tier_2:
+      price: 30
+      perks: ["Ad-free", "Early access", "Bonus episodes", "Discord"]
+      conversion: "1-2%"
+
+    tier_3:
+      price: 60
+      perks: ["Everything + Q&A calls", "Name in credits"]
+      conversion: "0.2-0.5%"
+
+  ltv_calculation:
+    avg_subscription_length: "8-12 meses"
+    price: 30
+    ltv: "R$240-360"
+    cac_target: "< R$100 (CAC < 1/3 LTV)"
+
+# VALUE4VALUE (V4V)
+value4value:
+  description: "Micro-payments via Lightning Network (Bitcoin)"
+
+  formula: "sats_per_minute x minutes_listened x sat_to_brl"
+
+  variables:
+    typical_rate: "100 sats/min (listener configurable)"
+    sat_to_brl: "Variável (Bitcoin price)"
+    adoption: "< 1% de ouvintes (current)"
+
+  examples:
+    example_1:
+      listeners: 1000
+      v4v_adopters: 10
+      avg_rate: 100
+      episode_duration: 45
+      sat_to_brl: 0.003
+      calculation: "10 x 100 x 45 x 0.003 = R$135/episode"
+      monthly: "R$135 x 4 = R$540"
+      note: "Extremamente variable, não depender como primary"
+
+  split_configuration:
+    host: "60%"
+    producer: "20%"
+    editor: "10%"
+    engineer: "10%"
+    note: "Split automático via RSS <podcast:value> tag"
+
+# LIVE EVENTS
+live_events:
+  formula: "(tickets_sold x ticket_price) + merch_sales + sponsor_revenue - costs"
+
+  event_types:
+    live_recording:
+      capacity: 100-300
+      ticket_price: 50-150
+      revenue: "R$5-45K"
+      costs: "R$2-10K"
+      profit: "R$3-35K"
+
+    meetup:
+      capacity: 50-150
+      ticket_price: "Free ou R$20-50"
+      revenue: "R$0-7.5K"
+      costs: "R$1-3K"
+      profit: "R$-1K a R$4.5K"
+
+    workshop:
+      capacity: 20-50
+      ticket_price: 200-500
+      revenue: "R$4-25K"
+      costs: "R$2-5K"
+      profit: "R$2-20K"
+
+  example_calculation:
+    event: "Live recording"
+    venue_capacity: 200
+    tickets_sold: 150
+    ticket_price: 80
+    ticket_revenue: "150 x R$80 = R$12K"
+    merch:
+      units: 50
+      avg_price: 60
+      revenue: "50 x R$60 = R$3K"
+    sponsor: "R$3K"
+    total_revenue: "R$18K"
+    costs:
+      venue: 3000
+      staff: 2000
+      marketing: 1000
+      production: 1500
+      total_costs: 7500
+    net_profit: "R$18K - R$7.5K = R$10.5K"
+
+  frequency_recommendations:
+    solo: "1-2x/ano"
+    studio: "2-4x/ano"
+    broadcast: "6-12x/ano"
+
+# COURSES
+courses:
+  formula: "price x enrollments x (1 - platform_fee)"
+
+  variables:
+    conversion: "1-2% de ouvintes regulares"
+    price_range: "R$200-2000"
+    platform_fees:
+      hotmart: "9.9% + R$1"
+      udemy: "50% (if via platform promo)"
+      teachable: "5% + $39/mês"
+
+  examples:
+    example_1:
+      listeners: 5000
+      conversion: 0.015
+      enrollments: 75
+      price: 497
+      platform_fee: 0.099
+      calculation: "75 x R$497 x 0.901 = R$33.6K per launch"
+      launches_per_year: 2
+      annual: "R$67.2K"
+
+    example_2:
+      listeners: 15000
+      conversion: 0.02
+      enrollments: 300
+      price: 697
+      platform_fee: 0.099
+      calculation: "300 x R$697 x 0.901 = R$188.4K per launch"
+      launches_per_year: 2
+      annual: "R$376.8K"
+
+  evergreen_model:
+    monthly_traffic: "500 visitors"
+    conversion: "2%"
+    monthly_sales: 10
+    price: 497
+    platform_fee: 0.099
+    monthly_revenue: "10 x R$497 x 0.901 = R$4.5K"
+    annual: "R$54K"
+
+# CONSULTING
+consulting:
+  formula: "inquiries x close_rate x avg_project_value"
+
+  variables:
+    inquiry_rate: "0.1-0.5% de downloads viram inquiries"
+    close_rate: "20-40%"
+    hourly_rate: "R$300-1500"
+    project_value: "R$5K-50K"
+
+  examples:
+    example_1:
+      downloads: 5000
+      inquiry_rate: 0.002
+      inquiries: 10
+      close_rate: 0.3
+      clients: 3
+      avg_project: 15000
+      monthly_revenue: "3 x R$15K = R$45K"
+
+    example_2:
+      downloads: 20000
+      inquiry_rate: 0.003
+      inquiries: 60
+      close_rate: 0.35
+      clients: 21
+      avg_project: 25000
+      monthly_revenue: "21 x R$25K = R$525K"
+      note: "Neste volume, contratar sales team"
+
+  retainer_model:
+    clients: 5
+    monthly_retainer: 8000
+    mrr: "5 x R$8K = R$40K"
+
+# WHITE-LABEL
+white_label:
+  formula: "(setup_fee x new_clients) + (monthly_fee x active_clients)"
+
+  pricing:
+    setup: "R$5K-20K"
+    monthly: "R$3K-15K (4 eps/mês)"
+    per_episode: "R$1K-5K"
+
+  examples:
+    example_1:
+      new_clients_month: 1
+      setup_fee: 10000
+      active_clients: 3
+      monthly_fee: 5000
+      calculation: "(1 x R$10K) + (3 x R$5K) = R$25K/mês"
+
+    example_2:
+      new_clients_month: 2
+      setup_fee: 15000
+      active_clients: 8
+      monthly_fee: 8000
+      calculation: "(2 x R$15K) + (8 x R$8K) = R$94K/mês"
+
+  client_acquisition:
+    sources: ["Outbound sales", "Referrals", "Content marketing"]
+    sales_cycle: "1-3 meses"
+    close_rate: "10-20%"
+
+# BLENDED MODEL (Realistic)
+blended_revenue:
+  studio_tier_year_1:
+    downloads_avg: 3000
+    host_read_ads: "R$8K/mês (2 sponsors)"
+    membership: "80 members x R$30 = R$2.4K/mês"
+    consulting: "R$3K/mês (pipeline from podcast)"
+    total: "R$13.4K/mês = R$160.8K/ano"
+
+  studio_tier_year_2:
+    downloads_avg: 10000
+    host_read_ads: "R$28K/mês (3 sponsors)"
+    programmatic: "R$4K/mês (back-catalog)"
+    membership: "180 members x R$35 = R$6.3K/mês"
+    live_events: "4/ano x R$8K profit = R$2.7K/mês avg"
+    consulting: "R$8K/mês"
+    total: "R$49K/mês = R$588K/ano"
+
+  broadcast_tier_year_2:
+    downloads_avg: 50000
+    host_read_ads: "R$120K/mês"
+    programmatic: "R$20K/mês"
+    membership: "800 members x R$40 = R$32K/mês"
+    white_label: "5 clients x R$8K = R$40K/mês"
+    live_events: "8/ano x R$15K profit = R$10K/mês avg"
+    courses: "R$15K/mês evergreen"
+    total: "R$237K/mês = R$2.84M/ano"
+
+# OPTIMIZATION STRATEGIES
+optimization:
+  maximize_cpm:
+    - "Niche audience (higher value)"
+    - "Engaged listeners (completion rate)"
+    - "Professional production"
+    - "Brand safe content"
+
+  maximize_membership:
+    - "Exclusive content regular"
+    - "Community engagement"
+    - "Tiered pricing"
+    - "Annual discount (12 months for 10)"
+
+  maximize_ltv:
+    - "Reduce churn (deliver value)"
+    - "Upsell tiers"
+    - "Cross-sell courses/events"
+    - "Referral program"

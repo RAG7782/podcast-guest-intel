@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://podcast-production.invalid/contracts/claim.schema.json",
+  "title": "Claim",
+  "description": "Uma afirmação sobre uma pessoa ou tema, com status epistêmico e fonte. Regras rígidas: verificado exige >=1 source; inferencia exige basis_claim_ids; sensitive=true só vale se o TITULAR declarou (origin=guest_intake) com consentimento específico (LGPD art. 11, I). Varredura pública/inferência nunca produz dado sensível. Modo denúncia (decisão do dono 2026-10-09, revista na 3ª rodada: a decisão é sempre humana): conduct_allegation=true sem status verificado com >=1 fonte tier 1 OU >=2 fontes tier 2 independentes NÃO invalida a claim; ela carrega `advisory` com o alerta (R-CLAIM-CONDUTA-FONTES / R-CLAIM-CONDUTA-INDEPENDENCIA) e quem a usa como base (roteiro) exige aceite humano registrado (human-decision.schema.json). Conferido em Python: o alerta devido tem de estar no advisory (R-CLAIM-ADVISORY-AUSENTE).",
+  "type": "object",
+  "required": ["id", "subject", "text", "status", "origin", "purpose", "sensitive"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$" },
+    "subject": { "type": "string", "minLength": 1, "description": "Referência ao titular/tema (ex.: intake_id do convidado)." },
+    "text": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["verificado", "autodeclarado", "inferencia"] },
+    "origin": { "enum": ["public_scan", "guest_intake", "guest_material", "manager_material"] },
+    "purpose": { "type": "string", "minLength": 1, "description": "Finalidade do tratamento (LGPD art. 6º, I; art. 7º, §3º)." },
+    "sources": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/source" }
+    },
+    "basis_claim_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "description": "Claims das quais a inferência deriva (obrigatório se status=inferencia)."
+    },
+    "sensitive": { "type": "boolean", "description": "Dado pessoal sensível (LGPD art. 5º, II). Só o titular decide incluir." },
+    "sensitive_category": { "$ref": "#/$defs/sensitive_category" },
+    "consent_ref": {
+      "type": "string",
+      "minLength": 1,
+      "description": "consent_id de guest-intake.sensitive_declarations[].consent que autoriza ESTE dado sensível."
+    },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "created_at": { "type": "string", "format": "date-time" },
+    "coverage_area": { "type": "string", "pattern": "^[a-z0-9_]{2,40}$", "description": "Área de guest-dossier.coverage.expected que esta claim preenche (ex.: trajetoria, cargo_atual, pronuncia_nome)." },
+    "as_of": { "type": "string", "format": "date", "description": "Data a que o fato se refere (cargo ATUAL, fatos datados). Diferente de sources[].accessed_at." },
+    "conduct_allegation": { "type": "boolean", "description": "true = afirma conduta de uma pessoa (o que ela fez, sobretudo conduta reprovável). Ativa a recomendação de rigor máximo do modo denúncia: fonte fraca vira advisory, não invalidação." },
+    "advisory": {
+      "type": "array",
+      "items": { "$ref": "human-decision.schema.json#/$defs/alert" },
+      "description": "Alertas de responsabilidade calculados pela ferramenta (dossier_tools.py advise). Não invalidam a claim; obrigam aceite humano para usá-la como base."
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "verificado" } }, "required": ["status"] },
+      "then": {
+        "x-rule": "R-CLAIM-VERIFICADO-SOURCES",
+        "required": ["sources"],
+        "properties": { "sources": { "x-rule": "R-CLAIM-VERIFICADO-SOURCES", "minItems": 1 } }
+      }
+    },
+    {
+      "if": { "properties": { "status": { "const": "inferencia" } }, "required": ["status"] },
+      "then": {
+        "x-rule": "R-CLAIM-INFERENCIA-BASIS",
+        "required": ["basis_claim_ids"],
+        "properties": { "basis_claim_ids": { "x-rule": "R-CLAIM-INFERENCIA-BASIS", "minItems": 1 } }
+      }
+    },
+    {
+      "if": { "properties": { "sensitive": { "const": true } }, "required": ["sensitive"] },
+      "then": {
+        "x-rule": "R-CLAIM-SENSITIVE-CONSENT",
+        "required": ["consent_ref", "sensitive_category"],
+        "properties": {
+          "origin": { "x-rule": "R-CLAIM-SENSITIVE-ORIGIN", "const": "guest_intake" },
+          "status": { "x-rule": "R-CLAIM-SENSITIVE-ORIGIN", "const": "autodeclarado" }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "source": {
+      "type": "object",
+      "required": ["url", "accessed_at"],
+      "additionalProperties": false,
+      "properties": {
+        "url": { "type": "string", "format": "uri" },
+        "title": { "type": "string" },
+        "accessed_at": { "type": "string", "format": "date-time" },
+        "tier": { "type": "integer", "minimum": 1, "maximum": 3, "description": "Hierarquia de fontes do researcher (1 = primária)." },
+        "author": { "type": "string", "description": "Autor ou assinatura, quando houver." },
+        "outlet": { "type": "string", "description": "Veículo ou órgão que publicou." },
+        "agency": { "type": "string", "description": "Agência ou origem do conteúdo replicado, quando houver." }
+      }
+    },
+    "sensitive_category": {
+      "description": "Categorias do art. 5º, II da LGPD.",
+      "enum": [
+        "origem_racial_etnica", "conviccao_religiosa", "opiniao_politica",
+        "filiacao_sindical_religiosa_filosofica_politica", "saude", "vida_sexual",
+        "genetico", "biometrico"
+      ]
+    }
+  }
+}

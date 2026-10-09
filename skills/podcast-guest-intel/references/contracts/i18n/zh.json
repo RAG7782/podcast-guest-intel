@@ -1,0 +1,385 @@
+{
+  "locale": "zh",
+  "needs_native_review": true,
+  "text_version": "zh/v0-skeleton",
+  "form": {
+    "title": "[TODO-zh] Guest of {{show.name}}",
+    "description_essencial": "[TODO-zh] Takes about 2 minutes. It helps us prepare a good conversation for you, with no surprises.",
+    "description_completo": "[TODO-zh] Takes about 8 minutes. Almost everything is optional: skip whatever you prefer.",
+    "confirmation": "[TODO-zh] Thank you! If you allowed email, the guest kit is on its way. To send files (PDFs, slides, photos), just reply to that email with attachments.",
+    "sections": {
+      "about": "[TODO-zh] About you",
+      "content": "[TODO-zh] The conversation",
+      "logistics": "[TODO-zh] Recording",
+      "channels": "[TODO-zh] How we reach you",
+      "consent": "[TODO-zh] Your data and this interview",
+      "sensitive": "[TODO-zh] Sensitive data (optional)",
+      "localization": "[TODO-zh] Other languages (optional)"
+    },
+    "fields": {
+      "guest.full_name": {
+        "title": "[TODO-zh] Full name",
+        "help": ""
+      },
+      "guest.preferred_name": {
+        "title": "[TODO-zh] What should we call you on air?",
+        "help": "[TODO-zh] E.g. Ana, Dr. Ana, Professor Silva."
+      },
+      "guest.name_pronunciation": {
+        "title": "[TODO-zh] How is your name pronounced?",
+        "help": "[TODO-zh] Only if we might get it wrong."
+      },
+      "guest.pronouns": {
+        "title": "[TODO-zh] Pronouns",
+        "help": "[TODO-zh] Optional. E.g. she/her."
+      },
+      "guest.role_title": {
+        "title": "[TODO-zh] Role or occupation",
+        "help": ""
+      },
+      "guest.photo_url": {
+        "title": "[TODO-zh] Link to a photo of you for promotion",
+        "help": "[TODO-zh] Optional. A public link (website, LinkedIn, shared Drive)."
+      },
+      "bio.short": {
+        "title": "[TODO-zh] Short bio, up to 2 lines",
+        "help": "[TODO-zh] This is what we read in the intro."
+      },
+      "bio.long": {
+        "title": "[TODO-zh] Full bio",
+        "help": "[TODO-zh] Optional."
+      },
+      "links": {
+        "title": "[TODO-zh] Your main links",
+        "help": "[TODO-zh] Website, profiles, portfolio. One per line."
+      },
+      "social_handles": {
+        "title": "[TODO-zh] Handles to tag when we promote",
+        "help": "[TODO-zh] One per line, as network: @user (e.g. instagram: @ana)."
+      },
+      "previous_interviews": {
+        "title": "[TODO-zh] Interviews you have given",
+        "help": "[TODO-zh] Links, one per line. Helps us avoid repeating questions."
+      },
+      "key_ideas": {
+        "title": "[TODO-zh] Up to 3 ideas you want the audience to take away",
+        "help": "[TODO-zh] One per line."
+      },
+      "stories_to_tell": {
+        "title": "[TODO-zh] Stories you like to tell",
+        "help": "[TODO-zh] One per line."
+      },
+      "controversies.accepts": {
+        "title": "[TODO-zh] Controversial topics you are happy to discuss",
+        "help": "[TODO-zh] One per line."
+      },
+      "controversies.declines": {
+        "title": "[TODO-zh] Controversial topics you would rather avoid",
+        "help": "[TODO-zh] One per line."
+      },
+      "off_limits_topics": {
+        "title": "[TODO-zh] Off-limits topics",
+        "help": "[TODO-zh] We will not touch these. One per line."
+      },
+      "wants_to_promote": {
+        "title": "[TODO-zh] Anything you want to promote?",
+        "help": "[TODO-zh] Book, course, event, project. One per line."
+      },
+      "dream_questions": {
+        "title": "[TODO-zh] Questions you would love to be asked",
+        "help": "[TODO-zh] One per line."
+      },
+      "conflicts_of_interest.details": {
+        "title": "[TODO-zh] Conflicts of interest or sponsorships related to the topics",
+        "help": "[TODO-zh] Leave blank if none."
+      },
+      "companion.name": {
+        "title": "[TODO-zh] Bringing someone along? Who?",
+        "help": "[TODO-zh] Leave blank if coming alone."
+      },
+      "materials": {
+        "title": "[TODO-zh] Supporting materials (links)",
+        "help": "[TODO-zh] Talks, books, articles, videos. One link per line. Files: reply to the kit email with attachments."
+      },
+      "recording_mode": {
+        "title": "[TODO-zh] How will we record?",
+        "help": ""
+      },
+      "scheduled_at": {
+        "title": "[TODO-zh] Date and time already agreed with us",
+        "help": "[TODO-zh] Only if already agreed. Used for the calendar invite and the day-before reminder."
+      },
+      "wants_prepublication_review": {
+        "title": "[TODO-zh] Would you like to see the episode before we publish?",
+        "help": ""
+      },
+      "preferred_channel": {
+        "title": "[TODO-zh] Preferred channel to reach you",
+        "help": ""
+      },
+      "contacts.email": {
+        "title": "[TODO-zh] Your email",
+        "help": ""
+      },
+      "contacts.whatsapp": {
+        "title": "[TODO-zh] Your WhatsApp",
+        "help": "[TODO-zh] Optional. With country code, e.g. +44 7700 900123."
+      },
+      "automation_consents": {
+        "title": "[TODO-zh] May we use these channels to send you the kit and reminders?",
+        "help": "[TODO-zh] Tick only what you want. Nothing ticked = nothing sent through that channel."
+      },
+      "image_voice": {
+        "title": "[TODO-zh] Image and voice",
+        "help": ""
+      },
+      "consent.general": {
+        "title": "[TODO-zh] Consent",
+        "help": ""
+      },
+      "consent.public_research": {
+        "title": "[TODO-zh] Research in public sources",
+        "help": ""
+      },
+      "consent.divulgacao": {
+        "title": "[TODO-zh] Promotion (optional)",
+        "help": ""
+      },
+      "accessibility.needs": {
+        "title": "[TODO-zh] SENSITIVE DATA — Do you need any accessibility accommodation?",
+        "help": "[TODO-zh] Optional. It may reveal health information: it is only used if you tick the consent right below."
+      },
+      "accessibility.accept": {
+        "title": "[TODO-zh] SENSITIVE DATA — Specific consent (accessibility)",
+        "help": ""
+      },
+      "sensitive.category": {
+        "title": "[TODO-zh] SENSITIVE DATA — What is it about?",
+        "help": "[TODO-zh] Optional."
+      },
+      "sensitive.value": {
+        "title": "[TODO-zh] SENSITIVE DATA — What you want us to know",
+        "help": "[TODO-zh] Optional. Write only what you want in the preparation."
+      },
+      "sensitive.accept": {
+        "title": "[TODO-zh] SENSITIVE DATA — Specific consent",
+        "help": ""
+      },
+      "localization.translation_text": {
+        "title": "[TODO-zh] Translated subtitles and texts",
+        "help": ""
+      },
+      "localization.dub_generic_voice": {
+        "title": "[TODO-zh] Dubbing with a generic synthetic voice",
+        "help": ""
+      },
+      "localization.dub_voice_replica": {
+        "title": "[TODO-zh] SENSITIVE DATA — Artificial replica of your voice",
+        "help": ""
+      }
+    },
+    "choices": {
+      "recording_mode": {
+        "presencial": "[TODO-zh] In person, at the studio",
+        "remoto": "[TODO-zh] Remote, online"
+      },
+      "yes_no": {
+        "yes": "[TODO-zh] Yes",
+        "no": "[TODO-zh] No"
+      },
+      "preferred_channel": {
+        "email": "[TODO-zh] Email",
+        "whatsapp": "[TODO-zh] WhatsApp",
+        "phone": "[TODO-zh] Phone",
+        "other": "[TODO-zh] Other"
+      },
+      "channels": {
+        "email": "[TODO-zh] Email: guest kit and a day-before reminder",
+        "whatsapp": "[TODO-zh] WhatsApp: kit and a day-before reminder",
+        "calendar": "[TODO-zh] Calendar: invite with date and address"
+      },
+      "sensitive_category": {
+        "origem_racial_etnica": "[TODO-zh] Racial or ethnic origin",
+        "conviccao_religiosa": "[TODO-zh] Religious belief",
+        "opiniao_politica": "[TODO-zh] Political opinion",
+        "filiacao_sindical_religiosa_filosofica_politica": "[TODO-zh] Trade union or religious, philosophical or political membership",
+        "saude": "[TODO-zh] Health",
+        "vida_sexual": "[TODO-zh] Sex life",
+        "genetico": "[TODO-zh] Genetic data",
+        "biometrico": "[TODO-zh] Biometric data"
+      }
+    }
+  },
+  "consent": {
+    "contact_email": "[TODO-zh] by email at {{email}}",
+    "contact_reply_to_email": "[TODO-zh] by replying to any email from this show (including the invitation or the guest kit)",
+    "clauses": {
+      "BR-LGPD": {
+        "clause_id": "BR-LGPD/v1",
+        "legal_review": "pending",
+        "text": "[TODO-zh] {{controller.name}} (data controller{{#controller.document_id}}, {{controller.document_id}}{{/controller.document_id}}; contact: {{controller.contact}}) will use the answers to this form only for the purposes below, related to your interview on {{show.name}}: {{purposes}}.\n\nTo prepare better questions, we will also look at information you have made public yourself (website, social media, interviews and published texts). Everything that goes into the preparation material will cite its source.\n\nWe will not use or keep sensitive data (health, religion, political opinion, sex life, racial or ethnic origin, among others) unless you write it yourself in the optional sensitive-data section and tick the specific consent for each item. It is your decision.\n\nThe data is deleted within {{retention_days}} days after the episode is published; we keep only the record of this consent, as proof. At any time and free of charge you may request access, correction or deletion, or withdraw this consent, {{controller.contact}}. If you do not want to consent, simply do not submit the form: the interview can still happen without it."
+      },
+      "EU-GDPR": {
+        "clause_id": "EU-GDPR/v1",
+        "legal_review": "pending",
+        "text": "[TODO-zh] {{controller.name}} (data controller{{#controller.document_id}}, {{controller.document_id}}{{/controller.document_id}}; contact: {{controller.contact}}) will process the answers to this form based on your consent, only for: {{purposes}}.\n\nWe will also look at information you have made publicly accessible (website, social media, interviews, published texts), always citing the source.\n\nSpecial categories of data (health, religion, political opinion, sex life, racial or ethnic origin, among others) are processed only if you write them in the optional section and give explicit consent for each item.\n\nThe data is deleted within {{retention_days}} days after the episode is published. You have the right of access, rectification, erasure, restriction, portability and objection, and you may withdraw consent at any time ({{controller.contact}}) without affecting processing already carried out. You may also lodge a complaint with a supervisory authority."
+      },
+      "other": {
+        "clause_id": "other/v1",
+        "legal_review": "pending",
+        "text": "[TODO-zh] {{controller.name}} (contact: {{controller.contact}}) will use the answers to this form only for: {{purposes}}. We will also look at information you have made public, always citing the source. Sensitive data is used only if you write it in the optional section and tick the specific consent. The data is deleted within {{retention_days}} days after publication. To access, correct, delete or withdraw consent: {{controller.contact}}."
+      },
+      "CN-PIPL": {
+        "clause_id": "CN-PIPL/v0",
+        "legal_review": "pending",
+        "text": "[TODO-zh] PIPL clause not drafted. Requires separate consent for sensitive personal information (PIPL art. 29) and native legal review before use. {{controller.name}} {{controller.contact}} {{purposes}} {{retention_days}}"
+      }
+    },
+    "purposes": {
+      "preparo_entrevista": "[TODO-zh] preparing your interview",
+      "dossie": "[TODO-zh] building the preparation material (with sources)",
+      "memoria_episodio": "[TODO-zh] recording the episode in the show's archive",
+      "divulgacao": "[TODO-zh] promoting the episode with your short bio, photo and handle"
+    },
+    "general_accept": "[TODO-zh] I have read the text above and agree to the use of my answers for these purposes.",
+    "public_research_accept": "[TODO-zh] I understand that information I have made public myself will be consulted, always citing the source.",
+    "divulgacao_accept": "[TODO-zh] I also allow my short bio, photo and handle to be used to promote the episode.",
+    "image_voice_accept": "[TODO-zh] I authorise the recording and publication of my image and voice in this episode.",
+    "sensitive_intro": "[TODO-zh] This section is entirely optional and the decision is yours. Everything here is SENSITIVE DATA: it is used only if you write it and tick the specific consent right below each field. Without consent the information is discarded and not kept.",
+    "sensitive_accept": "[TODO-zh] SENSITIVE DATA — I give specific, explicit consent to the use of the information I wrote above only to prepare and conduct this interview.",
+    "accessibility_accept": "[TODO-zh] SENSITIVE DATA (may reveal health) — I allow the accessibility need above to be used only to organise the recording logistics.",
+    "sensitive_purpose": "[TODO-zh] prepare and conduct this interview",
+    "accessibility_purpose": "[TODO-zh] organise the recording logistics",
+    "localization_intro": "[TODO-zh] This section is optional and each permission is separate: tick only what you want. None of them is a condition for the interview, and none comes pre-ticked. You can withdraw any of them at any time, free of charge, through the same contact given in the data section.",
+    "translation_accept": "[TODO-zh] I allow my speech to be transcribed and translated subtitles and texts of this episode (including the description) to be published in: {{locales}}.",
+    "dub_generic_accept": "[TODO-zh] I allow a dubbed version of this episode with a generic synthetic voice (not my voice), speaking the translation of my words, disclosed to the audience as AI dubbing, in: {{locales}}.",
+    "dub_replica_accept": "[TODO-zh] SENSITIVE DATA — I give specific, explicit consent to the creation of an artificial replica of my voice solely to dub THIS episode in {{locales}}, by the provider {{provider}} ({{country}}), with my voice model deleted within {{days}} days after dubbing. The dubbed version will be disclosed to the audience as AI-made. I can withdraw at any time.",
+    "dub_replica_purpose": "[TODO-zh] dub this episode with an artificial replica of the data subject's voice"
+  },
+  "kit": {
+    "title": "[TODO-zh] Guest kit",
+    "greeting": "[TODO-zh] Hello, {{guest.preferred_name}}!",
+    "thanks": "[TODO-zh] We are glad to have you on {{show.name}}. This kit gathers what you need to know before the recording. Read it calmly, whenever you can.",
+    "about_heading": "[TODO-zh] What {{show.name}} is",
+    "pillars_heading": "[TODO-zh] The topics we cover",
+    "when_heading": "[TODO-zh] When",
+    "when_tbd": "[TODO-zh] The date is still to be agreed with the production team.",
+    "where_heading": "[TODO-zh] Where (in-person recording)",
+    "address_label": "[TODO-zh] Address",
+    "landmarks_label": "[TODO-zh] Landmarks",
+    "gps_label": "[TODO-zh] In your GPS or ride app, type",
+    "parking_label": "[TODO-zh] Parking",
+    "arrive": "[TODO-zh] Please arrive {{arrive.min}} to {{arrive.max}} minutes early, to have some water and test the sound without rushing.",
+    "remote_heading": "[TODO-zh] Remote recording: what you need",
+    "remote_default": [
+      "[TODO-zh] Headphones (wired, if you have them)",
+      "[TODO-zh] A quiet room with little echo",
+      "[TODO-zh] A stable connection; cable rather than Wi-Fi if possible",
+      "[TODO-zh] Computer charged or plugged in"
+    ],
+    "conduct_heading": "[TODO-zh] So you can feel at ease",
+    "conduct_default": [
+      "[TODO-zh] There are no wrong answers: it is a conversation, not an exam.",
+      "[TODO-zh] If you stumble or want to redo an answer, just say so. We edit.",
+      "[TODO-zh] You can ask not to discuss a topic at any moment.",
+      "[TODO-zh] Water whenever you like, and breaks too."
+    ],
+    "materials_heading": "[TODO-zh] Materials (optional)",
+    "materials_text": "[TODO-zh] Want to send slides, PDFs, photos or links? Reply to this email with attachments. No account needed anywhere.",
+    "privacy_heading": "[TODO-zh] Your data",
+    "privacy_text": "[TODO-zh] We use your answers only to prepare this interview. To access, correct, delete or withdraw consent: {{controller.contact}}.",
+    "signoff": "[TODO-zh] See you soon!",
+    "parking": {
+      "disponivel": "[TODO-zh] available on site",
+      "indisponivel": "[TODO-zh] no parking on site",
+      "pago_proximo": "[TODO-zh] paid parking nearby",
+      "pendente": "[TODO-zh] to be confirmed by the production team"
+    }
+  },
+  "messages": {
+    "email_subject": "[TODO-zh] Guest kit · {{show.name}}",
+    "owner_subject": "[TODO-zh] New guest form: {{guest.preferred_name}}",
+    "calendar_title": "[TODO-zh] {{show.name}} recording with {{guest.preferred_name}}",
+    "calendar_remote_location": "[TODO-zh] Online (link from the production team)",
+    "calendar_description": "[TODO-zh] Guest kit sent by email. Questions: {{controller.contact}}.",
+    "whatsapp_kit": "[TODO-zh] Hello, {{guest.preferred_name}}! This is {{show.name}}. We got your form, thank you! The guest kit with all the details is in your email.{{#address_line}} Address: {{address_line}}.{{/address_line}}{{#gps_hint}} In your GPS, type: {{gps_hint}}.{{/gps_hint}}",
+    "reminder_subject": "[TODO-zh] Tomorrow: recording at {{show.name}}",
+    "reminder_body": "[TODO-zh] Hello, {{guest.preferred_name}}! Reminder: the {{show.name}} recording is tomorrow, {{scheduled_text}}.{{#address_line}} Address: {{address_line}}.{{/address_line}}{{#gps_hint}} In your GPS, type: {{gps_hint}}.{{/gps_hint}}{{#arrive}} Please arrive {{arrive.min}} to {{arrive.max}} minutes early.{{/arrive}} Any questions, just reply."
+  },
+  "_note": "ESQUELETO: textos copiados do en e marcados [TODO-zh]. Precisa de tradução e revisão nativa (e jurídica) antes de uso. O build do formulário recusa este locale enquanto needs_native_review=true, salvo ALLOW_UNREVIEWED_LOCALE=true.",
+  "invitation": {
+    "subject": "[TODO-zh] Official invitation · {{show.name}}",
+    "preheader": "[TODO-zh] {{show.name}} invites you to a conversation. Date, place and form inside.",
+    "title": "[TODO-zh] Official invitation",
+    "greeting": "[TODO-zh] Hello, {{guest.name}}!",
+    "intro": {
+      "formal": "[TODO-zh] We are honored to invite you to be a guest on {{show.name}}.",
+      "cordial": "[TODO-zh] It is a pleasure to invite you for a conversation on {{show.name}}.",
+      "descontraido": "[TODO-zh] Let's record? We'd love to have you on {{show.name}}."
+    },
+    "when_label": "[TODO-zh] Date and time",
+    "when_tbd": "[TODO-zh] to be agreed with the production team",
+    "where_label": "[TODO-zh] Place",
+    "gps_label": "[TODO-zh] In your GPS or ride app, type",
+    "arrival_label": "[TODO-zh] How to get there",
+    "arrive": "[TODO-zh] Please arrive {{arrive.min}} to {{arrive.max}} minutes early.",
+    "remote_label": "[TODO-zh] Remote recording, room link",
+    "remote_link_tbd": "[TODO-zh] the room link will arrive by e-mail before the recording",
+    "about_heading": "[TODO-zh] What {{show.name}} is",
+    "cta_intro": {
+      "essencial": "[TODO-zh] So we can prepare a conversation worthy of you, please fill in the guest form. It takes about 2 minutes.",
+      "completo": "[TODO-zh] So we can prepare a conversation worthy of you, please fill in the guest form. It takes about 8 minutes, and almost everything is optional."
+    },
+    "cta_button": "[TODO-zh] Fill in the form",
+    "cta_fallback": "[TODO-zh] If the button does not open, copy and paste this address into your browser:",
+    "signoff": "[TODO-zh] Kind regards,",
+    "footer_controller": "[TODO-zh] Sent by: {{controller.name}}, data controller. Contact: {{controller.contact}}.",
+    "footer_purpose": "[TODO-zh] You received this invitation because {{signature.name}} suggested you as a guest. We use your name and e-mail only for this invitation and to organize the interview; the guest kit arrives after you answer the form.",
+    "footer_optout": "[TODO-zh] Don't want to hear from {{show.name}} again? Reply to this e-mail with the word STOP and we will not send anything else.",
+    "ics_description": "[TODO-zh] Official invitation from {{show.name}}. Guest form: {{form_url}}"
+  },
+  "decision": {
+    "ack": {
+      "v1": "[TODO-zh] I have read the alerts above. I understand the plugin only recommends: the decision to go against the recommendation is mine, and the editorial and legal responsibility for what is recorded and published is mine (or of whom I represent), not the plugin's nor its authors'."
+    },
+    "alerts": {
+      "R-CLAIM-CONDUTA-FONTES": "[TODO-zh] This statement about someone's conduct lacks the recommended backing (verified status with 1 primary source or 2 independent press sources). Using it on air may create defamation liability.",
+      "R-CLAIM-CONDUTA-INDEPENDENCIA": "[TODO-zh] The press sources for this conduct statement may not be independent (same domain, author or agency). Check author, outlet and agency before deciding.",
+      "R-ROTEIRO-GATE-PENDENTE": "[TODO-zh] The @guardian review (fact-check) has not been done yet for a mode that recommends it before recording.",
+      "R-ROTEIRO-GATE-AJUSTES": "[TODO-zh] The @guardian recommended adjustments that are not recorded as applied.",
+      "R-ROTEIRO-GATE-VETADO": "[TODO-zh] The @guardian recommended NOT recording this script as is. Recording against that recommendation is your decision and your responsibility.",
+      "R-ROTEIRO-CONTRADITORIO": "[TODO-zh] This mode recommends hearing the named party before recording, and no right-of-reply request is recorded.",
+      "R-ROTEIRO-REVISAO-JURIDICA": "[TODO-zh] This mode carries high legal risk and the recommended human legal review is still pending.",
+      "R-ROTEIRO-SEM-LASTRO": "[TODO-zh] Some factual statements have no dossier claim nor source. Saying unbacked things on air is your editorial risk.",
+      "R-ROTEIRO-INFERENCIA-COMO-FATO": "[TODO-zh] An inference (hypothesis) appears as a factual statement. The recommendation is to turn it into a question or hypothesis.",
+      "R-ROTEIRO-RIGOR": "[TODO-zh] The mode asks for sources for numbers, dates and quotes, and this statement rests only on self-declared information.",
+      "R-ROTEIRO-DEGRADADO": "[TODO-zh] The dossier is incomplete and this block uses its statements without a caveat to confirm with the guest.",
+      "R-ROTEIRO-TIMING": "[TODO-zh] The sum of block durations is more than 15% away from the target duration.",
+      "R-FACTCHECK-SEM-FONTE": "[TODO-zh] The fact-check found no source for this statement.",
+      "R-FACTCHECK-DISCLOSURE": "[TODO-zh] The recommended advertising or sponsorship disclosure is missing.",
+      "R-FACTCHECK-LGPD": "[TODO-zh] Third-party personal data is cited without a clear legal basis. (Sensitive data not self-declared is not an alert: it is forbidden.)",
+      "R-PUBLICACAO-GATE": "[TODO-zh] The episode quality gate did not recommend publication (REQUEST CHANGES or HOLD).",
+      "R-MEMORIA-ROTEIRO-PENDENTE": "[TODO-zh] No script linked to this episode is ready to record (pronto_para_gravar). Recording anyway is your decision and responsibility.",
+      "R-LOCALIZACAO-REVISAO-HUMANA": "[TODO-zh] Machine translation: review source and translation side by side (names, numbers, glossary terms) before publishing.",
+      "R-LOCALIZACAO-SEM-ACEITE-TRADUCAO": "[TODO-zh] There is no recorded guest consent for translated subtitles and texts in this language. Publishing anyway is your decision and responsibility.",
+      "R-LOCALIZACAO-SEM-ACEITE-VOZ-GENERICA": "[TODO-zh] There is no recorded guest consent for dubbing with a generic synthetic voice in this language. Publishing anyway is your decision and responsibility.",
+      "R-LOCALIZACAO-AGENTE-POLITICO": "[TODO-zh] The guest is flagged as a candidate or political figure. Synthetic content with candidates' voices is subject to electoral rules in Brazil (TSE Resolution 23.732/2024; secondary source, check the current text): verify the electoral calendar and labelling before publishing the dub.",
+      "R-LOCALIZACAO-GLOSSARIO": "[TODO-zh] Show glossary terms do not appear as expected in the translation (proper name, acronym or do-not-translate term).",
+      "R-LOCALIZACAO-NUMEROS": "[TODO-zh] Some numbers from the source (dates, rates, statute articles) do not appear in the translation.",
+      "R-LOCALIZACAO-CPS": "[TODO-zh] Some subtitles exceed the reading-speed limit (characters per second)."
+    }
+  },
+  "localization": {
+    "language_names": {
+      "pt-BR": "葡萄牙语",
+      "en": "英语",
+      "es": "西班牙语",
+      "zh": "中文"
+    },
+    "disclosure": {
+      "subtitles": "[TODO-zh] Machine translation reviewed by {{show}}.",
+      "dub_generic": "本集为基于{{source_language}}原版节目的AI配音版本，声音为合成语音。",
+      "dub_replica": "本集为基于{{source_language}}原版节目的AI配音版本，经授权使用AI复制的说话者声音。"
+    }
+  }
+}

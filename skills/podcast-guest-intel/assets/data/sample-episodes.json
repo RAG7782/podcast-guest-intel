@@ -1,0 +1,304 @@
+{
+  "episodes": [
+    {
+      "id": "S01E05",
+      "season": 1,
+      "episode": 5,
+      "title": "Como a IA Está Transformando o Mercado de Trabalho",
+      "title_slug": "ia-transformando-mercado-trabalho",
+      "format": "interview",
+      "guest": {
+        "name": "Dr. Ana Silva",
+        "title": "PhD em IA, Professora na USP",
+        "bio": "Especialista em Machine Learning com 15 anos de experiência. Autora de 3 livros sobre IA.",
+        "social": {
+          "twitter": "@anasilva",
+          "linkedin": "linkedin.com/in/anasilva"
+        }
+      },
+      "duration": "52:30",
+      "recorded_date": "2026-01-15",
+      "published_date": "2026-01-22",
+      "content_pillar": "Tecnologia",
+      "status": "published",
+      "description": "Neste episódio, conversamos com a Dr. Ana Silva sobre como a Inteligência Artificial está redefinindo o mercado de trabalho. Discutimos quais profissões estão em risco, quais estão surgindo, e como se preparar para o futuro do trabalho.",
+      "audio_files": {
+        "raw": [
+          "S01E05_ia-transformando-mercado-trabalho_host_raw.wav",
+          "S01E05_ia-transformando-mercado-trabalho_guest_raw.wav"
+        ],
+        "master": {
+          "spotify": "S01E05_ia-transformando-mercado-trabalho_master_spotify.wav",
+          "apple": "S01E05_ia-transformando-mercado-trabalho_master_apple.wav",
+          "youtube": "S01E05_ia-transformando-mercado-trabalho_master_youtube.wav",
+          "rss": "S01E05_ia-transformando-mercado-trabalho_master_rss.mp3"
+        }
+      },
+      "transcript": {
+        "pt_br": "S01E05_ia-transformando-mercado-trabalho_transcript_pt-br.srt",
+        "en_us": null
+      },
+      "show_notes": {
+        "summary": "A Inteligência Artificial não é mais ficção científica — ela já está transformando profundamente o mercado de trabalho. Neste episódio, a Dr. Ana Silva nos guia por um panorama realista de como a IA está criando novas oportunidades enquanto torna outras profissões obsoletas.\n\nDiscutimos os 3 tipos de trabalho mais vulneráveis, as 5 habilidades que se tornarão essenciais nos próximos 5 anos, e estratégias práticas para se adaptar a essa nova realidade.\n\nSe você se preocupa com o futuro da sua carreira em um mundo dominado por IA, este episódio é essencial.",
+        "timestamps": [
+          {"time": "00:00", "title": "Intro"},
+          {"time": "02:30", "title": "Background da Dr. Ana Silva"},
+          {"time": "08:15", "title": "Profissões em Risco: Automação vs Augmentação"},
+          {"time": "18:45", "title": "Novas Profissões Surgindo com IA"},
+          {"time": "28:30", "title": "As 5 Habilidades Essenciais para 2030"},
+          {"time": "38:00", "title": "Como se Preparar: Estratégias Práticas"},
+          {"time": "47:20", "title": "Rapid Fire: Conselhos Rápidos"},
+          {"time": "51:00", "title": "Outro"}
+        ],
+        "key_takeaways": [
+          "Profissões repetitivas (data entry, atendimento básico) têm 80% de chance de automação nos próximos 10 anos",
+          "IA é melhor usada como ferramenta de augmentação (amplificar humanos) do que substituição total",
+          "As 5 habilidades críticas: pensamento crítico, criatividade, inteligência emocional, adaptabilidade, e prompt engineering",
+          "Começar a aprender sobre IA agora (não em 5 anos) é diferencial competitivo",
+          "Educação contínua será norma, não exceção"
+        ],
+        "links": [
+          {"title": "Livro da Dr. Ana: 'IA para Humanos'", "url": "https://example.com/livro"},
+          {"title": "Curso gratuito de IA (USP)", "url": "https://example.com/curso"},
+          {"title": "Relatório: Future of Jobs 2025", "url": "https://example.com/report"}
+        ],
+        "sponsor": {
+          "name": "TechAcademy",
+          "message": "Este episódio é patrocinado pela TechAcademy, plataforma de cursos em tecnologia. Use o código PODCAST20 para 20% de desconto.",
+          "url": "https://example.com/techacademy"
+        }
+      },
+      "social_clips": [
+        {
+          "file": "S01E05_ia-transformando-mercado-trabalho_clip1_youtube.mp4",
+          "platform": "youtube",
+          "duration": "0:58",
+          "title": "3 Profissões que a IA Vai Substituir",
+          "description": "Dr. Ana Silva revela quais profissões estão em maior risco. #IA #MercadoDeTrabalho",
+          "virality_score": 87
+        },
+        {
+          "file": "S01E05_ia-transformando-mercado-trabalho_clip2_instagram.mp4",
+          "platform": "instagram",
+          "duration": "0:45",
+          "title": "A Habilidade #1 para 2030",
+          "description": "Se você aprender apenas UMA coisa sobre IA, que seja isso. 👇",
+          "virality_score": 92
+        },
+        {
+          "file": "S01E05_ia-transformando-mercado-trabalho_clip3_tiktok.mp4",
+          "platform": "tiktok",
+          "duration": "0:35",
+          "title": "IA Vai Roubar Seu Emprego?",
+          "description": "A resposta pode te surpreender. 🤖 #IA #Trabalho #Carreira",
+          "virality_score": 78
+        }
+      ],
+      "chapters": "S01E05_ia-transformando-mercado-trabalho_chapters.json",
+      "metrics": {
+        "downloads_7d": 3247,
+        "downloads_30d": 8932,
+        "downloads_lifetime": 12489,
+        "completion_rate": 68,
+        "average_listen_duration": "35:42",
+        "engagement_score": 8.3,
+        "reviews": 12,
+        "rating_average": 4.8
+      }
+    },
+
+    {
+      "id": "S01E03",
+      "season": 1,
+      "episode": 3,
+      "title": "5 Frameworks de Produtividade que Realmente Funcionam",
+      "title_slug": "5-frameworks-produtividade",
+      "format": "solo",
+      "guest": null,
+      "duration": "28:15",
+      "recorded_date": "2026-01-05",
+      "published_date": "2026-01-08",
+      "content_pillar": "Produtividade",
+      "status": "published",
+      "description": "Testei dezenas de frameworks de produtividade nos últimos 10 anos. Neste episódio solo, compartilho os 5 que realmente fizeram diferença na minha vida — e como você pode implementá-los hoje.",
+      "audio_files": {
+        "raw": [
+          "S01E03_5-frameworks-produtividade_host_raw.wav"
+        ],
+        "master": {
+          "spotify": "S01E03_5-frameworks-produtividade_master_spotify.wav",
+          "apple": "S01E03_5-frameworks-produtividade_master_apple.wav",
+          "youtube": "S01E03_5-frameworks-produtividade_master_youtube.wav",
+          "rss": "S01E03_5-frameworks-produtividade_master_rss.mp3"
+        }
+      },
+      "transcript": {
+        "pt_br": "S01E03_5-frameworks-produtividade_transcript_pt-br.srt",
+        "en_us": null
+      },
+      "show_notes": {
+        "summary": "Produtividade não é sobre trabalhar mais — é sobre trabalhar melhor. Depois de testar dezenas de sistemas, descobri que apenas 5 frameworks realmente movem a agulha.\n\nNeste episódio solo, compartilho esses 5 frameworks (Pomodoro 2.0, Time Blocking, GTD Simplificado, Eat the Frog, e 80/20 Rule) com exemplos práticos de como implementar cada um.\n\nSe você sente que trabalha muito mas produz pouco, este episódio é para você.",
+        "timestamps": [
+          {"time": "00:00", "title": "Hook: O Framework Que Mudou Tudo"},
+          {"time": "01:30", "title": "Intro: Por Que Produtividade Importa"},
+          {"time": "03:45", "title": "Framework 1: Pomodoro 2.0"},
+          {"time": "08:20", "title": "Framework 2: Time Blocking"},
+          {"time": "13:00", "title": "Framework 3: GTD Simplificado"},
+          {"time": "17:30", "title": "Framework 4: Eat the Frog"},
+          {"time": "21:15", "title": "Framework 5: Regra 80/20"},
+          {"time": "25:00", "title": "Como Combinar os 5 Frameworks"},
+          {"time": "27:30", "title": "Outro + Próximo Episódio"}
+        ],
+        "key_takeaways": [
+          "Pomodoro 2.0: 52 min work + 17 min break (baseado em pesquisa de 2024)",
+          "Time Blocking: Agendar TUDO (inclusive tempo livre) previne procrastinação",
+          "GTD Simplificado: Inbox Zero + Next Actions = clareza mental",
+          "Eat the Frog: Tarefa mais difícil pela manhã (quando willpower está alto)",
+          "Regra 80/20: 20% das tarefas geram 80% dos resultados (foque nesses 20%)"
+        ],
+        "links": [
+          {"title": "Template de Time Blocking (Notion)", "url": "https://example.com/timeblock"},
+          {"title": "App recomendado: Forest (Pomodoro)", "url": "https://example.com/forest"},
+          {"title": "Livro: 'Getting Things Done' (David Allen)", "url": "https://example.com/gtd"}
+        ],
+        "sponsor": null
+      },
+      "social_clips": [
+        {
+          "file": "S01E03_5-frameworks-produtividade_clip1_instagram.mp4",
+          "platform": "instagram",
+          "duration": "0:52",
+          "title": "O Erro Fatal de Produtividade",
+          "description": "90% das pessoas cometem esse erro. Você também? #Produtividade",
+          "virality_score": 84
+        },
+        {
+          "file": "S01E03_5-frameworks-produtividade_clip2_youtube.mp4",
+          "platform": "youtube",
+          "duration": "1:15",
+          "title": "Pomodoro 2.0: A Versão Melhorada",
+          "description": "Esqueça o Pomodoro tradicional. Esta versão é 40% mais eficaz.",
+          "virality_score": 76
+        }
+      ],
+      "chapters": "S01E03_5-frameworks-produtividade_chapters.json",
+      "metrics": {
+        "downloads_7d": 2156,
+        "downloads_30d": 6432,
+        "downloads_lifetime": 9876,
+        "completion_rate": 72,
+        "average_listen_duration": "20:25",
+        "engagement_score": 7.9,
+        "reviews": 8,
+        "rating_average": 4.6
+      }
+    },
+
+    {
+      "id": "S01E07",
+      "season": 1,
+      "episode": 7,
+      "title": "O Golpe que Ninguém Viu Vir: A História da FTX",
+      "title_slug": "golpe-historia-ftx",
+      "format": "narrative",
+      "guest": null,
+      "duration": "38:42",
+      "recorded_date": "2026-01-20",
+      "published_date": "2026-01-27",
+      "content_pillar": "Finanças",
+      "status": "published",
+      "description": "Como uma exchange de criptomoedas avaliada em $32 bilhões ruiu em 48 horas? Esta é a história investigativa completa do colapso da FTX — com entrevistas exclusivas de ex-funcionários, investidores, e vítimas.",
+      "audio_files": {
+        "raw": [
+          "S01E07_golpe-historia-ftx_narration_raw.wav",
+          "S01E07_golpe-historia-ftx_interview1_raw.wav",
+          "S01E07_golpe-historia-ftx_interview2_raw.wav",
+          "S01E07_golpe-historia-ftx_interview3_raw.wav",
+          "S01E07_golpe-historia-ftx_music_raw.wav",
+          "S01E07_golpe-historia-ftx_sfx_raw.wav"
+        ],
+        "master": {
+          "spotify": "S01E07_golpe-historia-ftx_master_spotify.wav",
+          "apple": "S01E07_golpe-historia-ftx_master_apple.wav",
+          "youtube": "S01E07_golpe-historia-ftx_master_youtube.wav",
+          "rss": "S01E07_golpe-historia-ftx_master_rss.mp3"
+        }
+      },
+      "transcript": {
+        "pt_br": "S01E07_golpe-historia-ftx_transcript_pt-br.srt",
+        "en_us": null
+      },
+      "show_notes": {
+        "summary": "Em novembro de 2022, a FTX — uma das maiores exchanges de criptomoedas do mundo — entrou em colapso em questão de dias. $8 bilhões de dólares de clientes desapareceram. O fundador Sam Bankman-Fried foi preso.\n\nNeste episódio narrativo investigativo, reconstituímos a história completa: da ascensão meteórica à queda espetacular. Com entrevistas exclusivas de ex-funcionários, investidores que perderam milhões, e análise de especialistas.\n\nUma história de ganância, fraude, e as lições que todos devemos aprender.",
+        "timestamps": [
+          {"time": "00:00", "title": "Cold Open: O Tweet que Iniciou Tudo"},
+          {"time": "02:15", "title": "Ato I: A Ascensão do Império FTX"},
+          {"time": "11:30", "title": "Os Sinais de Alerta (Que Ninguém Viu)"},
+          {"time": "18:00", "title": "Ato II: O Colapso em 48 Horas"},
+          {"time": "26:45", "title": "As Vítimas: Histórias Reais"},
+          {"time": "32:00", "title": "Ato III: O Que Aprendemos"},
+          {"time": "37:00", "title": "Outro: Onde Estão Agora"}
+        ],
+        "key_takeaways": [
+          "FTX usava depósitos de clientes para trading da Alameda Research (empresa irmã) — ilegal",
+          "Red flags: CEO muito jovem, ausência de CFO, falta de auditoria externa",
+          "Diversificação é crítica: vítimas que tinham 100% dos ativos na FTX perderam tudo",
+          "Regulação em crypto é inevitável (e necessária) após este caso",
+          "Trust but verify: mesmo exchange 'confiável' pode falir"
+        ],
+        "links": [
+          {"title": "Timeline completo do colapso", "url": "https://example.com/ftx-timeline"},
+          {"title": "Court filings (processos públicos)", "url": "https://example.com/court"},
+          {"title": "Como proteger seus cripto assets", "url": "https://example.com/protect"}
+        ],
+        "sponsor": {
+          "name": "SecureWallet",
+          "message": "Este episódio é patrocinado pela SecureWallet — hardware wallet líder. Não deixe seus ativos em exchanges. Código PODCAST para 15% off.",
+          "url": "https://example.com/securewallet"
+        },
+        "credits": {
+          "narration": "João Host",
+          "interviews": ["Ex-funcionário FTX (anônimo)", "Maria Investidora", "Dr. Paulo Analista Financeiro"],
+          "music": "Original score por Pedro Composer",
+          "sound_design": "Lucas Engineer",
+          "research": "Ana Producer"
+        }
+      },
+      "social_clips": [
+        {
+          "file": "S01E07_golpe-historia-ftx_clip1_youtube.mp4",
+          "platform": "youtube",
+          "duration": "1:20",
+          "title": "O Momento Exato em que Tudo Desmoronou",
+          "description": "48 horas que mudaram o mundo cripto. #FTX #Crypto",
+          "virality_score": 91
+        },
+        {
+          "file": "S01E07_golpe-historia-ftx_clip2_instagram.mp4",
+          "platform": "instagram",
+          "duration": "0:48",
+          "title": "Ela Perdeu R$2 Milhões na FTX",
+          "description": "História real de uma vítima. 💔 #FTX #CryptoScam",
+          "virality_score": 88
+        }
+      ],
+      "chapters": "S01E07_golpe-historia-ftx_chapters.json",
+      "metrics": {
+        "downloads_7d": 5892,
+        "downloads_30d": 15234,
+        "downloads_lifetime": 18765,
+        "completion_rate": 74,
+        "average_listen_duration": "28:40",
+        "engagement_score": 9.1,
+        "reviews": 34,
+        "rating_average": 4.9
+      }
+    }
+  ],
+
+  "notes": {
+    "format_guide": "Use estes episódios modelo como referência para estrutura, metadata, e assets.",
+    "metrics": "Valores são exemplos realistas baseados em benchmarks do mercado.",
+    "virality_score": "Opus Clip AI score (0-100). >80 é considerado alto potencial viral."
+  }
+}

@@ -1,0 +1,329 @@
+# Audio Standards - Podcast Production Squad
+# Especificações técnicas detalhadas por plataforma
+
+# RECORDING STANDARDS (Universal)
+recording:
+  format: "WAV"
+  sample_rate: 48000  # Hz
+  bit_depth: 24       # bits
+  channels: "Mono per track"
+  target_level: "-16 to -12 dBFS (peak)"
+  headroom: "-6 dB minimum"
+
+  rationale:
+    format: "WAV = uncompressed, preserve max quality"
+    sample_rate: "48kHz = broadcast standard, future-proof"
+    bit_depth: "24-bit = dynamic range suficiente, evita noise floor"
+    mono: "Separate tracks por speaker = flexibility na edição"
+    target_level: "Deixa headroom para processing sem clipping"
+
+  room_treatment:
+    ideal: "Treated acoustic space (broadcast tier)"
+    minimum: "Quiet room + closet/blankets para damping"
+    avoid: "Hard surfaces, echo, HVAC noise"
+
+  microphone_technique:
+    distance: "4-6 inches (10-15cm)"
+    angle: "On-axis ou slight off-axis (reduce plosives)"
+    pop_filter: "Essential"
+    shock_mount: "Recommended"
+
+# PLATFORM-SPECIFIC MASTERS
+master_by_platform:
+  spotify:
+    loudness: "-14 LUFS integrated"
+    true_peak: "-1 dB"
+    format_delivered: "OGG Vorbis (auto-converted)"
+    export_format: "WAV 48kHz/24bit"
+    notes:
+      - "Spotify normaliza tudo para -14 LUFS"
+      - "Se mais alto, reduz volume (perda de dynamic range)"
+      - "Se mais baixo, aumenta volume (pode expor noise floor)"
+      - "Export WAV, deixa Spotify fazer compression"
+
+  apple:
+    loudness: "-16 LUFS integrated"
+    true_peak: "-1 dB"
+    format_delivered: "AAC 256kbps (VBR)"
+    export_format: "ALAC (Apple Lossless) ou WAV"
+    notes:
+      - "Apple mais conservador que Spotify (-16 vs -14)"
+      - "Aceita AAC direct, mas preferem lossless"
+      - "Suporta Dolby Atmos (spatial audio)"
+
+  youtube:
+    loudness: "-14 LUFS integrated"
+    true_peak: "-1 dB"
+    format_delivered: "AAC/Opus (auto-converted)"
+    export_format: "WAV 48kHz/24bit"
+    video_codec: "H.264 ou H.265"
+    resolution: "1080p minimum, 4K para premium"
+    notes:
+      - "YouTube normaliza audio similar ao Spotify"
+      - "Video podcast = thumbnail + static/animated image"
+      - "Shorts = vertical 9:16, audio -14 LUFS também"
+
+  amazon:
+    loudness: "-14 LUFS integrated"
+    true_peak: "-2 dB" # Mais conservador
+    format_delivered: "MP3 320kbps CBR"
+    export_format: "WAV"
+    notes:
+      - "Amazon Music + Audible"
+      - "True peak -2dB (evita distortion em devices)"
+
+  deezer:
+    loudness: "-14 to -16 LUFS"
+    true_peak: "-1 dB"
+    format_delivered: "MP3/AAC (auto)"
+    export_format: "WAV"
+
+  rss_general:
+    loudness: "-16 LUFS integrated"
+    true_peak: "-1 dB"
+    format_delivered: "MP3 192kbps VBR ou AAC 128kbps"
+    file_size_target: "< 100MB (hosting limits)"
+    notes:
+      - "Compatibilidade máxima"
+      - "VBR = melhor qualidade por MB"
+      - "192kbps VBR = sweet spot (qualidade vs size)"
+
+# MASTER DELIVERY CHECKLIST
+master_deliverables:
+  primary:
+    - name: "Master-Spotify.wav"
+      spec: "48kHz/24bit, -14 LUFS, -1dB true peak"
+    - name: "Master-Apple.wav"
+      spec: "48kHz/24bit, -16 LUFS, -1dB true peak"
+    - name: "Master-YouTube.wav"
+      spec: "48kHz/24bit, -14 LUFS, -1dB true peak"
+    - name: "Master-RSS.mp3"
+      spec: "192kbps VBR, -16 LUFS, -1dB true peak"
+
+  optional:
+    - name: "Master-Stereo-Enhanced.wav"
+      spec: "Stereo version com subtle widening, usar com cuidado"
+
+# NOISE & QUALITY STANDARDS
+noise_standards:
+  noise_floor: "-60 dBFS or lower"
+  snr: "Minimum 30 dB (signal-to-noise ratio)"
+  thd: "< 0.1% (total harmonic distortion)"
+
+  acceptable_noise_types:
+    - "Room tone consistente e baixo"
+    - "Breath sounds naturais"
+
+  unacceptable_noise_types:
+    - "HVAC/fan rumble"
+    - "Computer fan"
+    - "Mouth clicks (excessive)"
+    - "Electrical hum (60Hz/50Hz)"
+    - "Plosives não tratados"
+
+# PROCESSING CHAIN (typical)
+processing_chain:
+  step_1_editing:
+    - "Remove erros/silêncios"
+    - "Crossfades suaves (10-30ms)"
+    - "Consistent takes per speaker"
+
+  step_2_cleanup:
+    - name: "Noise Reduction"
+      tool: "iZotope RX, Descript, Audacity"
+      settings: "Conservative (avoid artifacts)"
+    - name: "De-Click/De-Pop"
+      tool: "iZotope RX"
+      use: "Mouth clicks, plosives residuais"
+    - name: "De-Ess"
+      frequency: "4-8 kHz"
+      reduction: "3-6 dB quando triggered"
+
+  step_3_eq:
+    male_voice:
+      - "HPF 80 Hz (12dB/oct) - remove rumble"
+      - "+2dB @ 3kHz (presence)"
+      - "-1dB @ 200Hz (reduce boxiness)"
+    female_voice:
+      - "HPF 100 Hz"
+      - "+2dB @ 4kHz (air)"
+      - "-1dB @ 250Hz"
+    notes: "Subtle, não overdone, cada voz é única"
+
+  step_4_compression:
+    ratio: "3:1 to 4:1"
+    threshold: "-18 to -12 dB"
+    attack: "10-30 ms"
+    release: "100-300 ms"
+    makeup_gain: "To taste"
+    purpose: "Consistência de level, controle dynamics"
+
+  step_5_bus_processing:
+    - name: "Bus Compression"
+      ratio: "2:1"
+      threshold: "-12 dB"
+      purpose: "Glue tracks together"
+    - name: "Bus EQ"
+      purpose: "Final tone shaping"
+
+  step_6_limiting:
+    ceiling: "-1 dB true peak (-2 dB for Amazon)"
+    algorithm: "True peak limiting"
+    purpose: "Prevent clipping, achieve target loudness"
+    tools: [FabFilter Pro-L2, Waves L2, Logic Adaptive Limiter]
+
+# SPATIAL AUDIO (Advanced)
+spatial_audio:
+  dolby_atmos:
+    format: "7.1.4 object-based"
+    delivery: "ADM BWF or Dolby Atmos Master"
+    platforms: [Apple Music, Amazon Music HD, Tidal]
+    tools: [Logic Pro, Pro Tools with Dolby Atmos Renderer]
+    use_case: "Premium podcasts, narrative/music-heavy"
+    notes:
+      - "Requer certification (Dolby)"
+      - "Fold-down para stereo CRITICAL (maioria ouve stereo)"
+      - "Não overdo (subtle spatial > gimmicky)"
+
+  binaural:
+    format: "Stereo fold-down com HRTF processing"
+    purpose: "3D audio em fones stereo normais"
+    tools: [Waves Nx, DearVR, Binaural plugins]
+    use_case: "Narrative podcasts, imersão"
+    notes: "Funciona melhor em fones, estranho em speakers"
+
+  stereo_widening:
+    technique: "Subtle panning de voice tracks"
+    amount: "L/R 5-15% (não hard pan)"
+    use_case: "Round-table, multiple hosts"
+    avoid: "Solo voice (sempre mono center)"
+
+# MUSIC & SFX
+music_sfx:
+  intro_outro_music:
+    duration: "15-30 seconds"
+    fade: "2-3 second fade in/out"
+    level: "-20 to -16 LUFS (under voice when presente)"
+    source: [Epidemic Sound, Artlist, Audio Jungle, original]
+    licensing: "CRITICAL - verify rights para commercial use"
+
+  transition_music:
+    duration: "5-15 seconds"
+    level: "-18 to -16 LUFS"
+    purpose: "Separar blocos, dar respiro"
+
+  bed_music:
+    level: "-30 to -25 LUFS (background)"
+    frequency: "Roll off high-end (não competir com voice)"
+    use: "Narrative podcasts, emotional moments"
+    avoid: "Interview (distracting)"
+
+  sfx:
+    level: "Match voice level ou slightly lower"
+    purpose: "Punctuate moments, não decorar excessivamente"
+    quality: "High-quality, não stock cheesy sounds"
+
+# QUALITY ASSURANCE CHECKS
+qa_checklist:
+  technical:
+    - "No clipping/distortion (visual + auditory check)"
+    - "LUFS target atingido (±0.5 LUFS tolerance)"
+    - "True peak não excede ceiling"
+    - "Noise floor acceptable"
+    - "Consistent levels entre speakers"
+    - "Smooth transitions/crossfades"
+    - "Music não sobrepõe voice"
+
+  content:
+    - "No dead air > 3 seconds (sem intenção)"
+    - "Sem erros não corrigidos"
+    - "Intro/outro music correct"
+    - "Fades suaves (não abrupt cuts)"
+
+  export:
+    - "File naming correct"
+    - "Metadata embedded (ID3 tags)"
+    - "Sample rate/bit depth correct"
+    - "Mono vs Stereo correct"
+    - "File plays sem erros"
+
+# TOOLS RECOMMENDATIONS
+tools:
+  daw:
+    beginner: "GarageBand (Mac), Audacity (free)"
+    intermediate: "Logic Pro, Reaper"
+    professional: "Pro Tools, Logic Pro"
+    ai_assisted: "Descript (edit by text)"
+
+  plugins:
+    essential:
+      - "EQ (stock DAW ou FabFilter Pro-Q)"
+      - "Compressor (stock ou FabFilter Pro-C)"
+      - "Limiter (FabFilter Pro-L2, Waves L2)"
+
+    cleanup:
+      - "iZotope RX (industry standard)"
+      - "Waves WNS (noise suppressor)"
+      - "Cedar DNS (broadcast grade, expensive)"
+
+    metering:
+      - "Youlean Loudness Meter (free)"
+      - "iZotope Insight"
+      - "Logic Pro built-in meters"
+
+  hardware:
+    microphone:
+      budget: "Audio-Technica ATR2100x (~$100)"
+      mid: "Shure SM7B (~$400), Rode PodMic (~$100)"
+      high: "Neumann U87 (~$3500), Shure SM7dB (~$500)"
+
+    interface:
+      budget: "Focusrite Scarlett Solo (~$120)"
+      mid: "Universal Audio Volt 276 (~$300)"
+      high: "Apollo Twin (~$900)"
+
+    headphones:
+      monitor: "Audio-Technica M50x (~$150)"
+      reference: "Sennheiser HD 600 (~$400)"
+
+# REMOTE RECORDING CHALLENGES
+remote_recording:
+  challenges:
+    - "Variable mic quality (guest equipment)"
+    - "Compression artifacts (internet)"
+    - "Background noise (guest environment)"
+    - "Level inconsistency"
+
+  solutions:
+    platform: "Riverside, Zencastr (local recording = studio quality)"
+    guest_prep:
+      - "Send tech guide 1 week before"
+      - "Tech check 2 days before"
+      - "Request quiet room + headphones"
+    processing:
+      - "More aggressive noise reduction (guest track)"
+      - "Tighter compression (consistent levels)"
+      - "EQ match (host vs guest tone)"
+
+  realistic_expectations:
+    - "Remote never = in-studio"
+    - "Focus em clarity > perfection"
+    - "Content > pristine audio (dentro do aceitável)"
+
+# TIER-SPECIFIC STANDARDS
+tier_standards:
+  solo:
+    acceptable: "Clean audio, -16 LUFS, basic processing"
+    tools: "GarageBand/Audacity + Descript"
+    time_per_episode: "2-4 horas editing"
+
+  studio:
+    target: "Professional audio, platform-optimized masters"
+    tools: "Logic Pro/Pro Tools + iZotope RX"
+    time_per_episode: "4-8 horas editing/mixing"
+
+  broadcast:
+    requirement: "Broadcast-grade audio, spatial audio option"
+    tools: "Pro Tools + full plugin suite + hardware"
+    time_per_episode: "8-16 horas (multiple iterations)"
+    extras: "Separate masters per platform, stems available"

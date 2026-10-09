@@ -1,0 +1,37 @@
+{
+  "name": "podcast-guest-intel",
+  "displayName": "Podcast Guest Intel",
+  "version": "1.0.0",
+  "description": "Prepara episódios de podcast com convidado: convite, dossiê com fontes, pauta e roteiro.",
+  "author": {
+    "name": "Renato Aparecido Gomes"
+  },
+  "repository": "https://github.com/RAG7782/podcast-guest-intel",
+  "license": "Apache-2.0",
+  "keywords": [
+    "podcast",
+    "entrevista",
+    "convidado",
+    "pauta",
+    "roteiro",
+    "lgpd"
+  ],
+  "metadata": {
+    "capabilities": {
+      "convite-e-formulario-essencial": "free",
+      "formulario-completo-e-automacoes": "paid",
+      "dossie": "free",
+      "dossie-portal-e-historico": "paid",
+      "pauta-1-tronco": "free",
+      "pauta-3-troncos": "paid",
+      "roteiro-modo-informativo": "free",
+      "roteiro-7-modos": "paid",
+      "memoria-centro-de-comando": "paid",
+      "localizacao-local": "free",
+      "localizacao-servidor": "paid",
+      "exportacao-markdown": "free",
+      "exportacao-pdf-docx": "paid"
+    },
+    "capabilities_file": "./skills/podcast-guest-intel/references/capabilities.json"
+  }
+}

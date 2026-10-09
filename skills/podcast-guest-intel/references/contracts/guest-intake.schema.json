@@ -1,0 +1,285 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://podcast-production.invalid/contracts/guest-intake.schema.json",
+  "title": "GuestIntake",
+  "description": "Respostas do formulário do convidado (adaptador: Google Forms, Tally, form próprio). Um único contrato para as duas variantes; só form_variant muda. Sem consentimento geral não existe intake. Dado sensível só entra em sensitive_declarations, cada um com consentimento específico e destacado (LGPD art. 11, I). Materiais são LINKS (Forms sem upload: upload exige login Google).",
+  "type": "object",
+  "x-form-variants": {
+    "essencial": [
+      "guest.full_name", "guest.preferred_name", "bio.short", "links", "recording_mode",
+      "contacts.email", "contacts.whatsapp", "scheduled_at", "automation_consents", "consent"
+    ],
+    "completo": "todos os campos de properties; nenhum além da variante essencial é obrigatório (o convidado pode pular)"
+  },
+  "required": [
+    "intake_id", "form_variant", "locale", "jurisdiction", "submitted_at",
+    "guest", "bio", "links", "recording_mode", "contacts", "automation_consents", "consent"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "intake_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$" },
+    "episode_ref": { "type": "string" },
+    "scheduled_at": { "type": "string", "format": "date-time", "description": "Data/hora da gravação já combinada com o host (opcional). Alimenta o convite de agenda e o lembrete D-1." },
+    "form_variant": { "enum": ["essencial", "completo"] },
+    "locale": { "$ref": "show-profile.schema.json#/$defs/locale" },
+    "jurisdiction": { "enum": ["BR-LGPD", "EU-GDPR", "CN-PIPL", "other"] },
+    "submitted_at": { "type": "string", "format": "date-time" },
+    "guest": {
+      "type": "object",
+      "required": ["full_name", "preferred_name"],
+      "additionalProperties": false,
+      "properties": {
+        "full_name": { "type": "string", "minLength": 1 },
+        "preferred_name": { "type": "string", "minLength": 1, "description": "Nome de tratamento (como quer ser chamado no ar)." },
+        "name_pronunciation": { "type": "string" },
+        "pronouns": { "type": "string" },
+        "role_title": { "type": "string" },
+        "photo_url": { "type": "string", "format": "uri" }
+      }
+    },
+    "bio": {
+      "type": "object",
+      "required": ["short"],
+      "additionalProperties": false,
+      "properties": {
+        "short": { "type": "string", "minLength": 1, "maxLength": 280, "description": "Mini-bio de até 2 linhas." },
+        "long": { "type": "string" }
+      }
+    },
+    "links": { "type": "array", "minItems": 1, "items": { "type": "string", "format": "uri" }, "description": "Site, perfis, portfólio. Modo mínimo sem formulário = nome + 1 link." },
+    "social_handles": {
+      "type": "array",
+      "description": "@ das redes para marcar na divulgação.",
+      "items": {
+        "type": "object",
+        "required": ["platform", "handle"],
+        "additionalProperties": false,
+        "properties": { "platform": { "type": "string" }, "handle": { "type": "string" } }
+      }
+    },
+    "previous_interviews": { "type": "array", "items": { "type": "string", "format": "uri" } },
+    "key_ideas": { "type": "array", "maxItems": 3, "items": { "type": "string" }, "description": "3 ideias que quer deixar ao público." },
+    "stories_to_tell": { "type": "array", "items": { "type": "string" } },
+    "controversies": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "accepts": { "type": "array", "items": { "type": "string" } },
+        "declines": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "off_limits_topics": { "type": "array", "items": { "type": "string" }, "description": "Assuntos proibidos." },
+    "wants_to_promote": { "type": "array", "items": { "type": "string" } },
+    "dream_questions": { "type": "array", "items": { "type": "string" }, "description": "Perguntas que adoraria receber." },
+    "conflicts_of_interest": {
+      "type": "object",
+      "required": ["declared"],
+      "additionalProperties": false,
+      "properties": {
+        "declared": { "type": "boolean" },
+        "details": { "type": "string" },
+        "sponsorships": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "accessibility": {
+      "type": "object",
+      "description": "Necessidade de acessibilidade pode revelar saúde (dado sensível): exige consentimento específico.",
+      "required": ["needs", "consent"],
+      "additionalProperties": false,
+      "properties": {
+        "needs": { "type": "string", "minLength": 1 },
+        "consent": { "$ref": "#/$defs/specific_consent" }
+      }
+    },
+    "companion": {
+      "type": "object",
+      "required": ["bringing"],
+      "additionalProperties": false,
+      "properties": { "bringing": { "type": "boolean" }, "name": { "type": "string" } }
+    },
+    "recording_mode": { "enum": ["presencial", "remoto"] },
+    "image_voice_authorization": {
+      "type": "object",
+      "required": ["granted", "text_version", "granted_at"],
+      "additionalProperties": false,
+      "properties": {
+        "granted": { "type": "boolean" },
+        "text_version": { "type": "string" },
+        "granted_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "wants_prepublication_review": { "type": "boolean" },
+    "preferred_channel": { "enum": ["email", "whatsapp", "phone", "other"] },
+    "materials": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kind", "url"],
+        "additionalProperties": false,
+        "properties": {
+          "kind": { "enum": ["palestra", "livro", "artigo", "video", "podcast", "apresentacao", "outro"] },
+          "title": { "type": "string" },
+          "url": { "type": "string", "format": "uri" }
+        }
+      }
+    },
+    "contacts": {
+      "type": "object",
+      "required": ["email"],
+      "additionalProperties": false,
+      "properties": {
+        "email": { "type": "string", "format": "email" },
+        "whatsapp": { "type": "string", "pattern": "^\\+[1-9][0-9]{7,14}$", "description": "E.164." }
+      }
+    },
+    "automation_consents": {
+      "type": "object",
+      "description": "Consentimento por canal para automações (kit por e-mail, WhatsApp, convite de agenda, lembrete D-1).",
+      "required": ["email", "whatsapp", "calendar"],
+      "additionalProperties": false,
+      "properties": {
+        "email": { "$ref": "#/$defs/channel_consent" },
+        "whatsapp": { "$ref": "#/$defs/channel_consent" },
+        "calendar": { "$ref": "#/$defs/channel_consent" }
+      }
+    },
+    "consent": { "$ref": "#/$defs/general_consent" },
+    "sensitive_declarations": {
+      "type": "array",
+      "description": "Únicos campos sensíveis. Cada um marcado e com aceite próprio, separado do geral.",
+      "items": { "$ref": "#/$defs/sensitive_declaration" }
+    },
+    "localization_consents": {
+      "type": "object",
+      "description": "Três aceites SEPARADOS e destacados para levar o episódio a outros idiomas (research/06 §3.3). Nenhum pré-marcado, nenhum condiciona a participação. Ausência do bloco ou de um aceite = não autorizado. (a) tradução/legendas; (b) dublagem com voz sintética genérica; (c) réplica da própria voz = dado sensível (LGPD art. 11, I), específico, revogável.",
+      "additionalProperties": false,
+      "properties": {
+        "translation_text": { "$ref": "#/$defs/localization_consent" },
+        "dub_generic_voice": { "$ref": "#/$defs/localization_consent" },
+        "dub_voice_replica": { "$ref": "#/$defs/voice_replica_consent" }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "automation_consents": { "properties": { "whatsapp": { "properties": { "granted": { "const": true } } } } } }
+      },
+      "then": {
+        "properties": { "contacts": { "x-rule": "R-INTAKE-WHATSAPP-NUMBER", "required": ["whatsapp"] } }
+      }
+    }
+  ],
+  "$defs": {
+    "general_consent": {
+      "type": "object",
+      "description": "Cláusula destacada (art. 8º, §1º), finalidades específicas (art. 8º, §4º), revogável (art. 8º, §5º).",
+      "x-rule": "R-INTAKE-CONSENT",
+      "required": ["consent_id", "granted", "granted_at", "text_version", "clause_id", "purposes", "public_research_notice"],
+      "additionalProperties": false,
+      "properties": {
+        "consent_id": { "type": "string", "minLength": 1 },
+        "granted": { "const": true, "x-rule": "R-INTAKE-CONSENT" },
+        "granted_at": { "type": "string", "format": "date-time" },
+        "text_version": { "type": "string", "minLength": 1 },
+        "clause_id": { "type": "string", "minLength": 1, "description": "Cláusula por jurisdição (ex.: BR-LGPD/v1, EU-GDPR/v1)." },
+        "purposes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["preparo_entrevista", "dossie", "memoria_episodio", "divulgacao"] }
+        },
+        "public_research_notice": { "const": true, "description": "Titular informado de que haverá pesquisa em fontes públicas (LGPD art. 9º; GDPR art. 14)." },
+        "channel": { "type": "string" },
+        "revoked_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "specific_consent": {
+      "type": "object",
+      "description": "Aceite específico e destacado para UMA finalidade (art. 11, I). Caixa desmarcada por padrão.",
+      "x-rule": "R-INTAKE-SENSITIVE-SPECIFIC-CONSENT",
+      "required": ["consent_id", "specific", "highlighted", "purpose", "granted_at", "text_version"],
+      "additionalProperties": false,
+      "properties": {
+        "consent_id": { "type": "string", "minLength": 1 },
+        "specific": { "const": true, "x-rule": "R-INTAKE-SENSITIVE-SPECIFIC-CONSENT" },
+        "highlighted": { "const": true, "x-rule": "R-INTAKE-SENSITIVE-SPECIFIC-CONSENT" },
+        "purpose": { "type": "string", "minLength": 1 },
+        "granted_at": { "type": "string", "format": "date-time" },
+        "text_version": { "type": "string", "minLength": 1 },
+        "revoked_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "sensitive_declaration": {
+      "type": "object",
+      "required": ["field_id", "sensitive", "category", "value", "consent"],
+      "additionalProperties": false,
+      "properties": {
+        "field_id": { "type": "string", "minLength": 1 },
+        "sensitive": { "const": true },
+        "category": { "$ref": "claim.schema.json#/$defs/sensitive_category" },
+        "value": { "type": "string", "minLength": 1 },
+        "consent": { "$ref": "#/$defs/specific_consent" }
+      }
+    },
+    "localization_consent": {
+      "type": "object",
+      "description": "Aceite de localização (texto ou voz genérica): idiomas nomeados (autorização genérica é nula, art. 8º, §4º).",
+      "required": ["granted"],
+      "additionalProperties": false,
+      "properties": {
+        "consent_id": { "type": "string", "minLength": 1 },
+        "granted": { "type": "boolean" },
+        "granted_at": { "type": "string", "format": "date-time" },
+        "text_version": { "type": "string", "minLength": 1 },
+        "target_locales": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "show-profile.schema.json#/$defs/locale" } },
+        "revoked_at": { "type": "string", "format": "date-time" }
+      },
+      "if": { "properties": { "granted": { "const": true } } },
+      "then": { "x-rule": "R-INTAKE-LOCALIZATION-CONSENT", "required": ["consent_id", "granted_at", "text_version", "target_locales"] }
+    },
+    "voice_replica_consent": {
+      "type": "object",
+      "description": "Réplica artificial da voz do titular: dado sensível (LGPD art. 5º, II e art. 11, I; CF art. 5º, XXVIII, a). Específico (episódio, idiomas, provedor e país, prazo de apagamento do modelo), destacado, revogável (art. 8º, §5º). Sem este aceite concedido e não revogado, a dublagem com réplica é RECUSADA (regra rígida).",
+      "required": ["granted"],
+      "additionalProperties": false,
+      "properties": {
+        "consent_id": { "type": "string", "minLength": 1 },
+        "granted": { "type": "boolean" },
+        "sensitive": { "const": true },
+        "specific": { "const": true },
+        "highlighted": { "const": true },
+        "purpose": { "type": "string", "minLength": 1 },
+        "episode_ref": { "type": "string" },
+        "granted_at": { "type": "string", "format": "date-time" },
+        "text_version": { "type": "string", "minLength": 1 },
+        "target_locales": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "show-profile.schema.json#/$defs/locale" } },
+        "provider": {
+          "type": "object",
+          "required": ["name", "country"],
+          "additionalProperties": false,
+          "properties": { "name": { "type": "string", "minLength": 1 }, "country": { "type": "string", "minLength": 2 } },
+          "description": "Transferência internacional nomeada (LGPD art. 33)."
+        },
+        "model_deletion_days": { "type": "integer", "minimum": 0, "maximum": 365 },
+        "revoked_at": { "type": "string", "format": "date-time" }
+      },
+      "if": { "properties": { "granted": { "const": true } } },
+      "then": {
+        "x-rule": "R-INTAKE-VOICE-REPLICA-CONSENT",
+        "required": ["consent_id", "sensitive", "specific", "highlighted", "purpose", "granted_at", "text_version", "target_locales", "provider", "model_deletion_days"]
+      }
+    },
+    "channel_consent": {
+      "type": "object",
+      "required": ["granted"],
+      "additionalProperties": false,
+      "properties": {
+        "granted": { "type": "boolean" },
+        "granted_at": { "type": "string", "format": "date-time" }
+      },
+      "if": { "properties": { "granted": { "const": true } } },
+      "then": { "required": ["granted_at"] }
+    }
+  }
+}

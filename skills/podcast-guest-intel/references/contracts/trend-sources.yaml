@@ -1,0 +1,64 @@
+# Fontes de tendência padrão (valida contra trend-sources.schema.json).
+# keyless: funcionam sem chave e são o fallback. Endpoints conferidos em 2026-10-09 (HTTP 200).
+# byok: chave do próprio usuário. O arquivo guarda SÓ a referência (env/cofre) e o status da
+# verificação feita quando a chave é fornecida. Valor de chave aqui = falha de validação.
+version: 1
+sources:
+  - id: x
+    kind: byok
+    provider: X (Twitter) API
+    priority: 1
+    enabled: false
+    credential:
+      ref: { store: env, name: TREND_X_BEARER }
+      status: not_provided
+
+  - id: tiktok
+    kind: byok
+    provider: TikTok Research/Display API
+    priority: 2
+    enabled: false
+    credential:
+      ref: { store: env, name: TREND_TIKTOK_TOKEN }
+      status: not_provided
+
+  - id: reddit
+    kind: byok
+    provider: Reddit API (OAuth)
+    priority: 3
+    enabled: false
+    credential:
+      ref: { store: env, name: TREND_REDDIT_CLIENT }
+      status: not_provided
+
+  - id: linkedin
+    kind: byok
+    provider: LinkedIn API
+    priority: 4
+    enabled: false
+    credential:
+      ref: { store: env, name: TREND_LINKEDIN_TOKEN }
+      status: not_provided
+
+  - id: youtube
+    kind: byok
+    provider: YouTube Data API v3
+    priority: 5
+    enabled: false
+    credential:
+      ref: { store: env, name: TREND_YOUTUBE_KEY }
+      status: not_provided
+
+  - id: google_trends_rss
+    kind: keyless
+    provider: Google Trends (RSS diário por país)
+    priority: 10
+    enabled: true
+    endpoint_template: "https://trends.google.com/trending/rss?geo={geo}"
+
+  - id: google_news_rss
+    kind: keyless
+    provider: Google News (RSS de busca)
+    priority: 11
+    enabled: true
+    endpoint_template: "https://news.google.com/rss/search?q={query}&hl={hl}&gl={geo}&ceid={geo}:{ceid_lang}"

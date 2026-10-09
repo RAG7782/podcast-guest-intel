@@ -1,0 +1,345 @@
+# Audio Processing Presets - Podcast Production Squad
+# Configurações de processamento por tipo de voz e cenário
+
+# VOZ MASCULINA
+male_voice:
+  eq:
+    hpf:
+      frequency: "80 Hz"
+      slope: "12 dB/octave"
+      purpose: "Remove rumble e frequências sub-bass"
+
+    presence_boost:
+      frequency: "3000 Hz"
+      gain: "+2 dB"
+      q: "1.5"
+      purpose: "Claridade e inteligibilidade"
+
+    reduce_boxiness:
+      frequency: "200 Hz"
+      gain: "-1 to -2 dB"
+      q: "2.0"
+      purpose: "Reduz 'boxiness' comum em vozes masculinas"
+
+    de_mud:
+      frequency: "400-500 Hz"
+      gain: "-1 to -2 dB"
+      q: "1.5"
+      purpose: "Remove 'mud' se voz soa abafada"
+
+  compression:
+    ratio: "3:1 to 4:1"
+    threshold: "-18 to -12 dB"
+    attack: "10-30 ms"
+    release: "100-300 ms"
+    knee: "Soft"
+    makeup_gain: "To compensate reduction"
+    purpose: "Consistência de nível, controle dinâmicas"
+
+  de_esser:
+    frequency: "6000-8000 Hz"
+    reduction: "3-6 dB when triggered"
+    threshold: "Adjust to taste"
+    purpose: "Controlar sibilância (s, sh, ch)"
+
+  gate:
+    threshold: "-40 to -50 dB"
+    attack: "5 ms"
+    release: "100-200 ms"
+    range: "-60 dB"
+    purpose: "Remover noise durante silêncios"
+    note: "Use com cuidado (pode cortar breathing natural)"
+
+# VOZ FEMININA
+female_voice:
+  eq:
+    hpf:
+      frequency: "100 Hz"
+      slope: "12 dB/octave"
+      purpose: "Remove rumble, pode ser mais agressivo que masculina"
+
+    presence_boost:
+      frequency: "4000 Hz"
+      gain: "+2 dB"
+      q: "1.5"
+      purpose: "Claridade, vozes femininas brilham nessa região"
+
+    air_boost:
+      frequency: "10000-12000 Hz"
+      gain: "+1 to +2 dB"
+      q: "1.0"
+      shelf: "High shelf"
+      purpose: "Add 'air', openness"
+
+    reduce_boxiness:
+      frequency: "250 Hz"
+      gain: "-1 to -2 dB"
+      q: "2.0"
+      purpose: "Similar a masculina, mas frequência levemente higher"
+
+  compression:
+    ratio: "3:1 to 4:1"
+    threshold: "-18 to -12 dB"
+    attack: "10-30 ms"
+    release: "100-300 ms"
+    knee: "Soft"
+    makeup_gain: "To compensate reduction"
+
+  de_esser:
+    frequency: "4000-8000 Hz"
+    reduction: "3-6 dB when triggered"
+    threshold: "Adjust to taste"
+    purpose: "Vozes femininas podem ter sibilância mais pronunciada"
+
+# MIX PODCAST STEREO
+mix_podcast:
+  bus_compression:
+    ratio: "2:1"
+    threshold: "-12 dB"
+    attack: "30 ms"
+    release: "Auto or 300 ms"
+    makeup_gain: "To taste"
+    purpose: "Glue tracks together, coesão sônica"
+
+  bus_eq:
+    purpose: "Final tone shaping, sutil"
+    high_shelf:
+      frequency: "10000 Hz"
+      gain: "+0.5 to +1 dB"
+      purpose: "Add subtle air"
+
+    low_shelf:
+      frequency: "80 Hz"
+      gain: "-1 dB"
+      purpose: "Clean up low-end"
+
+  stereo_width:
+    technique: "Subtle widening (if multi-speaker)"
+    amount: "5-15% pan L/R"
+    avoid: "Hard pan (sounds weird em fones)"
+    mono_compatibility: "Check mix collapses well to mono"
+
+  limiting:
+    ceiling: "-1 dB true peak (-2 dB for Amazon)"
+    algorithm: "True peak limiting"
+    purpose: "Prevent clipping, achieve target loudness"
+    tools: ["FabFilter Pro-L2", "Waves L2", "Logic Adaptive Limiter"]
+
+# MASTER POR PLATAFORMA
+master_spotify:
+  loudness: "-14 LUFS integrated"
+  true_peak: "-1 dB"
+  export:
+    format: "WAV"
+    sample_rate: "48000 Hz"
+    bit_depth: "24-bit"
+
+master_apple:
+  loudness: "-16 LUFS integrated"
+  true_peak: "-1 dB"
+  export:
+    format: "WAV or ALAC"
+    sample_rate: "48000 Hz"
+    bit_depth: "24-bit"
+
+master_youtube:
+  loudness: "-14 LUFS integrated"
+  true_peak: "-1 dB"
+  export:
+    format: "WAV"
+    sample_rate: "48000 Hz"
+    bit_depth: "24-bit"
+
+master_rss:
+  loudness: "-16 LUFS integrated"
+  true_peak: "-1 dB"
+  export:
+    format: "MP3 192kbps VBR or AAC 128kbps"
+    sample_rate: "48000 Hz"
+    quality: "VBR V2 (MP3) or AAC 128kbps"
+
+# GRAVAÇÃO REMOTA (Qualidade variável)
+remote_recording:
+  description: "Guest com equipamento consumer, ambiente não tratado"
+
+  aggressive_cleanup:
+    noise_reduction:
+      amount: "Medium to High"
+      tool: "iZotope RX, Audacity"
+      caution: "Watch for artifacts, pode soar 'robótico'"
+
+    noise_gate:
+      threshold: "-45 to -55 dB"
+      attack: "5 ms"
+      release: "150-250 ms"
+      purpose: "Remove noise durante pausas"
+
+  extra_compression:
+    ratio: "4:1 to 6:1"
+    threshold: "-20 to -15 dB"
+    purpose: "Tame inconsistent levels"
+    makeup_gain: "Match to host level"
+
+  eq_matching:
+    technique: "EQ guest para match host tone"
+    tools: ["iZotope Ozone EQ Match", "FabFilter Pro-Q Dynamic EQ"]
+    purpose: "Sonic consistency entre host e guest"
+
+  leveling:
+    technique: "Aggressive leveling/normalization"
+    purpose: "Guest track matches host level"
+
+# MÚSICA E SFX
+intro_outro_music:
+  level: "-20 to -16 LUFS (when alone)"
+  ducking:
+    when_voice_present: "-30 to -25 LUFS"
+    technique: "Sidechain compression or automation"
+    transition: "2-3 second fade"
+
+  fade:
+    fade_in: "2-3 seconds"
+    fade_out: "2-3 seconds"
+    purpose: "Smooth transitions"
+
+transition_music:
+  level: "-18 to -16 LUFS"
+  duration: "5-15 seconds"
+  fade: "1-2 seconds in/out"
+
+bed_music:
+  level: "-30 to -25 LUFS (background)"
+  eq:
+    hpf: "200 Hz (não competir com voz)"
+    lpf: "8000 Hz (remove high-end que compete)"
+  purpose: "Atmosfera, não distração"
+
+sfx:
+  level: "Match voice level ou slightly lower"
+  processing: "Minimal (preserve character)"
+  integration: "Fade in/out suave (10-50 ms)"
+
+# PRESETS POR DAW
+
+# Logic Pro
+logic_pro:
+  channel_strip_voice:
+    - slot_1: "Channel EQ (male/female preset acima)"
+    - slot_2: "Compressor (settings acima)"
+    - slot_3: "DeEsser"
+    - slot_4: "Noise Gate (se necessário)"
+    - slot_5: "Adaptive Limiter (apenas na master)"
+
+  master_chain:
+    - slot_1: "Multipressor (subtle bus compression)"
+    - slot_2: "Linear Phase EQ (final tone shaping)"
+    - slot_3: "Loudness Meter (iZotope Insight ou Youlean)"
+    - slot_4: "Adaptive Limiter (-1 dB ceiling)"
+
+# Pro Tools
+pro_tools:
+  voice_chain:
+    - insert_1: "EQ III ou FabFilter Pro-Q"
+    - insert_2: "Dynamics III Compressor/Limiter"
+    - insert_3: "DeEsser"
+
+  master_chain:
+    - insert_1: "Pro Compressor (bus compression)"
+    - insert_2: "EQ III (final tone)"
+    - insert_3: "Pro Limiter"
+
+# Descript
+descript:
+  studio_sound:
+    preset: "Podcast (one-click)"
+    adjustable: true
+    combines:
+      - "Noise reduction"
+      - "Echo removal"
+      - "EQ optimization"
+
+  filler_word_removal:
+    aggressiveness: "Medium (default)"
+    words: ["uh", "um", "like", "you know"]
+    caution: "Can remove natural thinking pauses"
+
+  voice_clone:
+    use: "Corrections only (ético)"
+    training: "10-30 min de áudio"
+    quality: "Excellent para fixes curtos"
+
+# TROUBLESHOOTING PRESETS
+troubleshooting:
+  harsh_sibilance:
+    solution: "De-esser mais agressivo + EQ cut 6-8 kHz"
+
+  muddy_voice:
+    solution: "EQ cut 200-500 Hz, boost 2-4 kHz"
+
+  thin_voice:
+    solution: "EQ boost 120-250 Hz (subtle), reduce high shelf"
+
+  background_hum:
+    solution: "Notch filter 60 Hz (US) ou 50 Hz (EU/BR) + harmonics"
+
+  room_echo:
+    solution: "iZotope RX De-reverb, EQ cut 200-400 Hz"
+
+  plosives:
+    solution: "HPF 80-100 Hz, de-pop plugin, re-record com pop filter"
+
+  clipping:
+    solution: "iZotope RX De-clip, mas melhor re-record"
+
+# TEMPLATES POR FORMATO
+template_interview:
+  tracks:
+    - track_1: "Host (preset male/female)"
+    - track_2: "Guest (preset + remote adjustments se necessário)"
+    - track_3: "Music (intro/outro)"
+    - track_4: "Transition music"
+    - track_5: "SFX (opcional)"
+
+  routing:
+    - "All voice tracks → Voice Bus → compression/EQ"
+    - "Voice Bus + Music → Master → limiting"
+
+template_solo:
+  tracks:
+    - track_1: "Host voice (preset male/female)"
+    - track_2: "Music (intro/outro/beds)"
+    - track_3: "SFX"
+
+  routing:
+    - "Track 1 → Master → compression/EQ/limiting"
+
+template_narrative:
+  tracks:
+    - track_1: "Narration"
+    - track_2_n: "Interview clips (multiple)"
+    - track_n1: "Ambience"
+    - track_n2: "Music"
+    - track_n3: "SFX"
+
+  routing:
+    - "Voice tracks → Voice Bus"
+    - "Ambience/Music/SFX → Atmosphere Bus"
+    - "Both buses → Master"
+
+# EXPORT SETTINGS
+export_master:
+  format: "WAV"
+  sample_rate: "48000 Hz"
+  bit_depth: "24-bit"
+  dither: "POW-r #3 se converting to 16-bit"
+  normalize: "Não (loudness já target)"
+  trim_silence:
+    head: "0.5-1 second"
+    tail: "1-2 seconds"
+
+export_mp3:
+  encoder: "LAME"
+  quality: "VBR V2 (192 kbps avg)"
+  sample_rate: "48000 Hz"
+  channels: "Stereo ou Mono (depende do formato)"
+  metadata: "Embedded (ID3v2.3)"

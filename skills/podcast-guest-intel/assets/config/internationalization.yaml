@@ -1,0 +1,357 @@
+# Internationalization Strategy - Podcast Production Squad
+# Estratégia de expansão multilíngue (PONTO FRACO #4 resolvido)
+
+# OVERVIEW
+philosophy:
+  approach: "BR-first, English expansion when audience justifies"
+  rationale:
+    - "Dominar mercado local antes de global"
+    - "Evitar dilução de recursos early-stage"
+    - "Content quality > quantity"
+    - "Expansão baseada em dados (não speculation)"
+
+  anti_patterns:
+    - "Launch bilíngue desde dia 1 (split focus)"
+    - "Tradução automática sem review (low quality)"
+    - "Multilingual sem demand (wasted effort)"
+
+# PRIMARY LANGUAGE
+primary_language:
+  code: "pt-BR"
+  full_name: "Português Brasileiro"
+  priority: "100% do esforço inicial"
+
+  considerations:
+    dialect: "BR específico (não Portugal)"
+    colloquialisms: "OK usar gírias brasileiras (authenticity)"
+    regional: "Evitar regionalismo muito específico (acessível nacionalmente)"
+
+  quality_bar:
+    - "Native speaker proficiency"
+    - "Natural, conversacional"
+    - "Culturally relevant"
+
+# SUPPORTED LANGUAGES
+supported_languages:
+  primary: "pt-BR"
+  secondary: "en-US"
+  future: ["es-ES"]  # considering if Latin America demand
+
+  english_rationale:
+    - "Global reach (1.5B speakers)"
+    - "International guests (não precisam falar PT)"
+    - "Content longevity (English evergreen)"
+    - "Premium positioning (bilingual = sophisticated)"
+
+# PHASED APPROACH
+strategy:
+  phase_1_br_only:
+    description: "Todo conteúdo em português brasileiro"
+    duration: "0-5000 downloads/episode"
+    focus:
+      - "Product-market fit"
+      - "Refinar formato"
+      - "Build core audience"
+      - "Establish brand"
+
+    metrics_to_watch:
+      - "Downloads por episódio"
+      - "Retention rate"
+      - "Comments em inglês (demand signal)"
+      - "International traffic (analytics)"
+
+    deliverables:
+      - "Episódios em PT-BR"
+      - "Show notes em PT-BR"
+      - "Social media em PT-BR"
+      - "Metadata: primary=pt-BR"
+
+  phase_2_subtitles:
+    description: "Adicionar legendas em inglês nos video podcasts"
+    trigger: "5000+ downloads/episode OU 10%+ audiência internacional"
+    effort: "Medium (AI + human review)"
+
+    workflow:
+      transcribe:
+        tool: "Whisper (PT-BR → text)"
+        output: "Transcrição portuguesa"
+
+      translate:
+        tool: "DeepL ou ChatGPT (PT-BR → EN)"
+        quality: "90% accuracy"
+
+      review:
+        who: "Native English speaker ou bilingual"
+        focus: "Idioms, context, timing"
+        time: "30-60 min per episode"
+
+      sync:
+        tool: "Descript, Subtitle Edit"
+        format: "SRT"
+        timing: "Adjust para match audio"
+
+      deliver:
+        youtube: "Upload EN captions"
+        rss: "Podcasting 2.0 transcript tag (EN version)"
+
+    cost:
+      ai_translation: "Free (ChatGPT) a $0.02/min (services)"
+      human_review: "R$100-300/episódio (freelancer)"
+      total: "~R$150/episódio"
+
+    roi:
+      cost: "R$150/ep"
+      new_reach: "Estimated 10-20% audience growth"
+      value: "Worth if downloads > 5K"
+
+  phase_3_dual_feed:
+    description: "Feed RSS separado em inglês (traducao AI + revisao humana)"
+    trigger: "10000+ downloads/episode OU 20%+ audiência internacional"
+    effort: "High (full translation + separate publishing)"
+
+    workflow:
+      audio_options:
+        option_1_voiceover:
+          method: "AI voice-over (ElevenLabs, Play.ht)"
+          quality: "80-90% natural"
+          cost: "$0.10-0.30/min"
+          time: "2-4h per episode (generate + review)"
+          pros: ["Native audio experience", "Full accessibility"]
+          cons: ["Expensive", "Loses original host voice", "Uncanny valley risk"]
+
+        option_2_original:
+          method: "Keep PT-BR audio + EN transcript/show notes"
+          quality: "100% original"
+          cost: "R$100-300 (translation only)"
+          time: "30-60 min per episode"
+          pros: ["Authentic", "Cost-effective", "Faster"]
+          cons: ["English speakers must read", "Limited appeal"]
+
+        recommendation: "Start com option_2, evaluate demand para option_1"
+
+      translation:
+        audio_script: "Transcribe PT-BR"
+        translate: "DeepL + human review"
+        adapt: "Cultural adaptation (não literal)"
+        examples:
+          - "Gírias → English equivalent (não translate palavra por palavra)"
+          - "Cultural references → explain or substitute"
+          - "Names/places → keep + explain if needed"
+
+      show_notes:
+        translate: "Full show notes to English"
+        seo: "English keywords"
+        links: "Same (or international versions)"
+
+      separate_feed:
+        rss: "podcast-name-en.rss"
+        hosting: "Same platform, different feed"
+        artwork: "Indicate 'English Version' (small flag)"
+
+      distribution:
+        submit: "Apple, Spotify, etc (as separate podcast)"
+        naming: "Podcast Name (English)"
+        categories: "Same categories"
+
+    cost:
+      translation: "R$200-500/episódio (professional)"
+      voiceover: "R$300-900/episódio (if AI voice)"
+      total: "R$500-1400/episódio"
+
+    roi:
+      cost: "R$500-1400/ep"
+      market: "English = 10x+ PT-BR potential reach"
+      monetization: "English CPMs 2-3x higher"
+      value: "Worth if downloads > 10K"
+
+  phase_4_native:
+    description: "Episódios gravados nativamente em inglês com guests internacionais"
+    trigger: "Audiência internacional > 20% OU opportunity com high-profile English guest"
+    effort: "Same as regular episodes"
+
+    strategy:
+      frequency: "1 English episode per month (don't abandon PT-BR)"
+      guests: "International experts, não disponíveis em PT-BR"
+      format: "Same format (interview, solo, etc)"
+      quality: "Same production value"
+
+    host_requirements:
+      english_fluency: "Proficient (não precisa ser nativo)"
+      accent: "OK ter sotaque (authenticity)"
+      prep: "Extra prep for English (practice pronunciation)"
+
+    dual_audience:
+      br_audience: "Legendas PT-BR (reverse workflow)"
+      en_audience: "Native audio"
+
+    cross_promotion:
+      - "Announce English episode no feed PT-BR"
+      - "Promote PT-BR content no feed EN"
+      - "Create bilingual community (Discord, etc)"
+
+# SEO MULTILINGUAL
+seo_multilingual:
+  show_notes:
+    strategy: "Publicar em PT-BR e EN-US (separate URLs)"
+    implementation:
+      - "website.com/episodios/ep5-ai (PT-BR)"
+      - "website.com/en/episodes/ep5-ai (EN-US)"
+      - "hreflang tags linking both"
+
+    hreflang: |  # html
+      <link rel="alternate" hreflang="pt-BR" href="https://website.com/episodios/ep5" />
+      <link rel="alternate" hreflang="en-US" href="https://website.com/en/episodes/ep5" />
+      <link rel="alternate" hreflang="x-default" href="https://website.com/episodios/ep5" />
+
+  transcript:
+    pt_br: "podcast.com/transcripts/ep5-pt.txt"
+    en_us: "podcast.com/transcripts/ep5-en.txt"
+    both_indexed: "Google indexes both, serves by language preference"
+
+  metadata:
+    rss_pt: |  # xml
+      <language>pt-BR</language>
+      <title>Meu Podcast</title>
+      <description>Descrição em português</description>
+
+    rss_en: |  # xml
+      <language>en-US</language>
+      <title>My Podcast (English)</title>
+      <description>Description in English</description>
+
+# TOOLS & SERVICES
+tools:
+  translation:
+    ai:
+      - name: "DeepL"
+        quality: "Best AI (better than Google)"
+        cost: "Free (500K chars/mo) to $10/mo"
+      - name: "ChatGPT/Claude"
+        quality: "Excellent with context"
+        cost: "API or $20/mo"
+
+    human:
+      - name: "Freelancer (Upwork, Fiverr)"
+        quality: "Varies (vet carefully)"
+        cost: "R$0.05-0.15/word"
+      - name: "Professional agency"
+        quality: "High"
+        cost: "R$0.20-0.50/word"
+
+    hybrid: "AI translation + human review (best ROI)"
+
+  voice_over:
+    - name: "ElevenLabs"
+      quality: "Best AI voice (99% natural)"
+      cost: "$0.30/min"
+    - name: "Play.ht"
+      quality: "Good"
+      cost: "$0.15/min"
+    - name: "Human voice actor"
+      quality: "Perfect"
+      cost: "R$200-800/episódio"
+
+  transcription:
+    - name: "Whisper"
+      languages: "50+ supported"
+      cost: "Free (local)"
+
+# COST SUMMARY BY PHASE
+cost_summary:
+  phase_1:
+    cost_per_episode: "R$0 (no extra cost)"
+    annual_extra: "R$0"
+
+  phase_2:
+    cost_per_episode: "R$150 (subtitles)"
+    annual_extra: "R$7.8K (52 eps/year)"
+
+  phase_3:
+    cost_per_episode: "R$500-1400 (translation + voice)"
+    annual_extra: "R$26-73K (52 eps/year)"
+
+  phase_4:
+    cost_per_episode: "Same as regular (no translation)"
+    frequency: "12 eps/year (1/month)"
+    annual_extra: "R$0 (replaces PT-BR episode that month)"
+
+# DECISION FRAMEWORK
+decision_framework:
+  expand_when:
+    downloads: "> 5K/episode"
+    international_traffic: "> 10%"
+    english_comments: "Regular requests"
+    guest_opportunities: "International guests interested"
+    revenue: "Can justify cost from monetization"
+
+  dont_expand_when:
+    downloads: "< 5K/episode"
+    growth_stagnant: "Focus em BR first"
+    no_demand: "Zero international audience"
+    quality_risk: "Can't maintain quality in both"
+
+  data_to_track:
+    - "Geographic analytics (where listeners are)"
+    - "Language of comments/feedback"
+    - "Guest interest (BR vs international)"
+    - "Revenue per language (if dual feed)"
+
+# CULTURAL ADAPTATION
+cultural_adaptation:
+  pt_to_en:
+    humor: "Explain context (humor doesn't translate literally)"
+    references: "Brazilian pop culture → explain or substitute"
+    measurements: "Metric → Imperial (if US audience)"
+    currency: "R$ → USD (add conversion)"
+
+  en_to_pt:
+    idioms: "English idioms → Portuguese equivalent"
+    names: "Keep original (don't translate names)"
+    context: "Add cultural context for BR audience"
+
+# COMMUNITY MANAGEMENT
+community:
+  bilingual:
+    discord: "Separate channels (pt-br, english)"
+    newsletter: "Separate lists (language preference)"
+    social: "Primary PT-BR, occasional EN posts"
+
+  moderation:
+    language_policy: "Both languages welcome, English speakers feel included"
+    translation: "Community members often help translate for each other"
+
+# CASE STUDIES
+case_studies:
+  success:
+    - podcast: "Lex Fridman (EN) com guests multilingual"
+      strategy: "English native, guests any language (subtitles)"
+      result: "Global reach"
+
+    - podcast: "Duolingo Spanish Podcast"
+      strategy: "Slow Spanish + English narration"
+      result: "Educational + accessible"
+
+  failure:
+    - podcast: "Many podcasts launch bilíngue"
+      problem: "Split focus, neither version é excelente"
+      result: "Shut down ou revert to single language"
+
+# RECOMMENDATIONS BY TIER
+tier_recommendations:
+  solo:
+    phase_1: "Obrigatório (focus em BR)"
+    phase_2: "Only se demand clear"
+    phase_3: "Not recommended (too expensive)"
+    phase_4: "Only if guest opportunity específico"
+
+  studio:
+    phase_1: "Obrigatório"
+    phase_2: "Implement when 5K+ downloads"
+    phase_3: "Consider when 10K+ downloads"
+    phase_4: "Strategic (1-2 English eps/year)"
+
+  broadcast:
+    phase_1: "Obrigatório"
+    phase_2: "Implement early (5K+ downloads)"
+    phase_3: "Full dual feed when 20K+ downloads"
+    phase_4: "Regular English episodes (25% do conteúdo)"

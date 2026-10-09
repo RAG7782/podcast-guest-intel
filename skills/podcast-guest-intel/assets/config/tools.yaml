@@ -1,0 +1,236 @@
+# Tools Stack - Podcast Production Squad
+# Ferramentas organizadas por categoria e tier
+
+recording:
+  primary:
+    name: Riverside
+    tier: solo
+    cost: "$15/mo"
+    purpose: "Remote studio-quality recording with local capture"
+    features:
+      - Local recording (backup automático)
+      - Até 4K video
+      - Separate tracks por participante
+      - AI noise reduction built-in
+
+  secondary:
+    name: Zencastr
+    tier: solo
+    cost: "Free-$20/mo"
+    purpose: "Alternativa com free tier generoso"
+
+  daw_beginner:
+    name: GarageBand
+    tier: solo
+    cost: "Free"
+    purpose: "Edição básica para iniciantes macOS"
+
+  daw_pro:
+    name: Logic Pro
+    tier: studio
+    cost: "$200 one-time"
+    purpose: "DAW profissional com Dolby Atmos support"
+
+  daw_broadcast:
+    name: Pro Tools
+    tier: broadcast
+    cost: "$30/mo"
+    purpose: "Industry standard para broadcast"
+
+editing:
+  primary:
+    name: Descript
+    tier: solo
+    cost: "$24/mo"
+    purpose: "Edit-by-text, AI noise reduction, filler removal"
+    features:
+      - Edição por texto (transcrição automática)
+      - Filler word removal automático
+      - AI voice clone para correções
+      - Noise reduction de studio quality
+      - Exporta multi-track
+
+  ai_clips:
+    name: Opus Clip
+    tier: studio
+    cost: "$15/mo"
+    purpose: "AI virality scoring, auto-clip detection"
+    features:
+      - Virality score por clip (0-100)
+      - Auto-detecção de melhores momentos
+      - Legendas com 97% accuracy
+      - Resize automático por plataforma
+
+  show_notes:
+    name: Podsqueeze
+    tier: studio
+    cost: "$10/mo"
+    purpose: "AI show notes + social posts"
+    features:
+      - Show notes completas
+      - Timestamps automáticos
+      - Social media posts
+      - Newsletter draft
+
+hosting:
+  primary:
+    name: Buzzsprout
+    tier: solo
+    cost: "$12-24/mo"
+    purpose: "Hosting + analytics + Podcasting 2.0"
+    features:
+      - Unlimited storage (planos pagos)
+      - Analytics detalhado
+      - Podcasting 2.0 support (chapters, transcripts)
+      - Auto-distribuição
+      - Magic Mastering (normalize audio)
+
+  alternative:
+    name: RSS.com
+    tier: solo
+    cost: "Free-$13/mo"
+    purpose: "V4V support, Podcasting 2.0"
+    features:
+      - Value4Value built-in
+      - Full Podcasting 2.0
+      - Free tier generoso
+
+distribution:
+  essential:
+    - Spotify (70% do mercado BR)
+    - Apple Podcasts
+    - YouTube (crescente, video essential)
+
+  recommended:
+    - Amazon Music/Audible
+    - Deezer (relevante no BR)
+    - Podcast Index
+
+  optional:
+    - Pocket Casts
+    - Overcast
+    - Castro
+    - Castbox
+
+analytics:
+  platform_native:
+    - Spotify for Creators
+    - Apple Podcasts Connect
+    - YouTube Studio
+
+  third_party:
+    - name: Chartable
+      cost: "Free-$20/mo"
+      purpose: "Attribution tracking"
+    - name: Podtrac
+      cost: "Free"
+      purpose: "Industry standard analytics"
+
+social:
+  scheduling:
+    - name: Buffer
+      cost: "$15/mo"
+      tier: solo
+    - name: Later
+      cost: "$15/mo"
+      tier: solo
+
+  design:
+    - name: Canva Pro
+      cost: "$13/mo"
+      tier: solo
+      purpose: "Social graphics + thumbnails"
+
+  video:
+    - name: CapCut
+      cost: "Free"
+      purpose: "Edição de shorts/clips mobile"
+
+community:
+  - name: Discord
+    cost: "Free"
+    purpose: "Community hub"
+
+  - name: Telegram
+    cost: "Free"
+    purpose: "Notification channel"
+
+  - name: Substack
+    cost: "Free-$50/mo"
+    purpose: "Newsletter + membership"
+
+transcription:
+  - name: Whisper
+    cost: "Free (local)"
+    purpose: "Open-source transcription, multi-language"
+    note: "Requer GPU para velocidade"
+
+  - name: Riverside built-in
+    cost: "Included"
+    purpose: "Auto-transcription com speaker labels"
+
+spatial_audio:
+  - name: Logic Pro + Dolby Atmos
+    tier: broadcast
+    cost: "$200 one-time + certification"
+    purpose: "Spatial audio production"
+    note: "Requer Mac + fones Dolby Atmos certified"
+
+monetization:
+  advertising:
+    - name: Spotify Partner Program
+      requirement: "3 eps, 2K horas, 1K listeners"
+    - name: Dynamic Ad Insertion (DAI)
+      via: "Hosting provider"
+
+  membership:
+    - Patreon
+    - Supercast
+    - Apple Subscriptions (15-30% fee)
+    - Spotify (future)
+
+  value4value:
+    - Fountain
+    - Podverse
+    # note: "Lightning Network, emergente"
+
+# Custo total estimado por tier
+estimated_costs:
+  solo:
+    monthly: "R$200-800"
+    breakdown:
+      - "Hosting: R$60-120"
+      - "Recording: R$75"
+      - "Editing: R$120"
+      - "Design: R$55"
+      - "Social: R$75"
+      - "Domain/site: R$30"
+    total_monthly: ~340
+
+  studio:
+    monthly: "R$2k-8k"
+    breakdown:
+      - "Solo tools: R$340"
+      - "AI tools (Opus+Podsqueeze): R$125"
+      - "Freelancers (editor+designer): R$3k"
+      - "Marketing: R$500"
+      - "Community tools: R$150"
+    total_monthly: ~4000
+
+  broadcast:
+    monthly: "R$10k-50k"
+    breakdown:
+      - "Studio tools: R$4k"
+      - "Team (5-8 pessoas): R$30k"
+      - "Studio space: R$5k"
+      - "Enterprise hosting: R$500"
+      - "Marketing/PR: R$5k"
+      - "Equipment amortization: R$2k"
+    total_monthly: ~42500
+
+notes:
+  - "Valores em USD convertidos para BRL (~R$5 por USD)"
+  - "Solo tier: viável para hobbyist ou side project"
+  - "Studio tier: profissional, pode ser full-time"
+  - "Broadcast tier: operação comercial, múltiplos shows"
+  - "One-time costs não incluídos: microfone ($100-500), interface ($100-300), fones ($50-200)"

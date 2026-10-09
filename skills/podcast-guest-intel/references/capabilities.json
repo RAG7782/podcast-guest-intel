@@ -1,0 +1,70 @@
+{
+  "note": "Metadado informativo; licenciamento e enforcement ficam no servidor (F9).",
+  "capabilities": [
+    {
+      "id": "convite-e-formulario-essencial",
+      "tier": "free",
+      "description": "Convite oficial + formulário variante essencial (Apps Script), kit do convidado com rodapé de marca"
+    },
+    {
+      "id": "formulario-completo-e-automacoes",
+      "tier": "paid",
+      "description": "Variante completa sem marca; automações pós-envio no servidor (e-mail com kit, WhatsApp, agenda, lembrete D-1)"
+    },
+    {
+      "id": "dossie",
+      "tier": "free",
+      "description": "Dossiê completo, cada afirmação VERIFICADO / AUTODECLARADO / INFERÊNCIA + fonte"
+    },
+    {
+      "id": "dossie-portal-e-historico",
+      "tier": "paid",
+      "description": "Enriquecimento pelo gestor no portal, histórico do convidado, relatório de auditoria"
+    },
+    {
+      "id": "pauta-1-tronco",
+      "tier": "free",
+      "description": "Perfil do convidado × linha editorial + Google Trends/News RSS rodado pelo próprio harness"
+    },
+    {
+      "id": "pauta-3-troncos",
+      "tier": "paid",
+      "description": "Tendências BYOK (X, TikTok, Reddit, LinkedIn) agregadas no servidor + continuidade com o catálogo"
+    },
+    {
+      "id": "roteiro-modo-informativo",
+      "tier": "free",
+      "description": "Roteiro no modo informativo, com versões completo, teleprompter e cartão"
+    },
+    {
+      "id": "roteiro-7-modos",
+      "tier": "paid",
+      "description": "Os 7 modos de abordagem e modos extensíveis por nicho, servidos pelo MCP"
+    },
+    {
+      "id": "memoria-centro-de-comando",
+      "tier": "paid",
+      "description": "Catálogo, busca, perfil do host gerado dos episódios, lições e cortes"
+    },
+    {
+      "id": "localizacao-local",
+      "tier": "free",
+      "description": "Transcrição, tradução, legendas e checks de QA locais (BYOK)"
+    },
+    {
+      "id": "localizacao-servidor",
+      "tier": "paid",
+      "description": "Feed por idioma, gate auditável de consentimento de voz, fila de revisão"
+    },
+    {
+      "id": "exportacao-markdown",
+      "tier": "free",
+      "description": "Saída em Markdown"
+    },
+    {
+      "id": "exportacao-pdf-docx",
+      "tier": "paid",
+      "description": "PDF/DOCX com a marca do show"
+    }
+  ]
+}

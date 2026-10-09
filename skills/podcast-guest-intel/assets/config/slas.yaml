@@ -1,0 +1,334 @@
+# SLAs - Podcast Production Pipeline
+# Service Level Agreements por etapa do processo
+
+# Pipeline completo: 7-14 dias da ideia à publicação
+
+pre_production:
+  content_ideation:
+    sla: "Ongoing (manter backlog de 10+ ideias)"
+    owner: [host, producer]
+    deliverable: "Lista priorizada de episódios futuros"
+    tools: [Notion, Trello, Airtable]
+
+  guest_booking:
+    outreach_initial:
+      sla: "2-4 semanas antes da data desejada"
+      owner: [guest_coordinator, producer]
+    confirmation:
+      sla: "1 semana antes da gravação"
+      owner: [guest_coordinator]
+    tech_check:
+      sla: "2-3 dias antes da gravação"
+      owner: [producer, engineer]
+    briefing_enviado:
+      sla: "2 dias antes da gravação"
+      owner: [producer]
+      deliverable: "Briefing doc + tech setup instructions"
+
+  research_script:
+    research:
+      sla: "3-5 dias antes da gravação"
+      owner: [producer, host]
+      depth:
+        solo: "2-4 horas"
+        studio: "4-8 horas"
+        broadcast: "8-16 horas"
+    script_outline:
+      sla: "1-2 dias antes da gravação"
+      owner: [host, producer]
+      deliverable: "Outline com intro, blocos, perguntas, outro"
+      format:
+        interview: "Lista de perguntas + research de guest"
+        solo: "Outline de tópicos + script de intro/outro"
+        narrative: "Script completo com tempo estimado"
+
+production:
+  recording:
+    setup:
+      sla: "15-30 min antes do start"
+      owner: [engineer, producer]
+      checklist:
+        - "Equipment functional"
+        - "Recording software ready"
+        - "Backup recording enabled"
+        - "Levels checked"
+    duration_target:
+      interview: "45-60 min"
+      solo: "20-40 min"
+      narrative: "30-45 min (raw)"
+      round_table: "45-60 min"
+    post_recording:
+      backup_immediate:
+        sla: "Imediatamente após gravação"
+        owner: [engineer, producer]
+        deliverable: "Raw files em 2 locais (local + cloud)"
+      edit_ready:
+        sla: "Até fim do dia (24h max)"
+        owner: [engineer]
+        deliverable: "Raw files organizados + notes de problemas técnicos"
+
+post_production:
+  editing:
+    rough_cut:
+      sla: "2 dias após receber raw files"
+      owner: [editor]
+      deliverable: "Episódio editado sem música/efeitos"
+      scope:
+        - "Remover silêncios/erros"
+        - "Cortar tangentes"
+        - "Basic noise reduction"
+    host_review:
+      sla: "1 dia após rough cut"
+      owner: [host, producer]
+      deliverable: "Feedback escrito com timestamps"
+    final_edit:
+      sla: "1 dia após feedback"
+      owner: [editor]
+      deliverable: "Episódio final com música/efeitos"
+    mix_master:
+      sla: "1 dia após final edit"
+      owner: [engineer, editor]
+      deliverable: "Master files por plataforma"
+      formats:
+        - "Spotify (WAV 48kHz -14 LUFS)"
+        - "Apple (WAV 48kHz -16 LUFS)"
+        - "YouTube (WAV 48kHz -14 LUFS)"
+        - "RSS general (MP3 192kbps VBR)"
+
+  content_creation:
+    transcript:
+      sla: "1 dia (AI) + 1 dia (review humana)"
+      owner: [producer, editor]
+      deliverable: "Transcript SRT + TXT com speaker labels"
+      tools: [Whisper, Riverside, Descript]
+
+    show_notes:
+      sla: "2 dias antes da publicação"
+      owner: [producer, growth]
+      deliverable: "Show notes completas"
+      must_include:
+        - "Resumo do episódio (2-3 parágrafos)"
+        - "Timestamps de tópicos principais"
+        - "Links mencionados"
+        - "Bio do guest (se aplicável)"
+        - "CTAs (newsletter, membership, etc)"
+        - "SEO keywords integrados naturalmente"
+
+    social_clips:
+      sla: "1-2 dias antes da publicação"
+      owner: [editor, designer]
+      deliverable: "3-5 clips por episódio"
+      specs:
+        - "1-2 min cada (ideal 30-90s)"
+        - "Legendas baked-in"
+        - "Branding (logo, cores)"
+        - "Formatos: 16:9 (YouTube), 9:16 (Shorts/Reels), 1:1 (feed)"
+      tools: [Opus Clip, Descript, CapCut]
+
+    visual_assets:
+      sla: "1 dia antes da publicação"
+      owner: [designer]
+      deliverable: "Cover art + thumbnails"
+      specs:
+        - "Cover: 3000x3000 JPEG (Spotify/Apple)"
+        - "YouTube thumbnail: 1280x720"
+        - "Social post graphics: 1080x1080 ou 1080x1350"
+
+  quality_assurance:
+    fact_check:
+      sla: "1 dia antes da publicação"
+      owner: [producer]
+      scope: "Verificar claims factuais, estatísticas, nomes"
+      priority: "HIGH para temas sensíveis (saúde, política, finanças)"
+
+    audio_qa:
+      sla: "Final do processo de editing"
+      owner: [editor, engineer]
+      checklist:
+        - "Sem clipping/distortion"
+        - "Levels consistentes"
+        - "Sem ruídos indesejados"
+        - "Music/SFX balanceados"
+        - "LUFS target atingido"
+
+    content_qa:
+      sla: "1 dia antes da publicação"
+      owner: [host, producer]
+      checklist:
+        - "Mensagem clara e alinhada"
+        - "Sem informação sensível/NDA"
+        - "CTAs incluídos"
+        - "Legal compliance (music rights, etc)"
+
+distribution:
+  upload:
+    hosting_platform:
+      sla: "1 dia antes da data de publicação"
+      owner: [producer, growth]
+      deliverable: "Episódio agendado com metadata completa"
+      metadata_required:
+        - "Título (60 chars max)"
+        - "Descrição com keywords"
+        - "Transcript"
+        - "Chapters (JSON)"
+        - "Cover art"
+        - "Publish date/time"
+
+    youtube:
+      sla: "1 dia antes da data de publicação"
+      owner: [growth, designer]
+      deliverable: "Video podcast agendado"
+      requirements:
+        - "Thumbnail custom"
+        - "Descrição com timestamps"
+        - "Tags (10-15)"
+        - "Playlists adicionadas"
+        - "End screen configurada"
+
+  promotion:
+    social_media:
+      pre_launch:
+        sla: "1-2 dias antes (teaser)"
+        owner: [growth]
+        deliverable: "Post teaser + story"
+      launch_day:
+        sla: "Hora da publicação"
+        owner: [growth]
+        deliverable: "Post de lançamento em todas plataformas"
+      post_launch:
+        sla: "3-7 dias após (clips)"
+        owner: [growth]
+        deliverable: "3-5 clips distribuídos ao longo da semana"
+
+    newsletter:
+      sla: "Dia da publicação ou +1 dia"
+      owner: [growth, host]
+      deliverable: "Email com episódio + insights"
+
+    guest_promotion:
+      coordination:
+        sla: "1 semana antes da publicação"
+        owner: [guest_coordinator, growth]
+        deliverable: "Assets + copy para guest compartilhar"
+      follow_up:
+        sla: "24h após publicação"
+        owner: [guest_coordinator]
+        deliverable: "Email agradecimento + link + analytics preview"
+
+post_launch:
+  analytics_review:
+    initial:
+      sla: "48h após publicação"
+      owner: [growth, producer]
+      metrics:
+        - "Downloads/streams primeiras 48h"
+        - "Completion rate"
+        - "Traffic sources"
+        - "Drop-off points"
+
+    weekly:
+      sla: "7 dias após publicação"
+      owner: [growth]
+      deliverable: "Report semanal de performance"
+
+    monthly:
+      sla: "Fim do mês"
+      owner: [growth, producer, host]
+      deliverable: "Report mensal + insights + recomendações"
+
+  community_engagement:
+    comment_monitoring:
+      sla: "Diário"
+      owner: [growth, host]
+      response_sla: "24-48h para comentários"
+
+    guest_follow_up:
+      thank_you:
+        sla: "24h após publicação"
+        owner: [guest_coordinator]
+      analytics_share:
+        sla: "7 dias após publicação"
+        owner: [guest_coordinator]
+        deliverable: "Report de performance do episódio"
+
+# Crisis management SLAs
+crisis_response:
+  identification:
+    sla: "2h durante horário comercial"
+    owner: [growth, producer, host]
+    triggers:
+      - "Erro factual significativo"
+      - "Conteúdo ofensivo reportado"
+      - "Copyright claim"
+      - "Guest controversy"
+
+  assessment:
+    sla: "4h após identificação"
+    owner: [host, producer]
+    deliverable: "Severity assessment + action plan"
+
+  response:
+    public_statement:
+      sla: "24h para high severity"
+      owner: [host]
+      channels: [social, newsletter, episódio correction]
+
+    content_correction:
+      sla: "24-48h dependendo da severity"
+      owner: [editor, producer]
+      actions:
+        - "Corrigir descrição/show notes"
+        - "Re-upload com correção (se crítico)"
+        - "Pin comment com correção"
+
+  stakeholder_communication:
+    guest:
+      sla: "6h se impacta guest"
+      owner: [host, guest_coordinator]
+    sponsors:
+      sla: "12h se impacta sponsor"
+      owner: [host, producer]
+
+# Total pipeline timeline
+pipeline_timeline:
+  optimal:
+    total: "7 dias"
+    breakdown:
+      - "D-7: Booking confirmado + briefing"
+      - "D-5: Research + script"
+      - "D-3: Gravação"
+      - "D-2: Edição rough cut"
+      - "D-1: Final edit + QA + upload"
+      - "D-0: Publicação + promoção"
+      - "D+1: Follow-up + analytics"
+
+  realistic:
+    total: "10-14 dias"
+    buffer: "3-7 dias para imprevistos"
+    recommended: "Manter buffer de 2-3 episódios prontos"
+
+  rush:
+    total: "3-5 dias"
+    use_case: "Episódio time-sensitive (breaking news, trending topic)"
+    requirements:
+      - "Guest disponível imediatamente"
+      - "Team disponível para fast-track"
+      - "Aceitar qualidade levemente menor"
+    not_recommended: "Usar apenas para exceções"
+
+# Tier-specific SLA adjustments
+tier_adjustments:
+  solo:
+    note: "SLAs mais flexíveis, pessoa única"
+    editing: "+1-2 dias (host faz tudo)"
+    total_pipeline: "14-21 dias"
+
+  studio:
+    note: "SLAs padrão do documento"
+    total_pipeline: "7-10 dias"
+
+  broadcast:
+    note: "SLAs mais rigorosos, equipe dedicada"
+    editing: "-1 dia (equipe paralela)"
+    total_pipeline: "5-7 dias"
+    buffer: "4-6 episódios prontos sempre"

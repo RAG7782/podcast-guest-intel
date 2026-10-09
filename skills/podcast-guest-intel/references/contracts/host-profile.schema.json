@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://podcast-production.invalid/contracts/host-profile.schema.json",
+  "title": "HostProfile",
+  "description": "Perfil do host derivado de episódios publicados + memória do usuário, depois confirmado por questionário curto. Os 5 elementos vêm de agents/host.md (Vocabulary Signature, Opinion Stance, Curiosity Signature, Vulnerability Pattern, Energy Range).",
+  "type": "object",
+  "required": ["host_id", "show_ref", "name", "locale", "status", "elements", "derived_from"],
+  "additionalProperties": false,
+  "properties": {
+    "host_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$" },
+    "show_ref": { "type": "string" },
+    "name": { "type": "string", "minLength": 1 },
+    "locale": { "$ref": "show-profile.schema.json#/$defs/locale" },
+    "status": { "enum": ["draft", "confirmed"] },
+    "elements": {
+      "type": "object",
+      "required": ["vocabulary_signature", "opinion_stance", "curiosity_signature", "vulnerability_pattern", "energy_range"],
+      "additionalProperties": false,
+      "properties": {
+        "vocabulary_signature": { "$ref": "#/$defs/element" },
+        "opinion_stance": { "$ref": "#/$defs/element" },
+        "curiosity_signature": { "$ref": "#/$defs/element" },
+        "vulnerability_pattern": { "$ref": "#/$defs/element" },
+        "energy_range": { "$ref": "#/$defs/element" }
+      }
+    },
+    "question_style": { "$ref": "#/$defs/element" },
+    "recurring_themes": { "type": "array", "items": { "type": "string" } },
+    "open_gaps": { "type": "array", "items": { "type": "string" }, "description": "Temas na linha editorial ainda não tratados (alimenta o tronco editorial da pauta)." },
+    "pending": { "type": "array", "items": { "type": "string" }, "description": "O que falta confirmar no questionário." },
+    "derived_from": {
+      "type": "object",
+      "required": ["episodes"],
+      "additionalProperties": false,
+      "properties": {
+        "episodes": { "type": "array", "items": { "type": "string" }, "description": "episode_refs analisados." },
+        "catalog_ref": { "type": "string" },
+        "memory_refs": { "type": "array", "items": { "type": "string" } },
+        "method_note": { "type": "string" }
+      }
+    },
+    "questionnaire": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "answers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["element", "question", "answer"],
+            "additionalProperties": false,
+            "properties": {
+              "element": { "type": "string" },
+              "question": { "type": "string" },
+              "answer": { "type": "string" }
+            }
+          }
+        },
+        "confirmed_at": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "if": { "properties": { "status": { "const": "confirmed" } }, "required": ["status"] },
+  "then": {
+    "x-rule": "R-HOST-CONFIRMED-QUESTIONNAIRE",
+    "required": ["questionnaire"],
+    "properties": { "questionnaire": { "x-rule": "R-HOST-CONFIRMED-QUESTIONNAIRE", "required": ["answers", "confirmed_at"] } }
+  },
+  "$defs": {
+    "element": {
+      "type": "object",
+      "required": ["summary"],
+      "additionalProperties": false,
+      "properties": {
+        "summary": { "type": "string", "minLength": 1 },
+        "markers": { "type": "array", "items": { "type": "string" } },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["episode_ref"],
+            "additionalProperties": false,
+            "properties": {
+              "episode_ref": { "type": "string" },
+              "at": { "type": "string", "pattern": "^[0-9]{1,3}:[0-5][0-9]$" },
+              "quote": { "type": "string" },
+              "kind": { "enum": ["observado", "metadado", "inferencia"] }
+            }
+          }
+        }
+      }
+    }
+  }
+}

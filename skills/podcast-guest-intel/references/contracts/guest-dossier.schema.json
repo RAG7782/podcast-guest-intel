@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://podcast-production.invalid/contracts/guest-dossier.schema.json",
+  "title": "GuestDossier",
+  "description": "Dossiê/Blueprint do convidado. Sempre válido com claims: [] (degrada, não trava). degraded=true sse coverage.gaps não vazio; o consumidor (pauta) TEM de ler degraded. Nenhum mínimo de fontes bloqueia o dossiê: o mínimo só bloqueia o status verificado de cada claim.",
+  "type": "object",
+  "required": ["dossier_id", "guest_ref", "generated_at", "purpose", "legal_basis", "coverage", "degraded", "claims"],
+  "additionalProperties": false,
+  "properties": {
+    "dossier_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$" },
+    "guest_ref": { "type": "string", "minLength": 1 },
+    "intake_ref": { "type": "string", "description": "intake_id, quando houver formulário." },
+    "episode_ref": { "type": "string" },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "locale": { "$ref": "show-profile.schema.json#/$defs/locale" },
+    "purpose": { "type": "string", "minLength": 1, "description": "Finalidade registrada (LGPD art. 7º, §3º)." },
+    "legal_basis": {
+      "type": "object",
+      "required": ["public_scan"],
+      "additionalProperties": false,
+      "properties": {
+        "public_scan": { "enum": ["dados_tornados_publicos_pelo_titular", "legitimo_interesse", "consentimento"] },
+        "intake": { "const": "consentimento" }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "required": ["expected", "found", "gaps"],
+      "additionalProperties": false,
+      "properties": {
+        "expected": { "type": "array", "items": { "type": "string" } },
+        "found": { "type": "array", "items": { "type": "string" } },
+        "gaps": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "degraded": { "type": "boolean" },
+    "claims": { "type": "array", "items": { "$ref": "claim.schema.json" } },
+    "materials_used": { "type": "array", "items": { "type": "string" } },
+    "enriched_by": { "type": "array", "items": { "enum": ["guest", "manager"] } }
+  },
+  "if": {
+    "properties": { "coverage": { "properties": { "gaps": { "minItems": 1 } } } }
+  },
+  "then": { "properties": { "degraded": { "x-rule": "R-DOSSIER-DEGRADED", "const": true } } },
+  "else": { "properties": { "degraded": { "x-rule": "R-DOSSIER-DEGRADED", "const": false } } }
+}

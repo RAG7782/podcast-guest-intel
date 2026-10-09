@@ -1,0 +1,231 @@
+{
+  "platforms": {
+    "spotify": {
+      "audio": {
+        "format_delivered": "OGG Vorbis (auto-converted)",
+        "format_upload": "WAV, MP3, M4A, FLAC",
+        "sample_rate_recommended": "48000 Hz",
+        "bit_depth_recommended": "24-bit",
+        "max_file_size": "200 MB",
+        "loudness_target": "-14 LUFS integrated"
+      },
+      "artwork": {
+        "dimensions": "3000x3000 pixels",
+        "format": "JPEG or PNG",
+        "file_size_max": "5 MB",
+        "aspect_ratio": "1:1 (square)"
+      },
+      "features": {
+        "chapters": true,
+        "transcripts": false,
+        "video": true,
+        "spatial_audio": false,
+        "podcasting_2_0": false
+      },
+      "video": {
+        "supported": true,
+        "format": "MP4",
+        "resolution_recommended": "1080p (1920x1080)",
+        "max_file_size": "1 GB",
+        "aspect_ratio": "16:9 or 1:1"
+      },
+      "distribution": {
+        "approval_time": "Immediate (via hosting)",
+        "rss_delay": "1-6 hours",
+        "analytics": "Spotify for Creators"
+      }
+    },
+
+    "apple": {
+      "audio": {
+        "format_delivered": "AAC 256kbps",
+        "format_upload": "AAC, MP3, WAV, ALAC",
+        "sample_rate_recommended": "48000 Hz",
+        "bit_depth_recommended": "24-bit",
+        "max_file_size": "Unlimited",
+        "loudness_target": "-16 LUFS integrated"
+      },
+      "artwork": {
+        "dimensions": "3000x3000 pixels (minimum 1400x1400)",
+        "format": "JPEG or PNG",
+        "file_size_max": "Unlimited",
+        "aspect_ratio": "1:1 (square)",
+        "rgb_color_space": true
+      },
+      "features": {
+        "chapters": true,
+        "transcripts": true,
+        "video": false,
+        "spatial_audio": true,
+        "podcasting_2_0": "Partial (transcripts, chapters)"
+      },
+      "spatial_audio": {
+        "format": "Dolby Atmos",
+        "delivery": "ADM BWF or Dolby Atmos Master",
+        "certification_required": true
+      },
+      "distribution": {
+        "approval_time": "24-48 hours (initial submission)",
+        "rss_delay": "1-12 hours (updates)",
+        "analytics": "Apple Podcasts Connect"
+      }
+    },
+
+    "youtube": {
+      "audio": {
+        "format_delivered": "AAC or Opus (auto-converted)",
+        "format_upload": "WAV, MP3, AAC",
+        "sample_rate_recommended": "48000 Hz",
+        "loudness_target": "-14 LUFS integrated"
+      },
+      "video": {
+        "format": "MP4 (H.264 or H.265)",
+        "resolution_options": ["1080p (1920x1080)", "4K (3840x2160)", "720p (1280x720)"],
+        "resolution_recommended": "1080p minimum",
+        "frame_rate": "24, 25, 30, 60 fps",
+        "aspect_ratio": "16:9",
+        "max_file_size": "256 GB or 12 hours",
+        "bitrate_recommended": "8-12 Mbps (1080p)"
+      },
+      "thumbnail": {
+        "dimensions": "1280x720 pixels",
+        "format": "JPEG, PNG, GIF",
+        "file_size_max": "2 MB",
+        "aspect_ratio": "16:9"
+      },
+      "shorts": {
+        "aspect_ratio": "9:16 (vertical)",
+        "duration_max": "60 seconds",
+        "resolution": "1080x1920"
+      },
+      "features": {
+        "chapters": true,
+        "transcripts": "Auto-generated + custom",
+        "video": "Required",
+        "spatial_audio": false,
+        "podcasting_2_0": false
+      },
+      "distribution": {
+        "approval_time": "Immediate",
+        "processing_time": "5-30 minutes (depends on length)",
+        "analytics": "YouTube Studio"
+      }
+    },
+
+    "amazon": {
+      "audio": {
+        "format_delivered": "MP3 320kbps CBR",
+        "format_upload": "MP3, WAV",
+        "sample_rate_recommended": "48000 Hz",
+        "bit_depth_recommended": "24-bit",
+        "max_file_size": "200 MB",
+        "loudness_target": "-14 LUFS integrated",
+        "true_peak_max": "-2 dB"
+      },
+      "artwork": {
+        "dimensions": "3000x3000 pixels (minimum 1400x1400)",
+        "format": "JPEG or PNG",
+        "aspect_ratio": "1:1 (square)"
+      },
+      "features": {
+        "chapters": false,
+        "transcripts": false,
+        "video": false,
+        "spatial_audio": false,
+        "podcasting_2_0": false
+      },
+      "distribution": {
+        "approval_time": "Via RSS feed",
+        "rss_delay": "Variable",
+        "analytics": "Limited"
+      }
+    },
+
+    "deezer": {
+      "audio": {
+        "format_delivered": "MP3 or AAC (auto-converted)",
+        "format_upload": "MP3, WAV",
+        "sample_rate_recommended": "48000 Hz",
+        "loudness_target": "-14 to -16 LUFS"
+      },
+      "artwork": {
+        "dimensions": "1400x1400 pixels minimum, 3000x3000 recommended",
+        "format": "JPEG or PNG",
+        "aspect_ratio": "1:1 (square)"
+      },
+      "features": {
+        "chapters": false,
+        "transcripts": false,
+        "video": false,
+        "spatial_audio": false,
+        "podcasting_2_0": false
+      },
+      "distribution": {
+        "approval_time": "Via RSS feed",
+        "rss_delay": "Variable",
+        "analytics": "Limited"
+      }
+    },
+
+    "podcast_index": {
+      "audio": {
+        "format": "Any (via RSS)",
+        "recommended": "MP3 192kbps VBR or higher"
+      },
+      "artwork": {
+        "dimensions": "1400x1400 minimum, 3000x3000 recommended",
+        "format": "JPEG or PNG"
+      },
+      "features": {
+        "chapters": true,
+        "transcripts": true,
+        "video": true,
+        "spatial_audio": false,
+        "podcasting_2_0": "Full support (all tags)",
+        "value4value": true
+      },
+      "distribution": {
+        "approval_time": "Immediate",
+        "rss_delay": "Minutes",
+        "analytics": "Via Podcast Index API"
+      }
+    },
+
+    "rss_general": {
+      "audio": {
+        "format_recommended": "MP3 192kbps VBR",
+        "format_alternative": "AAC 128kbps",
+        "sample_rate": "44100 or 48000 Hz",
+        "bit_depth": "16-bit (for MP3)",
+        "loudness_target": "-16 LUFS integrated",
+        "file_size_target": "< 100 MB (hosting limits)"
+      },
+      "artwork": {
+        "dimensions": "1400x1400 minimum, 3000x3000 recommended",
+        "format": "JPEG or PNG",
+        "file_size": "< 512 KB recommended",
+        "aspect_ratio": "1:1 (square)"
+      },
+      "features": {
+        "chapters": "Via Podcasting 2.0 tags",
+        "transcripts": "Via Podcasting 2.0 tags",
+        "video": "Supported by some apps",
+        "spatial_audio": false,
+        "podcasting_2_0": "Depends on hosting"
+      },
+      "distribution": {
+        "approval_time": "Immediate (RSS feed update)",
+        "compatibility": "Maximum (all apps support MP3)",
+        "analytics": "Via hosting platform"
+      }
+    }
+  },
+
+  "notes": {
+    "loudness": "Different platforms normalize to different LUFS. Export masters per platform for optimal quality.",
+    "file_size": "Large files (>100 MB) can cause download issues for listeners on limited data plans.",
+    "artwork": "Always create at 3000x3000 to future-proof. Platforms will downscale as needed.",
+    "video": "Video podcasts are growing. YouTube and Spotify support video; others are audio-only.",
+    "spatial_audio": "Apple Podcasts is the primary platform for Dolby Atmos podcasts."
+  }
+}

@@ -1,0 +1,283 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://podcast-production.invalid/contracts/show-profile.schema.json",
+  "title": "ShowProfile",
+  "description": "Perfil do programa: linha editorial, logística do estúdio (alimenta o Kit do Convidado) e automações. Genérico: todo dado do show é preenchido pelo usuário do plugin.",
+  "type": "object",
+  "required": ["show_id", "name", "locale", "editorial_line", "pillars", "controller", "logistics", "automations"],
+  "additionalProperties": false,
+  "properties": {
+    "show_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$" },
+    "name": { "type": "string", "minLength": 1 },
+    "tagline": { "type": "string" },
+    "locale": { "$ref": "#/$defs/locale" },
+    "jurisdiction": { "enum": ["BR-LGPD", "EU-GDPR", "CN-PIPL", "other"], "default": "BR-LGPD", "description": "Seleciona a cláusula de consentimento em contracts/i18n/<locale>.json." },
+    "editorial_line": { "type": "string", "minLength": 1 },
+    "pillars": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "covers": { "type": "array", "items": { "type": "string" } },
+    "does_not_cover": { "type": "array", "items": { "type": "string" } },
+    "series": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "cadence": { "type": "string" }
+        }
+      }
+    },
+    "cadence": { "type": "string" },
+    "formats": { "type": "array", "items": { "type": "string" }, "description": "Ids de config/formats.yaml do squad." },
+    "kit_tone": { "type": "string", "description": "Tom do kit do convidado (ex.: acolhedor, tranquilizador)." },
+    "brand": { "$ref": "#/$defs/brand" },
+    "controller": {
+      "type": "object",
+      "description": "Controlador LGPD (art. 5º, VI) citado na cláusula de consentimento. Contato obrigatório: contact_email OU contact_mode=reply_to_email (instância pessoal: o próprio host é o controlador e o titular fala com ele respondendo ao e-mail do programa; CPF/CNPJ não é exigido). Sem nenhum dos dois a cláusula não é emitida (integrations/google-forms recusa).",
+      "required": ["name"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["personal", "organization"], "description": "personal = o próprio host (pessoa natural); organization = produtora/empresa." },
+        "document_id": { "type": "string" },
+        "contact_email": { "type": "string", "format": "email" },
+        "contact_mode": { "enum": ["email", "reply_to_email"], "default": "email", "description": "reply_to_email: a cláusula orienta o titular a responder a qualquer e-mail do programa." }
+      }
+    },
+    "pending": { "type": "array", "items": { "type": "string" }, "description": "Campos que o dono ainda precisa confirmar (lacuna declarada, não inventada)." },
+    "pauta_max_items_per_trunk": { "type": "integer", "minimum": 1, "maximum": 10, "default": 5, "x-rule": "R-PAUTA-MAX-RANGE", "description": "Preferência do usuário: teto de itens por tronco da pauta (default 5)." },
+    "retention_days_after_publish": { "type": "integer", "minimum": 0, "default": 90 },
+    "localization": { "$ref": "#/$defs/localization" },
+    "logistics": { "$ref": "#/$defs/logistics" },
+    "automations": { "$ref": "#/$defs/automations" }
+  },
+  "$defs": {
+    "brand": {
+      "type": "object",
+      "description": "Identidade visual do programa no Convite Oficial (integrations/google-forms/src/invitation.js). Opcional: sem brand, o convite sai com cores neutras e o nome do show em texto. Regra cruzada R-BRAND-CONTRAST (scripts/validate-contracts.py e invitation.js): colors.text sobre colors.background >= 4.5:1 (WCAG 2.2, SC 1.4.3, AA).",
+      "required": ["colors"],
+      "additionalProperties": false,
+      "properties": {
+        "display_name": { "type": "string", "minLength": 1, "description": "Nome do show como aparece na marca (padrão: name)." },
+        "logo": {
+          "type": "object",
+          "description": "Logo: URL https pública OU id de arquivo no Google Drive (exatamente um). alt é obrigatório (aparece quando o cliente bloqueia imagens). Sem logo, o convite usa o nome do show em texto, nunca imagem quebrada.",
+          "required": ["alt"],
+          "additionalProperties": false,
+          "properties": {
+            "url": {
+              "type": "string",
+              "pattern": "^https://\\S+$",
+              "x-rule": "R-BRAND-HTTPS",
+              "description": "PNG/JPG público em https (PNG com fundo transparente funciona melhor no modo escuro)."
+            },
+            "drive_file_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{20,}$",
+              "description": "Id do arquivo no Drive do dono do script (exige colar src/drive-logo.js; pede o escopo do Drive)."
+            },
+            "alt": { "type": "string", "minLength": 1, "x-rule": "R-BRAND-LOGO-ALT" },
+            "width": { "type": "integer", "minimum": 40, "maximum": 600, "default": 120, "description": "Largura em px no e-mail." }
+          },
+          "allOf": [
+            {
+              "x-rule": "R-BRAND-LOGO-SOURCE",
+              "oneOf": [
+                { "required": ["url"], "not": { "required": ["drive_file_id"] } },
+                { "required": ["drive_file_id"], "not": { "required": ["url"] } }
+              ]
+            }
+          ]
+        },
+        "colors": {
+          "type": "object",
+          "required": ["primary", "background", "text"],
+          "additionalProperties": false,
+          "properties": {
+            "primary": {
+              "$ref": "#/$defs/hex_color",
+              "description": "Cor principal: faixa do topo e botão. O texto do botão é preto ou branco, o que contrastar mais."
+            },
+            "secondary": { "$ref": "#/$defs/hex_color", "description": "Cor de destaque: títulos e links." },
+            "background": { "$ref": "#/$defs/hex_color", "description": "Fundo do corpo do e-mail." },
+            "text": { "$ref": "#/$defs/hex_color", "description": "Texto do corpo; >= 4.5:1 sobre background (R-BRAND-CONTRAST)." }
+          }
+        },
+        "font": {
+          "type": "object",
+          "description": "Fonte segura para e-mail (instalada nos sistemas) + família genérica de fallback.",
+          "required": ["family", "fallback"],
+          "additionalProperties": false,
+          "properties": {
+            "family": { "enum": ["Arial", "Helvetica", "Verdana", "Tahoma", "Trebuchet MS", "Georgia", "Times New Roman", "Courier New"] },
+            "fallback": { "enum": ["sans-serif", "serif", "monospace"] }
+          }
+        },
+        "host_signature": {
+          "type": "object",
+          "required": ["name", "role"],
+          "additionalProperties": false,
+          "properties": {
+            "name": { "type": "string", "minLength": 1 },
+            "role": { "type": "string", "minLength": 1 },
+            "photo_url": {
+              "type": "string",
+              "pattern": "^https://\\S+$",
+              "x-rule": "R-BRAND-HTTPS",
+              "description": "Foto opcional do host (https)."
+            },
+            "photo_alt": { "type": "string", "minLength": 1 }
+          },
+          "dependentRequired": { "photo_url": ["photo_alt"] }
+        },
+        "links": {
+          "type": "array",
+          "maxItems": 6,
+          "items": {
+            "type": "object",
+            "required": ["label", "url"],
+            "additionalProperties": false,
+            "properties": {
+              "label": { "type": "string", "minLength": 1 },
+              "url": { "type": "string", "pattern": "^https://\\S+$", "x-rule": "R-BRAND-HTTPS" }
+            }
+          },
+          "description": "Redes e links no rodapé do convite."
+        },
+        "invitation_tone": {
+          "enum": ["formal", "cordial", "descontraido"],
+          "default": "cordial",
+          "description": "Tom da abertura do convite (textos em contracts/i18n/<locale>.json, invitation.intro)."
+        }
+      }
+    },
+    "hex_color": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$", "x-rule": "R-BRAND-HEX", "description": "Cor em hex #RRGGBB." },
+    "locale": { "enum": ["pt-BR", "en", "es", "zh"] },
+    "localization": {
+      "type": "object",
+      "description": "Legendas, tradução e dublagem (research/06). Sem target_locales, o formulário não pergunta os aceites de localização; sem voice_replica, não oferece o aceite de réplica de voz.",
+      "required": ["target_locales"],
+      "additionalProperties": false,
+      "properties": {
+        "target_locales": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/locale" } },
+        "subtitle_profile": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Diagramação (Netflix: 42 car./linha, 2 linhas, 17 car./s adulto). zh exige valor próprio (guia zh não lido).",
+          "properties": {
+            "max_chars_per_line": { "type": "integer", "minimum": 10, "maximum": 80, "default": 42 },
+            "max_lines": { "type": "integer", "minimum": 1, "maximum": 3, "default": 2 },
+            "max_cps": { "type": "number", "minimum": 5, "maximum": 40, "default": 17 }
+          }
+        },
+        "voice_replica": {
+          "type": "object",
+          "required": ["provider", "provider_country", "model_deletion_days"],
+          "additionalProperties": false,
+          "description": "Só preencher se o programa pretende oferecer réplica de voz. Vai nomeado no aceite (LGPD art. 11, I e art. 33).",
+          "properties": {
+            "provider": { "type": "string", "minLength": 1 },
+            "provider_country": { "type": "string", "minLength": 2 },
+            "model_deletion_days": { "type": "integer", "minimum": 0, "maximum": 365 }
+          }
+        },
+        "glossary": { "type": "array", "items": { "$ref": "#/$defs/glossary_term" } }
+      }
+    },
+    "glossary_term": {
+      "type": "object",
+      "description": "Termo do glossário do show: nome próprio, jargão, sigla. do_not_translate = aparece igual na tradução; translations[locale] = forma obrigatória.",
+      "required": ["term"],
+      "additionalProperties": false,
+      "properties": {
+        "term": { "type": "string", "minLength": 1 },
+        "do_not_translate": { "type": "boolean", "default": false },
+        "translations": { "type": "object", "propertyNames": { "enum": ["pt-BR", "en", "es", "zh"] }, "additionalProperties": { "type": "string", "minLength": 1 } },
+        "note": { "type": "string" }
+      }
+    },
+    "logistics": {
+      "type": "object",
+      "required": ["recording_modes"],
+      "additionalProperties": false,
+      "properties": {
+        "recording_modes": { "type": "array", "minItems": 1, "items": { "enum": ["presencial", "remoto"] } },
+        "studio_name": { "type": "string" },
+        "address": { "$ref": "#/$defs/address" },
+        "landmarks": { "type": "array", "items": { "type": "string" }, "description": "Pontos de referência." },
+        "arrival_instructions": { "type": "string" },
+        "gps_hint": { "type": "string", "description": "O que digitar no GPS/app de transporte." },
+        "parking": {
+          "type": "object",
+          "required": ["status"],
+          "additionalProperties": false,
+          "properties": {
+            "status": { "enum": ["disponivel", "indisponivel", "pago_proximo", "pendente"] },
+            "details": { "type": "string" }
+          }
+        },
+        "arrive_minutes_before": {
+          "type": "object",
+          "required": ["min", "max"],
+          "additionalProperties": false,
+          "properties": {
+            "min": { "type": "integer", "minimum": 0 },
+            "max": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "conduct_notes": { "type": "array", "items": { "type": "string" } },
+        "remote_setup_notes": { "type": "array", "items": { "type": "string" } },
+        "recording_duration_minutes": { "type": "integer", "minimum": 15, "default": 90, "description": "Duração do bloco no convite de agenda." }
+      },
+      "if": { "properties": { "recording_modes": { "contains": { "const": "presencial" } } } },
+      "then": { "x-rule": "R-SHOW-PRESENCIAL-ADDRESS", "required": ["address", "arrive_minutes_before"] }
+    },
+    "address": {
+      "type": "object",
+      "required": ["street", "number", "city", "region", "country"],
+      "additionalProperties": false,
+      "properties": {
+        "building_name": { "type": "string" },
+        "street": { "type": "string" },
+        "number": { "type": "string" },
+        "number_aliases": { "type": "array", "items": { "type": "string" }, "description": "Numeração antiga/alternativa." },
+        "complement": { "type": "string" },
+        "district": { "type": "string" },
+        "city": { "type": "string" },
+        "region": { "type": "string" },
+        "postal_code": { "type": "string" },
+        "country": { "type": "string", "pattern": "^[A-Z]{2}$" }
+      }
+    },
+    "automations": {
+      "type": "object",
+      "required": ["channels", "reminder_d_minus_1"],
+      "additionalProperties": false,
+      "properties": {
+        "channels": {
+          "type": "object",
+          "required": ["email", "whatsapp", "calendar"],
+          "additionalProperties": false,
+          "properties": {
+            "email": { "type": "boolean" },
+            "whatsapp": { "type": "boolean" },
+            "calendar": { "type": "boolean" }
+          }
+        },
+        "reminder_d_minus_1": {
+          "type": "object",
+          "required": ["enabled"],
+          "additionalProperties": false,
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "channels": { "type": "array", "items": { "enum": ["email", "whatsapp", "calendar"] } }
+          }
+        },
+        "note": { "type": "string", "description": "Envio por canal só ocorre se o convidado consentiu naquele canal (guest-intake.automation_consents)." }
+      }
+    }
+  }
+}

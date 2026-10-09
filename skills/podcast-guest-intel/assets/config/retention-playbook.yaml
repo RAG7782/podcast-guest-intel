@@ -1,0 +1,352 @@
+# Retention Playbook - Podcast Production Squad
+# Estratégias científicas para manter audiência engajada
+
+# OVERVIEW
+retention_importance:
+  why_critical:
+    - "Completion rate = #1 metric para algorithms (Spotify, Apple)"
+    - "High retention = better discovery placement"
+    - "Sponsors care about engaged audience (não só numbers)"
+    - "Quality > Quantity (100 que completam > 1000 que abandonam)"
+
+  industry_benchmarks:
+    poor: "< 40% completion"
+    average: "50-60% completion"
+    good: "60-70% completion"
+    excellent: "> 75% completion"
+
+  data_source: "Pacific Content study (2019-2023)"
+
+# HOOK RULES (First 30 seconds)
+hook_rules:
+  first_30_seconds:
+    rule: "Comunicar valor específico, NUNCA começar com saudação genérica"
+    data: "Ouvintes decidem continuar nos primeiros 30s"
+    drop_off: "20-30% drop nos primeiros 60s se hook fraco"
+
+    format: "Cold open com trecho mais impactante do episódio (teaser)"
+
+    bad_examples:
+      - "E aí galera, tudo bem? Bem-vindos ao episódio 47..."
+      - "Hoje vamos falar sobre um assunto super interessante..."
+      - "Antes de começar, quero agradecer nossos patrocinadores..."
+
+    good_examples:
+      - "'Se você não entender isso sobre IA nos próximos 5 anos, vai ficar para trás.' Essa frase do meu guest hoje, Maria Silva, mudou minha perspectiva..."
+      - "[COLD OPEN: 30s do momento mais impactante] ...voltamos a esse momento em 10 minutos. Primeiro, contexto..."
+      - "Pergunta: você está cometendo o erro que 90% das pessoas comete com X? Descubra nos próximos 20 minutos."
+
+    formula:
+      - "Lead com o payoff (resultado/insight)"
+      - "Create curiosity gap (quer saber mais)"
+      - "Promise específico (não vago)"
+      - "Time-bound (saberá em X minutos)"
+
+  intro_length:
+    max: "60 segundos"
+    ideal: "30-45 segundos"
+    data: "Intro > 90s = dobro da taxa de abandono"
+
+    what_to_include:
+      must_have:
+        - "Nome do podcast (5s)"
+        - "Tema do episódio (10s)"
+        - "Valor promise (10s)"
+      optional:
+        - "Nome do host (se não óbvio)"
+        - "Guest introduction (15-20s)"
+      avoid:
+        - "Longa explicação do que é o podcast (ouvintes já sabem)"
+        - "Agradecimentos múltiplos"
+        - "Housekeeping (save for outro)"
+
+  value_promise:
+    format: "1 frase que responde 'por que devo ouvir?'"
+    examples:
+      - "Você vai aprender 3 estratégias práticas para X"
+      - "Vou revelar o erro que me custou R$50K (e como evitar)"
+      - "João vai compartilhar a framework que levou empresa dele de 0 a 10M"
+
+    specificity:
+      vague: "Vamos falar sobre produtividade ❌"
+      specific: "Você vai aprender como dobrar sua produtividade usando técnica Pomodoro 2.0 ✅"
+
+# PACING (Durante episódio)
+pacing:
+  energy_curve:
+    principle: "Alto → médio → alto → médio → alto (ondas)"
+    avoid: "Monotonia (mesmo energia todo episódio)"
+
+    implementation:
+      - "Variar tom de voz"
+      - "Mudar subtópicos a cada 10-15 min"
+      - "Inserir moments de leveza entre deep dives"
+      - "Transition music entre blocos"
+
+  segment_max:
+    rule: "15-20 min sem break"
+    reason: "Attention span drops, audiência precisa de respiro"
+    break_types:
+      - "Transition music (15-30s)"
+      - "Quick recap ('até aqui falamos sobre...')"
+      - "Ad break (if applicable)"
+      - "Tone shift (story → data → story)"
+
+  transition:
+    bad: "Abrupt cut de tópico A para B"
+    good: "Bridge ('Isso me lembra outro ponto importante...')"
+    music: "15-30s de music bed (sinalizando mudança)"
+
+  examples_frequency:
+    rule: "Exemplo concreto a cada 3-5 min"
+    reason: "Abstração cansa, exemplos reengajam"
+    types:
+      - "Story pessoal"
+      - "Case study"
+      - "Analogia"
+      - "Dados específicos"
+
+# RETENTION KILLERS (Evitar)
+retention_killers:
+  long_intro:
+    problem: "Intro > 90 segundos"
+    data: "2x drop-off rate"
+    fix: "Cut to 30-60s, move context para depois do hook"
+
+  generic_greeting:
+    problem: "E aí galera, tudo bem? Bem-vindos..."
+    reason: "Zero value, predictable, boring"
+    fix: "Cold open com valor imediato"
+
+  explain_podcast:
+    problem: "Explicar o podcast para ouvintes que já conhecem"
+    reason: "Ouvinte no ep 47 não precisa saber 'o que é o podcast'"
+    fix: "Assumir familiarity (novos ouvintes descobrem)"
+
+  long_sponsor_reads:
+    problem: "3-5 min de ads no início"
+    data: "25-40% drop-off durante ad"
+    fix: "Ad no minute 10-15 (após value delivery)"
+
+  tangents:
+    problem: "Host/guest vai off-topic sem valor"
+    data: "Drop-off spikes durante tangents"
+    fix: "Edit out OU redirect ('voltando ao ponto...')"
+
+  dead_air:
+    problem: "Silêncios longos (>3s sem intenção)"
+    reason: "Ouvinte pensa que áudio travou"
+    fix: "Edit out na pós-produção"
+
+  monotonia:
+    problem: "Mesma energia/tom por 30+ min"
+    reason: "Brain tunes out"
+    fix: "Variar energia, usar música, mudar subtópicos"
+
+  no_payoff:
+    problem: "Promise grande no início, não entrega"
+    reason: "Ouvinte se sente enganado"
+    fix: "Deliver on promise antes do minute 15"
+
+# CTA PLACEMENT
+cta_placement:
+  intro_cta:
+    timing: "Segundos 30-60"
+    type: "Preview ('no final deste ep, revelarei...')"
+    avoid: "Pedir review/subscribe (too early)"
+
+  mid_roll_cta:
+    timing: "Após momento de alto valor (não no meio de tópico)"
+    types:
+      - "Sponsor ad (minute 10-20)"
+      - "Newsletter signup ('se gostou, se inscreva...')"
+      - "Community invite"
+    duration: "30-90s max"
+    transition: "Suave ('falando em X, nosso parceiro...')"
+
+  pre_outro_cta:
+    timing: "Antes do outro, NUNCA após"
+    reason: "Ouvinte já saiu se CTA é após outro"
+    types:
+      - "Review request"
+      - "Next episode tease"
+      - "Newsletter/membership"
+    duration: "30-60s"
+
+  outro_cta:
+    timing: "Final do episódio"
+    keep_short: "30s max (maioria já saiu)"
+    content:
+      - "Recap de 1 key takeaway"
+      - "Próximo episódio preview"
+      - "Follow host/podcast"
+
+# CONTENT STRUCTURE
+structure_best_practices:
+  storytelling_arc:
+    setup: "Contexto + stakes"
+    conflict: "Problema/desafio"
+    resolution: "Solução/insight"
+    meaning: "Por que isso importa?"
+
+  framework_based:
+    intro: "Apresentar framework"
+    breakdown: "1 bloco por elemento (3-7 min cada)"
+    synthesis: "Como usar junto"
+    action: "Próximos passos"
+
+  interview:
+    background: "5-10 min (establish credibility)"
+    core: "25-35 min (3-5 blocos temáticos)"
+    actionable: "5-10 min (takeaways práticos)"
+    rapid_fire: "3-5 min (humanizar)"
+
+# DATA-DRIVEN OPTIMIZATION
+data_optimization:
+  metrics_to_track:
+    - "Completion rate (overall)"
+    - "Drop-off points (where people leave)"
+    - "Replay rate (segments replayed)"
+    - "Skip rate (segments skipped)"
+
+  tools:
+    - "Spotify for Creators (drop-off chart)"
+    - "Apple Podcasts Connect (engagement)"
+    - "Chartable (attribution + retention)"
+
+  analysis_process:
+    weekly:
+      - "Review drop-off chart"
+      - "Identify patterns (sempre dropam no X?)"
+      - "Hypothesis (por que?)"
+
+    test:
+      - "Mudar variável (ex: intro mais curta)"
+      - "Comparar retention ep anterior vs novo"
+
+    iterate:
+      - "Keep o que funciona"
+      - "Discard o que não funciona"
+
+  common_insights:
+    - "Drop spikes durante ads → move ad timing"
+    - "Drop no minute 3-5 → intro muito longa"
+    - "High replay no segment X → audiência ama, faz mais"
+    - "Low completion mas high retention até minute 30 → episódio muito longo"
+
+# EPISODE LENGTH
+episode_length:
+  data: "Não existe 'perfect length', depende do formato"
+
+  guidelines:
+    solo: "20-40 min (holding attention sozinho é hard)"
+    interview: "45-60 min (sweet spot)"
+    narrative: "30-45 min (produção densa)"
+    round_table: "45-60 min"
+    daily_news: "15-25 min"
+
+  brasil_specific:
+    tolerance: "Brasileiros toleram 2-4h (Flow, Podpah)"
+    context: "Video + conversational + entertainment"
+    caveat: "Só funciona se conteúdo engajante TODO o tempo"
+
+  optimization:
+    - "Better 30 min excelentes que 60 min medianos"
+    - "Se drop-off alto após minute 40, considerar cortar"
+    - "Listener feedback ('muito longo' = red flag)"
+
+# ENGAGEMENT TECHNIQUES
+engagement_techniques:
+  direct_address:
+    technique: "Falar diretamente com ouvinte ('você')"
+    example: "Você já passou por isso? Deixa eu te contar..."
+    avoid: "Third person ('as pessoas fazem...')"
+
+  questions:
+    technique: "Fazer perguntas retóricas (create mental engagement)"
+    example: "O que você faria nessa situação? [pausa] Eu fiz X..."
+    frequency: "1-2 por bloco temático"
+
+  callbacks:
+    technique: "Referir momentos anteriores do episódio"
+    example: "Lembra que no início eu mencionei X? Agora faz sentido..."
+    benefit: "Reward quem está prestando atenção"
+
+  foreshadowing:
+    technique: "Tease conteúdo futuro"
+    example: "Daqui a 10 minutos vou revelar a estratégia mais controversa..."
+    benefit: "Create curiosity gap, mantém ouvindo"
+
+  contrast:
+    technique: "Before vs After, Problem vs Solution"
+    example: "Antes eu fazia X e resultado era Y. Agora faço Z e resultado é W."
+    benefit: "Clear value demonstration"
+
+  specificity:
+    technique: "Números, nomes, detalhes"
+    vague: "Muitas pessoas... ❌"
+    specific: "273 pessoas no nosso estudo... ✅"
+
+# AUDIO QUALITY IMPACT
+audio_quality:
+  data: "Má qualidade = 30-50% drop-off"
+
+  minimum_standards:
+    - "No background noise (HVAC, traffic)"
+    - "No clipping/distortion"
+    - "Consistent levels (não loud → quiet)"
+    - "Clear voice (não muffled)"
+
+  forgivable:
+    - "Slightly sub-optimal (remote guest)"
+    - "Occasional artifact (se conteúdo vale)"
+
+  unforgivable:
+    - "Painful to listen (harsh sibilance, clipping)"
+    - "Hard to understand (heavy noise)"
+
+  fix: "Seguir audio-standards.yaml"
+
+# TESTING & ITERATION
+testing:
+  ab_testing:
+    variables:
+      - "Intro length (30s vs 60s)"
+      - "Cold open vs direct intro"
+      - "Episode length (40 vs 60 min)"
+      - "Ad placement (minute 10 vs 20)"
+
+    method:
+      - "Test em episódios alternados"
+      - "Compare retention metrics"
+      - "Confirm pattern (não fluke)"
+
+  guest_testing:
+    - "Compartilhar episódio com 5-10 pessoas BEFORE publish"
+    - "Perguntar: 'onde você quase desistiu?'"
+    - "Edit based on feedback"
+
+# TIER-SPECIFIC TIPS
+tier_tips:
+  solo:
+    challenge: "Holding attention sozinho (harder)"
+    solutions:
+      - "Episódios mais curtos (20-30 min)"
+      - "Energy alta constante"
+      - "Storytelling > lecture"
+      - "Edit agressivo (cut filler)"
+
+  studio:
+    advantage: "Co-host ou guests (variedade de vozes)"
+    focus:
+      - "Chemistry entre hosts"
+      - "Banter equilibrado com conteúdo"
+      - "Production value (music, sfx)"
+
+  broadcast:
+    expectation: "Audiência espera alta qualidade"
+    differentiators:
+      - "Original music/sound design"
+      - "Multiple guests/perspectives"
+      - "Narrative structure"
+      - "Spatial audio (imersão)"

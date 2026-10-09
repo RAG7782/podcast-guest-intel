@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://podcast-production.invalid/contracts/episode-record.schema.json",
+  "title": "EpisodeRecord",
+  "description": "Registro do episódio na memória/centro de comando: guarda blueprint, pesquisa, pauta, roteiro, gravação, edições e cortes postados. retention permite eliminação real por titular (LGPD art. 18, VI; art. 8º, §5º). Mídia (gravação, transcrição, edições, cortes) é guardada por REFERÊNCIA (caminho/URL + sha256 + duração), nunca o binário. Ferramenta: scripts/memory_tools.py (F6).",
+  "type": "object",
+  "required": ["episode_id", "show_ref", "status", "artifacts", "retention"],
+  "additionalProperties": false,
+  "properties": {
+    "episode_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$" },
+    "show_ref": { "type": "string" },
+    "title": { "type": "string" },
+    "status": {
+      "description": "EpisodeStatus de docs/prd/podcommand-prd.md §11.5.",
+      "enum": [
+        "idea", "planning", "briefing", "guest_outreach", "guest_confirmed", "pre_production",
+        "ready_to_record", "recording_scheduled", "recorded", "editing", "review",
+        "ready_to_publish", "publishing", "published", "repurposing", "archived"
+      ]
+    },
+    "format": { "type": "string" },
+    "approach_mode": { "type": "string" },
+    "series_ref": { "type": "string" },
+    "guest_refs": { "type": "array", "items": { "type": "string" } },
+    "themes": { "type": "array", "items": { "type": "string" }, "description": "Temas do episódio (busca, catálogo da pauta, surfacing de temas recorrentes)." },
+    "recording_mode": { "enum": ["presencial", "remoto"] },
+    "published_at": { "type": "string", "format": "date-time" },
+    "published_url": { "type": "string", "format": "uri" },
+    "gate": {
+      "type": "object",
+      "required": ["recommendation"],
+      "additionalProperties": false,
+      "description": "Recomendação do quality gate (*approve-episode). Avançar para publicação sem APPROVE exige human-decision com R-PUBLICACAO-GATE.",
+      "properties": {
+        "recommendation": { "enum": ["APPROVE", "REQUEST_CHANGES", "HOLD"] },
+        "by": { "type": "string" },
+        "at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "history": {
+      "type": "array",
+      "description": "Transições de status (auditoria sem conteúdo pessoal).",
+      "items": {
+        "type": "object",
+        "required": ["from", "to", "at"],
+        "additionalProperties": false,
+        "properties": {
+          "from": { "type": "string" },
+          "to": { "type": "string" },
+          "at": { "type": "string", "format": "date-time" },
+          "by": { "type": "string" },
+          "decision_ref": { "type": "string" }
+        }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "intake": { "$ref": "#/$defs/refs", "description": "intake_id ou caminho do guest-intake; vários convidados = lista." },
+        "dossier": { "$ref": "#/$defs/refs", "description": "Caminho/ref do dossiê (guest-dossier); vários convidados = lista." },
+        "research": { "type": "string" },
+        "pauta": { "type": "string" },
+        "script": {
+          "description": "Roteiro (F5): caminho/ref de um documento válido contra script.schema.json, o roteiro embutido, ou lista de refs (modos alternativos).",
+          "anyOf": [{ "type": "string" }, { "$ref": "script.schema.json" }, { "type": "array", "items": { "type": "string" } }]
+        },
+        "decisions": {
+          "type": "array",
+          "items": { "$ref": "human-decision.schema.json" },
+          "description": "Decisões humanas registradas neste episódio (aceites para seguir contra recomendações)."
+        },
+        "recording": { "$ref": "#/$defs/media" },
+        "transcript": { "$ref": "#/$defs/media" },
+        "edits": { "type": "array", "items": { "$ref": "#/$defs/media" } },
+        "clips": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["platform", "url"],
+            "additionalProperties": false,
+            "properties": {
+              "platform": { "type": "string" },
+              "url": { "type": "string", "format": "uri" },
+              "posted_at": { "type": "string", "format": "date-time" },
+              "metrics": { "type": "object", "additionalProperties": { "type": "number" } },
+              "duration_s": { "type": "number", "minimum": 0 },
+              "title": { "type": "string" },
+              "source_ref": { "type": "string", "description": "Caminho/URL do arquivo do corte (referência, não o binário)." },
+              "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+            }
+          }
+        }
+      }
+    },
+    "metrics": { "type": "object", "additionalProperties": { "type": "number" } },
+    "lessons": { "type": "array", "items": { "type": "string" } },
+    "retention": {
+      "type": "object",
+      "required": ["subject_ids"],
+      "additionalProperties": false,
+      "properties": {
+        "subject_ids": { "type": "array", "items": { "type": "string" }, "description": "Titulares cujos dados (intake, dossiê) estão neste registro." },
+        "delete_after": { "type": "string", "format": "date" },
+        "keep_consent_record": { "type": "boolean", "default": true, "description": "Guardar só o registro do consentimento (ônus da prova, art. 8º, §2º)." },
+        "days_after_publish": { "type": "integer", "minimum": 0, "description": "Elimina intake e dossiê N dias após published_at (vem de show-profile.retention_days_after_publish). delete_after, se presente, prevalece." },
+        "applied_at": { "type": "string", "format": "date-time", "description": "Quando a retenção eliminou intake/dossiê deste registro." }
+      }
+    }
+  },
+  "$defs": {
+    "refs": { "anyOf": [{ "type": "string" }, { "type": "array", "items": { "type": "string" } }] },
+    "media": {
+      "description": "Mídia por referência: string (legado) ou objeto com ref + integridade. O binário fica onde o usuário já guarda.",
+      "anyOf": [
+        { "type": "string" },
+        {
+          "type": "object",
+          "required": ["ref"],
+          "additionalProperties": false,
+          "properties": {
+            "ref": { "type": "string", "minLength": 1, "description": "Caminho local ou URL." },
+            "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+            "bytes": { "type": "integer", "minimum": 0 },
+            "duration_s": { "type": "number", "minimum": 0 },
+            "platform": { "type": "string" },
+            "title": { "type": "string" }
+          }
+        }
+      ]
+    }
+  }
+}

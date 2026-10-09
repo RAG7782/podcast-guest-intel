@@ -1,0 +1,444 @@
+# Naming Conventions - Podcast Production Squad
+# Organização e nomenclatura de arquivos
+
+# PHILOSOPHY
+philosophy:
+  principles:
+    - "Consistency (todo arquivo segue pattern)"
+    - "Descriptive (nome comunica conteúdo)"
+    - "Sortable (ordem alfabética = ordem lógica)"
+    - "Future-proof (escalável para 100+ episódios)"
+
+  avoid:
+    - "Espaços (usar hífen ou underscore)"
+    - "Caracteres especiais (ç, ã, ~, etc)"
+    - "ALL CAPS ou alLCaps (hard to read)"
+    - "Nomes vagos (final.wav, edit2.wav)"
+
+# EPISODE NUMBERING
+numbering:
+  format: "S{SS}E{EE}"
+  examples:
+    - "S01E05 (Season 1, Episode 5)"
+    - "S02E23 (Season 2, Episode 23)"
+
+  padding:
+    seasons: "2 digits (S01, S02, ... S99)"
+    episodes: "2 digits (E01, E02, ... E99)"
+    reason: "Sorting (S01E09 antes de S01E10)"
+
+  special_episodes:
+    bonus: "S01E05B (bonus do ep 5)"
+    trailer: "S01E00 (trailer da season)"
+    recap: "S01E99 (season recap)"
+
+# TITLE SLUG
+title_slug:
+  format: "kebab-case"
+  rules:
+    - "Lowercase apenas"
+    - "Palavras separadas por hífen"
+    - "Remove acentos (IA → ia, São → sao)"
+    - "Remove artigos desnecessários (o, a, de)"
+    - "Max 50 caracteres"
+
+  examples:
+    - title: "Como usar IA para Produtividade"
+      slug: "como-usar-ia-produtividade"
+
+    - title: "Entrevista: João Silva sobre Marketing Digital"
+      slug: "entrevista-joao-silva-marketing"
+
+    - title: "5 Erros que Todo Iniciante Comete"
+      slug: "5-erros-iniciante"
+
+# AUDIO FILES
+audio:
+  raw:
+    pattern: "S{SS}E{EE}_{titulo-kebab}_{speaker}_raw.wav"
+    components:
+      season_episode: "S01E05"
+      title: "inteligencia-artificial"
+      speaker: "host, guest, guest2, music, sfx"
+      version: "raw (indica unprocessed)"
+      extension: "wav"
+
+    examples:
+      - "S01E05_inteligencia-artificial_host_raw.wav"
+      - "S01E05_inteligencia-artificial_guest_raw.wav"
+      - "S01E05_inteligencia-artificial_music_raw.wav"
+
+  edit:
+    pattern: "S{SS}E{EE}_{titulo-kebab}_edit_v{N}.wav"
+    examples:
+      - "S01E05_inteligencia-artificial_edit_v1.wav"
+      - "S01E05_inteligencia-artificial_edit_v2.wav"
+      - "S01E05_inteligencia-artificial_edit_final.wav"
+
+    versioning:
+      - "v1, v2, v3... (incremental iterations)"
+      - "final (marca última versão aprovada)"
+
+  mix:
+    pattern: "S{SS}E{EE}_{titulo-kebab}_mix_v{N}.wav"
+    examples:
+      - "S01E05_inteligencia-artificial_mix_v1.wav"
+      - "S01E05_inteligencia-artificial_mix_final.wav"
+
+  master:
+    pattern: "S{SS}E{EE}_{titulo-kebab}_master_{platform}.{ext}"
+    platforms: [spotify, apple, youtube, rss, generic]
+
+    examples:
+      - "S01E05_inteligencia-artificial_master_spotify.wav"
+      - "S01E05_inteligencia-artificial_master_apple.wav"
+      - "S01E05_inteligencia-artificial_master_youtube.wav"
+      - "S01E05_inteligencia-artificial_master_rss.mp3"
+
+  clips:
+    pattern: "S{SS}E{EE}_{titulo-kebab}_clip{N}_{platform}.{ext}"
+    clip_numbering: "clip1, clip2, clip3..."
+    platforms: [youtube, instagram, tiktok, twitter, generic]
+
+    examples:
+      - "S01E05_inteligencia-artificial_clip1_youtube.mp4"
+      - "S01E05_inteligencia-artificial_clip2_instagram.mp4"
+      - "S01E05_inteligencia-artificial_clip3_tiktok.mp4"
+
+# VIDEO FILES
+video:
+  raw:
+    pattern: "S{SS}E{EE}_{titulo-kebab}_{camera}_raw.{ext}"
+    cameras: [cam1, cam2, cam3, screen, etc]
+    extensions: [mov, mp4, mts]
+
+    examples:
+      - "S01E05_inteligencia-artificial_cam1_raw.mov"
+      - "S01E05_inteligencia-artificial_cam2_raw.mov"
+      - "S01E05_inteligencia-artificial_screen_raw.mp4"
+
+  edit:
+    pattern: "S{SS}E{EE}_{titulo-kebab}_video_v{N}.mp4"
+    examples:
+      - "S01E05_inteligencia-artificial_video_v1.mp4"
+      - "S01E05_inteligencia-artificial_video_final.mp4"
+
+  clips:
+    pattern: "S{SS}E{EE}_{titulo-kebab}_short{N}_{platform}.mp4"
+    examples:
+      - "S01E05_inteligencia-artificial_short1_youtube.mp4"
+      - "S01E05_inteligencia-artificial_short2_instagram.mp4"
+      - "S01E05_inteligencia-artificial_short3_tiktok.mp4"
+
+# VISUAL ASSETS
+assets:
+  cover_art:
+    pattern: "S{SS}E{EE}_{titulo-kebab}_cover_{platform}.{ext}"
+    platforms: [spotify, apple, youtube, generic]
+    extensions: [jpg, png]
+
+    examples:
+      - "S01E05_inteligencia-artificial_cover_spotify.jpg"
+      - "S01E05_inteligencia-artificial_cover_generic.png"
+
+  thumbnails:
+    pattern: "S{SS}E{EE}_{titulo-kebab}_thumb_{platform}.{ext}"
+    platforms: [youtube, instagram, facebook]
+
+    examples:
+      - "S01E05_inteligencia-artificial_thumb_youtube.jpg"
+      - "S01E05_inteligencia-artificial_thumb_instagram.jpg"
+
+  social_graphics:
+    pattern: "S{SS}E{EE}_{titulo-kebab}_social_{type}_{platform}.{ext}"
+    types: [post, story, carousel]
+
+    examples:
+      - "S01E05_inteligencia-artificial_social_post_instagram.jpg"
+      - "S01E05_inteligencia-artificial_social_story_instagram.jpg"
+      - "S01E05_inteligencia-artificial_social_post_linkedin.png"
+
+# PROJECT FILES
+project:
+  daw:
+    pattern: "S{SS}E{EE}_{titulo-kebab}.{daw_ext}"
+    extensions:
+      logic: ".logic"
+      protools: ".ptx"
+      reaper: ".rpp"
+      audacity: ".aup3"
+
+    examples:
+      - "S01E05_inteligencia-artificial.logic"
+      - "S01E05_inteligencia-artificial.ptx"
+
+  descript:
+    pattern: "S{SS}E{EE}_{titulo-kebab}/"
+    note: "Descript usa pasta (não single file)"
+
+    example:
+      - "S01E05_inteligencia-artificial/ (folder)"
+
+  video_editor:
+    pattern: "S{SS}E{EE}_{titulo-kebab}.{editor_ext}"
+    extensions:
+      premiere: ".prproj"
+      final_cut: ".fcpbundle"
+      davinci: ".drp"
+
+    examples:
+      - "S01E05_inteligencia-artificial.prproj"
+
+# TRANSCRIPTS
+transcript:
+  srt:
+    pattern: "S{SS}E{EE}_{titulo-kebab}_transcript.srt"
+    example: "S01E05_inteligencia-artificial_transcript.srt"
+
+  txt:
+    pattern: "S{SS}E{EE}_{titulo-kebab}_transcript.txt"
+    example: "S01E05_inteligencia-artificial_transcript.txt"
+
+  json:
+    pattern: "S{SS}E{EE}_{titulo-kebab}_transcript.json"
+    example: "S01E05_inteligencia-artificial_transcript.json"
+
+  multilingual:
+    pattern: "S{SS}E{EE}_{titulo-kebab}_transcript_{lang}.{ext}"
+    examples:
+      - "S01E05_inteligencia-artificial_transcript_pt-br.srt"
+      - "S01E05_inteligencia-artificial_transcript_en-us.srt"
+
+# CHAPTERS
+chapters:
+  pattern: "S{SS}E{EE}_{titulo-kebab}_chapters.json"
+  example: "S01E05_inteligencia-artificial_chapters.json"
+
+# SHOW NOTES
+show_notes:
+  pattern: "S{SS}E{EE}_{titulo-kebab}_shownotes.{ext}"
+  extensions: [md, txt, html]
+
+  examples:
+    - "S01E05_inteligencia-artificial_shownotes.md"
+    - "S01E05_inteligencia-artificial_shownotes.html"
+
+# METADATA
+metadata:
+  pattern: "S{SS}E{EE}_{titulo-kebab}_metadata.{ext}"
+  extensions: [json, yaml, xml]
+
+  example: "S01E05_inteligencia-artificial_metadata.json"
+
+# FOLDER STRUCTURE
+folder_structure:
+  root: "Podcast-Name/"
+  season: "Season-{SS}/"
+  episode: "S{SS}E{EE}-{titulo-kebab}/"
+
+  subfolders:
+    raw:
+      name: "raw/"
+      content: "Audio/video bruto da gravação"
+
+    edit:
+      name: "edit/"
+      content: "Work-in-progress da edição"
+
+    master:
+      name: "master/"
+      content: "Masters finais por plataforma"
+
+    clips:
+      name: "clips/"
+      content: "Social media clips"
+
+    assets:
+      name: "assets/"
+      content: "Cover art, thumbnails, graphics"
+
+    project:
+      name: "project/"
+      content: "DAW project files"
+
+    transcript:
+      name: "transcript/"
+      content: "Transcrições SRT/TXT/JSON"
+
+    chapters:
+      name: "chapters/"
+      content: "Chapter files"
+
+    notes:
+      name: "notes/"
+      content: "Show notes, research, scripts"
+
+  example_tree: |
+    Meu-Podcast/
+      Season-01/
+        S01E01-lancamento/
+          raw/
+            S01E01_lancamento_host_raw.wav
+            S01E01_lancamento_guest_raw.wav
+          edit/
+            S01E01_lancamento_edit_v1.wav
+            S01E01_lancamento_edit_final.wav
+          master/
+            S01E01_lancamento_master_spotify.wav
+            S01E01_lancamento_master_rss.mp3
+          clips/
+            S01E01_lancamento_clip1_youtube.mp4
+            S01E01_lancamento_clip2_instagram.mp4
+          assets/
+            S01E01_lancamento_cover_spotify.jpg
+            S01E01_lancamento_thumb_youtube.jpg
+          project/
+            S01E01_lancamento.logic/
+          transcript/
+            S01E01_lancamento_transcript.srt
+            S01E01_lancamento_transcript.txt
+          chapters/
+            S01E01_lancamento_chapters.json
+          notes/
+            S01E01_lancamento_shownotes.md
+            S01E01_lancamento_script.md
+
+        S01E02-segundo-episodio/
+          (same structure)
+
+      Season-02/
+        S02E01-novo-comeco/
+          (same structure)
+
+# SPECIAL FILES
+special_files:
+  media_kit:
+    pattern: "MediaKit_{podcast-name}_{YYYY-MM}.pdf"
+    example: "MediaKit_meu-podcast_2026-01.pdf"
+
+  sponsor_deck:
+    pattern: "SponsorDeck_{podcast-name}_{YYYY-MM}.pdf"
+    example: "SponsorDeck_meu-podcast_2026-01.pdf"
+
+  analytics_report:
+    pattern: "Analytics_{podcast-name}_{YYYY-MM}.pdf"
+    example: "Analytics_meu-podcast_2026-01.pdf"
+
+  season_trailer:
+    pattern: "S{SS}E00_{season-name}_trailer.wav"
+    example: "S02E00_nova-temporada_trailer.wav"
+
+# BACKUP FILES
+backup:
+  pattern: "{original-filename}.{timestamp}.bak"
+  timestamp: "YYYYMMDD-HHMMSS"
+
+  examples:
+    - "S01E05_inteligencia-artificial_edit_v1.wav.20260211-143022.bak"
+
+  location: "backup/ subfolder (separate from working files)"
+
+# VERSION CONTROL
+versioning:
+  incremental:
+    pattern: "_v{N}"
+    examples: ["_v1", "_v2", "_v3"]
+
+  descriptive:
+    pattern: "_{descriptor}"
+    examples: ["_draft", "_review", "_approved", "_final"]
+
+  combined:
+    pattern: "_v{N}_{descriptor}"
+    examples: ["_v2_review", "_v3_final"]
+
+  recommendation: "Use incremental para WIP, descriptive para milestones"
+
+# CHECKSUMS
+checksums:
+  pattern: "{filename}.sha256"
+  content: "{hash} {filename}"
+
+  example:
+    file: "S01E05_inteligencia-artificial_master_spotify.wav"
+    checksum_file: "S01E05_inteligencia-artificial_master_spotify.wav.sha256"
+    content: "abc123def456... S01E05_inteligencia-artificial_master_spotify.wav"
+
+# AUTOMATION SCRIPTS
+scripts:
+  rename_batch:
+    purpose: "Renomear múltiplos arquivos de uma vez"
+    tools: [Rename Master, Bulk Rename Utility, bash script]
+
+  generate_checksums:
+    bash: |
+      #!/bin/bash
+      for file in *.wav; do
+        shasum -a 256 "$file" > "$file.sha256"
+      done
+
+  organize_files:
+    purpose: "Mover arquivos para subfolders corretos"
+    logic:
+      - "*_raw.* → raw/"
+      - "*_edit_*.* → edit/"
+      - "*_master_*.* → master/"
+      - "*_clip*.* → clips/"
+
+# BEST PRACTICES
+best_practices:
+  do:
+    - "Nomear arquivos IMEDIATAMENTE (não 'recording1.wav')"
+    - "Usar pattern consistente em TODO episódio"
+    - "Incluir versioning (v1, v2) para WIP"
+    - "Checksum arquivos críticos (masters)"
+    - "Document naming convention (este arquivo!)"
+
+  dont:
+    - "Mudar convention mid-project (confusão)"
+    - "Usar nomes genéricos ('final.wav', 'edit.wav')"
+    - "Esquecer speaker label em raw files"
+    - "Misturar conventions (às vezes hífen, às vezes underscore)"
+
+  recovery:
+    scenario: "Arquivos mal nomeados (recording1.wav, etc)"
+    solution:
+      - "Criar mapping table (old → new name)"
+      - "Usar script de rename batch"
+      - "Verificar após rename (play file)"
+      - "Update references (project files, notes)"
+
+# PLATFORM-SPECIFIC
+platform_requirements:
+  spotify:
+    audio: "Qualquer nome (upload via hosting)"
+    artwork: "3000x3000.jpg"
+
+  apple:
+    audio: "Qualquer nome"
+    artwork: "3000x3000.jpg ou .png"
+
+  youtube:
+    video: "Qualquer nome (upload manual)"
+    thumbnail: "1280x720.jpg"
+
+  rss:
+    audio: "URL friendly (sem espaços, acentos)"
+    format: "kebab-case recomendado"
+
+# INTERNATIONALIZATION
+international:
+  language_suffix:
+    pattern: "_{lang}"
+    examples: ["_pt-br", "_en-us", "_es-es"]
+
+  use_cases:
+    - "Transcripts multilingual"
+    - "Show notes multilingual"
+    - "Dubbed audio tracks"
+
+  examples:
+    - "S01E05_inteligencia-artificial_transcript_pt-br.srt"
+    - "S01E05_inteligencia-artificial_transcript_en-us.srt"
+    - "S01E05_inteligencia-artificial_shownotes_pt-br.md"
+    - "S01E05_inteligencia-artificial_shownotes_en-us.md"

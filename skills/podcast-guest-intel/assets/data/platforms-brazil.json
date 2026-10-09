@@ -1,0 +1,376 @@
+{
+  "market_overview": {
+    "total_listeners": "51.8M (2024)",
+    "yoy_growth": "20-25%",
+    "global_rank": "Top 5",
+    "penetration": "~24% da população 16+",
+    "mobile_first": true
+  },
+
+  "platforms": {
+    "spotify": {
+      "market_share": "~70%",
+      "status": "Dominante absoluto",
+      "listeners_br": "51.8M podcast listeners",
+      "monetization": {
+        "partner_program": {
+          "available": true,
+          "since": 2024,
+          "requirements": {
+            "episodes": 3,
+            "hours": 2000,
+            "listeners": 1000,
+            "period": "últimos 60 dias"
+          },
+          "revenue_share": "50/50"
+        },
+        "ads_manager": {
+          "available": "Beta (2025)",
+          "access": "Convite apenas (currently)"
+        }
+      },
+      "features": {
+        "video": true,
+        "chapters": true,
+        "transcripts": false,
+        "spatial_audio": false,
+        "analytics": "Spotify for Creators (excelente)"
+      },
+      "user_behavior": {
+        "device": "Mobile (90%)",
+        "discovery": "Playlists automáticas, For You feed",
+        "session": "Commute, casa, academia"
+      },
+      "distribution": {
+        "via": "RSS feed",
+        "delay": "1-6 horas",
+        "approval": "Instantâneo (após first approval)"
+      }
+    },
+
+    "youtube": {
+      "market_share": "~15-20% (crescente rápido)",
+      "status": "Ameaça ao Spotify, video essential",
+      "growth": "25-30% YoY (faster than Spotify)",
+      "monetization": {
+        "adsense": {
+          "available": true,
+          "requirements": {
+            "subscribers": 1000,
+            "watch_hours": 4000,
+            "period": "últimos 12 meses"
+          },
+          "revenue": "Variable (CPM R$5-30)"
+        },
+        "memberships": {
+          "available": true,
+          "fee": "30%",
+          "min_subscribers": 1000
+        },
+        "super_chat": {
+          "available": true,
+          "fee": "30%",
+          "use_case": "Live streams"
+        }
+      },
+      "features": {
+        "video": "Required",
+        "shorts": true,
+        "chapters": true,
+        "transcripts": "Auto + custom",
+        "community_posts": true,
+        "analytics": "YouTube Studio (excellent)"
+      },
+      "user_behavior": {
+        "device": "Mobile (70%), Desktop (30%)",
+        "discovery": "Algorithm, search, recommendations",
+        "session": "Binge-watching (multiple episodes)"
+      },
+      "content_types": {
+        "long_form": "1-4h (brasileiros toleram)",
+        "clips": "Shorts 15-60s (discovery)",
+        "live": "Live streams (engagement)"
+      },
+      "distribution": {
+        "via": "Direct upload",
+        "processing": "5-30 min",
+        "approval": "Instantâneo"
+      }
+    },
+
+    "deezer": {
+      "market_share": "~5-8%",
+      "status": "Relevante localmente, global decline",
+      "local_relevance": "Alta (parcerias com operadoras)",
+      "monetization": {
+        "direct": "Não disponível para creators",
+        "via_label": "Possível via agregadores"
+      },
+      "features": {
+        "video": false,
+        "chapters": false,
+        "transcripts": false,
+        "analytics": "Limitado"
+      },
+      "user_behavior": {
+        "device": "Mobile (95%)",
+        "bundled": "Tim, Claro, Vivo (operadoras)",
+        "discovery": "Editorial, busca"
+      },
+      "distribution": {
+        "via": "RSS feed",
+        "delay": "Variable",
+        "approval": "Automático"
+      }
+    },
+
+    "apple_podcasts": {
+      "market_share": "~8-10%",
+      "status": "Premium audience, menor que global",
+      "ios_penetration": "~20% no Brasil (vs ~50% US)",
+      "monetization": {
+        "subscriptions": {
+          "available": true,
+          "fee": "30% Y1, 15% após",
+          "requirements": "Approval da Apple"
+        }
+      },
+      "features": {
+        "video": false,
+        "chapters": true,
+        "transcripts": true,
+        "spatial_audio": true,
+        "analytics": "Apple Podcasts Connect (good)"
+      },
+      "user_behavior": {
+        "device": "iPhone, iPad, Mac",
+        "discovery": "Browse, search, editorial",
+        "demographics": "Higher income"
+      },
+      "distribution": {
+        "via": "RSS feed",
+        "delay": "1-12 horas",
+        "approval": "24-48h (initial)"
+      }
+    },
+
+    "amazon_music": {
+      "market_share": "~3-5% (crescente)",
+      "status": "Emerging, bundled com Prime",
+      "prime_subscribers_br": "Crescente",
+      "monetization": {
+        "direct": "Não disponível",
+        "via_audible": "Possível para produções específicas"
+      },
+      "features": {
+        "video": false,
+        "chapters": false,
+        "transcripts": false,
+        "analytics": "Limitado"
+      },
+      "user_behavior": {
+        "device": "Mobile, Alexa",
+        "bundled": "Prime membership",
+        "discovery": "Alexa recommendations"
+      },
+      "distribution": {
+        "via": "RSS feed",
+        "delay": "Variable",
+        "approval": "Automático"
+      }
+    },
+
+    "other": {
+      "castbox": {"market_share": "~2%"},
+      "podcast_addict": {"market_share": "~1-2%"},
+      "overcast": {"market_share": "~0.5%"},
+      "pocket_casts": {"market_share": "~0.5%"},
+      "combined": "~5%"
+    }
+  },
+
+  "distribution_strategy": {
+    "priority_1": {
+      "platform": "Spotify",
+      "reason": "70% do mercado, analytics excelente, monetização"
+    },
+    "priority_2": {
+      "platform": "YouTube",
+      "reason": "Crescimento rápido, AdSense, discovery via search"
+    },
+    "priority_3": {
+      "platforms": ["Apple", "Deezer", "Amazon"],
+      "method": "Via RSS (automático)"
+    }
+  },
+
+  "video_importance": {
+    "critical": true,
+    "reason": "70% dos top podcasts BR são video-first",
+    "youtube_requirement": "Video essential para crescimento",
+    "spotify_video": "Crescente adoption",
+    "minimum": "Camera fixa com boa iluminação",
+    "ideal": "Multi-camera com switching"
+  },
+
+  "regional_considerations": {
+    "language": "Português brasileiro (não Portugal)",
+    "accent": "Sotaque OK (autenticidade > neutralização)",
+    "slang": "Gírias comuns OK, regionalismo very específico avoid",
+    "topics": {
+      "popular": ["Futebol", "BBB/reality", "Política", "Finanças pessoais", "Tecnologia"],
+      "emerging": ["IA", "Web3", "Investimentos", "Empreendedorismo"],
+      "underserved": ["Fiction", "Histórico", "Ciência"]
+    }
+  },
+
+  "listening_habits": {
+    "primary_location": {
+      "transporte_publico": "30%",
+      "casa": "25%",
+      "trabalho": "20%",
+      "academia": "15%",
+      "carro": "10%"
+    },
+    "peak_times": {
+      "manha": "7-9h (commute)",
+      "almoco": "12-14h",
+      "noite": "20-22h (antes de dormir)"
+    },
+    "session_duration": {
+      "average": "40-60 min",
+      "long_form": "Brasileiros toleram 2-4h (únicos globalmente)"
+    },
+    "discovery": {
+      "friends": "40%",
+      "spotify_playlists": "25%",
+      "youtube_recommendations": "20%",
+      "social_media": "15%"
+    }
+  },
+
+  "advertising_ecosystem": {
+    "brands": {
+      "active": ["Fintech", "E-commerce", "Apps", "Educação online", "Suplementos"],
+      "cpm": {
+        "host_read": "R$50-100",
+        "programmatic": "R$25-75",
+        "premium": "R$100-200+"
+      }
+    },
+    "agencies": {
+      "gumball": {
+        "focus": "Podcast advertising",
+        "services": "Matching brands + podcasts"
+      },
+      "other": "Maioria agencies tradicionais ainda não focam em podcast"
+    }
+  },
+
+  "cultural_factors": {
+    "communication_style": {
+      "preferred": "Caloroso, pessoal, informal",
+      "humor": "Valorizado (não precisa ser sério o tempo todo)",
+      "storytelling": "Preferido sobre dados puros"
+    },
+    "trust": {
+      "host_credibility": "Mais importante que production quality",
+      "transparency": "Essential sobre sponsors",
+      "community": "Responder audiência (não ser distante)"
+    },
+    "trends": {
+      "bbb": "Sazonalidade (Jan-Abr)",
+      "futebol": "Copa do Mundo, Libertadores",
+      "politica": "Polarizado (cuidado com posicionamento)",
+      "economia": "Finanças pessoais crescente"
+    }
+  },
+
+  "payment_infrastructure": {
+    "local": {
+      "pix": {
+        "adoption": "Universal (everyone has)",
+        "use_case": "Donations, direct payments"
+      },
+      "boleto": {
+        "adoption": "Alta (older demographics)",
+        "use_case": "Purchases, subscriptions"
+      },
+      "credit_card": {
+        "adoption": "Média-alta",
+        "installments": "Parcelamento common (3-12x)"
+      }
+    },
+    "platforms": {
+      "mercadopago": "Most popular payment gateway",
+      "pagseguro": "Popular alternative",
+      "stripe": "Available but less common"
+    },
+    "membership": {
+      "apoia_se": {
+        "local": true,
+        "fee": "7.9% + R$0.40",
+        "payment": "Pix, boleto, credit card"
+      },
+      "catarse": {
+        "local": true,
+        "model": "Crowdfunding",
+        "fee": "13%"
+      },
+      "patreon": {
+        "international": true,
+        "fee": "5-12%",
+        "payment": "Credit card (works in BR)"
+      }
+    }
+  },
+
+  "competition_landscape": {
+    "top_podcasts_reference": {
+      "flow": {
+        "hosts": "Monark + Igor 3K",
+        "format": "Entrevista longa (2-4h), video",
+        "downloads": "Estimado 500K-1M+/ep"
+      },
+      "podpah": {
+        "hosts": "Igão + Mítico",
+        "format": "Entrevista longa, comedy, video",
+        "downloads": "Estimado 300K-800K/ep"
+      },
+      "inteligencia_ltda": {
+        "host": "Vilela",
+        "format": "Business interview (60-90 min)",
+        "downloads": "Estimado 100K-300K/ep"
+      },
+      "cafe_da_manha": {
+        "host": "Folha de S.Paulo",
+        "format": "News (20-30 min), diário",
+        "downloads": "Estimado 50K-150K/ep"
+      }
+    },
+    "saturation": {
+      "high": ["Entrevista generalista", "True crime"],
+      "medium": ["Business", "Tecnologia", "Educação"],
+      "low": ["Fiction", "Narrativo", "Ciência"]
+    }
+  },
+
+  "recommendations": {
+    "starting_out": {
+      "platforms": ["Spotify (priority)", "YouTube (essential)", "Apple + Deezer via RSS"],
+      "format": "Video-first (even camera fixa)",
+      "language": "PT-BR coloquial",
+      "length": "40-60 min (sweet spot) OU long-form se entertainment"
+    },
+    "monetization": {
+      "start": "Apoia.se ou Patreon (membership)",
+      "scale": "Direct sponsors + Spotify Partner",
+      "mature": "Multiple streams (ads + membership + events)"
+    },
+    "growth": {
+      "organic": "YouTube Shorts + Instagram Reels (clips)",
+      "paid": "Facebook/Instagram ads (if budget)",
+      "partnerships": "Guest swaps com podcasts similares"
+    }
+  }
+}

@@ -1,0 +1,428 @@
+# Podcasting 2.0 - Podcast Production Squad
+# Features modernas do RSS namespace (2024-2026)
+
+# OVERVIEW
+overview:
+  what: "Conjunto de extensões RSS para podcasts"
+  namespace: 'xmlns:podcast="https://podcastindex.org/namespace/1.0"'
+  goal: "Enriquecer experiência além de audio file + descrição"
+  status: "Crescente adoção, não mainstream"
+
+  why_adopt:
+    - "Diferenciação (poucas pessoas usam ainda)"
+    - "Better UX para audiência"
+    - "Future-proof (tendência clara)"
+    - "Monetization features (V4V)"
+    - "SEO e discovery benefits"
+
+  compatibility:
+    full_support: [Fountain, Podverse, CurioCaster, Castamatic, AntennaPod]
+    partial_support: [Apple Podcasts, Spotify, Overcast, Pocket Casts]
+    no_support: [Apps antigos, not updated]
+
+# FEATURES DETALHADAS
+features:
+  transcript:
+    enabled: true
+    tag: "<podcast:transcript>"
+    formats: ["SRT", "JSON", "HTML"]
+    source: "Whisper + manual review"
+
+    implementation: |  # xml
+      <podcast:transcript
+        url="https://example.com/episode-5-transcript.srt"
+        type="application/srt"
+        language="pt-BR"
+        rel="captions" />
+
+    benefits:
+      - "Accessibility (deaf/hard of hearing)"
+      - "SEO (text indexável)"
+      - "Search within episode (apps suportam)"
+      - "Reading preference (algumas pessoas preferem ler)"
+
+    apps_with_feature:
+      full: [Apple Podcasts, Overcast, Pocket Casts, Podcast Addict]
+      search: [Podcast Index, Podverse]
+
+  chapters:
+    enabled: true
+    tag: "<podcast:chapters>"
+    format: "JSON"
+    source: "Manual + auto from timestamps"
+
+    implementation: |  # xml
+      <podcast:chapters
+        url="https://example.com/episode-5-chapters.json"
+        type="application/json+chapters" />
+
+    json_format: |  # json
+      {
+        "version": "1.2.0",
+        "chapters": [
+          {
+            "startTime": 0,
+            "title": "Intro",
+            "img": "https://example.com/intro.jpg"
+          },
+          {
+            "startTime": 120,
+            "title": "Deep Dive em IA",
+            "img": "https://example.com/ai.jpg",
+            "url": "https://example.com/ai-resources"
+          }
+        ]
+      }
+
+    benefits:
+      - "Navigation (jump to sections)"
+      - "Context (saber onde está)"
+      - "Visual variety (chapter images)"
+      - "Links (resources por capítulo)"
+
+    apps_with_feature: [Apple Podcasts, Spotify, Overcast, Pocket Casts, Podcast Addict]
+
+  person:
+    enabled: true
+    tag: "<podcast:person>"
+    purpose: "Creditar pessoas envolvidas"
+
+    roles: [host, guest, editor, producer, composer, narrator]
+
+    implementation: |  # xml
+      <podcast:person
+        role="host"
+        img="https://example.com/host.jpg"
+        href="https://twitter.com/host">
+        João Silva
+      </podcast:person>
+
+      <podcast:person
+        role="guest"
+        img="https://example.com/guest.jpg"
+        href="https://linkedin.com/in/guest">
+        Maria Santos
+      </podcast:person>
+
+      <podcast:person
+        role="editor">
+        Pedro Editor
+      </podcast:person>
+
+    benefits:
+      - "Credit equipe (recognition)"
+      - "Discovery (ouvintes descobrem guest via app)"
+      - "SEO (nomes indexados)"
+      - "Network building (links para profiles)"
+
+    apps_with_feature: [Podcast Index, Podverse, Fountain]
+
+  soundbite:
+    enabled: true
+    tag: "<podcast:soundbite>"
+    max_per_episode: 3
+    duration: "30-120s"
+
+    implementation: |  # xml
+      <podcast:soundbite
+        startTime="180"
+        duration="60"
+        title="Melhor momento: insight sobre IA" />
+
+    benefits:
+      - "App pode criar playlist de soundbites"
+      - "Discovery (ouvintes navegam por highlights)"
+      - "Marketing (soundbites são shareable)"
+
+    apps_with_feature: [Podcast Index, Podverse, Curiocaster]
+
+    selection_strategy:
+      - "Pick 3 melhores momentos (quotable)"
+      - "Duration ideal: 45-90s"
+      - "Title deve ser descriptive + enticing"
+
+  funding:
+    enabled: true
+    tag: "<podcast:funding>"
+    purpose: "Link para support financeiro"
+
+    implementation: |  # xml
+      <podcast:funding
+        url="https://patreon.com/meupodcast">
+        Apoie no Patreon
+      </podcast:funding>
+
+      <podcast:funding
+        url="https://apoia.se/meupodcast">
+        Apoie no Apoia.se
+      </podcast:funding>
+
+    benefits:
+      - "Direct support link (apps mostram)"
+      - "Multiple funding sources"
+      - "Easier than procurar show notes"
+
+    apps_with_feature: [Podcast Index, Podverse, Fountain, Castamatic]
+
+  value:
+    enabled: false
+    note: "Enable when V4V audience exists"
+    tag: "<podcast:value>"
+    type: "lightning"
+    method: "keysend"
+
+    implementation: |  # xml
+      <podcast:value
+        type="lightning"
+        method="keysend"
+        suggested="100">
+        <podcast:valueRecipient
+          name="Host"
+          type="node"
+          address="[lightning address]"
+          split="80" />
+        <podcast:valueRecipient
+          name="Producer"
+          type="node"
+          address="[lightning address]"
+          split="20" />
+      </podcast:value>
+
+    requirements:
+      - "Lightning wallet (Bitcoin)"
+      - "Node address"
+      - "App support (Fountain, Podverse)"
+
+    benefits:
+      - "Micro-payments durante listening"
+      - "No middleman (direct to creator)"
+      - "Split automático entre team"
+
+    challenges:
+      - "Complexidade técnica (Lightning Network)"
+      - "Low adoption no Brasil"
+      - "Volatilidade (Bitcoin)"
+
+    recommendation:
+      when_to_enable: "Quando 1000+ ouvintes engaged OU nicho tech-savvy"
+      until_then: "Usar funding link (Patreon, etc)"
+
+  txt:
+    enabled: true
+    tag: "<podcast:txt>"
+    purpose: "Metadata adicional key-value"
+
+    implementation: |  # xml
+      <podcast:txt purpose="verify">abc123verify</podcast:txt>
+      <podcast:txt purpose="keywords">IA, tecnologia, futuro</podcast:txt>
+      <podcast:txt purpose="location">São Paulo, Brasil</podcast:txt>
+
+    use_cases:
+      - "Verification codes"
+      - "Keywords adicionais (SEO)"
+      - "Location metadata"
+      - "Custom fields"
+
+  location:
+    enabled: false
+    tag: "<podcast:location>"
+    purpose: "Geo-tag episodes"
+
+    implementation: |  # xml
+      <podcast:location
+        geo="geo:-23.5505,-46.6333"
+        osm="R298285">
+        São Paulo, Brasil
+      </podcast:location>
+
+    use_case: "Travel podcasts, local events"
+
+  trailer:
+    enabled: false
+    tag: "<podcast:trailer>"
+    purpose: "Trailer do podcast (promotional)"
+
+    implementation: |  # xml
+      <podcast:trailer
+        url="https://example.com/trailer.mp3"
+        pubdate="2024-01-01T00:00:00Z"
+        length="3000000"
+        type="audio/mpeg">
+        Trailer oficial do Meu Podcast
+      </podcast:trailer>
+
+    use_case: "Lançamento de novo podcast ou season"
+
+  season:
+    enabled: true
+    tag: "<podcast:season>"
+    purpose: "Organizar em temporadas"
+
+    implementation: |  # xml
+      <podcast:season>1</podcast:season>
+      <podcast:episode>5</podcast:episode>
+
+    benefits: "Apps podem organizar por season"
+
+# IMPLEMENTATION GUIDE
+implementation:
+  step_1_hosting:
+    check: "Hosting suporta Podcasting 2.0?"
+    supported: [Buzzsprout, RSS.com, Captivate, Transistor, Fireside]
+    not_supported: [Anchor, Spreaker]
+    workaround: "Editar RSS feed manualmente (advanced)"
+
+  step_2_enable_features:
+    buzzsprout_example:
+      - "Settings > Podcasting 2.0"
+      - "Enable Transcripts (upload SRT)"
+      - "Enable Chapters (upload JSON)"
+      - "Add Person tags"
+
+  step_3_validate:
+    tool: "Podcast Index (https://podcastindex.org)"
+    steps:
+      - "Submit RSS feed"
+      - "Validate tags"
+      - "Check warnings/errors"
+
+  step_4_test:
+    apps: [Fountain, Podverse, Curiocaster]
+    checklist:
+      - "Transcript appears?"
+      - "Chapters navigable?"
+      - "Person tags show?"
+      - "Funding links visible?"
+
+# CONTENT CREATION WORKFLOW
+workflow:
+  transcript:
+    generate: "Whisper (auto)"
+    review: "Human correction (names, terms)"
+    format: "Export SRT"
+    upload: "Hosting + link in RSS"
+    time: "30-60 min per episode"
+
+  chapters:
+    identify: "Durante editing, mark chapter points"
+    create_json: "Manual ou script"
+    images: "Optional, 1 per chapter"
+    upload: "Hosting + link in RSS"
+    time: "15-30 min per episode"
+
+  person_tags:
+    list: "Host, guest(s), editor, producer"
+    collect: "Photos + social links"
+    add: "Via hosting interface"
+    time: "5-10 min per episode (reuse host/producer)"
+
+  soundbites:
+    identify: "Durante editing ou via Opus Clip AI"
+    select: "3 best moments"
+    add: "Via hosting interface (start time + duration)"
+    time: "10-20 min per episode"
+
+  total_time: "60-120 min per episode (one-time setup faster after)"
+
+# APPS SUPPORTING PODCASTING 2.0
+apps:
+  full_support:
+    fountain:
+      features: [transcripts, chapters, person, soundbites, funding, value]
+      platform: [iOS, Android, Web]
+      specialty: "V4V leader"
+
+    podverse:
+      features: [transcripts, chapters, person, soundbites, funding, value, clips]
+      platform: [iOS, Android, Web]
+      specialty: "Clip sharing"
+
+    curiocaster:
+      features: [transcripts, chapters, person, soundbites, funding]
+      platform: [iOS, Android]
+      specialty: "Beautiful UI"
+
+    castamatic:
+      features: [transcripts, chapters, person, funding]
+      platform: [iOS]
+      specialty: "Power user features"
+
+    antennapod:
+      features: [chapters, funding]
+      platform: [Android]
+      specialty: "Open-source"
+
+  partial_support:
+    apple_podcasts:
+      features: [transcripts, chapters]
+      note: "Biggest player, mas support limitado"
+
+    spotify:
+      features: [chapters (via backend, não RSS)]
+      note: "Closed ecosystem, ignora RSS tags"
+
+    overcast:
+      features: [transcripts, chapters]
+      platform: [iOS]
+
+    pocket_casts:
+      features: [chapters]
+      platform: [iOS, Android, Web]
+
+# ADOPTION STRATEGY
+adoption_strategy:
+  phase_1_essentials:
+    features: [transcript, chapters]
+    reason: "Max impact, supported by major apps"
+    effort: "Medium"
+    timeline: "Implementar immediately"
+
+  phase_2_discovery:
+    features: [person, soundbites]
+    reason: "Improve discovery + credit"
+    effort: "Low"
+    timeline: "Após 5-10 episódios"
+
+  phase_3_monetization:
+    features: [funding]
+    reason: "Direct support"
+    effort: "Low"
+    timeline: "Quando membership/Patreon lançar"
+
+  phase_4_experimental:
+    features: [value (V4V)]
+    reason: "Cutting edge, low adoption"
+    effort: "High"
+    timeline: "Quando audiência 1000+ engaged"
+
+# BENEFITS SUMMARY
+benefits:
+  audience:
+    - "Better navigation (chapters)"
+    - "Accessibility (transcripts)"
+    - "Context (person tags, images)"
+    - "Discovery (soundbites)"
+
+  creator:
+    - "SEO (transcripts indexáveis)"
+    - "Credit team (person tags)"
+    - "Monetization (funding, value)"
+    - "Differentiation (few use)"
+
+  discoverability:
+    - "Apps podem create playlists de soundbites"
+    - "Search within episodes (transcripts)"
+    - "Guest discovery (person tags)"
+
+# FUTURE OF PODCASTING 2.0
+future:
+  2026:
+    - "Major apps adopt more features"
+    - "Spotify considera support (pressure from users)"
+    - "V4V grows (Lightning Network matures)"
+
+  2027:
+    - "Podcasting 2.0 becomes expected (não diferencial)"
+    - "New features (live, interactive, etc)"
+
+  recommendation: "Adopt early = gain advantage agora"

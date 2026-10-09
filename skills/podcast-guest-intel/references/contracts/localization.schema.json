@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://podcast-production.invalid/contracts/localization.schema.json",
+  "title": "LocalizationJob",
+  "description": "Job de localização de UM episódio (research/06): transcrição → tradução com glossário → legendas SRT/VTT, show notes traduzidas e, opcionalmente, PLANO de dublagem. A decisão é humana: revisão registrada (human-decision) antes de aprovar ou publicar. Regra rígida (é lei, não recomendação): dublagem com réplica da voz exige consent_ref para um aceite dub_voice_replica concedido e não revogado (conferido por scripts/localization_tools.py check). Ferramenta: scripts/localization_tools.py.",
+  "type": "object",
+  "required": ["localization_id", "episode_ref", "source_locale", "target_locales", "transcript_ref", "subtitles", "review", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "localization_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$" },
+    "episode_ref": { "type": "string", "minLength": 1 },
+    "show_ref": { "type": "string" },
+    "source_locale": { "$ref": "show-profile.schema.json#/$defs/locale" },
+    "target_locales": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "show-profile.schema.json#/$defs/locale" } },
+    "transcript_ref": { "type": "string", "minLength": 1, "description": "Transcrição na língua de origem (formato de localization_tools.py: {locale, source, segments[{id,start,end,speaker,text}]})." },
+    "transcript_source": { "enum": ["assemblyai", "elevenlabs_scribe", "from_file", "manual"] },
+    "glossary_ref": { "type": "string", "description": "show-profile (localization.glossary) ou arquivo próprio {glossary: [...]}." },
+    "speakers": {
+      "type": "array",
+      "description": "Mapa rótulo do STT → pessoa. Proposto pela ferramenta, confirmado pelo humano.",
+      "items": {
+        "type": "object",
+        "required": ["label", "role"],
+        "additionalProperties": false,
+        "properties": {
+          "label": { "type": "string", "minLength": 1 },
+          "display_name": { "type": "string" },
+          "role": { "enum": ["host", "guest", "other"] },
+          "intake_ref": { "type": "string", "description": "intake_id do convidado (onde estão os aceites de localização)." }
+        }
+      }
+    },
+    "translations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["locale", "path", "translated_by"],
+        "additionalProperties": false,
+        "properties": {
+          "locale": { "$ref": "show-profile.schema.json#/$defs/locale" },
+          "path": { "type": "string", "minLength": 1 },
+          "translated_by": { "enum": ["harness_agent", "deepl", "google", "openai", "assemblyai", "human"], "description": "harness_agent = o LLM do harness traduziu via task (não é BYOK)." }
+        }
+      }
+    },
+    "subtitles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["locale", "format", "path", "max_chars_per_line", "max_lines"],
+        "additionalProperties": false,
+        "properties": {
+          "locale": { "$ref": "show-profile.schema.json#/$defs/locale" },
+          "format": { "enum": ["srt", "vtt"] },
+          "path": { "type": "string", "minLength": 1 },
+          "max_chars_per_line": { "type": "integer", "minimum": 10, "maximum": 80 },
+          "max_lines": { "type": "integer", "minimum": 1, "maximum": 3 },
+          "max_cps": { "type": "number", "minimum": 5, "maximum": 40 }
+        }
+      }
+    },
+    "show_notes_translated": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["locale", "path"],
+        "additionalProperties": false,
+        "properties": {
+          "locale": { "$ref": "show-profile.schema.json#/$defs/locale" },
+          "path": { "type": "string", "minLength": 1 },
+          "source_path": { "type": "string" }
+        }
+      }
+    },
+    "dubbing": {
+      "type": "array",
+      "description": "Só PLANO no MVP (dub-plan): nenhum provedor de voz é chamado.",
+      "items": { "$ref": "#/$defs/dubbing_item" }
+    },
+    "political_exposure": {
+      "type": "object",
+      "description": "Convidado candidato ou agente político: alerta extra (Res. TSE 23.732/2024, fonte secundária). Não bloqueia; o humano decide.",
+      "required": ["is_political_agent"],
+      "additionalProperties": false,
+      "properties": {
+        "is_political_agent": { "type": "boolean" },
+        "basis": { "type": "string", "description": "De onde veio a marcação (dossiê, @guardian, humano)." }
+      }
+    },
+    "review": {
+      "type": "object",
+      "required": ["alertas"],
+      "additionalProperties": false,
+      "properties": {
+        "alertas": { "type": "array", "items": { "$ref": "human-decision.schema.json#/$defs/alert" }, "description": "Recalculados por localization_tools.py check." },
+        "human_decision": { "$ref": "human-decision.schema.json" },
+        "reviewed_by_guest": { "type": "boolean" }
+      }
+    },
+    "status": { "enum": ["rascunho", "em_revisao", "aprovado", "publicado"] },
+    "published": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["locale", "platform"],
+        "additionalProperties": false,
+        "properties": {
+          "locale": { "$ref": "show-profile.schema.json#/$defs/locale" },
+          "platform": { "type": "string" },
+          "url": { "type": "string", "format": "uri" },
+          "published_at": { "type": "string", "format": "date-time" }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "enum": ["aprovado", "publicado"] } } },
+      "then": { "properties": { "review": { "x-rule": "R-LOC-REVIEW-REQUIRED", "required": ["human_decision"] } } }
+    }
+  ],
+  "$defs": {
+    "dubbing_item": {
+      "type": "object",
+      "required": ["locale", "voice_mode", "provider", "speaker_label", "disclosure_text_key"],
+      "additionalProperties": false,
+      "properties": {
+        "locale": { "$ref": "show-profile.schema.json#/$defs/locale" },
+        "voice_mode": { "enum": ["generic", "guest_replica"] },
+        "provider": { "type": "string", "minLength": 1 },
+        "speaker_label": { "type": "string", "minLength": 1 },
+        "consent_ref": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{1,63}#localization_consents/(dub_generic_voice|dub_voice_replica)$", "description": "<intake_id>#localization_consents/<aceite>." },
+        "disclosure_text_key": { "type": "string", "pattern": "^localization\\.disclosure\\.(dub_generic|dub_replica)$", "description": "Aviso de IA ao ouvinte (contracts/i18n). Ligado por padrão." }
+      },
+      "if": { "properties": { "voice_mode": { "const": "guest_replica" } } },
+      "then": { "x-rule": "R-LOC-REPLICA-CONSENT", "required": ["consent_ref"] }
+    }
+  }
+}
