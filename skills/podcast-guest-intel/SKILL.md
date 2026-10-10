@@ -4,7 +4,7 @@ description: "Prepara episódios de podcast com convidado, do convite ao roteiro
 license: Apache-2.0
 compatibility: "Python 3.10+ para os scripts (stdlib; check e validação usam jsonschema e pyyaml). Busca web do harness para o dossiê e a pauta."
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
   source: "https://github.com/RAG7782/podcast-guest-intel"
 ---
 
@@ -71,7 +71,7 @@ do servidor do produto e não estão neste pacote; não tente imitá-los nem afi
 | `dossie` | free | Dossiê completo, cada afirmação VERIFICADO / AUTODECLARADO / INFERÊNCIA + fonte |
 | `dossie-portal-e-historico` | paid | Enriquecimento pelo gestor no portal, histórico do convidado, relatório de auditoria |
 | `pauta-1-tronco` | free | Perfil do convidado × linha editorial + Google Trends/News RSS rodado pelo próprio harness |
-| `pauta-3-troncos` | paid | Tendências BYOK (X, TikTok, Reddit, LinkedIn) agregadas no servidor + continuidade com o catálogo |
+| `pauta-3-troncos` | paid | Tendências BYOK do X (chave do usuário, verificada) agregadas no servidor + continuidade com o catálogo; sem chave, Google Trends/News RSS |
 | `roteiro-modo-informativo` | free | Roteiro no modo informativo, com versões completo, teleprompter e cartão |
 | `roteiro-7-modos` | paid | Os 7 modos de abordagem e modos extensíveis por nicho, servidos pelo MCP |
 | `memoria-centro-de-comando` | paid | Catálogo, busca, perfil do host gerado dos episódios, lições e cortes |

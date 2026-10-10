@@ -255,7 +255,7 @@ function renderInvitationText(template, built) {
 }
 
 function icsText(s) {
-  return String(s).replace(/\\/g, '\\\\').replace(/;/g, '\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
+  return String(s).replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r\n|\r|\n/g, '\\n');
 }
 
 /** RFC 5545 §3.1: dobra linhas em 75 octetos (UTF-8), continuação começa com espaço. */
@@ -304,5 +304,5 @@ function buildInvitationEmail(template, show, invitee, i18n, opts) {
 if (typeof module !== 'undefined') {
   module.exports = { contrastRatio: contrastRatio, resolveBrand: resolveBrand, normalizeInvitee: normalizeInvitee,
     invitationKey: invitationKey, invitationView: invitationView, escapeDeep: escapeDeep, LOGO_CID: LOGO_CID,
-    buildInvitationEmail: buildInvitationEmail, foldIcsLine: foldIcsLine };
+    buildInvitationEmail: buildInvitationEmail, foldIcsLine: foldIcsLine, icsText: icsText };
 }

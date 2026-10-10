@@ -122,9 +122,13 @@ Envelope (output_schema no campo `dossier`):
 ```bash
 python3 scripts/dossier_tools.py coverage dossie.json --apply
 uv run --no-project -q --with jsonschema --with pyyaml python scripts/dossier_tools.py advise dossie.json --apply
-uv run --no-project -q --with jsonschema --with pyyaml python scripts/dossier_tools.py check dossie.json
+uv run --no-project -q --with jsonschema --with pyyaml python scripts/dossier_tools.py check dossie.json --intake intake.json
 python3 scripts/dossier_tools.py render dossie.json -o dossie.md
 ```
+
+Com claim sensível, o `check` exige o `--intake` do titular: o `consent_ref` precisa apontar para
+um aceite de `sensitive_declarations` do mesmo `intake_ref`, da mesma categoria e não revogado
+(regra rígida, LGPD art. 11, I).
 
 ## Limites
 

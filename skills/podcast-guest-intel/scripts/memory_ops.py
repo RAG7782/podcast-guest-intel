@@ -43,9 +43,17 @@ def script_ready(ws, record):
     return False
 
 
+def effective_status(record):
+    """Status que conta para os gates: saindo de archived, vale o anterior ao arquivamento (CRITIC M1)."""
+    if record["status"] != "archived":
+        return record["status"]
+    last = next((h for h in reversed(record.get("history") or []) if h.get("to") == "archived"), None)
+    return last["from"] if last and last.get("from") in ms.STATUSES else "idea"
+
+
 def transition_alerts(ws, record, target):
     """Alertas da recomendação para ir de record.status a target (só avanço gera alerta)."""
-    cur, tgt = ms.STATUSES.index(record["status"]), ms.STATUSES.index(target)
+    cur, tgt = ms.STATUSES.index(effective_status(record)), ms.STATUSES.index(target)
     alerts = []
     if tgt <= cur or target == "archived":
         return alerts

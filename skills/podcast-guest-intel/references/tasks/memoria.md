@@ -83,7 +83,8 @@ manifesto prevalece.
    só relatório. Com `--confirm <id> --decided-by <quem>` apaga intake, dossiê e claims do
    titular, redige as menções em todo arquivo do workspace, reconstrói o índice do zero e confere
    o resíduo (busca e varredura de bytes). Sai 1 se sobrar algo. O vault do usuário não é tocado:
-   o relatório lista as notas de origem para ele apagar lá.
+   o relatório lista as notas de origem para ele apagar lá. Se o intake veio do Google Forms, rode
+   também `esquecerTitular('<intake_id>')` no Apps Script (apaga a linha, a resposta e as chaves).
 10. **Segundo cérebro:** `export-md --out <pasta>` gera uma nota por episódio com frontmatter
     (Obsidian/Logseq). `import-md --vault <pasta> --opt-in` traz notas do usuário como
     `origin=manager_material`; nota com `private: true` ou `podcast: false` é pulada.

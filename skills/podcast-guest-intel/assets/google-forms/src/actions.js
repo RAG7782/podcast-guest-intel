@@ -92,8 +92,18 @@ function consented(intake, ch) {
   return !!(intake.automation_consents[ch] && intake.automation_consents[ch].granted);
 }
 
-/** Envio só se o show liga o canal E o convidado consentiu naquele canal. */
-function planSubmitActions(intake, show) {
+/**
+ * policy = {invited, optedOut}. O formulário é público e o remetente digita o e-mail: só sai algo
+ * ao convidado se o HOST o convidou (enviarConvite/confirmarIntake) e ele não pediu SAIR (CRITIC A3).
+ * Sem política = fechado.
+ */
+function guestAllowed(policy) {
+  return !!(policy && policy.invited && !policy.optedOut);
+}
+
+/** Envio só se o show liga o canal E o convidado consentiu naquele canal E a política libera. */
+function planSubmitActions(intake, show, policy) {
+  if (!guestAllowed(policy)) return [];
   var on = show.automations.channels, id = intake.intake_id, acts = [];
   if (on.email && consented(intake, 'email')) acts.push({ key: id + ':email:kit', channel: 'email', kind: 'kit' });
   if (on.whatsapp && consented(intake, 'whatsapp') && intake.contacts.whatsapp) {
@@ -116,9 +126,9 @@ function isDMinus1(scheduledIso, nowMs, offsetMinutes) {
   return dayKey(t, offsetMinutes) === dayKey(nowMs + 86400000, offsetMinutes);
 }
 
-function planReminderActions(intake, show, nowMs, offsetMinutes) {
+function planReminderActions(intake, show, nowMs, offsetMinutes, policy) {
   var r = show.automations.reminder_d_minus_1, on = show.automations.channels;
-  if (!r.enabled || !intake.scheduled_at || !isDMinus1(intake.scheduled_at, nowMs, offsetMinutes)) return [];
+  if (!guestAllowed(policy) || !r.enabled || !intake.scheduled_at || !isDMinus1(intake.scheduled_at, nowMs, offsetMinutes)) return [];
   return (r.channels || ['email']).filter(function (ch) {
     return ch !== 'calendar' && on[ch] && consented(intake, ch) && (ch !== 'whatsapp' || intake.contacts.whatsapp);
   }).map(function (ch) {
@@ -181,6 +191,6 @@ function runActions(actions, executors, store) {
 if (typeof module !== 'undefined') {
   module.exports = { renderKit: renderKit, renderMessage: renderMessage, mdToHtml: mdToHtml, escapeHtml: escapeHtml,
     addressLine: addressLine, formatScheduled: formatScheduled, planSubmitActions: planSubmitActions,
-    planReminderActions: planReminderActions, isDMinus1: isDMinus1,
+    planReminderActions: planReminderActions, isDMinus1: isDMinus1, guestAllowed: guestAllowed,
     buildWhatsappRequest: buildWhatsappRequest, runActions: runActions };
 }

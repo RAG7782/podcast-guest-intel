@@ -6,7 +6,8 @@ Subcomandos:
                                              resumo_status a partir das claims (e do intake).
   advise ARQ [--apply]                       recalcula claim.advisory (alertas do modo denúncia: fonte
                                              fraca vira alerta, não invalidação; o humano decide).
-  check ARQ                                  schema + regras cruzadas; sai 1 se houver violação.
+  check ARQ [--intake INTAKE]                schema + regras cruzadas (claim sensível exige o intake do
+                                             titular para conferir o aceite); sai 1 se houver violação.
   render ARQ [-o SAIDA.md]                   dossiê -> markdown legível para o host.
 
 ARQ é o envelope do manifesto ({dossier, resumo_status, conflitos, orcamento}) ou o dossiê puro.
@@ -169,13 +170,52 @@ def rules_envelope(envelope, dossier):
             + rule_orcamento(envelope, dossier.get("degraded")))
 
 
-def check_doc(doc, validator=None):
-    """Lista de violações (vazia = conforme)."""
+def find_declaration(intake, ref):
+    """consent_ref = 'intake_id#field_id' ou o consent_id do aceite. -> declaração sensível ou None."""
+    iid, sep, field = ref.partition("#")
+    for decl in intake.get("sensitive_declarations") or []:
+        if (sep and iid == intake.get("intake_id") and decl.get("field_id") == field) or \
+                (not sep and (decl.get("consent") or {}).get("consent_id") == ref):
+            return decl
+    return None
+
+
+def consent_ref_problem(claim, intake, intake_ref):
+    if intake is None:
+        return "intake não fornecido: consentimento não conferido (rode check --intake INTAKE)"
+    if intake.get("intake_id") != intake_ref:
+        return f"intake {intake.get('intake_id')!r} não é o do titular deste dossiê (intake_ref={intake_ref!r})"
+    decl = find_declaration(intake, str(claim.get("consent_ref") or ""))
+    if decl is None:
+        return f"consent_ref={claim.get('consent_ref')!r} não existe em sensitive_declarations do titular"
+    consent = decl.get("consent") or {}
+    if decl.get("category") != claim.get("sensitive_category"):
+        return f"aceite é de {decl.get('category')!r}, claim é de {claim.get('sensitive_category')!r}"
+    if consent.get("revoked_at") or consent.get("granted") is False:
+        return f"aceite {consent.get('consent_id')!r} revogado ou negado"
+    return None
+
+
+def rule_sensitive_consent(dossier, intake):
+    """RÍGIDO (LGPD art. 11, I; 00-escopo): claim sensível só com aceite DO MESMO titular, da mesma
+    categoria, vigente. Antes bastava consent_ref existir como string (CRITIC A5)."""
+    out = []
+    for i, c in enumerate(claims_of(dossier)):
+        why = c.get("sensitive") is True and consent_ref_problem(c, intake, dossier.get("intake_ref"))
+        if why:
+            out.append(f"R-CLAIM-SENSITIVE-CONSENT-REF @claims/{i}: {why} | esperado: aceite do titular"
+                       " (intake_ref) da mesma categoria, não revogado (regra rígida)")
+    return out
+
+
+def check_doc(doc, validator=None, intake=None):
+    """Lista de violações (vazia = conforme). `intake` confere o consentimento das claims sensíveis."""
     validator = validator or load_validator()
     dossier, envelope = split_envelope(doc)
     schemas, registry = validator.load_schemas()
     errs = validator.check("guest-dossier", dossier, schemas, registry)
     errs += rule_subject_is_guest(dossier) + rule_cargo_dated(dossier) + rule_coverage_sets(dossier)
+    errs += rule_sensitive_consent(dossier, intake)
     if envelope is not None:
         errs += rules_envelope(envelope, dossier)
     return errs
@@ -293,7 +333,7 @@ def cmd_coverage(args):
 
 def cmd_check(args):
     doc = load_json(args.arquivo)
-    errs = check_doc(doc)
+    errs = check_doc(doc, intake=load_json(args.intake) if args.intake else None)
     claims = claims_of(split_envelope(doc)[0])
     for err in errs:
         print(f"FALHA  {err}")
@@ -330,7 +370,9 @@ def main(argv=None):
     adv = sub.add_parser("advise")
     adv.add_argument("arquivo")
     adv.add_argument("--apply", action="store_true", help="grava claim.advisory no arquivo")
-    sub.add_parser("check").add_argument("arquivo")
+    chk = sub.add_parser("check")
+    chk.add_argument("arquivo")
+    chk.add_argument("--intake", help="guest-intake do titular: confere consent_ref das claims sensíveis")
     ren = sub.add_parser("render")
     ren.add_argument("arquivo")
     ren.add_argument("-o", "--output")

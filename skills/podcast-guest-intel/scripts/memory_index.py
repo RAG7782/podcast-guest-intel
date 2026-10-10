@@ -8,6 +8,7 @@ Journal padrão (DELETE), nunca WAL; nunca abrir com `sqlite3 -readonly`.
 import re
 import sqlite3
 import sys
+import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -124,15 +125,29 @@ def note_rows(ws):
 
 # ── construção ────────────────────────────────────────────────────────────
 
+REINDEX_ALERT_S = 2.0            # gatilho DEBT-021: escrita com reindex acima de 2 s
+REINDEX_ALERT_EPISODES = 5000    # ou workspace com mais de 5.000 episódios
+
+
+def reindex_alert(episodes, elapsed_s):
+    """Aviso quando o reindex total se aproxima do teto (DEBT-021); None se está longe."""
+    if episodes <= REINDEX_ALERT_EPISODES and elapsed_s <= REINDEX_ALERT_S:
+        return None
+    return (f"AVISO DEBT-021: reindex total de {episodes} episódio(s) levou {elapsed_s:.2f} s (gatilho: >"
+            f" {REINDEX_ALERT_EPISODES} episódios ou > {REINDEX_ALERT_S} s); hora de indexar por episódio")
+
+
 def rebuild(ws):
     """Apaga o cache e reconstrói dos arquivos. Devolve o nº de documentos indexados."""
+    started = time.monotonic()
     # ponytail: reconstrução TOTAL a cada escrita (O(docs do workspace)); garante que forget não
     # deixe texto em página livre do SQLite. Teto: ~10^4 episódios fica lento. Upgrade:
     # reindex por episódio (DELETE WHERE episode_id) + VACUUM só no forget.
     path = index_path(ws)
     for leftover in (path, Path(str(path) + "-journal")):
         leftover.unlink(missing_ok=True)
-    rows = [r for eid in ms.episode_ids(ws) for r in episode_rows(ws, eid)] + note_rows(ws)
+    eids = ms.episode_ids(ws)
+    rows = [r for eid in eids for r in episode_rows(ws, eid)] + note_rows(ws)
     con = sqlite3.connect(path)
     try:
         con.execute(SCHEMA)
@@ -140,6 +155,8 @@ def rebuild(ws):
         con.commit()
     finally:
         con.close()
+    if alert := reindex_alert(len(eids), time.monotonic() - started):
+        print(alert, file=sys.stderr)
     return len(rows)
 
 

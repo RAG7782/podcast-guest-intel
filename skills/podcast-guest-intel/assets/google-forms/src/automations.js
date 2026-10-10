@@ -99,7 +99,7 @@ function notifyOwner_(show, intake, i18n, results, dropped) {
   var owner = Session.getEffectiveUser().getEmail();
   if (!owner) throw new Error('e-mail do dono indisponível (Session.getEffectiveUser().getEmail() vazio)');
   var body = 'intake_id: ' + intake.intake_id + '\nconvidado: ' + intake.guest.full_name +
-    '\n\nEnvios:\n' + results.map(function (r) { return '- ' + r.key + ': ' + r.status + (r.error ? ' — ' + r.error : ''); }).join('\n') +
+    '\n\nEnvios:\n' + results.map(function (r) { return '- ' + r.key + ': ' + r.status + (r.error ? ' — ' + r.error : r.reason ? ' — ' + r.reason : ''); }).join('\n') +
     '\n\nDescartados (não guardados):\n' + (dropped.length ? dropped.map(function (d) { return '- ' + d.field + ': ' + d.reason; }).join('\n') : '- nenhum') +
     '\n\nJSON completo na aba "intake" da planilha de respostas.';
   MailApp.sendEmail(owner, renderMessage('owner_subject', show, intake, i18n), body);
@@ -126,8 +126,9 @@ function onFormSubmit(e) {
     textVersion: meta.text_version, offset: tzOffset_().iso,
     purposes: { sensitive: i18n.consent.sensitive_purpose, accessibility: i18n.consent.accessibility_purpose,
       voice_replica: i18n.consent.dub_replica_purpose }, localization: show.localization || null });
-  var intake = res.intake, store = store_();
-  var results = runActions(planSubmitActions(intake, show), executors_(show, intake, i18n), store);
+  var intake = res.intake, store = store_(), policy = guestPolicy_(intake.contacts.email);
+  var results = runActions(planSubmitActions(intake, show, policy), executors_(show, intake, i18n), store);
+  if (!policy.invited || policy.optedOut) results = [heldResult_(intake, policy)];
   results = results.concat(runActions([{ key: intake.intake_id + ':owner:notify', channel: 'owner', kind: 'notify',
     results: results, dropped: res.dropped }], executors_(show, intake, i18n), store));
   if (!store.has(intake.intake_id + ':record')) {
@@ -152,11 +153,40 @@ function lembreteDiario() {
       console.error('linha da aba intake com JSON inválido (intake_id=' + JSON.stringify(row[0]) + '): ' + err.message);
       return;
     }
-    var acts = planReminderActions(intake, show, now, tz.minutes);
+    var acts = planReminderActions(intake, show, now, tz.minutes, guestPolicy_(intake.contacts && intake.contacts.email));
     all = all.concat(runActions(acts, executors_(show, intake, i18n), store));
   });
   logErrors_(all);
+  if (props_().getProperty('RETENCAO_AUTOMATICA') === 'true') aplicarRetencao(now);
   return all;
+}
+
+/** Quem o host convidou (enviarConvite) ou aprovou (confirmarIntake), e quem pediu SAIR. */
+function guestPolicy_(email) {
+  var e = String(email || '').trim().toLowerCase();
+  return { invited: props_().getProperty('invited:' + e) !== null, optedOut: optOutList_().indexOf(e) >= 0 };
+}
+
+function markInvited_(email, how) {
+  props_().setProperty('invited:' + String(email).trim().toLowerCase(), JSON.stringify({ by: how, at: new Date().toISOString() }));
+}
+
+function heldResult_(intake, policy) {
+  return { key: intake.intake_id + ':guest', status: policy.optedOut ? 'skipped' : 'held',
+    reason: policy.optedOut ? 'opt-out (OPTOUT_EMAILS)' : 'e-mail não convidado por enviarConvite; nada foi enviado ao' +
+      ' convidado. Se for legítimo, rode confirmarIntake(' + JSON.stringify(intake.intake_id) + ')' };
+}
+
+/** Decisão do host para um intake retido: marca o e-mail como convidado e roda os envios dele. */
+function confirmarIntake(intakeId) {
+  var row = intakeSheet_().getDataRange().getValues().slice(1).filter(function (r) { return r[0] === intakeId; })[0];
+  if (!row) throw new Error('confirmarIntake(' + JSON.stringify(intakeId) + '): intake não está na aba "intake"; esperado o intake_id do e-mail ao dono');
+  var show = loadShow_(), meta = loadMeta_(), intake = JSON.parse(row[2]);
+  var i18n = selectLocale(BUNDLE, meta.locale, allowUnreviewed_());
+  markInvited_(intake.contacts.email, 'confirmarIntake');
+  var results = runActions(planSubmitActions(intake, show, guestPolicy_(intake.contacts.email)), executors_(show, intake, i18n), store_());
+  logErrors_(results);
+  return results;
 }
 
 // ---------- Convite Oficial (primeiro envio; leva o link do formulário) ----------
@@ -214,7 +244,94 @@ function enviarConvite(convidado, variante) {
   var i18n = selectLocale(BUNDLE, meta.locale, allowUnreviewed_());
   var mail = buildInvitationEmail(BUNDLE.invitationTemplate, show, invitee, i18n, { formUrl: formUrl, variant: variant });
   var res = runActions([{ key: key, channel: 'email', kind: 'convite' }], { email: function () { return sendInvitation_(mail); } }, store_())[0];
+  if (res.status !== 'error') markInvited_(invitee.email, 'enviarConvite');   // libera o pós-formulário dele
   logErrors_([res]);
   console.log('convite ' + key + ': ' + res.status + (res.error ? ' — ' + res.error : ''));
   return res;
+}
+
+// ---------- Esquecer o titular (LGPD art. 18, VI) e retenção (CRITIC M5, DEBT-067, DEBT-075) ----------
+
+/** Linhas (1-based, de baixo para cima) de `sheet` em que `match(row)` é verdadeiro; pula o cabeçalho. */
+function rowsWhere_(sheet, match) {
+  var rows = sheet.getDataRange().getValues(), out = [];
+  for (var i = rows.length - 1; i >= 1; i--) if (match(rows[i])) out.push(i + 1);
+  return out;
+}
+
+function deleteRows_(sheet, positions) {
+  positions.forEach(function (p) { sheet.deleteRow(p); });   // já vêm de baixo para cima
+  return positions.length;
+}
+
+/** Respostas do Form cujo intake_id é este (o id é derivado do responseId, sem volta: compara pelo slug). */
+function deleteFormResponses_(intakeId) {
+  var formId = props_().getProperty('FORM_ID');
+  if (!formId) return { deleted: 0, note: 'FORM_ID ausente; apague a resposta à mão no Forms' };
+  var form = FormApp.openById(formId), n = 0;
+  form.getResponses().forEach(function (r) {
+    if (slugId('in-', r.getId()) === intakeId) { form.deleteResponse(r.getId()); n++; }
+  });
+  return { deleted: n };
+}
+
+/** A aba de respostas ligada ao Form NÃO perde a linha quando a resposta é apagada: casa pelo e-mail. */
+function deleteLinkedRows_(email) {
+  var ss = SpreadsheetApp.openById(props_().getProperty('SHEET_ID')), n = 0;
+  var e = String(email || '').trim().toLowerCase();
+  if (!e) return { deleted: 0, note: 'intake sem e-mail; revise a aba de respostas do Form à mão' };
+  ss.getSheets().filter(function (s) { return s.getFormUrl && s.getFormUrl(); }).forEach(function (s) {
+    n += deleteRows_(s, rowsWhere_(s, function (row) {
+      return row.some(function (c) { return String(c).trim().toLowerCase() === e; });
+    }));
+  });
+  return { deleted: n };
+}
+
+/** Chaves de Script Properties do titular: sent:<intake_id>:*, sent:convite:<email>:*, invited:<email>. */
+function deleteGuestKeys_(intakeId, email) {
+  var p = props_(), e = String(email || '').trim().toLowerCase();
+  var mine = p.getKeys().filter(function (k) {
+    return k.indexOf('sent:' + intakeId + ':') === 0 || (e && (k === 'invited:' + e || k.indexOf('sent:convite:' + e + ':') === 0));
+  });
+  mine.forEach(function (k) { p.deleteProperty(k); });
+  return mine.length;
+}
+
+/**
+ * esquecerTitular('in-…'): apaga a linha da aba intake, a resposta no Forms, a linha da aba de
+ * respostas ligada e as chaves do titular. OPTOUT_EMAILS fica (é o registro da oposição dele).
+ * Rode junto com `memory forget` no workspace local. Devolve o relatório com o denominador.
+ */
+function esquecerTitular(intakeId) {
+  var sheet = intakeSheet_(), email = null;
+  var hit = rowsWhere_(sheet, function (r) { return r[0] === intakeId; });
+  if (!hit.length) throw new Error('esquecerTitular(' + JSON.stringify(intakeId) + '): intake não está na aba "intake"; esperado o intake_id do e-mail ao dono');
+  try { email = JSON.parse(sheet.getDataRange().getValues()[hit[0] - 1][2]).contacts.email; } catch (err) {
+    console.error('intake ' + intakeId + ' com JSON ilegível (' + err.message + '); apagando só pelo intake_id');
+  }
+  var report = { intake_id: intakeId, form_responses: deleteFormResponses_(intakeId), linked_rows: deleteLinkedRows_(email),
+    intake_rows: deleteRows_(sheet, hit), keys: deleteGuestKeys_(intakeId, email) };
+  console.log('esquecerTitular: ' + JSON.stringify(report));
+  return report;
+}
+
+/**
+ * Retenção: esquece todo intake cuja gravação (ou envio, sem data) passou de retention_days_after_publish.
+ * ponytail: conta da data de GRAVAÇÃO, não da publicação (a planilha não sabe quando publicou), então
+ * apaga mais cedo que o prazo declarado, nunca mais tarde. Se o host precisar do prazo exato, gravar
+ * published_at na aba intake e contar dele. Só roda no gatilho diário com RETENCAO_AUTOMATICA=true.
+ */
+function aplicarRetencao(nowMs) {
+  var show = loadShow_(), days = show.retention_days_after_publish === undefined ? 90 : show.retention_days_after_publish;
+  var limit = (nowMs || Date.now()) - days * 86400000, expired = [];
+  intakeSheet_().getDataRange().getValues().slice(1).forEach(function (row) {
+    var when = NaN;
+    try { var it = JSON.parse(row[2]); when = Date.parse(it.scheduled_at || it.submitted_at); } catch (err) {
+      console.error('retenção: linha ' + JSON.stringify(row[0]) + ' com JSON inválido (' + err.message + '); usando submitted_at da coluna B');
+    }
+    if (isNaN(when)) when = Date.parse(row[1]);
+    if (when < limit) expired.push(row[0]);
+  });
+  return expired.map(esquecerTitular);
 }

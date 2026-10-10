@@ -76,13 +76,26 @@ class CallBudget:
 
 # ── HTTP ──────────────────────────────────────────────────────────────────
 
+class SameHostAuthRedirect(urllib.request.HTTPRedirectHandler):
+    """Redirect para OUTRO host perde o Authorization: a chave BYOK não vaza para quem redireciona (CRITIC B2)."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        new = super().redirect_request(req, fp, code, msg, headers, newurl)
+        if new is not None and urllib.parse.urlsplit(newurl).hostname != urllib.parse.urlsplit(req.full_url).hostname:
+            new.remove_header("Authorization")
+        return new
+
+
+OPENER = urllib.request.build_opener(SameHostAuthRedirect)
+
+
 def http_get(url, headers=None, budget=None):
     """GET com timeout e user-agent. headers pode levar Authorization: nunca entra em erro/log."""
     if budget is not None:
         budget.take()
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, **(headers or {})})
     try:
-        with urllib.request.urlopen(req, timeout=TIMEOUT_S) as resp:
+        with OPENER.open(req, timeout=TIMEOUT_S) as resp:
             return resp.status, resp.read()
     except urllib.error.HTTPError as exc:
         return exc.code, exc.read()
@@ -175,8 +188,8 @@ def google_trends_rss(geo, budget=None, fetch=http_get):
 
 
 def google_news_rss(query, hl="pt-BR", gl="BR", budget=None, fetch=http_get):
-    url = NEWS_URL.format(query=urllib.parse.quote(query), hl=hl, geo=gl,
-                          ceid_lang=CEID_LANG.get(hl, hl.split("-")[0]))
+    q = urllib.parse.quote   # hl/gl podem vir do cliente remoto (MCP): nunca crus na URL (CRITIC B1)
+    url = NEWS_URL.format(query=q(query), hl=q(hl), geo=q(gl), ceid_lang=q(CEID_LANG.get(hl, hl.split("-")[0])))
     return parse_news_rss(expect_200(*fetch(url, None, budget), url))
 
 
@@ -205,20 +218,21 @@ def x_recent_search(query, source, budget=None, fetch=http_get, env=None, max_re
     return parse_x_search(json.loads(body))
 
 
-def byok_stub(name):
-    """Mesma interface do x_recent_search; desligado por default (BYOK sem adaptador na v1)."""
+def byok_unavailable(name, reason):
+    """Mesma interface do x_recent_search; recusa com o motivo (BYOK sem adaptador nesta versão)."""
     def collector(query, source, budget=None, fetch=http_get, env=None):
-        raise TrendError(f"adaptador {name!r} não implementado na v1 (query={query!r})"
-                         " | esperado: fonte desligada (enabled=false) ou adaptador implementado")
+        raise TrendError(f"tendências de {name!r} não disponíveis nesta versão ({reason}; query={query!r})"
+                         f" | esperado: fonte desligada (enabled=false); use {AVAILABLE_BYOK} ou o fallback RSS")
     collector.__name__ = f"{name}_search"
-    collector.__doc__ = f"Stub BYOK de {name}: levanta TrendError até ser implementado."
+    collector.__doc__ = f"{name}: não disponível nesta versão ({reason})."
     return collector
 
 
-tiktok_search = byok_stub("tiktok")   # TikTok Research API: uso comercial excluído (research/02 §3)
-reddit_search = byok_stub("reddit")   # Reddit: free só não comercial; OAuth com aprovação manual
-linkedin_search = byok_stub("linkedin")  # LinkedIn: coleta automatizada proibida no User Agreement
-youtube_search = byok_stub("youtube")  # YouTube Data API v3: videos.list chart=mostPopular, 1 unidade
+AVAILABLE_BYOK = ("x",)   # única rede com adaptador; o texto de venda só pode citar estas (DEBT-063)
+tiktok_search = byok_unavailable("tiktok", "Research API exclui uso comercial, research/02 §3")
+reddit_search = byok_unavailable("reddit", "API grátis só para uso não comercial; OAuth com aprovação manual")
+linkedin_search = byok_unavailable("linkedin", "coleta automatizada proibida no User Agreement")
+youtube_search = byok_unavailable("youtube", "adaptador da YouTube Data API v3 ainda não escrito")
 BYOK_COLLECTORS = {"x": x_recent_search, "tiktok": tiktok_search, "reddit": reddit_search,
                    "linkedin": linkedin_search, "youtube": youtube_search}
 
@@ -237,8 +251,8 @@ def classify_verification(status, body):
 def verify_credential(source, fetch=http_get, env=None, now=None):
     """Chamada mínima; devolve {status, verified_at, verification_note} sem expor o valor."""
     if source.get("id") != "x":
-        raise TrendError(f"verify para {source.get('id')!r} não implementado na v1"
-                         " | esperado: 'x' (demais fontes BYOK são stubs)")
+        raise TrendError(f"verify para {source.get('id')!r} não disponível nesta versão"
+                         f" | esperado: uma de {AVAILABLE_BYOK} (as demais redes não têm adaptador)")
     auth = {"Authorization": "Bearer " + bearer_from_env(source, env)}
     status, note = classify_verification(*fetch(X_USAGE_URL, auth, None))
     stamp = (now or datetime.now(timezone.utc)).strftime("%Y-%m-%dT%H:%M:%SZ")

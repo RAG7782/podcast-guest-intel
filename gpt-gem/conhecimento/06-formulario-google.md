@@ -107,7 +107,12 @@ O que você precisa saber:
 - **Com data marcada**, o e-mail leva um anexo `convite.ics` para o convidado pôr na agenda dele.
 - **Opt-out.** O rodapé diz quem é o controlador, para que o contato é usado e que o convidado
   pode responder **SAIR**. Quando isso acontecer, rode uma vez `registrarOptOut('email@dele')`:
-  nenhum convite novo sai para esse endereço.
+  nenhum convite, kit, convite de agenda, WhatsApp ou lembrete D-1 sai mais para esse endereço.
+- **Só quem você convidou recebe as automações.** O formulário é público e quem responde digita o
+  e-mail, então o kit (com o endereço do estúdio), o convite de agenda, o WhatsApp e o lembrete só
+  saem para e-mails que passaram por `enviarConvite`. Resposta de outro e-mail fica **retida**: nada
+  sai para o convidado, e o e-mail-resumo diz `held` e traz o comando `confirmarIntake("<id>")`, que
+  você roda se a pessoa for legítima.
 - Cada convite gasta **1 destinatário** da cota diária de e-mail.
 
 ### 7. Teste antes de enviar
@@ -240,7 +245,7 @@ gatilho diário**, que varre a aba `intake`, e não um gatilho por convidado (o 
   `src/actions.js` (kit, mensagens, plano por consentimento, D-1, WhatsApp, `runActions` idempotente) e
   `src/invitation.js` (convite oficial: marca, contraste, HTML, texto puro, `.ics`).
 - **Lado Google**: `src/forms.js` (criação do Form e gatilhos), `src/automations.js` (`onFormSubmit`, `lembreteDiario`,
-  `enviarConvite`, `registrarOptOut`) e o opcional `src/drive-logo.js`.
+  `enviarConvite`, `registrarOptOut`, `confirmarIntake`) e o opcional `src/drive-logo.js`.
 - `src/bundle.gen.js` é **gerado** a partir de `references/contracts/i18n/*.json`, `assets/templates/guest-kit.md`,
   `assets/templates/guest-invitation-official.md`
   e de `x-form-variants` do schema. Depois de editar textos ou o template, rode:
@@ -266,8 +271,15 @@ gatilho diário**, que varre a aba `intake`, e não um gatilho por convidado (o 
   guarde `FORM_ID`/`FORM_URL` por variante e instale um gatilho por formulário.
 - `ponytail:` o opt-out é uma lista em `OPTOUT_EMAILS`, alimentada à mão (`registrarOptOut`). Se o volume
   crescer, leia as respostas "SAIR" da caixa de entrada com GmailApp, que pede um escopo maior.
-- Revogação de consentimento e eliminação após `retention_days_after_publish` são **manuais**: apague a
-  linha da planilha e as chaves `sent:` do convidado.
+- Revogação e eliminação: `esquecerTitular('in-…')` apaga a linha da aba `intake`, a resposta no Forms
+  (`Form.deleteResponse`), a linha da aba de respostas ligada ao Form (casada pelo e-mail, porque apagar a
+  resposta não apaga essa linha [INFERÊNCIA: a doc do `deleteResponse` não diz]) e as chaves `sent:`/`invited:`
+  do titular; devolve o relatório com as contagens. `OPTOUT_EMAILS` fica, porque é o registro da oposição.
+  Rode junto com `memory forget` no workspace local.
+- `ponytail:` retenção automática só com `RETENCAO_AUTOMATICA=true` (Script Properties): o gatilho diário
+  roda `aplicarRetencao`, que conta `retention_days_after_publish` a partir da **gravação** (a planilha não
+  sabe a data de publicação), então apaga mais cedo que o prazo declarado, nunca mais tarde. Para o prazo
+  exato, grave `published_at` na aba `intake` e conte dele.
 - Locales `es` e `zh` são **esqueletos** (`needs_native_review: true`). O script recusa usá-los, a menos
   que `ALLOW_UNREVIEWED_LOCALE=true`.
 - As cláusulas (`legal_review: pendente`) são um **rascunho técnico, não um parecer**. Precisam de

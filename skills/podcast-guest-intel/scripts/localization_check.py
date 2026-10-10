@@ -58,7 +58,9 @@ def replica_refusals(job, intakes):
         owner = (speakers.get(d.get("speaker_label")) or {}).get("intake_ref")
         if path and not path.endswith("dub_voice_replica"):
             why = f"consent_ref aponta {path!r}, não dub_voice_replica"
-        elif owner and owner != intake_id:
+        elif not owner:   # biometria: sem titular identificado não há de quem ser o aceite (CRITIC A6)
+            why = f"falante {d.get('speaker_label')!r} sem intake_ref: aceite de {intake_id!r} não é dele"
+        elif owner != intake_id:
             why = f"falante {d.get('speaker_label')} é {owner!r}, aceite é de {intake_id!r}"
         elif not why and not consent_ok(rec, d["locale"], replica=True):
             why = f"aceite {intake_id} não concedido, revogado, incompleto ou sem o idioma {d['locale']}"

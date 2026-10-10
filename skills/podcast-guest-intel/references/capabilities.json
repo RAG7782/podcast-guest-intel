@@ -29,7 +29,7 @@
     {
       "id": "pauta-3-troncos",
       "tier": "paid",
-      "description": "Tendências BYOK (X, TikTok, Reddit, LinkedIn) agregadas no servidor + continuidade com o catálogo"
+      "description": "Tendências BYOK do X (chave do usuário, verificada) agregadas no servidor + continuidade com o catálogo; sem chave, Google Trends/News RSS"
     },
     {
       "id": "roteiro-modo-informativo",

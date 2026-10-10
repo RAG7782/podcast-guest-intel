@@ -1,6 +1,6 @@
 {
   "name": "podcast-guest-intel",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Prepara episódios de podcast com convidado: convite, dossiê com fontes, pauta e roteiro.",
   "skills": "./skills/",
   "interface": {

@@ -84,6 +84,14 @@ def episode_markdown(rec):
     return "\n".join(frontmatter(rec)[:-1] + body + section("Artefatos", artifact_lines(rec))) + "\n"
 
 
+EXPORTS_LOG = "exports.json"   # destinos já escritos: o forget redige e confere também esses (CRITIC C3)
+
+
+def export_paths(ws):
+    path = ms.ws_path(ws) / EXPORTS_LOG
+    return ms.read_json(path) if path.is_file() else []
+
+
 def export_md(ws, out_dir, episode_ids=None):
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
@@ -92,6 +100,9 @@ def export_md(ws, out_dir, episode_ids=None):
         path = out / f"{eid}.md"
         path.write_text(episode_markdown(ms.load_record(ws, eid)), encoding="utf-8")
         written.append(str(path))
+    known = export_paths(ws)
+    ms.write_json(ms.ws_path(ws) / EXPORTS_LOG, known + [str(Path(w).resolve()) for w in written
+                                                         if str(Path(w).resolve()) not in known])
     return written
 
 
@@ -104,6 +115,9 @@ def parse_scalar(value):
     if len(value) > 1 and value[0] == value[-1] and value[0] in "\"'":
         return value[1:-1]
     return {"true": True, "false": False, "null": None, "": None}.get(value.lower(), value)
+
+
+UNPARSED = "__linhas_nao_lidas__"
 
 
 def parse_frontmatter(text):
@@ -122,6 +136,8 @@ def parse_frontmatter(text):
             key, _, value = line.partition(":")
             key = key.strip()
             meta[key] = parse_scalar(value)
+        elif line.strip() and not line.lstrip().startswith("#"):
+            meta.setdefault(UNPARSED, []).append(line)   # gatilho DEBT-017: o import reporta, não some
     return meta, text[match.end():]
 
 
@@ -145,9 +161,14 @@ def path_skip_reason(path, root):
     return None
 
 
+YES = {True, "yes", "y", "on", "1", "sim"}   # YAML 1.1 do Obsidian: `private: yes` é verdadeiro (CRITIC M6)
+NO = {False, "no", "n", "off", "0", "nao", "não"}
+
+
 def meta_skip_reason(meta):
-    if meta.get("private") is True or meta.get("podcast") is False:
-        return "nota marcada private:true ou podcast:false"
+    private, podcast = (v.lower() if isinstance(v, str) else v for v in (meta.get("private"), meta.get("podcast")))
+    if private in YES or podcast in NO:
+        return "nota marcada private:true/yes ou podcast:false/no"
     return None
 
 
@@ -160,7 +181,7 @@ def import_md(ws, folder, opt_in=False):
     if not root.is_dir():
         raise ms.MemoryError_(f"pasta={folder!r} não existe | esperado: diretório do vault indicado pelo usuário")
     notes_dir = ms.ws_path(ws) / ms.NOTES
-    done, skipped = [], []
+    done, skipped, partial = [], [], []
     for path in sorted(root.rglob("*.md")):
         reason = path_skip_reason(path, root)
         text = "" if reason else path.read_text(encoding="utf-8", errors="replace")
@@ -170,6 +191,11 @@ def import_md(ws, folder, opt_in=False):
             skipped.append((str(path), reason))
             continue
         note = note_record(path, root, meta, body, text)
+        if note["note_id"] in done:   # a/b.md e a-b.md têm o mesmo slug: não sobrescrever em silêncio
+            note["note_id"] += "-" + ms.sha256_text(str(path.relative_to(root)))[:8]
         ms.write_json(notes_dir / f"{note['note_id']}.json", note)
         done.append(note["note_id"])
-    return {"importadas": done, "puladas": skipped}
+        if meta.get(UNPARSED):
+            partial.append((str(path), f"{len(meta[UNPARSED])} linha(s) de frontmatter não lida(s): YAML aninhado"
+                                       " ou multilinha (DEBT-017)"))
+    return {"importadas": done, "puladas": skipped, "frontmatter_parcial": partial}

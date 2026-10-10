@@ -8,7 +8,7 @@ Subcomandos:
   translate  TRANSCRICAO --target L --provider agent|deepl|google|openai [--glossary G] -o SAIDA.json
              agent: grava um PACOTE (segmentos + regras do glossário) para o LLM do harness preencher
              translated_text; depois `translate --merge PACOTE -o SAIDA`. deepl: BYOK (DEEPL_API_KEY).
-  subtitles  TRADUZIDA [--max-chars 42 --max-lines 2 --max-cps 17] [--job J] -o PREFIXO  → PREFIXO.srt/.vtt
+  subtitles  TRADUZIDA [--max-chars N --max-lines N --max-cps N] (padrão pelo locale: 42/2/17; zh 16/2/9) [--job J] -o PREFIXO  → PREFIXO.srt/.vtt
   shownotes  protect|restore|check  (links e timestamps viram ⟦n⟧ antes de traduzir e voltam depois)
   disclosure --locale L --kind subtitles|dub_generic|dub_replica --source-locale L [--show NOME]
   dub-plan   JOB --translated L=ARQ ... [--intake ARQ ...] -o PLANO.json   (só PLANO: nenhum provedor de voz é chamado)
@@ -36,7 +36,10 @@ from paths import I18N  # noqa: E402
 PROTECT_RE = re.compile(r"https?://[^\s)>\]]+|\b\d{1,2}:\d{2}(?::\d{2})?\b")
 NUM_RE = re.compile(r"\d+(?:[.,]\d+)*")
 SEV_ACK = ("atencao", "alta")
-# (id, modo, unidade, preço US$, fonte) — research/06 §2.3, lido em 2026-10-09
+# (id, modo, unidade, preço US$, fonte) — research/06 §2.3, lido em DUB_PRICES_READ_AT.
+# Gatilho DEBT-054: reler as páginas a cada DUB_PRICES_MAX_AGE_DAYS; dub-plan avisa quando venceu.
+DUB_PRICES_READ_AT = "2026-10-09"
+DUB_PRICES_MAX_AGE_DAYS = 90
 DUB_PRICES = [
     ("youtube_auto_dubbing", "generic", "min", 0.0, "https://support.google.com/youtube/answer/15569972 (só pt→en/es, vídeo)"),
     ("google_chirp3_hd_tts", "generic", "1M_chars", 30.0, "https://cloud.google.com/text-to-speech/pricing"),
@@ -138,11 +141,40 @@ def provider_translate(doc, target, provider, **kw):
     return {"locale": target, "source": f"translated_by:{provider}", "translated_from": doc["locale"], "segments": segs}
 
 
+def dub_prices_stale(today=None):
+    """Aviso quando a tabela DUB_PRICES passou do prazo de releitura (DEBT-054); None se está em dia."""
+    from datetime import date
+    age = ((today or date.today()) - date.fromisoformat(DUB_PRICES_READ_AT)).days
+    if age <= DUB_PRICES_MAX_AGE_DAYS:
+        return None
+    return (f"AVISO DEBT-054: preços de TTS/dublagem lidos há {age} dias (prazo {DUB_PRICES_MAX_AGE_DAYS});"
+            " as estimativas podem estar defasadas: releia as fontes de DUB_PRICES")
+
+
 # ── legendas ─────────────────────────────────────────────────────────────
+
+# Limites (car./linha, linhas, car./s) por locale. Padrão: Netflix geral/pt-BR (research/06 §diagramação).
+# zh: guia Netflix Chinese (Simplified), 16 car./linha e até 9 car./s no adulto
+# (partnerhelp.netflixstudios.com/hc/en-us/articles/215986007, consultado 2026-10-09 via busca).
+SUBTITLE_LIMITS = {"zh": (16, 2, 9)}
+DEFAULT_SUBTITLE_LIMITS = (42, 2, 17)
+
+
+def subtitle_limits(locale):
+    return SUBTITLE_LIMITS.get(str(locale or "").split("-")[0], DEFAULT_SUBTITLE_LIMITS)
+
+
+def wrap_lines(text, max_chars):
+    """textwrap por palavra; trecho sem espaço maior que a linha (chinês, URL) é cortado por caractere."""
+    lines = []
+    for line in textwrap.wrap(text, width=max_chars, break_long_words=False) or [""]:
+        lines += [line[i:i + max_chars] for i in range(0, len(line), max_chars)] or [""]
+    return lines
+
 
 def segment_cues(seg, max_chars, max_lines):
     """Quebra um segmento em cues de até max_lines linhas; tempo proporcional aos caracteres."""
-    lines = textwrap.wrap(seg["text"], width=max_chars, break_long_words=False) or [""]
+    lines = wrap_lines(seg["text"], max_chars)
     chunks = [lines[i:i + max_lines] for i in range(0, len(lines), max_lines)]
     total = sum(len(" ".join(c)) for c in chunks) or 1
     t, span, cues = seg["start"], seg["end"] - seg["start"], []
@@ -263,6 +295,9 @@ def cmd_loc_translate(args):
 def cmd_loc_subtitles(args):
     doc = load_json(args.traduzida)
     names = {s["label"]: s.get("display_name") for s in (load_json(args.job).get("speakers") or [])} if args.job else {}
+    lim = subtitle_limits(doc.get("locale"))
+    args.max_chars, args.max_lines, args.max_cps = (v if v is not None else d for v, d in
+                                                    zip((args.max_chars, args.max_lines, args.max_cps), lim))
     cues, bad = build_cues(doc, args.max_chars, args.max_lines), 0
     for ext, text in (("srt", render_srt(cues)), ("vtt", render_vtt(cues, names))):
         Path(f"{args.output}.{ext}").write_text(text, encoding="utf-8")
@@ -303,6 +338,8 @@ def cmd_loc_dub_plan(args):
         return 2
     plan["generated_at"] = now_iso()
     dump_loc(plan, args.output)
+    if stale := dub_prices_stale():
+        print(stale, file=sys.stderr)
     for p in plan["plans"]:
         best = min((c["estimate_usd"] for c in p["cost_estimates"]), default=0)
         print(f"dub-plan {p['locale']}/{p['speaker_label']} ({p['voice_mode']}): {p['totals']} · menor estimativa US$ {best}",
@@ -348,9 +385,9 @@ def build_parser():
         tr.add_argument(name, dest={"-o": "output"}.get(name))
     s = sub.add_parser("subtitles")
     s.add_argument("traduzida")
-    s.add_argument("--max-chars", type=int, default=42)
-    s.add_argument("--max-lines", type=int, default=2)
-    s.add_argument("--max-cps", type=float, default=17)
+    s.add_argument("--max-chars", type=int, default=None)
+    s.add_argument("--max-lines", type=int, default=None)
+    s.add_argument("--max-cps", type=float, default=None)
     s.add_argument("--job")
     s.add_argument("-o", "--output", required=True)
     n = sub.add_parser("shownotes")
