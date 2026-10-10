@@ -14,7 +14,8 @@ Oficial** com a marca do programa e automatiza o que vem depois do envio:
 - **Lembrete na véspera (D-1)**, por e-mail e/ou WhatsApp.
 
 Cada envio só acontece se o convidado **consentiu naquele canal**. Os dados sensíveis só são
-guardados com **aceite específico** (LGPD, art. 11, I). Sem esse aceite, são descartados.
+guardados com **aceite específico** (LGPD, art. 11, I). Sem esse aceite, são descartados, e a
+resposta crua também some do Forms e da planilha ligada (o que é lícito fica na aba `intake`).
 
 Não é preciso servidor nem projeto no Google Cloud, e nada é instalado no seu computador.
 
@@ -26,14 +27,14 @@ Não é preciso servidor nem projeto no Google Cloud, e nada é instalado no seu
 1. Abra **<https://script.google.com/home/projects/create>** (já abre um projeto novo; se não abrir, vá em script.google.com → **Novo projeto**).
 2. Clique em "Projeto sem título" e dê um nome, por exemplo `Formulário do convidado`.
 
-### 2. Cole os 7 arquivos
+### 2. Cole os 8 arquivos
 No editor, para **cada** arquivo da pasta `src/` deste repositório:
 1. Clique no **+** ao lado de "Arquivos" e escolha **Script**.
-2. Dê um nome (o nome não importa; sugestão: `bundle`, `core`, `intake`, `actions`, `invitation`, `forms`, `automations`).
+2. Dê um nome (o nome não importa; sugestão: `bundle`, `core`, `intake`, `actions`, `invitation`, `forms`, `automations`, `admission`).
 3. Apague o conteúdo de exemplo e cole o conteúdo do arquivo.
 
 O arquivo `Código.gs` que já vem no projeto pode ser apagado. A ordem dos arquivos não importa.
-O 8º arquivo, `drive-logo.js`, é **opcional**: cole só se o logo estiver no seu Google Drive (veja
+O 9º arquivo, `drive-logo.js`, é **opcional**: cole só se o logo estiver no seu Google Drive (veja
 "Logo e cores do convite").
 Clique em 💾 **Salvar**.
 
@@ -110,9 +111,16 @@ O que você precisa saber:
   nenhum convite, kit, convite de agenda, WhatsApp ou lembrete D-1 sai mais para esse endereço.
 - **Só quem você convidou recebe as automações.** O formulário é público e quem responde digita o
   e-mail, então o kit (com o endereço do estúdio), o convite de agenda, o WhatsApp e o lembrete só
-  saem para e-mails que passaram por `enviarConvite`. Resposta de outro e-mail fica **retida**: nada
-  sai para o convidado, e o e-mail-resumo diz `held` e traz o comando `confirmarIntake("<id>")`, que
-  você roda se a pessoa for legítima.
+  saem para quem respondeu pelo **link do convite**: o `enviarConvite` gera um código de uso único
+  para cada convidado (vale 30 dias, só com o e-mail convidado) e o põe no campo "Código do convite",
+  já preenchido pelo link. Conhecer o e-mail de um convidado não basta (Codex Security #5). Resposta
+  sem código válido (outro e-mail, código já usado, vencido ou apagado) fica **retida**: nada
+  sai para o convidado nem para você na hora. Os retidos vão num **resumo único** no gatilho diário,
+  com o comando `confirmarIntake("<id>")` ao lado de cada um, que você roda se a pessoa for legítima.
+  Para um envio em massa pelo link não esgotar cota nem armazenamento (ALQERA SEC-004, Codex Security
+  #2), ficam no máximo **50 retidos abertos**; acima disso a resposta é apagada do Forms e da planilha
+  sem gerar linha, e o resumo só conta quantas foram. A linha retida que você não confirmar some em
+  **7 dias**, mesmo com `RETENCAO_AUTOMATICA=false`.
 - Cada convite gasta **1 destinatário** da cota diária de e-mail.
 
 ### 7. Teste antes de enviar
@@ -245,7 +253,8 @@ gatilho diário**, que varre a aba `intake`, e não um gatilho por convidado (o 
   `src/actions.js` (kit, mensagens, plano por consentimento, D-1, WhatsApp, `runActions` idempotente) e
   `src/invitation.js` (convite oficial: marca, contraste, HTML, texto puro, `.ics`).
 - **Lado Google**: `src/forms.js` (criação do Form e gatilhos), `src/automations.js` (`onFormSubmit`, `lembreteDiario`,
-  `enviarConvite`, `registrarOptOut`, `confirmarIntake`) e o opcional `src/drive-logo.js`.
+  `enviarConvite`, `registrarOptOut`, `confirmarIntake`), `src/admission.js` (lock das chaves de envio e
+  admissão por código de convite) e o opcional `src/drive-logo.js`.
 - `src/bundle.gen.js` é **gerado** a partir de `references/contracts/i18n/*.json`, `assets/templates/guest-kit.md`,
   `assets/templates/guest-invitation-official.md`
   e de `x-form-variants` do schema. Depois de editar textos ou o template, rode:
@@ -274,16 +283,22 @@ gatilho diário**, que varre a aba `intake`, e não um gatilho por convidado (o 
 - Revogação e eliminação: `esquecerTitular('in-…')` apaga a linha da aba `intake`, a resposta no Forms
   (`Form.deleteResponse`), a linha da aba de respostas ligada ao Form (casada pelo e-mail, porque apagar a
   resposta não apaga essa linha [INFERÊNCIA: a doc do `deleteResponse` não diz]) e as chaves `sent:`/`invited:`
-  do titular; devolve o relatório com as contagens. `OPTOUT_EMAILS` fica, porque é o registro da oposição.
+  do titular e o evento da agenda criado pelo envio; devolve o relatório com as contagens e
+  `pendencias_manuais` (Gmail do host, histórico do WhatsApp no provedor, logs antigos), que a API deste
+  script não apaga (ALQERA PRV-002). Nenhuma linha de log leva e-mail. `OPTOUT_EMAILS` fica, porque é o
+  registro da oposição.
   Rode junto com `memory forget` no workspace local.
-- `ponytail:` retenção automática só com `RETENCAO_AUTOMATICA=true` (Script Properties): o gatilho diário
-  roda `aplicarRetencao`, que conta `retention_days_after_publish` a partir da **gravação** (a planilha não
+- `ponytail:` retenção automática **ligada por padrão** (ALQERA PRV-001; `RETENCAO_AUTOMATICA=false` em
+  Script Properties desliga): o gatilho diário roda `aplicarRetencao`, que conta `retention_days_after_publish` a partir da **gravação** (a planilha não
   sabe a data de publicação), então apaga mais cedo que o prazo declarado, nunca mais tarde. Para o prazo
   exato, grave `published_at` na aba `intake` e conte dele.
 - Locales `es` e `zh` são **esqueletos** (`needs_native_review: true`). O script recusa usá-los, a menos
   que `ALLOW_UNREVIEWED_LOCALE=true`.
 - As cláusulas (`legal_review: pendente`) são um **rascunho técnico, não um parecer**. Precisam de
-  revisão de advogado antes do uso comercial.
+  revisão de advogado antes do uso comercial. Enquanto a cláusula não tiver `legal_review: aprovado`
+  (ou `approved`), o formulário mostra ao convidado, na descrição e no topo da cláusula, o aviso
+  `consent.draft_notice` ("RASCUNHO (v0) em revisão jurídica"). Mitigação R-07, aceita pelo dono em
+  2026-10-10 só para o beta; o aviso some sozinho quando o advogado aprova e a flag muda.
 
 ---
 

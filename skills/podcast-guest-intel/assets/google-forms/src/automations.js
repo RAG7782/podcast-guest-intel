@@ -9,7 +9,16 @@ function store_() {
   var p = PropertiesService.getScriptProperties();
   return {
     has: function (k) { return p.getProperty('sent:' + k) !== null; },
-    set: function (k, v) { p.setProperty('sent:' + k, v); }
+    set: function (k, v) { p.setProperty('sent:' + k, v); },
+    // Codex #8: reserva atômica ANTES do envio irreversível; a 2ª execução sobreposta vê a reserva e pula
+    claim: function (k) {
+      return withScriptLock_(function () {
+        if (p.getProperty('sent:' + k) !== null) return false;
+        p.setProperty('sent:' + k, 'pending:' + new Date().toISOString());
+        return true;
+      });
+    },
+    release: function (k) { p.deleteProperty('sent:' + k); }
   };
 }
 
@@ -106,9 +115,14 @@ function notifyOwner_(show, intake, i18n, results, dropped) {
   return 'owner';
 }
 
+/** O log de execução fica com o Google, fora do esquecerTitular: nenhum e-mail entra nele (ALQERA PRV-002). */
+function maskEmails_(text) {
+  return String(text).replace(/[^\s@<>"'(),;:]+@[^\s@<>"'(),;:]+/g, '[e-mail]');
+}
+
 function logErrors_(results) {
   results.filter(function (r) { return r.status === 'error'; }).forEach(function (r) {
-    console.error('falha no envio ' + r.key + ': ' + r.error);
+    console.error(maskEmails_('falha no envio ' + r.key + ': ' + r.error));
   });
 }
 
@@ -127,11 +141,15 @@ function onFormSubmit(e) {
     purposes: { sensitive: i18n.consent.sensitive_purpose, accessibility: i18n.consent.accessibility_purpose,
       voice_replica: i18n.consent.dub_replica_purpose }, localization: show.localization || null });
   var intake = res.intake, store = store_(), policy = guestPolicy_(intake.contacts.email);
+  // Codex #5: admissão pelo código de uso único do link do convite, nunca só pelo e-mail digitado
+  policy.invited = admitByToken_(answers['invite.token'], intake.contacts.email, e.response.getId());
+  var rawGone = res.dropped.some(function (d) { return SENSITIVE_DROPS.indexOf(d.field) >= 0; });
+  if (rawGone) discardRaw_(e.response, intake);
+  if (!policy.invited || policy.optedOut) return holdSubmission_(e.response, intake, res, policy, store, rawGone);
   var results = runActions(planSubmitActions(intake, show, policy), executors_(show, intake, i18n), store);
-  if (!policy.invited || policy.optedOut) results = [heldResult_(intake, policy)];
-  results = results.concat(runActions([{ key: intake.intake_id + ':owner:notify', channel: 'owner', kind: 'notify',
-    results: results, dropped: res.dropped }], executors_(show, intake, i18n), store));
-  if (!store.has(intake.intake_id + ':record')) {
+  var notify = { key: intake.intake_id + ':owner:notify', channel: 'owner', kind: 'notify', results: results, dropped: res.dropped };
+  results = results.concat(runActions([notify], executors_(show, intake, i18n), store));
+  if (store.claim(intake.intake_id + ':record')) {
     intakeSheet_().appendRow([intake.intake_id, intake.submitted_at, JSON.stringify(intake), JSON.stringify(results), JSON.stringify(res.dropped)]);
     store.set(intake.intake_id + ':record', new Date().toISOString());
   }
@@ -153,12 +171,47 @@ function lembreteDiario() {
       console.error('linha da aba intake com JSON inválido (intake_id=' + JSON.stringify(row[0]) + '): ' + err.message);
       return;
     }
-    var acts = planReminderActions(intake, show, now, tz.minutes, guestPolicy_(intake.contacts && intake.contacts.email));
+    var acts = !admittedRow_(row, store) ? [] :   // retido e não aprovado: nem o D-1 sai (Codex #5)
+      planReminderActions(intake, show, now, tz.minutes, guestPolicy_(intake.contacts && intake.contacts.email));
     all = all.concat(runActions(acts, executors_(show, intake, i18n), store));
   });
   logErrors_(all);
-  if (props_().getProperty('RETENCAO_AUTOMATICA') === 'true') aplicarRetencao(now);
+  sendHeldDigest_();
+  expireHeldRows_(now);
+  expireInvites_(now);
+  // retenção prometida no consentimento: LIGADA por padrão (ALQERA PRV-001); só 'false' desliga
+  if (props_().getProperty('RETENCAO_AUTOMATICA') !== 'false') aplicarRetencao(now);
   return all;
+}
+
+// ---------- Envios retidos (ALQERA SEC-004, Codex #2): aviso só agregado, teto de linhas e prazo curto ----------
+
+var HELD_MAX_ROWS = 50;        // ponytail: teto fixo de retidos abertos; acima disso a resposta é apagada (virar Script Property se pedirem)
+var HELD_RETENTION_DAYS = 7;   // linha retida e não confirmada pelo host some depois disto
+
+/** 1 e-mail ao dono com todos os retidos do período (só se houver). */
+function sendHeldDigest_() {
+  var p = props_(), raw = p.getProperty('held_digest');
+  if (!raw) return;
+  var d = JSON.parse(raw), owner = Session.getEffectiveUser().getEmail();
+  MailApp.sendEmail(owner, 'Resumo: ' + d.count + ' envio(s) retido(s) do formulário',
+    d.count + ' envio(s) retido(s) sem código de convite válido; ' + (d.discarded || 0) + ' descartado(s) acima do teto de ' +
+    HELD_MAX_ROWS + ' retidos abertos (resposta apagada do Forms e da planilha). Nada foi enviado aos e-mails digitados.' +
+    ' Se algum for legítimo, rode o comando ao lado dele. Os não confirmados somem em ' + HELD_RETENTION_DAYS + ' dias.\n\n' +
+    d.ids.map(function (id) { return '- ' + id + ' → confirmarIntake(' + JSON.stringify(id) + ')'; }).join('\n'));
+  p.deleteProperty('held_digest');
+  p.getKeys().filter(function (k) { return k.indexOf('held_notify:') === 0; })   // contador da versão anterior
+    .forEach(function (k) { p.deleteProperty(k); });
+}
+
+/** Linhas retidas (status held) cujo e-mail o host não confirmou, mais velhas que HELD_RETENTION_DAYS: esquecidas. */
+function expireHeldRows_(nowMs) {
+  var limit = nowMs - HELD_RETENTION_DAYS * 86400000;
+  intakeSheet_().getDataRange().getValues().slice(1).filter(function (row) {
+    var held = String(row[3] || '').indexOf('"status":"held"') >= 0, it = {};
+    try { it = JSON.parse(row[2]); } catch (err) { return false; }   // ilegível: a retenção geral cuida
+    return held && Date.parse(row[1]) < limit && !store_().has(row[0] + ':admitted');
+  }).forEach(function (row) { esquecerTitular(row[0]); });
 }
 
 /** Quem o host convidou (enviarConvite) ou aprovou (confirmarIntake), e quem pediu SAIR. */
@@ -173,8 +226,8 @@ function markInvited_(email, how) {
 
 function heldResult_(intake, policy) {
   return { key: intake.intake_id + ':guest', status: policy.optedOut ? 'skipped' : 'held',
-    reason: policy.optedOut ? 'opt-out (OPTOUT_EMAILS)' : 'e-mail não convidado por enviarConvite; nada foi enviado ao' +
-      ' convidado. Se for legítimo, rode confirmarIntake(' + JSON.stringify(intake.intake_id) + ')' };
+    reason: policy.optedOut ? 'opt-out (OPTOUT_EMAILS)' : 'sem código de convite válido (link do enviarConvite, uso único,' +
+      ' mesmo e-mail); nada foi enviado ao convidado. Se for legítimo, rode confirmarIntake(' + JSON.stringify(intake.intake_id) + ')' };
 }
 
 /** Decisão do host para um intake retido: marca o e-mail como convidado e roda os envios dele. */
@@ -184,6 +237,7 @@ function confirmarIntake(intakeId) {
   var show = loadShow_(), meta = loadMeta_(), intake = JSON.parse(row[2]);
   var i18n = selectLocale(BUNDLE, meta.locale, allowUnreviewed_());
   markInvited_(intake.contacts.email, 'confirmarIntake');
+  store_().set(intakeId + ':admitted', 'confirmarIntake');   // libera o D-1 e tira do prazo curto de retido
   var results = runActions(planSubmitActions(intake, show, guestPolicy_(intake.contacts.email)), executors_(show, intake, i18n), store_());
   logErrors_(results);
   return results;
@@ -242,11 +296,13 @@ function enviarConvite(convidado, variante) {
   var invitee = normalizeInvitee(convidado, show), key = invitationKey(invitee);
   if (optOutList_().indexOf(invitee.email.toLowerCase()) >= 0) return { key: key, status: 'skipped', reason: 'opt-out' };
   var i18n = selectLocale(BUNDLE, meta.locale, allowUnreviewed_());
-  var mail = buildInvitationEmail(BUNDLE.invitationTemplate, show, invitee, i18n, { formUrl: formUrl, variant: variant });
-  var res = runActions([{ key: key, channel: 'email', kind: 'convite' }], { email: function () { return sendInvitation_(mail); } }, store_())[0];
+  var res = runActions([{ key: key, channel: 'email', kind: 'convite' }], { email: function () {
+    var link = issueInviteLink_(invitee.email);   // código de uso único só quando o convite sai de fato (Codex #5)
+    return sendInvitation_(buildInvitationEmail(BUNDLE.invitationTemplate, show, invitee, i18n, { formUrl: link, variant: variant }));
+  } }, store_())[0];
   if (res.status !== 'error') markInvited_(invitee.email, 'enviarConvite');   // libera o pós-formulário dele
   logErrors_([res]);
-  console.log('convite ' + key + ': ' + res.status + (res.error ? ' — ' + res.error : ''));
+  console.log(maskEmails_('convite ' + key + ': ' + res.status + (res.error ? ' — ' + res.error : '')));
   return res;
 }
 
@@ -275,44 +331,99 @@ function deleteFormResponses_(intakeId) {
   return { deleted: n };
 }
 
-/** A aba de respostas ligada ao Form NÃO perde a linha quando a resposta é apagada: casa pelo e-mail. */
-function deleteLinkedRows_(email) {
+/**
+ * A aba de respostas ligada ao Form NÃO perde a linha quando a resposta é apagada. Casa pelo e-mail E pelo
+ * carimbo de data/hora do envio deste intake (ALQERA REL-005: só o e-mail apagava a linha do intake novo do
+ * mesmo convidado). Sem submitted_at (linha antiga), só pelo e-mail, e só se o titular não tem outro intake.
+ */
+function deleteLinkedRows_(email, submittedAt, hasOthers) {
   var ss = SpreadsheetApp.openById(props_().getProperty('SHEET_ID')), n = 0;
-  var e = String(email || '').trim().toLowerCase();
+  var e = String(email || '').trim().toLowerCase(), t = Date.parse(submittedAt);
   if (!e) return { deleted: 0, note: 'intake sem e-mail; revise a aba de respostas do Form à mão' };
+  if (isNaN(t) && hasOthers) return { deleted: 0, note: 'intake sem submitted_at e titular com outro intake; apague a linha à mão' };
   ss.getSheets().filter(function (s) { return s.getFormUrl && s.getFormUrl(); }).forEach(function (s) {
     n += deleteRows_(s, rowsWhere_(s, function (row) {
-      return row.some(function (c) { return String(c).trim().toLowerCase() === e; });
+      var mine = row.some(function (c) { return String(c).trim().toLowerCase() === e; });
+      return mine && (isNaN(t) || row.some(function (c) { return Math.abs(new Date(c).getTime() - t) < 2000; }));
     }));
   });
   return { deleted: n };
 }
 
-/** Chaves de Script Properties do titular: sent:<intake_id>:*, sent:convite:<email>:*, invited:<email>. */
-function deleteGuestKeys_(intakeId, email) {
-  var p = props_(), e = String(email || '').trim().toLowerCase();
+/**
+ * Chaves do titular: sent:<intake_id>:*; e, se ele NÃO tem outro intake, invited:<email> e sent:convite:<email>:*.
+ * Com outro intake vigente, o convite e a lista de convidados ficam (REL-005: sem eles o D-1 do novo não sai);
+ * sai só o convite da data deste intake.
+ */
+function deleteGuestKeys_(intakeId, email, hasOthers, scheduledAt) {
+  var p = props_(), e = String(email || '').trim().toLowerCase(), day = String(scheduledAt || '').slice(0, 10);
   var mine = p.getKeys().filter(function (k) {
-    return k.indexOf('sent:' + intakeId + ':') === 0 || (e && (k === 'invited:' + e || k.indexOf('sent:convite:' + e + ':') === 0));
+    if (k.indexOf('sent:' + intakeId + ':') === 0) return true;
+    if (!e) return false;
+    if (!hasOthers) return k === 'invited:' + e || k.indexOf('sent:convite:' + e + ':') === 0 || inviteOf_(p, k) === e;
+    return !!day && k.indexOf('sent:convite:' + e + ':' + day) === 0;
   });
   mine.forEach(function (k) { p.deleteProperty(k); });
   return mine.length;
 }
 
+/** E-mail do código de convite guardado em `k` (invite:<hash>), ou '' se `k` não for código. */
+function inviteOf_(p, k) {
+  if (k.indexOf('invite:') !== 0) return '';
+  try { return JSON.parse(p.getProperty(k)).email || ''; } catch (err) { return ''; }
+}
+
+/** Evento criado pelo envio (o id está na chave sent:<intake_id>:calendar:invite). ALQERA PRV-002. */
+function deleteCalendarEvent_(intakeId) {
+  var id = props_().getProperty('sent:' + intakeId + ':calendar:invite');
+  if (!id) return { deleted: 0 };
+  var ev = CalendarApp.getDefaultCalendar().getEventById(id);
+  if (!ev) return { deleted: 0, note: 'evento ' + id + ' não encontrado na agenda padrão; confira à mão' };
+  ev.deleteEvent();
+  return { deleted: 1 };
+}
+
+/** O que a API deste script não alcança: o host apaga à mão (o relatório diz onde). */
+function manualLeftovers_(intakeId, intake) {
+  var e = (intake.contacts && intake.contacts.email) || '<e-mail do titular>';
+  var out = ['Gmail da conta do host (MailApp não apaga): apague kit, lembrete, convite e o aviso ao dono em Enviados e' +
+    ' Entrada; busca: to:' + e + ' OR from:' + e + ' OR "' + intakeId + '"',
+    'Log de execução do Apps Script: guarda só intake_id, sem e-mail (registros de antes desta versão podem ter e-mail;' +
+    ' o Google os descarta no prazo dele)'];
+  if (props_().getProperty('sent:' + intakeId + ':whatsapp:kit') || (intake.contacts && intake.contacts.whatsapp)) {
+    out.push('WhatsApp: o histórico da conversa fica no provedor (' + (props_().getProperty('WHATSAPP_PROVIDER') || 'generic') +
+      ') e no aparelho; a API de envio não apaga. Apague a conversa lá');
+  }
+  return out;
+}
+
+function emailOf_(row) {
+  try { return String(JSON.parse(row[2]).contacts.email || '').trim().toLowerCase(); } catch (err) { return ''; }
+}
+
 /**
- * esquecerTitular('in-…'): apaga a linha da aba intake, a resposta no Forms, a linha da aba de
- * respostas ligada e as chaves do titular. OPTOUT_EMAILS fica (é o registro da oposição dele).
- * Rode junto com `memory forget` no workspace local. Devolve o relatório com o denominador.
+ * esquecerTitular('in-…'): apaga a linha da aba intake, a resposta no Forms, a linha ligada, o evento da agenda e
+ * as chaves deste intake. OPTOUT_EMAILS fica (é o registro da oposição dele). Outros intakes do mesmo e-mail NÃO
+ * são tocados (vêm em outros_intakes_do_titular: num pedido do titular, rode para cada um). Rode junto com
+ * `memory forget` no workspace local. Devolve o relatório com o denominador e as pendências manuais.
  */
 function esquecerTitular(intakeId) {
-  var sheet = intakeSheet_(), email = null;
+  var sheet = intakeSheet_(), rows = sheet.getDataRange().getValues(), intake = {};
   var hit = rowsWhere_(sheet, function (r) { return r[0] === intakeId; });
   if (!hit.length) throw new Error('esquecerTitular(' + JSON.stringify(intakeId) + '): intake não está na aba "intake"; esperado o intake_id do e-mail ao dono');
-  try { email = JSON.parse(sheet.getDataRange().getValues()[hit[0] - 1][2]).contacts.email; } catch (err) {
+  try { intake = JSON.parse(rows[hit[0] - 1][2]); } catch (err) {
     console.error('intake ' + intakeId + ' com JSON ilegível (' + err.message + '); apagando só pelo intake_id');
   }
-  var report = { intake_id: intakeId, form_responses: deleteFormResponses_(intakeId), linked_rows: deleteLinkedRows_(email),
-    intake_rows: deleteRows_(sheet, hit), keys: deleteGuestKeys_(intakeId, email) };
-  console.log('esquecerTitular: ' + JSON.stringify(report));
+  var email = String((intake.contacts && intake.contacts.email) || '').trim().toLowerCase();
+  var others = email ? rows.slice(1).filter(function (r) { return r[0] !== intakeId && emailOf_(r) === email; })
+    .map(function (r) { return r[0]; }) : [];
+  var report = { intake_id: intakeId, form_responses: deleteFormResponses_(intakeId),
+    linked_rows: deleteLinkedRows_(email, intake.submitted_at, others.length > 0), calendar: deleteCalendarEvent_(intakeId),
+    pendencias_manuais: manualLeftovers_(intakeId, intake), intake_rows: deleteRows_(sheet, hit),
+    keys: deleteGuestKeys_(intakeId, email, others.length > 0, intake.scheduled_at), outros_intakes_do_titular: others };
+  console.log(maskEmails_('esquecerTitular: ' + JSON.stringify({ intake_id: intakeId, form_responses: report.form_responses,
+    linked_rows: report.linked_rows, calendar: report.calendar, intake_rows: report.intake_rows, keys: report.keys,
+    outros_intakes_do_titular: others.length })));
   return report;
 }
 
@@ -320,7 +431,7 @@ function esquecerTitular(intakeId) {
  * Retenção: esquece todo intake cuja gravação (ou envio, sem data) passou de retention_days_after_publish.
  * ponytail: conta da data de GRAVAÇÃO, não da publicação (a planilha não sabe quando publicou), então
  * apaga mais cedo que o prazo declarado, nunca mais tarde. Se o host precisar do prazo exato, gravar
- * published_at na aba intake e contar dele. Só roda no gatilho diário com RETENCAO_AUTOMATICA=true.
+ * published_at na aba intake e contar dele. Roda no gatilho diário por padrão; RETENCAO_AUTOMATICA=false desliga.
  */
 function aplicarRetencao(nowMs) {
   var show = loadShow_(), days = show.retention_days_after_publish === undefined ? 90 : show.retention_days_after_publish;

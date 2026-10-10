@@ -109,7 +109,13 @@ function renderClause(i18n, jurisdiction, show) {
     purposes: purposes.join('; '),
     retention_days: show.retention_days_after_publish === undefined ? 90 : show.retention_days_after_publish
   });
-  return { clause_id: clause.clause_id, text: text };
+  var draft = isDraftClause(clause);
+  return { clause_id: clause.clause_id, text: draft ? i18n.consent.draft_notice + '\n\n' + text : text, draft: draft };
+}
+
+/** R-07: cláusula sem `legal_review: aprovado|approved` é rascunho; o aviso some sozinho quando o advogado aprova. */
+function isDraftClause(clause) {
+  return ['aprovado', 'approved'].indexOf(clause.legal_review) < 0;
 }
 
 // ---------- especificação do formulário ----------
@@ -231,11 +237,15 @@ function buildFormSpec(opts) {
     items.push({ type: 'section', key: 'section.' + sec[0], title: i18n.form.sections[sec[0]], help: '' });
     keys.forEach(function (k) { items.push(fieldItem(k, i18n, show)); });
   });
+  // Codex #5: código de uso único do convite, pré-preenchido pelo link do enviarConvite (logo após o e-mail)
+  var at = items.map(function (it) { return it.key; }).indexOf('contacts.email');
+  items.splice(at + 1, 0, { type: 'text', key: 'invite.token', title: i18n.form.fields['invite.token'].title,
+    help: i18n.form.fields['invite.token'].help, required: false });
   if (variant === 'completo') items = items.concat(sensitiveItems(i18n, show));
   items = items.concat(consentItems(i18n, clause)).concat(localizationItems(i18n, show));
   return {
     title: renderTemplate(i18n.form.title, { show: { name: show.name } }),
-    description: i18n.form['description_' + variant], confirmation: i18n.form.confirmation,
+    description: (clause.draft ? i18n.consent.draft_notice + '\n\n' : '') + i18n.form['description_' + variant], confirmation: i18n.form.confirmation,
     clause_id: clause.clause_id, text_version: i18n.text_version, items: items
   };
 }
@@ -244,7 +254,7 @@ if (typeof module !== 'undefined') {
   module.exports = {
     renderTemplate: renderTemplate, lookupPath: lookupPath, stripDocComment: stripDocComment,
     selectLocale: selectLocale, selectClause: selectClause, resolveController: resolveController,
-    renderClause: renderClause, buildFormSpec: buildFormSpec, enabledChannels: enabledChannels,
+    renderClause: renderClause, isDraftClause: isDraftClause, buildFormSpec: buildFormSpec, enabledChannels: enabledChannels,
     localizationItems: localizationItems,
     BASE_PURPOSES: BASE_PURPOSES
   };

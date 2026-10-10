@@ -121,6 +121,10 @@
         "title": "[TODO-es] Your email",
         "help": ""
       },
+      "invite.token": {
+        "title": "Código de invitación",
+        "help": "Viene completado por el enlace de la invitación que recibiste por correo. No lo cambies. Si está vacío, envía igual: el programa lo confirmará contigo antes de enviar nada."
+      },
       "contacts.whatsapp": {
         "title": "[TODO-es] Your WhatsApp",
         "help": "[TODO-es] Optional. With country code, e.g. +44 7700 900123."
@@ -236,6 +240,7 @@
       "memoria_episodio": "[TODO-es] recording the episode in the show's archive",
       "divulgacao": "[TODO-es] promoting the episode with your short bio, photo and handle"
     },
+    "draft_notice": "[TODO-es] NOTICE: this consent text is a DRAFT (v0) under legal review and may change. If the final version changes anything, we will ask for your consent again.",
     "general_accept": "[TODO-es] I have read the text above and agree to the use of my answers for these purposes.",
     "public_research_accept": "[TODO-es] I understand that information I have made public myself will be consulted, always citing the source.",
     "divulgacao_accept": "[TODO-es] I also allow my short bio, photo and handle to be used to promote the episode.",

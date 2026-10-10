@@ -4,7 +4,7 @@ description: "Prepara episódios de podcast com convidado, do convite ao roteiro
 license: Apache-2.0
 compatibility: "Python 3.10+ para os scripts (stdlib; check e validação usam jsonschema e pyyaml). Busca web do harness para o dossiê e a pauta."
 metadata:
-  version: "1.0.1"
+  version: "1.0.3"
   source: "https://github.com/RAG7782/podcast-guest-intel"
 ---
 
@@ -79,3 +79,26 @@ do servidor do produto e não estão neste pacote; não tente imitá-los nem afi
 | `localizacao-servidor` | paid | Feed por idioma, gate auditável de consentimento de voz, fila de revisão |
 | `exportacao-markdown` | free | Saída em Markdown |
 | `exportacao-pdf-docx` | paid | PDF/DOCX com a marca do show |
+
+## Se o servidor não responder
+
+As tools do servidor do produto podem falhar por tempo esgotado, erro de conexão, HTTP 5xx ou a
+mensagem "temporariamente indisponível". Isso não é recusa de licença (recusa vem com código, como
+`quota_free` ou `paid_only`). Nesse caso:
+
+1. Tente de novo no máximo 1 vez, depois de cerca de 1 minuto. Não repita em laço.
+2. Avise o usuário em uma frase: "O servidor do Guest Intel não respondeu agora; sigo com a versão
+   grátis local desta etapa, e você pode refazer com o recurso pago quando ele voltar."
+3. Siga com o fallback grátis da tabela abaixo. Ele roda inteiro neste pacote, sem servidor.
+4. Registre a lacuna no artefato (alertas ou lacunas): a etapa saiu na versão grátis por indisponibilidade.
+5. Nunca simule o resultado pago nem diga que a licença caiu.
+
+| Capacidade paga | Fallback grátis local | O que o fallback entrega |
+|---|---|---|
+| `formulario-completo-e-automacoes` | `convite-e-formulario-essencial` | Convite oficial + formulário variante essencial (Apps Script), kit do convidado com rodapé de marca |
+| `dossie-portal-e-historico` | `dossie` | Dossiê completo, cada afirmação VERIFICADO / AUTODECLARADO / INFERÊNCIA + fonte |
+| `pauta-3-troncos` | `pauta-1-tronco` | Perfil do convidado × linha editorial + Google Trends/News RSS rodado pelo próprio harness |
+| `roteiro-7-modos` | `roteiro-modo-informativo` | Roteiro no modo informativo, com versões completo, teleprompter e cartão |
+| `memoria-centro-de-comando` | `exportacao-markdown` | Saída em Markdown |
+| `localizacao-servidor` | `localizacao-local` | Transcrição, tradução, legendas e checks de QA locais (BYOK) |
+| `exportacao-pdf-docx` | `exportacao-markdown` | Saída em Markdown |

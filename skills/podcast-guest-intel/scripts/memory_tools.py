@@ -276,9 +276,29 @@ def build_parser():
     return parser
 
 
+AUTO_RETENTION_SKIP = ("init", "retention", "forget")
+
+
+def auto_retention(args):
+    """Retenção prometida ao convidado ligada por padrão (ALQERA PRV-001): todo comando num workspace
+    aplica o que venceu. memory.json com auto_retention=false desliga e passa a só avisar."""
+    ws = getattr(args, "ws", None)
+    if args.cmd in AUTO_RETENTION_SKIP or not ws or not (Path(ws) / ms.CONFIG).is_file():
+        return
+    on = ms.config(ws).get("auto_retention", True) is not False
+    due = priv.retention(ws, apply=on)
+    if due and on:
+        print(f"retenção automática: {len(due)} episódio(s) vencido(s) aplicados {[d['episode_id'] for d in due]}",
+              file=sys.stderr)
+    elif due:
+        print(f"AVISO: {len(due)} episódio(s) com retenção vencida e auto_retention=false: rode"
+              " `retention --apply`", file=sys.stderr)
+
+
 def main(argv=None):
     args = build_parser().parse_args(argv)
     try:
+        auto_retention(args)
         return args.func(args) or 0
     except ms.MemoryError_ as exc:
         print(f"ERRO: {exc}", file=sys.stderr)

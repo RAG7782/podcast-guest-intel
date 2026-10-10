@@ -7,8 +7,10 @@ forget:    apaga TODOS os dados de um titular — intake, dossiê, claims e men�
            workspace e nos .md que o export-md escreveu — e reconstrói o índice do zero. Primeiro
            nome sozinho NUNCA é padrão de busca (apagaria homônimos, CRITIC C3): vai para
            `revisar_manual`, para o humano decidir. Sem `confirm == subject` é só relatório.
-retention: elimina intake e dossiê de episódios cuja data de retenção venceu
-           (retention.delete_after, ou published_at + retention.days_after_publish).
+retention: elimina intake e dossiê de episódios cuja data de retenção venceu (retention.delete_after,
+           ou published_at + days_after_publish, padrão 90; nunca publicado: prazo-limite) e redige o
+           titular no resto do episódio (research, pauta, script). Roda sozinha em todo comando da
+           memória enquanto memory.json não disser auto_retention=false (ALQERA PRV-001).
 Nos dois, keep_consent_record=true guarda só o registro do consentimento, sem identificação
 (sha256 no lugar de ids), como ônus da prova (art. 8º, §2º).
 As ORIGENS de import-md no vault do usuário nunca são tocadas: o relatório lista o que fica lá.
@@ -297,37 +299,99 @@ def mi_terms(text):
 
 # ── retenção ─────────────────────────────────────────────────────────────
 
-def due_date(record):
+DEFAULT_RETENTION_DAYS = 90     # o mesmo padrão que o consentimento mostra (core.js retention_days)
+UNPUBLISHED_LIMIT_DAYS = 180    # ponytail: gravado e nunca publicado vence aqui, contado do envio do intake;
+                                # virar campo do show-profile se algum host precisar de outro prazo
+
+
+def started_at(ws, record, files):
+    """Início do episódio para quem nunca publicou: 1º envio de intake ou 1ª transição registrada."""
+    stamps = [ms.read_json(p).get("submitted_at") for k, p in files if k == "intake"]
+    stamps += [h.get("at") for h in record.get("history") or []]
+    days = [datetime.fromisoformat(t.replace("Z", "+00:00")).date() for t in stamps if t]
+    return min(days) if days else None
+
+
+def due_date(record, started=None):
+    """Data em que o dado do titular vence (ALQERA PRV-001). delete_after prevalece; sem prazo gravado,
+    vale o padrão do consentimento; sem publicação, o prazo-limite contado do início."""
     ret = record.get("retention") or {}
     if ret.get("delete_after"):
         return date.fromisoformat(ret["delete_after"])
-    days, published = ret.get("days_after_publish"), record.get("published_at")
-    if days is None or not published:
+    if not ret.get("subject_ids"):
         return None
-    return datetime.fromisoformat(published.replace("Z", "+00:00")).date() + timedelta(days=int(days))
+    days = ret.get("days_after_publish")
+    days = DEFAULT_RETENTION_DAYS if days is None else int(days)
+    published = record.get("published_at")
+    if published:
+        return datetime.fromisoformat(published.replace("Z", "+00:00")).date() + timedelta(days=days)
+    return started + timedelta(days=UNPUBLISHED_LIMIT_DAYS) if started else None
+
+
+def episode_matchers(record, files):
+    """Identificadores de TODO titular do episódio (ids + nome, @, e-mail e telefone dos intakes)."""
+    terms = {"names": list(record["retention"]["subject_ids"]), "phones": [], "review": []}
+    for kind, path in files:
+        if kind == "intake":
+            for key, vals in known_terms(ms.read_json(path)).items():
+                terms[key] += vals
+    return matchers("", terms)
+
+
+def scrub_episode(ws, eid, regexes, apply):
+    """Redige o titular em todo arquivo do episódio (research, pauta, script, record, .md). -> nomes."""
+    out = []
+    for path in sorted(ms.episode_dir(ws, eid).iterdir()):
+        if path.suffix == ".json":
+            doc = ms.read_json(path)
+            new = scrub(doc, "", regexes, {"itens_removidos": 0, "mencoes_redigidas": 0})
+            changed, write = new != doc, lambda p=path, n=new: ms.write_json(p, n)
+        elif path.suffix == ".md":
+            text = path.read_text(encoding="utf-8")
+            new = text
+            for rx in regexes:
+                new = rx.sub(REDACTED, new)
+            changed, write = new != text, lambda p=path, n=new: p.write_text(n, encoding="utf-8")
+        else:
+            continue
+        if changed:
+            out.append(path.name)
+            if apply:
+                write()
+    return out
 
 
 def retention(ws, today=None, apply=False):
-    """[{episode_id, vence_em, apagar:[...]}] para intake/dossiê vencidos; aplica com apply=True."""
+    """[{episode_id, vence_em, apagar, redigir}] dos episódios vencidos: apaga intake/dossiê e redige o
+    titular no resto do episódio; aplica com apply=True. Episódio sem nada a fazer não aparece."""
     today = today or date.today()
     out = []
     for eid in ms.episode_ids(ws):
         record = ms.load_record(ws, eid)
-        due = due_date(record)
-        files = [(k, p) for k, p in ms.artifact_files(ws, eid) if k in ("intake", "dossier")]
-        if due is None or due > today or not files:
+        files = ms.artifact_files(ws, eid)
+        due = due_date(record, started_at(ws, record, files))
+        if due is None or due > today:
             continue
-        out.append({"episode_id": eid, "vence_em": due.isoformat(), "apagar": [p.name for _k, p in files]})
+        drop = [(k, p) for k, p in files if k in ("intake", "dossier")]
+        regexes = episode_matchers(record, files)
+        redact = [n for n in scrub_episode(ws, eid, regexes, False) if n not in {p.name for _k, p in drop}]
+        if not drop and not redact:
+            continue
+        out.append({"episode_id": eid, "vence_em": due.isoformat(), "apagar": [p.name for _k, p in drop],
+                    "redigir": redact})
         if apply:
-            apply_retention(ws, record, files)
+            apply_retention(ws, record, drop, regexes)
     if apply and out:
         mi.rebuild(ws)
     return out
 
 
-def apply_retention(ws, record, files):
+def apply_retention(ws, record, files, regexes):
     keep = record["retention"].get("keep_consent_record", True)
     for kind, path in files:
         drop_artifact(ws, record, kind, path, ms.read_json(path), keep)
+    ms.save_record(ws, record)
+    scrub_episode(ws, record["episode_id"], regexes, True)   # reescreve o record também (subject_ids)
+    record = ms.load_record(ws, record["episode_id"])
     record["retention"]["applied_at"] = ms.now_iso()
     ms.save_record(ws, record)

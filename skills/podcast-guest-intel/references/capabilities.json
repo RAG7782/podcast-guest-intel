@@ -9,7 +9,8 @@
     {
       "id": "formulario-completo-e-automacoes",
       "tier": "paid",
-      "description": "Variante completa sem marca; automações pós-envio no servidor (e-mail com kit, WhatsApp, agenda, lembrete D-1)"
+      "description": "Variante completa sem marca; automações pós-envio no servidor (e-mail com kit, WhatsApp, agenda, lembrete D-1)",
+      "fallback": "convite-e-formulario-essencial"
     },
     {
       "id": "dossie",
@@ -19,7 +20,8 @@
     {
       "id": "dossie-portal-e-historico",
       "tier": "paid",
-      "description": "Enriquecimento pelo gestor no portal, histórico do convidado, relatório de auditoria"
+      "description": "Enriquecimento pelo gestor no portal, histórico do convidado, relatório de auditoria",
+      "fallback": "dossie"
     },
     {
       "id": "pauta-1-tronco",
@@ -29,7 +31,8 @@
     {
       "id": "pauta-3-troncos",
       "tier": "paid",
-      "description": "Tendências BYOK do X (chave do usuário, verificada) agregadas no servidor + continuidade com o catálogo; sem chave, Google Trends/News RSS"
+      "description": "Tendências BYOK do X (chave do usuário, verificada) agregadas no servidor + continuidade com o catálogo; sem chave, Google Trends/News RSS",
+      "fallback": "pauta-1-tronco"
     },
     {
       "id": "roteiro-modo-informativo",
@@ -39,12 +42,14 @@
     {
       "id": "roteiro-7-modos",
       "tier": "paid",
-      "description": "Os 7 modos de abordagem e modos extensíveis por nicho, servidos pelo MCP"
+      "description": "Os 7 modos de abordagem e modos extensíveis por nicho, servidos pelo MCP",
+      "fallback": "roteiro-modo-informativo"
     },
     {
       "id": "memoria-centro-de-comando",
       "tier": "paid",
-      "description": "Catálogo, busca, perfil do host gerado dos episódios, lições e cortes"
+      "description": "Catálogo, busca, perfil do host gerado dos episódios, lições e cortes",
+      "fallback": "exportacao-markdown"
     },
     {
       "id": "localizacao-local",
@@ -54,7 +59,8 @@
     {
       "id": "localizacao-servidor",
       "tier": "paid",
-      "description": "Feed por idioma, gate auditável de consentimento de voz, fila de revisão"
+      "description": "Feed por idioma, gate auditável de consentimento de voz, fila de revisão",
+      "fallback": "localizacao-local"
     },
     {
       "id": "exportacao-markdown",
@@ -64,7 +70,8 @@
     {
       "id": "exportacao-pdf-docx",
       "tier": "paid",
-      "description": "PDF/DOCX com a marca do show"
+      "description": "PDF/DOCX com a marca do show",
+      "fallback": "exportacao-markdown"
     }
   ]
 }

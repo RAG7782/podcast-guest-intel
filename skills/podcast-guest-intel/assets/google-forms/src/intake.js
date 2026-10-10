@@ -127,8 +127,8 @@ function sensitiveBlock(a, out, ctx, dropped) {
   var value = text(a['sensitive.value']), category = text(a['sensitive.category']);
   if (!value) return;
   if (!hasYes(a['sensitive.accept']) || !category) {
-    dropped.push({ field: 'sensitive', reason: 'DADO SENSÍVEL sem aceite específico ou sem categoria (categoria=' +
-      JSON.stringify(category) + '); descartado' });
+    // sem eco da categoria: ela também revela o dado (Codex #1); a resposta crua é apagada pelo onFormSubmit
+    dropped.push({ field: 'sensitive', reason: 'DADO SENSÍVEL sem ' + (category ? 'aceite específico' : 'categoria') + '; descartado' });
     return;
   }
   out.sensitive_declarations = [{ field_id: 'sensivel_1', sensitive: true, category: category, value: value,

@@ -170,21 +170,30 @@ function buildWhatsappRequest(cfg, e164, message) {
 
 /**
  * Executa cada ação isolada: falha de um canal não derruba os outros.
- * store: {has(key), set(key, value)} — idempotência (reexecução não reenvia).
+ * store: {has(key), set(key, value), claim?(key), release?(key)} — idempotência (reexecução não reenvia).
+ * Com claim (lado Google, Codex #8): a chave é reservada sob lock ANTES do envio; erro do executor libera,
+ * e envio feito com registro falho deixa a reserva (não reenvia às cegas: o dono confere).
  * executors: {email|whatsapp|calendar: function(action) → ref}
  */
 function runActions(actions, executors, store) {
   return actions.map(function (a) {
-    if (store.has(a.key)) return { key: a.key, status: 'skipped', reason: 'já enviado' };
+    if (!(store.claim ? store.claim(a.key) : !store.has(a.key))) return { key: a.key, status: 'skipped', reason: 'já enviado' };
+    var ref;
     try {
       var exec = executors[a.channel];
       if (!exec) throw new Error('canal sem executor: ' + JSON.stringify(a.channel) + '; esperado um de ' + JSON.stringify(Object.keys(executors)));
-      var ref = exec(a);
-      store.set(a.key, String(ref || new Date().toISOString()));
-      return { key: a.key, status: 'sent' };
+      ref = exec(a);
     } catch (e) {
+      if (store.release) store.release(a.key);
       return { key: a.key, status: 'error', error: a.channel + ': ' + (e && e.message ? e.message : String(e)) };
     }
+    try {
+      store.set(a.key, String(ref || new Date().toISOString()));
+    } catch (e) {
+      return { key: a.key, status: 'error', error: a.channel + ': enviado, mas o registro falhou (' + (e && e.message ? e.message : String(e)) +
+        '); a reserva fica e não reenvia; confira o envio' };
+    }
+    return { key: a.key, status: 'sent' };
   });
 }
 

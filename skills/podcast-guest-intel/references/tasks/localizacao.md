@@ -74,13 +74,17 @@ Ausência do aceite = não autorizado. O host consente para a própria voz no se
    arquivo, use o STT BYOK com diarização: `--provider assemblyai` (`ASSEMBLYAI_API_KEY`) ou
    `--provider elevenlabs` (`ELEVENLABS_API_KEY`). O `--keyterms` com o glossário custa +20%
    na ElevenLabs e só entra se o humano pedir. **Nada de STT local** (whisper/modelo em RAM).
+   O STT BYOK sobe o áudio do convidado a um terceiro: passe `--intake` de cada convidado. Sem o
+   aceite `translation_text` concedido e não revogado, o comando recusa (exit 2) **antes** do envio.
+   Áudio sem convidado: `--sem-convidado`, como declaração do humano.
 2. **Falantes.** Proponha o mapa rótulo → pessoa (`speakers`, com `intake_ref` do convidado). O
    humano confirma.
 3. **Tradução.** Rota padrão: o LLM do harness. `translate --provider agent` grava um pacote
    com segmentos e regras do glossário; o agente preenche `translated_text`, e
    `translate --merge` gera a transcrição traduzida (`translated_by: harness_agent`). Rota
-   BYOK: `--provider deepl` (`DEEPL_API_KEY`). Google e OpenAI têm interface, mas o adaptador
-   ainda não existe. Número de lei, data e alíquota **não se traduzem**.
+   BYOK: `--provider deepl` (`DEEPL_API_KEY`), que exige `--intake` com o aceite `translation_text`
+   do idioma-alvo e recusa antes de chamar o DeepL se faltar. Google e OpenAI têm interface, mas o
+   adaptador ainda não existe. Número de lei, data e alíquota **não se traduzem**.
 4. **Legendas.** `subtitles <traduzida> -o legendas.<locale>` gera SRT e VTT (com `<v Nome>`
    quando o falante é conhecido) e relê os dois arquivos: tempo monotônico, linhas e caracteres
    dentro do limite. O que passa de 17 car./s vira alerta informativo. Para zh, fixe o limite

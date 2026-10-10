@@ -43,6 +43,7 @@
       "wants_prepublication_review": { "title": "Would you like to see the episode before we publish?", "help": "" },
       "preferred_channel": { "title": "Preferred channel to reach you", "help": "" },
       "contacts.email": { "title": "Your email", "help": "" },
+      "invite.token": { "title": "Invitation code", "help": "Filled in by the link in the invitation email you received. Do not change it. If it is empty, submit anyway: the show will check with you before sending anything." },
       "contacts.whatsapp": { "title": "Your WhatsApp", "help": "Optional. With country code, e.g. +44 7700 900123." },
       "automation_consents": { "title": "May we use these channels to send you the kit and reminders?", "help": "Tick only what you want. Nothing ticked = nothing sent through that channel." },
       "image_voice": { "title": "Image and voice", "help": "" },
@@ -105,6 +106,7 @@
       "memoria_episodio": "recording the episode in the show's archive",
       "divulgacao": "promoting the episode with your short bio, photo and handle"
     },
+    "draft_notice": "NOTICE: this consent text is a DRAFT (v0) under legal review and may change. If the final version changes anything, we will ask for your consent again.",
     "general_accept": "I have read the text above and agree to the use of my answers for these purposes.",
     "public_research_accept": "I understand that information I have made public myself will be consulted, always citing the source.",
     "divulgacao_accept": "I also allow my short bio, photo and handle to be used to promote the episode.",

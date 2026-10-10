@@ -76,15 +76,22 @@ manifesto prevalece.
    entre aspas busca a frase exata.
 7. **Alimentar a pauta:** `catalog -o catalogo.json` e passar em `pauta_tools.py build --catalog`.
    `suggest` lista o que retomar, com a regra e a evidência de cada sugestão.
-8. **Retenção:** `retention --dry-run` mostra intake e dossiê vencidos (`delete_after`, ou
-   `published_at` + `days_after_publish`); `--apply` elimina e guarda só o registro do
-   consentimento, sem identificação.
+8. **Retenção (ligada por padrão, ALQERA PRV-001):** todo comando da memória aplica sozinho o que
+   venceu (`delete_after`, ou `published_at` + `days_after_publish`, padrão 90 como no
+   consentimento; episódio nunca publicado vence 180 dias depois do envio do intake). Vencido, sai o
+   intake e o dossiê, o titular é redigido em research, pauta e script do episódio e fica só o
+   registro do consentimento, sem identificação. `retention --dry-run` mostra o que vence;
+   `auto_retention: false` no `memory.json` desliga e passa a só avisar.
 9. **Eliminar titular (*esquecer, LGPD art. 18, VI):** `forget --subject <id>` sem confirmação é
    só relatório. Com `--confirm <id> --decided-by <quem>` apaga intake, dossiê e claims do
    titular, redige as menções em todo arquivo do workspace, reconstrói o índice do zero e confere
    o resíduo (busca e varredura de bytes). Sai 1 se sobrar algo. O vault do usuário não é tocado:
    o relatório lista as notas de origem para ele apagar lá. Se o intake veio do Google Forms, rode
-   também `esquecerTitular('<intake_id>')` no Apps Script (apaga a linha, a resposta e as chaves).
+   também `esquecerTitular('<intake_id>')` no Apps Script, para cada id em `outros_intakes_do_titular`
+   também. Ele apaga a linha, a resposta, a linha ligada, o evento da agenda e as chaves, e devolve em
+   `pendencias_manuais` o que a API não alcança: e-mails em Enviados/Entrada do Gmail do host (com a
+   busca pronta), o histórico do WhatsApp no provedor e no aparelho e logs antigos. O host apaga
+   esses à mão. O log de execução não guarda e-mail.
 10. **Segundo cérebro:** `export-md --out <pasta>` gera uma nota por episódio com frontmatter
     (Obsidian/Logseq). `import-md --vault <pasta> --opt-in` traz notas do usuário como
     `origin=manager_material`; nota com `private: true` ou `podcast: false` é pulada.

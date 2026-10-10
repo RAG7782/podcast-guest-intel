@@ -43,6 +43,7 @@
       "wants_prepublication_review": { "title": "Quer ver o episódio antes de publicarmos?", "help": "" },
       "preferred_channel": { "title": "Canal preferido para falarmos com você", "help": "" },
       "contacts.email": { "title": "Seu e-mail", "help": "" },
+      "invite.token": { "title": "Código do convite", "help": "Já vem preenchido pelo link do convite que você recebeu por e-mail. Não altere. Se estiver vazio, responda mesmo assim: o programa confere com você antes de enviar qualquer coisa." },
       "contacts.whatsapp": { "title": "Seu WhatsApp", "help": "Opcional. Com código do país e DDD, ex.: +55 11 91234-5678." },
       "automation_consents": { "title": "Posso usar estes canais para te mandar o kit e os lembretes?", "help": "Marque só o que quiser. Nada marcado = nada enviado por aquele canal." },
       "image_voice": { "title": "Imagem e voz", "help": "" },
@@ -105,6 +106,7 @@
       "memoria_episodio": "registrar o episódio no arquivo do programa",
       "divulgacao": "divulgar o episódio com sua mini-bio, foto e @"
     },
+    "draft_notice": "AVISO: este texto de consentimento é um RASCUNHO (v0) em revisão jurídica e pode mudar. Se a versão final mudar algo, vamos pedir o seu aceite de novo.",
     "general_accept": "Li o texto acima e concordo com o uso das minhas respostas para essas finalidades.",
     "public_research_accept": "Estou ciente de que haverá consulta a informações que eu mesmo(a) tornei públicas, sempre com fonte indicada.",
     "divulgacao_accept": "Também autorizo usar minha mini-bio, foto e @ na divulgação do episódio.",

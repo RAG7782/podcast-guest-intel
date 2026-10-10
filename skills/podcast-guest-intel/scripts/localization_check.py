@@ -46,6 +46,27 @@ def consent_ok(rec, locale, replica=False):
     return not replica or all(rec.get(k) is True for k in ("specific", "highlighted", "sensitive"))
 
 
+def byok_refusal(intakes, target=None, no_guest=False):
+    """Motivo de recusa (str) ou None, ANTES de mandar áudio/falas do convidado a um provedor BYOK (PRV-004).
+
+    Exige o aceite translation_text (tradução/legendas, research/06 §3.3) de TODO intake informado:
+    concedido, não revogado e, na tradução, cobrindo o idioma-alvo. Sem intake, só com a declaração
+    explícita de que o áudio não tem convidado (`--sem-convidado`). A rota local (from-file, agent) não passa aqui.
+    ponytail: a transcrição usa o mesmo aceite de tradução; aceite próprio de transcrição se a revisão jurídica pedir.
+    """
+    if not intakes:
+        return None if no_guest else ("nenhum --intake informado; esperado o intake de cada convidado com o aceite"
+                                      " translation_text, ou --sem-convidado se o áudio não tem convidado")
+    bad = []
+    for intake_id, intake in intakes.items():
+        rec = (intake.get("localization_consents") or {}).get("translation_text")
+        live = bool(rec) and rec.get("granted") is True and not rec.get("revoked_at")
+        if not (consent_ok(rec, target) if target else live):
+            bad.append(intake_id)
+    return (f"sem aceite translation_text{' para ' + target if target else ''} concedido e não revogado: {bad}"
+            if bad else None)
+
+
 def replica_refusals(job, intakes):
     """Motivos de recusa de cada dubbing guest_replica. Vazio = liberado."""
     out = []

@@ -1,7 +1,7 @@
 {
   "name": "podcast-guest-intel",
   "displayName": "Podcast Guest Intel",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Prepara episódios de podcast com convidado: convite, dossiê com fontes, pauta e roteiro.",
   "author": {
     "name": "Renato Aparecido Gomes"

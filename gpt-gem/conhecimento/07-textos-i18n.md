@@ -46,6 +46,7 @@
       "wants_prepublication_review": { "title": "Would you like to see the episode before we publish?", "help": "" },
       "preferred_channel": { "title": "Preferred channel to reach you", "help": "" },
       "contacts.email": { "title": "Your email", "help": "" },
+      "invite.token": { "title": "Invitation code", "help": "Filled in by the link in the invitation email you received. Do not change it. If it is empty, submit anyway: the show will check with you before sending anything." },
       "contacts.whatsapp": { "title": "Your WhatsApp", "help": "Optional. With country code, e.g. +44 7700 900123." },
       "automation_consents": { "title": "May we use these channels to send you the kit and reminders?", "help": "Tick only what you want. Nothing ticked = nothing sent through that channel." },
       "image_voice": { "title": "Image and voice", "help": "" },
@@ -108,6 +109,7 @@
       "memoria_episodio": "recording the episode in the show's archive",
       "divulgacao": "promoting the episode with your short bio, photo and handle"
     },
+    "draft_notice": "NOTICE: this consent text is a DRAFT (v0) under legal review and may change. If the final version changes anything, we will ask for your consent again.",
     "general_accept": "I have read the text above and agree to the use of my answers for these purposes.",
     "public_research_accept": "I understand that information I have made public myself will be consulted, always citing the source.",
     "divulgacao_accept": "I also allow my short bio, photo and handle to be used to promote the episode.",
@@ -379,6 +381,10 @@
         "title": "[TODO-es] Your email",
         "help": ""
       },
+      "invite.token": {
+        "title": "Código de invitación",
+        "help": "Viene completado por el enlace de la invitación que recibiste por correo. No lo cambies. Si está vacío, envía igual: el programa lo confirmará contigo antes de enviar nada."
+      },
       "contacts.whatsapp": {
         "title": "[TODO-es] Your WhatsApp",
         "help": "[TODO-es] Optional. With country code, e.g. +44 7700 900123."
@@ -494,6 +500,7 @@
       "memoria_episodio": "[TODO-es] recording the episode in the show's archive",
       "divulgacao": "[TODO-es] promoting the episode with your short bio, photo and handle"
     },
+    "draft_notice": "[TODO-es] NOTICE: this consent text is a DRAFT (v0) under legal review and may change. If the final version changes anything, we will ask for your consent again.",
     "general_accept": "[TODO-es] I have read the text above and agree to the use of my answers for these purposes.",
     "public_research_accept": "[TODO-es] I understand that information I have made public myself will be consulted, always citing the source.",
     "divulgacao_accept": "[TODO-es] I also allow my short bio, photo and handle to be used to promote the episode.",
@@ -688,6 +695,7 @@
       "wants_prepublication_review": { "title": "Quer ver o episódio antes de publicarmos?", "help": "" },
       "preferred_channel": { "title": "Canal preferido para falarmos com você", "help": "" },
       "contacts.email": { "title": "Seu e-mail", "help": "" },
+      "invite.token": { "title": "Código do convite", "help": "Já vem preenchido pelo link do convite que você recebeu por e-mail. Não altere. Se estiver vazio, responda mesmo assim: o programa confere com você antes de enviar qualquer coisa." },
       "contacts.whatsapp": { "title": "Seu WhatsApp", "help": "Opcional. Com código do país e DDD, ex.: +55 11 91234-5678." },
       "automation_consents": { "title": "Posso usar estes canais para te mandar o kit e os lembretes?", "help": "Marque só o que quiser. Nada marcado = nada enviado por aquele canal." },
       "image_voice": { "title": "Imagem e voz", "help": "" },
@@ -750,6 +758,7 @@
       "memoria_episodio": "registrar o episódio no arquivo do programa",
       "divulgacao": "divulgar o episódio com sua mini-bio, foto e @"
     },
+    "draft_notice": "AVISO: este texto de consentimento é um RASCUNHO (v0) em revisão jurídica e pode mudar. Se a versão final mudar algo, vamos pedir o seu aceite de novo.",
     "general_accept": "Li o texto acima e concordo com o uso das minhas respostas para essas finalidades.",
     "public_research_accept": "Estou ciente de que haverá consulta a informações que eu mesmo(a) tornei públicas, sempre com fonte indicada.",
     "divulgacao_accept": "Também autorizo usar minha mini-bio, foto e @ na divulgação do episódio.",
@@ -1021,6 +1030,10 @@
         "title": "[TODO-zh] Your email",
         "help": ""
       },
+      "invite.token": {
+        "title": "邀请码",
+        "help": "已由您收到的邀请邮件中的链接自动填写，请勿修改。如果为空，也请照常提交：节目方会先与您确认，再发送任何内容。"
+      },
       "contacts.whatsapp": {
         "title": "[TODO-zh] Your WhatsApp",
         "help": "[TODO-zh] Optional. With country code, e.g. +44 7700 900123."
@@ -1141,6 +1154,7 @@
       "memoria_episodio": "[TODO-zh] recording the episode in the show's archive",
       "divulgacao": "[TODO-zh] promoting the episode with your short bio, photo and handle"
     },
+    "draft_notice": "[TODO-zh] NOTICE: this consent text is a DRAFT (v0) under legal review and may change. If the final version changes anything, we will ask for your consent again.",
     "general_accept": "[TODO-zh] I have read the text above and agree to the use of my answers for these purposes.",
     "public_research_accept": "[TODO-zh] I understand that information I have made public myself will be consulted, always citing the source.",
     "divulgacao_accept": "[TODO-zh] I also allow my short bio, photo and handle to be used to promote the episode.",

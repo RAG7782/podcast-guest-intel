@@ -3,11 +3,13 @@
 
 Subcomandos:
   transcribe --provider from-file|assemblyai|elevenlabs ENTRADA --locale L [--start S --end S]
-             [--key-env NOME] [--keyterms GLOSSARIO] -o TRANSCRICAO.json
+             [--key-env NOME] [--keyterms GLOSSARIO] [--intake ARQ ... | --sem-convidado] -o TRANSCRICAO.json
+             assemblyai/elevenlabs: recusa (exit 2) ANTES de subir o áudio sem o aceite translation_text.
              from-file aceita VTT/SRT/JSON já existentes (ex.: auto-legenda do YouTube): custo zero.
   translate  TRANSCRICAO --target L --provider agent|deepl|google|openai [--glossary G] -o SAIDA.json
              agent: grava um PACOTE (segmentos + regras do glossário) para o LLM do harness preencher
              translated_text; depois `translate --merge PACOTE -o SAIDA`. deepl: BYOK (DEEPL_API_KEY).
+             BYOK exige --intake com aceite translation_text do idioma (ou --sem-convidado), antes do HTTP.
   subtitles  TRADUZIDA [--max-chars N --max-lines N --max-cps N] (padrão pelo locale: 42/2/17; zh 16/2/9) [--job J] -o PREFIXO  → PREFIXO.srt/.vtt
   shownotes  protect|restore|check  (links e timestamps viram ⟦n⟧ antes de traduzir e voltam depois)
   disclosure --locale L --kind subtitles|dub_generic|dub_replica --source-locale L [--show NOME]
@@ -266,7 +268,17 @@ def load_intakes(paths):
     return {d.get("intake_id"): d for d in docs}
 
 
+def require_byok_consent(args, target=None):
+    """Recusa (ConsentRefusal) antes de qualquer chamada BYOK sem aceite do convidado (ALQERA PRV-004)."""
+    import localization_check as lc
+    why = lc.byok_refusal(load_intakes(args.intake), target, args.sem_convidado)
+    if why:
+        raise lc.ConsentRefusal(f"{args.provider}: {why}; nada foi enviado ao provedor")
+
+
 def cmd_loc_transcribe(args):
+    if args.provider != "from-file":
+        require_byok_consent(args)
     if args.provider == "from-file":
         doc = lio.transcript_from_file(args.entrada, args.locale, args.start, args.end)
     elif args.provider == "assemblyai":
@@ -285,6 +297,7 @@ def cmd_loc_translate(args):
     doc, glossary = load_json(args.transcricao), load_glossary(args.glossary)
     if args.provider == "agent":
         return dump_loc(agent_packet(doc, args.target, glossary), args.output) or 0
+    require_byok_consent(args, args.target)
     kw = {"key_env": args.key_env or "DEEPL_API_KEY", "host": args.deepl_host} if args.provider == "deepl" else {}
     out = provider_translate(doc, args.target, args.provider, **kw)
     cov = glossary_coverage(doc["segments"], out["segments"], glossary, args.target)
@@ -376,6 +389,8 @@ def build_parser():
     t.add_argument("--end", type=float)
     for name in ("--key-env", "--keyterms", "-o"):
         t.add_argument(name, dest={"-o": "output"}.get(name))
+    t.add_argument("--intake", action="append", help="intake do convidado (aceite translation_text); BYOK exige")
+    t.add_argument("--sem-convidado", action="store_true", help="declara que o áudio não tem convidado")
     tr = sub.add_parser("translate")
     tr.add_argument("transcricao", nargs="?")
     tr.add_argument("--target")
@@ -383,6 +398,8 @@ def build_parser():
     tr.add_argument("--deepl-host", choices=("pro", "free"), default="pro")
     for name in ("--glossary", "--merge", "--key-env", "-o"):
         tr.add_argument(name, dest={"-o": "output"}.get(name))
+    tr.add_argument("--intake", action="append", help="intake do convidado (aceite translation_text do idioma); BYOK exige")
+    tr.add_argument("--sem-convidado", action="store_true", help="declara que as falas não têm convidado")
     s = sub.add_parser("subtitles")
     s.add_argument("traduzida")
     s.add_argument("--max-chars", type=int, default=None)
@@ -418,8 +435,12 @@ def main(argv=None):
     handlers = {"transcribe": cmd_loc_transcribe, "translate": cmd_loc_translate, "subtitles": cmd_loc_subtitles,
                 "shownotes": cmd_loc_shownotes, "disclosure": cmd_loc_disclosure, "dub-plan": cmd_loc_dub_plan,
                 "check": cmd_loc_check}
+    import localization_check as lc
     try:
         return handlers[args.cmd](args)
+    except lc.ConsentRefusal as exc:   # aceite ausente antes do BYOK (PRV-004): nada saiu da máquina
+        print(f"RECUSADO (aceite do convidado, LGPD): {exc}", file=sys.stderr)
+        return 2
     except lio.LocalizationError as exc:
         print(f"{args.cmd}: {exc}", file=sys.stderr)
         return 1
