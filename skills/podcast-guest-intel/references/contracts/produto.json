@@ -2,6 +2,7 @@
   "_comentario": "Fonte única dos endereços do produto para o pacote local (scripts/produto.py) e o Apps Script (bundle.gen.js, gerado por integrations/google-forms/build.js). Mudou o domínio: troque só aqui e regenere (node integrations/google-forms/build.js; python3 scripts/build_plugin.py).",
   "servidor_mcp": "https://api.antecena.artesanatodigital.com/mcp",
   "precos": "https://antecena.artesanatodigital.com/precos/",
+  "contato": "contato@artesanatodigital.com",
   "user_agent": "PodFacil-pacote (+https://github.com/RAG7782/podcast-guest-intel)",
   "licenca_revalidar_horas": 1,
   "licenca_offline_horas": 72

@@ -210,3 +210,6 @@ Configurar a chave do plano pago (vem no e-mail de compra):
    `PODFACIL_LICENSE_KEY` (nunca no código) e `PODFACIL_DEVICE_ID` com o mesmo valor do item 2.
 
 Sem chave, o recurso pago para e mostra onde assinar: https://antecena.artesanatodigital.com/precos/
+
+Estúdios, produtoras e redes: fale conosco em contato@artesanatodigital.com (proposta para vários programas
+ou vários hosts; não há plano de equipe em autosserviço).

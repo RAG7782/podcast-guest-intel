@@ -11,7 +11,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from paths import PRODUTO  # noqa: E402
 
-CHAVES = ("servidor_mcp", "precos", "user_agent", "licenca_revalidar_horas", "licenca_offline_horas")
+CHAVES = ("servidor_mcp", "precos", "contato", "user_agent", "licenca_revalidar_horas", "licenca_offline_horas")
 
 
 def carregar(path=PRODUTO):
@@ -29,6 +29,7 @@ def carregar(path=PRODUTO):
 _DOC = carregar()
 SERVER_URL = os.environ.get("PODFACIL_SERVER_URL") or _DOC["servidor_mcp"]
 PRICING_URL = _DOC["precos"]
+CONTACT_EMAIL = _DOC["contato"]   # = site/config.js contact.email (site/tests/test_site.py confere)
 USER_AGENT = _DOC["user_agent"]
 REVALIDAR_H = float(_DOC["licenca_revalidar_horas"])
 OFFLINE_H = float(_DOC["licenca_offline_horas"])

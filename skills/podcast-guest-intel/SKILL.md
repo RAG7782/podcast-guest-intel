@@ -4,7 +4,7 @@ description: "Prepara episódios de podcast com convidado, do convite ao roteiro
 license: Apache-2.0
 compatibility: "Python 3.10+ com PyYAML (roteiro e check da pauta) e jsonschema (validação); recomendado uv (uv run --with pyyaml --with jsonschema python scripts/...). Busca web do harness para o dossiê e a pauta. Plano pago: chave de licença (scripts/licenca.py) e o conector MCP do PodFácil."
 metadata:
-  version: "1.1.0"
+  version: "1.1.1"
   source: "https://github.com/RAG7782/podcast-guest-intel"
 ---
 
@@ -100,6 +100,9 @@ Configurar a chave do plano pago (vem no e-mail de compra):
    `PODFACIL_LICENSE_KEY` (nunca no código) e `PODFACIL_DEVICE_ID` com o mesmo valor do item 2.
 
 Sem chave, o recurso pago para e mostra onde assinar: https://antecena.artesanatodigital.com/precos/
+
+Estúdios, produtoras e redes: fale conosco em contato@artesanatodigital.com (proposta para vários programas
+ou vários hosts; não há plano de equipe em autosserviço).
 
 ## Se o servidor não responder
 
