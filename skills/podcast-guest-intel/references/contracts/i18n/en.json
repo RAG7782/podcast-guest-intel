@@ -201,6 +201,7 @@
     "footer_controller": "Sent by: {{controller.name}}, data controller. Contact: {{controller.contact}}.",
     "footer_purpose": "You received this invitation because {{signature.name}} suggested you as a guest. We use your name and e-mail only for this invitation and to organize the interview; the guest kit arrives after you answer the form.",
     "footer_optout": "Don't want to hear from {{show.name}} again? Reply to this e-mail with the word STOP and we will not send anything else.",
+    "footer_brand": "Prepared with PodFácil",
     "ics_description": "Official invitation from {{show.name}}. Guest form: {{form_url}}"
   },
   "decision": {

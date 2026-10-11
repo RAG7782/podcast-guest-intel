@@ -28,7 +28,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from dossier_tools import load_json, load_validator, split_envelope as split_dossier  # noqa: E402
 from pauta_tools import TRUNKS, now_iso, split_pauta  # noqa: E402
 
-from paths import FORMATS, MODES  # noqa: E402
+from paths import FORMATS, MODES, PACKAGED, load_yaml  # noqa: E402
 PACING = {"lento": (3, 90), "moderado": (4, 60), "rapido": (5, 40)}  # (itens, abertura em s)
 DEPTH_BY_PACING = {"lento": "profunda", "moderado": "media", "rapido": "superficie"}
 QUESTIONS_BY_DEPTH = {"superficie": 1, "media": 2, "profunda": 3}
@@ -40,15 +40,22 @@ GATE_CODE = {"vetado": ("R-ROTEIRO-GATE-VETADO", "alta"), "aprovado_com_ajustes"
 
 # ── modo ──────────────────────────────────────────────────────────────────
 
+# O pacote local traz só o modo grátis em approach-modes.yaml (build_plugin.py filtra); os outros são servidos
+# pelo MCP. Mensagem só no layout de pacote: no repo, modo ausente é erro de digitação.
+MODO_PAGO = ("approach_mode {modo!r} é do plano pago e não vem no pacote local | esperado: um de {livres} aqui, ou a"
+             " tool `roteiro_modos` do MCP do PodFácil com a chave de licença para os 7 modos")
+
+
 def load_modes():
-    import yaml
-    return {m.get("id"): m for m in yaml.safe_load(MODES.read_text(encoding="utf-8")).get("modes") or []}
+    return {m.get("id"): m for m in load_yaml(MODES).get("modes") or []}
 
 
 def resolve_mode(mode_id, modes=None):
     """Flags efetivas com extends resolvido. Modo inexistente para; nunca cai num padrão silencioso."""
     modes, chain, cur = modes or load_modes(), [], mode_id
     while cur:
+        if cur not in modes and PACKAGED:
+            raise ValueError(MODO_PAGO.format(modo=cur, livres=sorted(modes)))
         if cur not in modes or cur in chain:
             raise ValueError(f"approach_mode {cur!r} {'não existe' if cur not in modes else 'em ciclo de extends'}"
                              f" | esperado: um de {sorted(modes)}")
@@ -66,8 +73,7 @@ def resolve_mode(mode_id, modes=None):
 def target_minutes(fmt, override):
     if override:
         return int(override)
-    import yaml
-    spec = (yaml.safe_load(FORMATS.read_text(encoding="utf-8")) or {}).get(fmt) or {}
+    spec = (load_yaml(FORMATS) or {}).get(fmt) or {}
     hit = re.search(r"\d+", str(spec.get("duration", "")))
     return int(hit.group()) if hit else 45
 

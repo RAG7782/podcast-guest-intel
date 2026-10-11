@@ -14,13 +14,8 @@ Guarda de lote: mais de 20 chamadas de fonte numa execução exige --confirm-bat
 (manifesto HPF-3 da pauta). O plano é contado ANTES de disparar a primeira chamada.
 
 Registro: references/contracts/trend-sources.yaml (YAML exige pyyaml; JSON roda só com stdlib).
-X API v2 (conferido em 2026-10-09):
-  busca  GET https://api.x.com/2/tweets/search/recent  (Bearer app-only; max_results 10-100;
-         janela de 7 dias; 450 req/15 min por app) — https://docs.x.com/x-api/posts/recent-search
-         e https://docs.x.com/x-api/fundamentals/rate-limits
-  custo  pay-per-use, US$ 0,005 por post lido — https://docs.x.com/x-api/getting-started/pricing
-  verify GET https://api.x.com/2/usage/tweets?days=1 (Bearer; não lê posts) —
-         https://docs.x.com/x-api/usage/get-usage
+Tendências do X (BYOK): adaptador em scripts/trends_x.py (plano pago: roda no servidor do PodFácil, fora do pacote), que fica no repositório e no servidor
+(plano pago, tool MCP `trends_collect`); o pacote local não o traz, e aqui a fonte X recusa com o caminho.
 """
 import argparse
 import json
@@ -43,8 +38,6 @@ BATCH_LIMIT = 20
 HT_NS = "{https://trends.google.com/trending/rss}"
 TRENDS_URL = "https://trends.google.com/trending/rss?geo={geo}"
 NEWS_URL = "https://news.google.com/rss/search?q={query}&hl={hl}&gl={geo}&ceid={geo}:{ceid_lang}"
-X_SEARCH_URL = "https://api.x.com/2/tweets/search/recent"
-X_USAGE_URL = "https://api.x.com/2/usage/tweets?days=1"
 CEID_LANG = {"pt-BR": "pt-419", "pt": "pt-419", "en": "en", "en-US": "en"}
 
 
@@ -164,17 +157,6 @@ def parse_news_rss(xml_bytes, source="google_news_rss"):
     return out
 
 
-def parse_x_search(payload, source="x"):
-    """X API v2 recent search -> itens; signal = curtidas+reposts (public_metrics)."""
-    out = []
-    for post in payload.get("data") or []:
-        metrics = post.get("public_metrics") or {}
-        signal = metrics.get("like_count", 0) + metrics.get("retweet_count", 0)
-        out.append(normalized(source, post.get("text"), f"https://x.com/i/web/status/{post.get('id')}",
-                              post.get("created_at"), str(signal)))
-    return out
-
-
 def normalized(source, title, url, published, signal):
     return {"source": source, "title": " ".join((title or "").split()), "url": url,
             "published_at": iso_date(published), "signal": signal}
@@ -209,13 +191,30 @@ def bearer_from_env(source, env=None):
     return value
 
 
+X_PAGO = ("a coleta do X (BYOK) é do plano pago e não vem no pacote local | esperado: tool `trends_collect`"
+          " do MCP do PodFácil com a chave de licença e a sua chave do X no header X-Byok-X; sem ela, use as"
+          " fontes Google Trends/News RSS (fonte x com enabled=false)")
+
+
+def x_adapter():
+    """scripts/trends_x.py (plano pago: roda no servidor do PodFácil, fora do pacote): presente no repo e no servidor; ausente no pacote local (gate real, não um if)."""
+    try:
+        import trends_x
+    except ImportError as exc:
+        raise TrendError(X_PAGO) from exc
+    return trends_x
+
+
 def x_recent_search(query, source, budget=None, fetch=http_get, env=None, max_results=10):
-    params = urllib.parse.urlencode({"query": query, "max_results": max_results,
-                                     "post.fields": "created_at,public_metrics"})
-    url = f"{X_SEARCH_URL}?{params}"
-    auth = {"Authorization": "Bearer " + bearer_from_env(source, env)}
-    body = expect_200(*fetch(url, auth, budget), url)
-    return parse_x_search(json.loads(body))
+    return x_adapter().recent_search(query, source, budget, fetch, env, max_results)
+
+
+def verify_credential(source, fetch=http_get, env=None, now=None):
+    """Chamada mínima; devolve {status, verified_at, verification_note} sem expor o valor."""
+    if source.get("id") != "x":
+        raise TrendError(f"verify para {source.get('id')!r} não disponível nesta versão"
+                         f" | esperado: uma de {AVAILABLE_BYOK} (as demais redes não têm adaptador)")
+    return x_adapter().verify_usage(source, fetch, env, now)
 
 
 def byok_unavailable(name, reason):
@@ -235,28 +234,6 @@ linkedin_search = byok_unavailable("linkedin", "coleta automatizada proibida no 
 youtube_search = byok_unavailable("youtube", "adaptador da YouTube Data API v3 ainda não escrito")
 BYOK_COLLECTORS = {"x": x_recent_search, "tiktok": tiktok_search, "reddit": reddit_search,
                    "linkedin": linkedin_search, "youtube": youtube_search}
-
-
-def classify_verification(status, body):
-    if status == 200:
-        return "valid", "chamada mínima aceita (HTTP 200)"
-    if status == 401:
-        kind = "expired" if b"expired" in body.lower() else "invalid"
-        return kind, f"HTTP 401 ({kind})"
-    if status == 403:
-        return "invalid", "HTTP 403: chave sem acesso ao endpoint ou ao plano"
-    raise TrendError(f"verificação inconclusiva: HTTP {status} | esperado: 200, 401 ou 403")
-
-
-def verify_credential(source, fetch=http_get, env=None, now=None):
-    """Chamada mínima; devolve {status, verified_at, verification_note} sem expor o valor."""
-    if source.get("id") != "x":
-        raise TrendError(f"verify para {source.get('id')!r} não disponível nesta versão"
-                         f" | esperado: uma de {AVAILABLE_BYOK} (as demais redes não têm adaptador)")
-    auth = {"Authorization": "Bearer " + bearer_from_env(source, env)}
-    status, note = classify_verification(*fetch(X_USAGE_URL, auth, None))
-    stamp = (now or datetime.now(timezone.utc)).strftime("%Y-%m-%dT%H:%M:%SZ")
-    return {"status": status, "verified_at": stamp, "verification_note": note}
 
 
 # ── registro e coleta ─────────────────────────────────────────────────────

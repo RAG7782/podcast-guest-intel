@@ -1,7 +1,7 @@
 {
   "name": "guest-intel",
   "interface": {
-    "displayName": "Podcast Guest Intel"
+    "displayName": "PodFácil"
   },
   "plugins": [
     {

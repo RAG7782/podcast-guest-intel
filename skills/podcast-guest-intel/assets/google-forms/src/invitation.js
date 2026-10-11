@@ -117,11 +117,21 @@ function placeView(show, invitee) {
   };
 }
 
-/** Textos do convite já escolhidos (tom e variante), ainda como template. */
-function invitationTemplates(inv, brand, variant) {
+/** Rodapé de marca pelo TIER: só `branded === false` (pago, decidido pelo servidor) tira a marca (FLUXOS Q7). */
+function isBranded(opts) {
+  return !(opts && opts.branded === false);
+}
+
+/** Textos do convite já escolhidos (tom, variante e marca), ainda como template. */
+function invitationTemplates(inv, brand, variant, branded) {
   var src = Object.assign({}, inv, { intro: inv.intro[brand.tone], cta_intro: inv.cta_intro[variant] });
   if (src.intro === undefined) throw new Error('invitation_tone=' + JSON.stringify(brand.tone) + '; esperado um de ' + JSON.stringify(Object.keys(inv.intro)));
   if (src.cta_intro === undefined) throw new Error('variante=' + JSON.stringify(variant) + '; esperado um de ' + JSON.stringify(Object.keys(inv.cta_intro)));
+  // Free leva "Preparado com PodFácil" em qualquer variante; o pago sai sem marca (FLUXOS Q7)
+  if (branded && typeof inv.footer_brand !== 'string') {
+    throw new Error('i18n.invitation.footer_brand=' + JSON.stringify(inv.footer_brand) + '; esperado texto do rodapé do Free');
+  }
+  src.footer_brand = branded ? inv.footer_brand : '';
   return src;
 }
 
@@ -131,7 +141,7 @@ function renderMap(src, view) {
   return out;
 }
 
-/** opts: {formUrl, variant}. → {view (texto puro, sem escape), html (view escapada), brand}. */
+/** opts: {formUrl, variant, branded}. → {view (texto puro, sem escape), html (view escapada), brand}. */
 function invitationView(show, invitee, i18n, opts) {
   var brand = resolveBrand(show), formUrl = requireHttps(opts && opts.formUrl, 'formUrl');
   if (!i18n.invitation) throw new Error('i18n ' + i18n.locale + ' sem bloco "invitation"; rode build.js');
@@ -142,7 +152,7 @@ function invitationView(show, invitee, i18n, opts) {
     scheduled_text: formatScheduled(invitee.scheduled_at, i18n.locale), form_url: formUrl,
     links_text: brand.links.map(function (l) { return l.label + ': ' + l.url; })
   });
-  var src = invitationTemplates(i18n.invitation, brand, opts.variant);
+  var src = invitationTemplates(i18n.invitation, brand, opts.variant, isBranded(opts));
   var html = escapeDeep(view);
   view.t = renderMap(src, view);
   html.t = renderMap(escapeDeep(src), html);
@@ -229,7 +239,8 @@ function footerSection(v, c) {
   // rodapé com a MESMA cor de texto (cinza claro reprovaria o contraste AA)
   return '<tr><td style="padding:16px 24px 24px;font-size:12px;line-height:1.5;color:' + c.text + ';border-top:1px solid ' + c.primary + ';">' +
     '<p style="margin:0 0 6px;">' + v.t.footer_controller + '</p><p style="margin:0 0 6px;">' + v.t.footer_purpose + '</p>' +
-    '<p style="margin:0;">' + v.t.footer_optout + '</p></td></tr>';
+    '<p style="margin:0;">' + v.t.footer_optout + '</p>' +
+    (v.t.footer_brand ? '<p style="margin:6px 0 0;">' + v.t.footer_brand + '</p>' : '') + '</td></tr>';
 }
 
 /** HTML do e-mail. logoSrc: URL https ou "cid:showlogo" (logo do Drive como imagem embutida); null = nome em texto. */
@@ -287,7 +298,7 @@ function buildInvitationIcs(show, invitee, built, nowMs) {
 }
 
 /**
- * Tudo que o e-mail precisa. opts: {formUrl, variant, nowMs}.
+ * Tudo que o e-mail precisa. opts: {formUrl, variant, nowMs, branded} (branded=false só no pago; padrão: com marca).
  * → {to, subject, text, html, ics, logo: {cid, drive_file_id}|null, sender}
  */
 function buildInvitationEmail(template, show, invitee, i18n, opts) {
@@ -304,5 +315,5 @@ function buildInvitationEmail(template, show, invitee, i18n, opts) {
 if (typeof module !== 'undefined') {
   module.exports = { contrastRatio: contrastRatio, resolveBrand: resolveBrand, normalizeInvitee: normalizeInvitee,
     invitationKey: invitationKey, invitationView: invitationView, escapeDeep: escapeDeep, LOGO_CID: LOGO_CID,
-    buildInvitationEmail: buildInvitationEmail, foldIcsLine: foldIcsLine, icsText: icsText };
+    buildInvitationEmail: buildInvitationEmail, isBranded: isBranded, foldIcsLine: foldIcsLine, icsText: icsText };
 }

@@ -251,13 +251,21 @@ def check(name, data, schemas, registry):
     return errs + CROSS_RULES.get(name, lambda _d: [])(data)
 
 
-def targets():
-    """(caminho, schema, sentido) para cada alvo; schema=None => pulado."""
+def fixture_targets():
     expected = json.loads((FIXTURES / "expected-failures.json").read_text(encoding="utf-8"))
     for path in sorted((FIXTURES / "valid").glob("*.*")):
         yield path, path.name.split("--")[0], "valid", None
     for path in sorted((FIXTURES / "invalid").glob("*.*")):
         yield path, path.name.split("--")[0], "invalid", expected.get(path.name)
+
+
+def targets():
+    """(caminho, schema, sentido) para cada alvo; schema=None => pulado. O pacote do plugin não leva as fixtures
+    (Q13): lá o CLI valida só os registros, e o aviso diz isso em vez de quebrar."""
+    if (FIXTURES / "expected-failures.json").is_file():
+        yield from fixture_targets()
+    else:
+        print(f"AVISO  {FIXTURES.relative_to(ROOT)} ausente (pacote do plugin): validando só os registros")
     yield CONTRACTS / "approach-modes.yaml", "approach-modes", "valid", None
     yield CONTRACTS / "trend-sources.yaml", "trend-sources", "valid", None
     for path in sorted(INSTANCES.glob("*/*.json")):

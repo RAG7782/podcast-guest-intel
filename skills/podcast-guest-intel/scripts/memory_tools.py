@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Memória / centro de comando do show (F6, task *memoria). Plugin local, sem servidor.
+"""Memória / centro de comando do show (F6, task *memoria). Roda local: os dados ficam no computador do usuário.
 
 Arquivos = fonte da verdade; índice SQLite FTS5 = cache (`reindex` reconstrói). A mesma lógica
 (memory_store/index/ops/privacy/md) é a que o MCP remoto/SaaS vai expor depois.
@@ -24,6 +24,10 @@ Arquivos = fonte da verdade; índice SQLite FTS5 = cache (`reindex` reconstrói)
 `add` de artefato JSON, `status --decision` e `import-catalog` validam contra references/contracts/ (jsonschema
 + pyyaml): uv run --no-project -q --with jsonschema --with pyyaml python scripts/memory_tools.py ...
 search/catalog/suggest/export-md/import-md/forget/retention/reindex são stdlib.
+
+Plano pago (capacidade memoria-centro-de-comando): os comandos conferem a chave de licença
+(scripts/licenca.py). forget, retention e export-md ficam livres: apagar a pedido do titular, cumprir a
+retenção prometida e levar os próprios dados embora não dependem de assinatura (LGPD arts. 16 e 18).
 """
 import argparse
 import json
@@ -37,6 +41,7 @@ import memory_md as md  # noqa: E402
 import memory_ops as ops  # noqa: E402
 import memory_privacy as priv  # noqa: E402
 import memory_store as ms  # noqa: E402
+import licenca  # noqa: E402
 
 
 def emit(obj, as_json=True):
@@ -277,6 +282,7 @@ def build_parser():
 
 
 AUTO_RETENTION_SKIP = ("init", "retention", "forget")
+LICENSE_FREE = ("forget", "retention", "export-md")   # dever legal e portabilidade: nunca atrás da licença
 
 
 def auto_retention(args):
@@ -298,7 +304,9 @@ def auto_retention(args):
 def main(argv=None):
     args = build_parser().parse_args(argv)
     try:
-        auto_retention(args)
+        auto_retention(args)   # antes do gate: a retenção prometida roda mesmo sem licença
+        if args.cmd not in LICENSE_FREE:
+            licenca.exigir("memoria-centro-de-comando")
         return args.func(args) or 0
     except ms.MemoryError_ as exc:
         print(f"ERRO: {exc}", file=sys.stderr)

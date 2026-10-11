@@ -146,7 +146,9 @@ function onFormSubmit(e) {
   var rawGone = res.dropped.some(function (d) { return SENSITIVE_DROPS.indexOf(d.field) >= 0; });
   if (rawGone) discardRaw_(e.response, intake);
   if (!policy.invited || policy.optedOut) return holdSubmission_(e.response, intake, res, policy, store, rawGone);
-  var results = runActions(planSubmitActions(intake, show, policy), executors_(show, intake, i18n), store);
+  // plano pago: sem licença, só o aviso ao dono e o registro saem (licenca.js)
+  var results = automacoesLiberadas_() ? runActions(planSubmitActions(intake, show, policy), executors_(show, intake, i18n), store)
+    : [semLicencaResultado_(intake.intake_id)];
   var notify = { key: intake.intake_id + ':owner:notify', channel: 'owner', kind: 'notify', results: results, dropped: res.dropped };
   results = results.concat(runActions([notify], executors_(show, intake, i18n), store));
   if (store.claim(intake.intake_id + ':record')) {
@@ -160,8 +162,9 @@ function onFormSubmit(e) {
 /** Gatilho diário: lembrete na véspera (D-1) para quem consentiu no canal. */
 function lembreteDiario() {
   var show = loadShow_(), meta = loadMeta_(), store = store_(), tz = tzOffset_(), now = Date.now();
+  retencaoDiaria_(now);   // M-04: primeiro e isolada; cota do MailApp ou passo abaixo não trava a retenção
   var i18n = selectLocale(BUNDLE, meta.locale, allowUnreviewed_());
-  var rows = intakeSheet_().getDataRange().getValues().slice(1);
+  var rows = automacoesLiberadas_() ? intakeSheet_().getDataRange().getValues().slice(1) : [];   // D-1 é pago
   var all = [];
   rows.forEach(function (row) {
     var intake;
@@ -179,9 +182,18 @@ function lembreteDiario() {
   sendHeldDigest_();
   expireHeldRows_(now);
   expireInvites_(now);
-  // retenção prometida no consentimento: LIGADA por padrão (ALQERA PRV-001); só 'false' desliga
-  if (props_().getProperty('RETENCAO_AUTOMATICA') !== 'false') aplicarRetencao(now);
   return all;
+}
+
+/** Retenção prometida no consentimento: LIGADA por padrão (ALQERA PRV-001); só 'false' desliga. Nunca pede licença. */
+function retencaoDiaria_(now) {
+  if (props_().getProperty('RETENCAO_AUTOMATICA') === 'false') return null;
+  try {
+    return aplicarRetencao(now);
+  } catch (err) {
+    console.error(maskEmails_('retenção: falhou antes de começar (' + err.message + '); roda de novo amanhã'));
+    return null;
+  }
 }
 
 // ---------- Envios retidos (ALQERA SEC-004, Codex #2): aviso só agregado, teto de linhas e prazo curto ----------
@@ -208,8 +220,10 @@ function sendHeldDigest_() {
 function expireHeldRows_(nowMs) {
   var limit = nowMs - HELD_RETENTION_DAYS * 86400000;
   intakeSheet_().getDataRange().getValues().slice(1).filter(function (row) {
-    var held = String(row[3] || '').indexOf('"status":"held"') >= 0, it = {};
-    try { it = JSON.parse(row[2]); } catch (err) { return false; }   // ilegível: a retenção geral cuida
+    var held = String(row[3] || '').indexOf('"status":"held"') >= 0;
+    try { JSON.parse(row[2]); } catch (err) {   // B-01: ilegível não escapa do prazo curto de retido
+      console.error('retido ' + JSON.stringify(row[0]) + ' com JSON ilegível (' + err.message + '); vale o prazo pela coluna B');
+    }
     return held && Date.parse(row[1]) < limit && !store_().has(row[0] + ':admitted');
   }).forEach(function (row) { esquecerTitular(row[0]); });
 }
@@ -238,7 +252,9 @@ function confirmarIntake(intakeId) {
   var i18n = selectLocale(BUNDLE, meta.locale, allowUnreviewed_());
   markInvited_(intake.contacts.email, 'confirmarIntake');
   store_().set(intakeId + ':admitted', 'confirmarIntake');   // libera o D-1 e tira do prazo curto de retido
-  var results = runActions(planSubmitActions(intake, show, guestPolicy_(intake.contacts.email)), executors_(show, intake, i18n), store_());
+  var results = automacoesLiberadas_()
+    ? runActions(planSubmitActions(intake, show, guestPolicy_(intake.contacts.email)), executors_(show, intake, i18n), store_())
+    : [semLicencaResultado_(intakeId)];
   logErrors_(results);
   return results;
 }
@@ -444,5 +460,21 @@ function aplicarRetencao(nowMs) {
     if (isNaN(when)) when = Date.parse(row[1]);
     if (when < limit) expired.push(row[0]);
   });
-  return expired.map(esquecerTitular);
+  return esquecerVencidos_(expired);
+}
+
+/** M-04: cada titular num try próprio; uma linha que falha não aborta as seguintes. {expirados, apagados, falhas}. */
+function esquecerVencidos_(ids) {
+  var report = { expirados: ids.length, apagados: 0, falhas: [] };
+  ids.forEach(function (id) {
+    try {
+      esquecerTitular(id);
+      report.apagados++;
+    } catch (err) {
+      report.falhas.push({ intake_id: id, erro: maskEmails_(err.message) });
+      console.error(maskEmails_('retenção: esquecerTitular(' + JSON.stringify(id) + ') falhou: ' + err.message));
+    }
+  });
+  console.log('retenção: ' + JSON.stringify({ expirados: report.expirados, apagados: report.apagados, falhas: report.falhas.length }));
+  return report;
 }

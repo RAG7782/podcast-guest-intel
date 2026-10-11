@@ -55,6 +55,9 @@ Este bloco de comentário é removido na renderização.
 {{t.footer_controller}}
 {{t.footer_purpose}}
 {{t.footer_optout}}
+{{#t.footer_brand}}
+{{t.footer_brand}}
+{{/t.footer_brand}}
 
 
 ## guest-kit.md

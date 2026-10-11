@@ -17,10 +17,22 @@ CONFIG = ROOT / ("assets/config" if PACKAGED else "squads/podcast-production/con
 I18N = CONTRACTS / "i18n"
 MODES = CONTRACTS / "approach-modes.yaml"
 TREND_SOURCES = CONTRACTS / "trend-sources.yaml"
+PRODUTO = CONTRACTS / "produto.json"   # endereços do servidor e da página de preços (scripts/produto.py)
 FORMATS = CONFIG / "formats.yaml"
 VALIDATOR = ROOT / "scripts" / "validate-contracts.py"
 INSTANCES = ROOT / "instances"   # dados do usuário: só no repo, pode não existir
-REQUIRED = (CONTRACTS, I18N, I18N / "pt-BR.json", I18N / "en.json", MODES, TREND_SOURCES, FORMATS, VALIDATOR)
+REQUIRED = (CONTRACTS, I18N, I18N / "pt-BR.json", I18N / "en.json", MODES, TREND_SOURCES, PRODUTO, FORMATS, VALIDATOR)
+
+
+def load_yaml(path):
+    """Dado YAML do pacote (modos, formatos). Sem PyYAML, para com o jeito de instalar, não com traceback (A-05)."""
+    try:
+        import yaml
+    except ImportError as exc:
+        raise SystemExit(f"{Path(path).name}: é YAML e o PyYAML não está instalado | esperado: rodar com"
+                         " `uv run --with pyyaml python scripts/<arquivo>.py ...` (recomendado) ou"
+                         " instalar com `python3 -m pip install pyyaml`") from exc
+    return yaml.safe_load(Path(path).read_text(encoding="utf-8"))
 
 
 def missing_data():

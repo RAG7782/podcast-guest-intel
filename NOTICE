@@ -4,7 +4,8 @@ Copyright 2026 Renato Aparecido Gomes
 This product is licensed under the Apache License, Version 2.0 (see LICENSE).
 Distributed at https://github.com/RAG7782/podcast-guest-intel. Generated from the author's development repository (squad, contracts/, scripts/), which is not public.
 
-Commercial add-ons (open-core paid layer: hosted MCP, automations, memory server) are
-distributed separately under their own EULA and are NOT part of this package. Capabilities
-marked `tier: paid` in references/capabilities.json describe that layer; they are not unlocked
-by anything in this package.
+Paid plan (open core): capabilities marked `tier: paid` in references/capabilities.json either run on
+the hosted MCP server (their code is NOT part of this package: 3-trunk rundown, the 7 script modes, X
+trend collection, dubbing plan) or run locally after checking the user's license key against that
+server (show memory, full guest form and post-submit automations). The local check is a condition of
+the paid plan's terms; this Apache-2.0 code does not grant a paid subscription.

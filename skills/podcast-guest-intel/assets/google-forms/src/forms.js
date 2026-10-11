@@ -38,7 +38,9 @@ function criarFormularioEssencial() {
   return buildForm('essencial', null);
 }
 
+/** Variante completa (sem marca) é do plano pago: confere a chave antes de criar (licenca.js). */
 function criarFormularioCompleto() {
+  exigirLicenca_('formulario-completo-e-automacoes');
   return buildForm('completo', null);
 }
 

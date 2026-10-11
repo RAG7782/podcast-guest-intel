@@ -1,6 +1,6 @@
 # Como criar o Gem ou o GPT (sem programar)
 
-Este pacote é a versão "sem plugin" do Podcast Guest Intel, para quem usa o Gemini (Gem) ou o
+Este pacote é a versão "sem plugin" do PodFácil, para quem usa o Gemini (Gem) ou o
 ChatGPT (GPT personalizado). Ele traz só o núcleo grátis: convite, dossiê, pauta de 1 tronco e
 roteiro no modo informativo. Sem scripts: os checks automáticos ficam na versão plugin.
 
@@ -12,7 +12,7 @@ roteiro no modo informativo. Sem scripts: os checks automáticos ficam na versã
 ## ChatGPT — GPT personalizado
 
 1. Abra <https://chatgpt.com/gpts/editor> e vá na aba **Configurar**.
-2. **Nome**: Podcast Guest Intel. **Instruções**: cole o conteúdo de `INSTRUCOES.txt`.
+2. **Nome**: PodFácil. **Instruções**: cole o conteúdo de `INSTRUCOES.txt`.
 3. Em **Conhecimento**, clique em **Carregar arquivos** e envie os arquivos de `conhecimento/`.
 4. Em **Recursos**, deixe **Pesquisa na web** ligada (o dossiê precisa dela).
 5. **Criar** → escolha quem pode usar (só você, quem tiver o link, ou a GPT Store).
@@ -20,7 +20,7 @@ roteiro no modo informativo. Sem scripts: os checks automáticos ficam na versã
 ## Gemini — Gem (ou Skill)
 
 1. Abra <https://gemini.google.com/gems/create>.
-2. **Nome**: Podcast Guest Intel. **Instruções**: cole `INSTRUCOES.txt`.
+2. **Nome**: PodFácil. **Instruções**: cole `INSTRUCOES.txt`.
 3. Em **Conhecimento**, envie os arquivos de `conhecimento/` (o Gem aceita até 10).
 4. **Salvar** e, se quiser, **Compartilhar** para gerar o link.
 

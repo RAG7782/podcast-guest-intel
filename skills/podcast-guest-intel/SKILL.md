@@ -2,13 +2,13 @@
 name: podcast-guest-intel
 description: "Prepara episódios de podcast com convidado, do convite ao roteiro: convite oficial e formulário do convidado (Google Forms), dossiê com fontes (VERIFICADO / AUTODECLARADO / INFERÊNCIA), pauta ranqueada, roteiro por modo de abordagem, memória do show e localização (legendas, tradução). Use quando o usuário pedir para preparar entrevista, pesquisar convidado, montar pauta ou roteiro de podcast, convidar alguém para o programa ou legendar um episódio. EN: prepares podcast guest episodes end to end — invite, guest form, sourced guest dossier, ranked topic plan, approach-mode script, show memory, localization. Use for podcast guest research, interview prep, episode outline or script, guest invitation, subtitles."
 license: Apache-2.0
-compatibility: "Python 3.10+ para os scripts (stdlib; check e validação usam jsonschema e pyyaml). Busca web do harness para o dossiê e a pauta."
+compatibility: "Python 3.10+ com PyYAML (roteiro e check da pauta) e jsonschema (validação); recomendado uv (uv run --with pyyaml --with jsonschema python scripts/...). Busca web do harness para o dossiê e a pauta. Plano pago: chave de licença (scripts/licenca.py) e o conector MCP do PodFácil."
 metadata:
-  version: "1.0.3"
+  version: "1.1.0"
   source: "https://github.com/RAG7782/podcast-guest-intel"
 ---
 
-# Podcast Guest Intel — orquestração
+# PodFácil — orquestração
 
 Você conduz a preparação de um episódio com convidado. Responda no idioma do usuário (ou no
 `locale` do show-profile). Explique em palavras simples: o usuário pode ser leigo em IA e em podcast.
@@ -59,26 +59,47 @@ Regras do fluxo:
 
 13 especialistas (HPF v1). Mandato de cada um em `references/agents/<id>.md`; índice em `references/agents.md`. No Claude Code também são subagentes `podcast-guest-intel:<id>`.
 
-## Grátis × pago (informativo)
+## Grátis × pago
 
-O pacote é o núcleo aberto (Apache-2.0) e roda inteiro sem servidor. Os recursos `paid` dependem
-do servidor do produto e não estão neste pacote; não tente imitá-los nem afirme que estão ativos.
+O pacote é o núcleo aberto (Apache-2.0). Tudo o que é `free` roda aqui, sem servidor e sem chave.
+O `paid` chega de dois jeitos:
 
-| Capacidade | Tier | O que é |
-|---|---|---|
-| `convite-e-formulario-essencial` | free | Convite oficial + formulário variante essencial (Apps Script), kit do convidado com rodapé de marca |
-| `formulario-completo-e-automacoes` | paid | Variante completa sem marca; automações pós-envio no servidor (e-mail com kit, WhatsApp, agenda, lembrete D-1) |
-| `dossie` | free | Dossiê completo, cada afirmação VERIFICADO / AUTODECLARADO / INFERÊNCIA + fonte |
-| `dossie-portal-e-historico` | paid | Enriquecimento pelo gestor no portal, histórico do convidado, relatório de auditoria |
-| `pauta-1-tronco` | free | Perfil do convidado × linha editorial + Google Trends/News RSS rodado pelo próprio harness |
-| `pauta-3-troncos` | paid | Tendências BYOK do X (chave do usuário, verificada) agregadas no servidor + continuidade com o catálogo; sem chave, Google Trends/News RSS |
-| `roteiro-modo-informativo` | free | Roteiro no modo informativo, com versões completo, teleprompter e cartão |
-| `roteiro-7-modos` | paid | Os 7 modos de abordagem e modos extensíveis por nicho, servidos pelo MCP |
-| `memoria-centro-de-comando` | paid | Catálogo, busca, perfil do host gerado dos episódios, lições e cortes |
-| `localizacao-local` | free | Transcrição, tradução, legendas e checks de QA locais (BYOK) |
-| `localizacao-servidor` | paid | Feed por idioma, gate auditável de consentimento de voz, fila de revisão |
-| `exportacao-markdown` | free | Saída em Markdown |
-| `exportacao-pdf-docx` | paid | PDF/DOCX com a marca do show |
+- **No servidor (MCP):** o código não vem neste pacote. Chame a tool indicada pelo conector MCP do
+  PodFácil, com a chave. Aqui, a pauta sai só com o tronco editorial e o roteiro só no modo grátis.
+- **Neste pacote, com a chave:** roda no computador ou na conta Google do usuário (os dados são dele)
+  e confere a chave de licença antes. Sem chave, para com a mensagem de como assinar.
+
+Não imite um recurso pago, não contorne a checagem e não diga que ele está ativo sem a confirmação.
+Esquecer um titular, a retenção e exportar a memória em Markdown funcionam sem chave (LGPD).
+
+| Capacidade | Tier | Onde roda | O que é |
+|---|---|---|---|
+| `convite-e-formulario-essencial` | free | neste pacote, grátis | Convite oficial + formulário variante essencial (Apps Script), kit do convidado com rodapé de marca |
+| `formulario-completo-e-automacoes` | paid | neste pacote, com a chave de licença | Variante completa sem marca; automações pós-envio no Apps Script da sua conta Google (e-mail com kit, WhatsApp, agenda, lembrete D-1), liberadas pela chave de licença |
+| `dossie` | free | neste pacote, grátis | Dossiê completo, cada afirmação VERIFICADO / AUTODECLARADO / INFERÊNCIA + fonte |
+| `pauta-1-tronco` | free | neste pacote, grátis | Perfil do convidado × linha editorial + Google Trends/News RSS rodado pelo próprio harness |
+| `pauta-3-troncos` | paid | servidor (MCP): `pauta_completa`, `trends_collect` | Tendências BYOK do X (chave do usuário, verificada) agregadas no servidor + continuidade com o catálogo; sem chave, Google Trends/News RSS |
+| `roteiro-modo-informativo` | free | neste pacote, grátis | Roteiro no modo informativo, com versões completo, teleprompter e cartão |
+| `roteiro-7-modos` | paid | servidor (MCP): `roteiro_modos` | Os 7 modos de abordagem e modos extensíveis por nicho, servidos pelo MCP |
+| `memoria-centro-de-comando` | paid | neste pacote, com a chave de licença | Catálogo, busca, perfil do host gerado dos episódios, lições e cortes; roda no seu computador (os dados ficam com você), liberado pela chave de licença |
+| `localizacao-local` | free | neste pacote, grátis | Transcrição, tradução, legendas e checks de QA locais (BYOK) |
+| `localizacao-servidor` | paid | servidor (MCP): `localizacao_plano` | Plano de dublagem por idioma com gate auditável de consentimento de voz (LGPD art. 11), no servidor |
+| `exportacao-markdown` | free | neste pacote, grátis | Saída em Markdown |
+| `exportacao-pdf-docx` | paid | servidor (MCP): `exportar_documento` | PDF/DOCX com a marca do show |
+
+Configurar a chave do plano pago (vem no e-mail de compra):
+
+1. **Neste computador (memória do show):** `python3 scripts/licenca.py configurar` grava a chave em
+   `~/.podfacil/licenca` (permissão 600), sem mostrar na tela; ou exporte `PODFACIL_LICENSE_KEY`.
+   Confira com `python3 scripts/licenca.py status`. A confirmação vale 1 h sem nova consulta e até 72 h
+   se o servidor não responder.
+2. **Conector MCP (pauta em 3 troncos, 7 modos, coleta do X):** URL `https://api.antecena.artesanatodigital.com/mcp`, headers
+   `Authorization: Bearer <chave>` e `X-Device-Id: <conteúdo de ~/.podfacil/dispositivo>`. Use o mesmo
+   X-Device-Id em todo lugar: o plano conta dispositivos por ele.
+3. **Formulário (Apps Script):** em Configurações do projeto → Propriedades do script, crie
+   `PODFACIL_LICENSE_KEY` (nunca no código) e `PODFACIL_DEVICE_ID` com o mesmo valor do item 2.
+
+Sem chave, o recurso pago para e mostra onde assinar: https://antecena.artesanatodigital.com/precos/
 
 ## Se o servidor não responder
 
@@ -87,7 +108,7 @@ mensagem "temporariamente indisponível". Isso não é recusa de licença (recus
 `quota_free` ou `paid_only`). Nesse caso:
 
 1. Tente de novo no máximo 1 vez, depois de cerca de 1 minuto. Não repita em laço.
-2. Avise o usuário em uma frase: "O servidor do Guest Intel não respondeu agora; sigo com a versão
+2. Avise o usuário em uma frase: "O servidor do PodFácil não respondeu agora; sigo com a versão
    grátis local desta etapa, e você pode refazer com o recurso pago quando ele voltar."
 3. Siga com o fallback grátis da tabela abaixo. Ele roda inteiro neste pacote, sem servidor.
 4. Registre a lacuna no artefato (alertas ou lacunas): a etapa saiu na versão grátis por indisponibilidade.
@@ -96,7 +117,6 @@ mensagem "temporariamente indisponível". Isso não é recusa de licença (recus
 | Capacidade paga | Fallback grátis local | O que o fallback entrega |
 |---|---|---|
 | `formulario-completo-e-automacoes` | `convite-e-formulario-essencial` | Convite oficial + formulário variante essencial (Apps Script), kit do convidado com rodapé de marca |
-| `dossie-portal-e-historico` | `dossie` | Dossiê completo, cada afirmação VERIFICADO / AUTODECLARADO / INFERÊNCIA + fonte |
 | `pauta-3-troncos` | `pauta-1-tronco` | Perfil do convidado × linha editorial + Google Trends/News RSS rodado pelo próprio harness |
 | `roteiro-7-modos` | `roteiro-modo-informativo` | Roteiro no modo informativo, com versões completo, teleprompter e cartão |
 | `memoria-centro-de-comando` | `exportacao-markdown` | Saída em Markdown |

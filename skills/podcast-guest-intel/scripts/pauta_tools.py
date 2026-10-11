@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Ferramentas determinísticas da pauta em 3 troncos (task *pauta).
+"""Ferramentas determinísticas da pauta (task *pauta): 3 troncos no repo e no servidor; editorial no pacote local.
 
 Subcomandos:
   build  --dossier --host-profile --show-profile --catalog --trends --episode-ref --pauta-id
@@ -32,7 +32,6 @@ TRUNKS = ("trend", "continuity", "editorial")
 DEFAULT_MAX = 5
 DEGRADED_CAP = 0.7   # item com claim_ids quando o dossiê veio degradado
 DRAFT_CAP = 0.8      # item do tronco editorial quando o host-profile é draft
-PER_QUERY = 2        # diversidade no tronco trend: no máximo 2 itens por (fonte, query)
 ENVELOPE_KEYS = ["pauta", "fontes_usadas", "confianca", "removidos"]
 STOP = {"para", "como", "mais", "sobre", "entre", "pela", "pelo", "pelos", "pelas", "esse", "essa",
         "isso", "este", "esta", "ainda", "quem", "onde", "quando", "porque", "pode", "podem", "fazer",
@@ -104,54 +103,6 @@ def candidate(title, rationale, score, **anchors):
     return item
 
 
-def trend_ref(it, collected_at):
-    ref = {"source_id": it["source"], "observed_at": it.get("published_at") or collected_at}
-    if it.get("url"):
-        ref["url"] = it["url"]
-    return ref
-
-
-def trend_candidates(trends, profile, claims):
-    seen, per_key, out = set(), {}, []
-    scored = []
-    for it in trends.get("items") or []:
-        terms = tokens(it.get("title"))
-        overlap, hits = sorted(terms & profile), claim_hits(terms, claims)
-        if not (overlap or hits) or norm(it.get("title")) in seen:
-            continue
-        seen.add(norm(it.get("title")))
-        scored.append((0.3 + 0.1 * len(overlap) + 0.2 * len(hits), it, overlap, hits))
-    for score, it, overlap, hits in sorted(scored, key=lambda s: -s[0]):
-        key = (it["source"], it.get("query"))
-        per_key[key] = per_key.get(key, 0) + 1
-        if per_key[key] <= PER_QUERY:
-            where = it["source"] + (f" (busca: {it['query']})" if it.get("query") else "")
-            cross = f"perfil ({', '.join(overlap)})" if overlap else "obra do convidado (claims)"
-            out.append(candidate(it["title"], f"em alta em {where}; cruza com {cross}", score, claim_ids=hits,
-                                 trend_refs=[trend_ref(it, trends.get("collected_at"))]))
-    return out
-
-
-def continuity_candidates(episodes, host, claims):
-    gaps = host.get("open_gaps") or []
-    want = tokens(*gaps, *(host.get("recurring_themes") or []), *(c.get("text") for c in claims))
-    best = {}
-    for ep in episodes:
-        terms = tokens(ep["title"], ep["series"], *ep["themes"])
-        overlap = sorted(terms & want)
-        sequel = [g for g in gaps if len(tokens(ep["series"]) & tokens(g)) >= 2]
-        if not overlap:
-            continue
-        score = 0.3 + 0.08 * len(overlap) + (0.25 if sequel else 0)
-        why = (f"continuação pendente: {sequel[0]}" if sequel else "retoma tema já tratado no catálogo")
-        cand = candidate(f"Continuar: {short_title(ep['title'])}", f"{why}; termos: {', '.join(overlap[:6])}",
-                         score, episode_refs=[ep["id"]], claim_ids=claim_hits(terms, claims))
-        key = norm(ep["series"]) or ep["id"]
-        if key not in best or cand["score"] > best[key]["score"]:
-            best[key] = cand
-    return list(best.values())
-
-
 def editorial_candidates(host, episodes, claims, removed):
     out = []
     for gap in host.get("open_gaps") or []:
@@ -202,8 +153,8 @@ def finalize(trunk, cands, ctx, removed):
     return [dict(id=f"{trunk[0]}{n}", rank=n, **item) for n, item in enumerate(kept[:ctx["max"]], 1)]
 
 
-def confianca(degraded, host_status, dossier):
-    motivos = []
+def confianca(degraded, host_status, dossier, extra=None):
+    motivos = [extra] if extra else []
     if degraded:
         gaps = ", ".join((dossier.get("coverage") or {}).get("gaps") or [])
         motivos.append(f"dossiê degradado (lacunas: {gaps}); itens com claim_ids limitados a {DEGRADED_CAP}")
@@ -211,6 +162,21 @@ def confianca(degraded, host_status, dossier):
         motivos.append(f"host-profile em {host_status}; tronco editorial limitado a {DRAFT_CAP}")
     return {"dossie": "rebaixada" if degraded else "normal", "host_profile": host_status,
             "motivo": "; ".join(motivos) or "entradas completas"}
+
+
+PAUTA_PAGA = ("troncos tendência e continuidade são do plano pago (tool pauta_completa do MCP do PodFácil);"
+              " este pacote monta só o tronco editorial")
+
+
+def paid_candidates(inp, show, host, claims, episodes):
+    """Troncos tendência e continuidade (pauta-3-troncos, plano pago). pauta_troncos.py fica no repositório e no
+    servidor (tool pauta_completa) e não vai para o pacote local: lá só o editorial sai, e a confiança diz por quê."""
+    try:
+        import pauta_troncos as pp
+    except ImportError:
+        return {"trend": [], "continuity": []}, PAUTA_PAGA
+    return {"trend": pp.trend_candidates(inp["trends"], profile_terms(show, host), claims),
+            "continuity": pp.continuity_candidates(episodes, host, claims)}, None
 
 
 def build_pauta(inp, meta):
@@ -221,9 +187,8 @@ def build_pauta(inp, meta):
     ctx = {"topics": off_limits(show, inp.get("intake")), "degraded": degraded,
            "draft": host.get("status") != "confirmed", "max": resolve_max(meta.get("max_items"), show),
            "inferencias": {c["id"] for c in claims if c.get("status") == "inferencia"}}
-    raw = {"trend": trend_candidates(inp["trends"], profile_terms(show, host), claims),
-           "continuity": continuity_candidates(episodes, host, claims),
-           "editorial": editorial_candidates(host, episodes, claims, removed)}
+    raw, paid_note = paid_candidates(inp, show, host, claims, episodes)
+    raw["editorial"] = editorial_candidates(host, episodes, claims, removed)
     trunks = {t: finalize(t, raw[t], ctx, removed) for t in TRUNKS}
     pauta = {"pauta_id": meta["pauta_id"], "episode_ref": meta["episode_ref"], "show_ref": show.get("show_id"),
              "host_profile_ref": host.get("host_id"), "dossier_ref": dossier.get("dossier_id"),
@@ -232,7 +197,7 @@ def build_pauta(inp, meta):
              "generated_at": meta.get("generated_at") or now_iso()}
     return {"pauta": {k: v for k, v in pauta.items() if v is not None},
             "fontes_usadas": inp["trends"].get("sources_used") or [],
-            "confianca": confianca(degraded, host.get("status", "draft"), dossier), "removidos": removed}
+            "confianca": confianca(degraded, host.get("status", "draft"), dossier, paid_note), "removidos": removed}
 
 
 # ── check ─────────────────────────────────────────────────────────────────
@@ -334,9 +299,7 @@ def rule_no_secret(env, validator):
 
 
 def rule_registries(pauta):
-    import yaml
-    modes = yaml.safe_load(paths.MODES.read_text(encoding="utf-8"))
-    formats = yaml.safe_load(paths.FORMATS.read_text(encoding="utf-8"))
+    modes, formats = paths.load_yaml(paths.MODES), paths.load_yaml(paths.FORMATS)
     mode_ids = {m.get("id") for m in modes.get("modes") or []}
     errs = [] if pauta.get("approach_mode") in mode_ids else [
         f"R-PAUTA-MODE @approach_mode: {pauta.get('approach_mode')!r} | esperado: um de {sorted(mode_ids)}"]

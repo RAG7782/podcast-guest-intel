@@ -204,6 +204,7 @@
     "footer_controller": "Sent by: {{controller.name}}, data controller. Contact: {{controller.contact}}.",
     "footer_purpose": "You received this invitation because {{signature.name}} suggested you as a guest. We use your name and e-mail only for this invitation and to organize the interview; the guest kit arrives after you answer the form.",
     "footer_optout": "Don't want to hear from {{show.name}} again? Reply to this e-mail with the word STOP and we will not send anything else.",
+    "footer_brand": "Prepared with PodFácil",
     "ics_description": "Official invitation from {{show.name}}. Guest form: {{form_url}}"
   },
   "decision": {
@@ -596,6 +597,7 @@
     "footer_controller": "[TODO-es] Sent by: {{controller.name}}, data controller. Contact: {{controller.contact}}.",
     "footer_purpose": "[TODO-es] You received this invitation because {{signature.name}} suggested you as a guest. We use your name and e-mail only for this invitation and to organize the interview; the guest kit arrives after you answer the form.",
     "footer_optout": "[TODO-es] Don't want to hear from {{show.name}} again? Reply to this e-mail with the word STOP and we will not send anything else.",
+    "footer_brand": "[TODO-es] Prepared with PodFácil",
     "ics_description": "[TODO-es] Official invitation from {{show.name}}. Guest form: {{form_url}}"
   },
   "decision": {
@@ -853,6 +855,7 @@
     "footer_controller": "Quem envia: {{controller.name}}, controlador dos dados. Contato: {{controller.contact}}.",
     "footer_purpose": "Você recebeu este convite porque {{signature.name}} indicou você como convidado(a). Usamos seu nome e e-mail só para este convite e para organizar a entrevista; o kit do convidado chega depois que você responder ao formulário.",
     "footer_optout": "Não quer receber mais mensagens do {{show.name}}? Responda a este e-mail com a palavra SAIR e não enviaremos mais nada.",
+    "footer_brand": "Preparado com PodFácil",
     "ics_description": "Convite oficial do {{show.name}}. Formulário do convidado: {{form_url}}"
   },
   "decision": {
@@ -1250,6 +1253,7 @@
     "footer_controller": "[TODO-zh] Sent by: {{controller.name}}, data controller. Contact: {{controller.contact}}.",
     "footer_purpose": "[TODO-zh] You received this invitation because {{signature.name}} suggested you as a guest. We use your name and e-mail only for this invitation and to organize the interview; the guest kit arrives after you answer the form.",
     "footer_optout": "[TODO-zh] Don't want to hear from {{show.name}} again? Reply to this e-mail with the word STOP and we will not send anything else.",
+    "footer_brand": "[TODO-zh] Prepared with PodFácil",
     "ics_description": "[TODO-zh] Official invitation from {{show.name}}. Guest form: {{form_url}}"
   },
   "decision": {

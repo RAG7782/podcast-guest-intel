@@ -13,6 +13,12 @@ Oficial** com a marca do programa e automatiza o que vem depois do envio:
 - **WhatsApp**, opcional, pela sua própria API (Evolution API ou WAHA).
 - **Lembrete na véspera (D-1)**, por e-mail e/ou WhatsApp.
 
+**Grátis × plano pago.** O Convite Oficial e o formulário essencial são grátis. O formulário
+**completo** e as automações pós-envio (Kit por e-mail, Agenda, WhatsApp e lembrete D-1) são do
+**plano pago** e conferem a sua chave de licença antes (passo 4). Sem chave, o formulário segue
+recebendo respostas, você recebe o aviso de cada envio e a retenção/`esquecerTitular` (LGPD)
+continuam funcionando. Planos: <https://antecena.artesanatodigital.com/precos/>.
+
 Cada envio só acontece se o convidado **consentiu naquele canal**. Os dados sensíveis só são
 guardados com **aceite específico** (LGPD, art. 11, I). Sem esse aceite, são descartados, e a
 resposta crua também some do Forms e da planilha ligada (o que é lícito fica na aba `intake`).
@@ -27,14 +33,14 @@ Não é preciso servidor nem projeto no Google Cloud, e nada é instalado no seu
 1. Abra **<https://script.google.com/home/projects/create>** (já abre um projeto novo; se não abrir, vá em script.google.com → **Novo projeto**).
 2. Clique em "Projeto sem título" e dê um nome, por exemplo `Formulário do convidado`.
 
-### 2. Cole os 8 arquivos
+### 2. Cole os 9 arquivos
 No editor, para **cada** arquivo da pasta `src/` deste repositório:
 1. Clique no **+** ao lado de "Arquivos" e escolha **Script**.
-2. Dê um nome (o nome não importa; sugestão: `bundle`, `core`, `intake`, `actions`, `invitation`, `forms`, `automations`, `admission`).
+2. Dê um nome (o nome não importa; sugestão: `bundle`, `core`, `intake`, `actions`, `invitation`, `forms`, `automations`, `admission`, `licenca`).
 3. Apague o conteúdo de exemplo e cole o conteúdo do arquivo.
 
 O arquivo `Código.gs` que já vem no projeto pode ser apagado. A ordem dos arquivos não importa.
-O 9º arquivo, `drive-logo.js`, é **opcional**: cole só se o logo estiver no seu Google Drive (veja
+O 10º arquivo, `drive-logo.js`, é **opcional**: cole só se o logo estiver no seu Google Drive (veja
 "Logo e cores do convite").
 Clique em 💾 **Salvar**.
 
@@ -57,6 +63,8 @@ Ainda em ⚙️ **Configurações do projeto**, desça até **Propriedades do sc
 | `WHATSAPP_TOKEN` | a chave da sua API | só com WhatsApp |
 | `WHATSAPP_INSTANCE` | nome da instância (Evolution) | só Evolution |
 | `WHATSAPP_SESSION` | nome da sessão (WAHA; padrão `default`) | não |
+| `PODFACIL_LICENSE_KEY` | a chave de licença do e-mail de compra (**nunca** cole no código) | só no plano pago |
+| `PODFACIL_DEVICE_ID` | o mesmo `X-Device-Id` do seu conector MCP / de `~/.podfacil/dispositivo` (assim o plano conta 1 dispositivo; sem ela, o script cria um) | não |
 
 > **O valor de cada propriedade aceita até 9 KB.** Se o seu show-profile for maior, crie mais um
 > arquivo de script chamado `config` e cole nele `var SHOW_PROFILE = { …seu JSON… };`.
@@ -254,7 +262,8 @@ gatilho diário**, que varre a aba `intake`, e não um gatilho por convidado (o 
   `src/invitation.js` (convite oficial: marca, contraste, HTML, texto puro, `.ics`).
 - **Lado Google**: `src/forms.js` (criação do Form e gatilhos), `src/automations.js` (`onFormSubmit`, `lembreteDiario`,
   `enviarConvite`, `registrarOptOut`, `confirmarIntake`), `src/admission.js` (lock das chaves de envio e
-  admissão por código de convite) e o opcional `src/drive-logo.js`.
+  admissão por código de convite), `src/licenca.js` (chave do plano pago conferida na tool `licenca_status`
+  do servidor; endereço em `references/contracts/produto.json`, empacotado no bundle) e o opcional `src/drive-logo.js`.
 - `src/bundle.gen.js` é **gerado** a partir de `references/contracts/i18n/*.json`, `assets/templates/guest-kit.md`,
   `assets/templates/guest-invitation-official.md`
   e de `x-form-variants` do schema. Depois de editar textos ou o template, rode:

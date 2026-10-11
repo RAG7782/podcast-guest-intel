@@ -201,6 +201,7 @@
     "footer_controller": "Quem envia: {{controller.name}}, controlador dos dados. Contato: {{controller.contact}}.",
     "footer_purpose": "Você recebeu este convite porque {{signature.name}} indicou você como convidado(a). Usamos seu nome e e-mail só para este convite e para organizar a entrevista; o kit do convidado chega depois que você responder ao formulário.",
     "footer_optout": "Não quer receber mais mensagens do {{show.name}}? Responda a este e-mail com a palavra SAIR e não enviaremos mais nada.",
+    "footer_brand": "Preparado com PodFácil",
     "ics_description": "Convite oficial do {{show.name}}. Formulário do convidado: {{form_url}}"
   },
   "decision": {

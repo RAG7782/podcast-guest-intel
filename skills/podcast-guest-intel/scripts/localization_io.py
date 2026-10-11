@@ -33,11 +33,15 @@ import html
 import json
 import os
 import re
+import sys
 import time
 import urllib.error
 import urllib.request
 import uuid
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from produto import USER_AGENT  # noqa: E402
 
 TIMEOUT_S = 60
 ASSEMBLY = "https://api.assemblyai.com/v2"
@@ -188,8 +192,9 @@ def transcript_from_file(path, locale, start=None, end=None):
 # ── HTTP e chave (BYOK) ──────────────────────────────────────────────────
 
 def http_call(method, url, headers=None, body=None):
-    """(status, bytes). headers pode levar a chave: nunca entra em erro nem log."""
-    req = urllib.request.Request(url, data=body, method=method, headers=headers or {})
+    """(status, bytes) com User-Agent (M-05: WAF de provedor barra Python-urllib). headers pode levar a chave:
+    nunca entra em erro nem log."""
+    req = urllib.request.Request(url, data=body, method=method, headers={"User-Agent": USER_AGENT, **(headers or {})})
     try:
         with urllib.request.urlopen(req, timeout=TIMEOUT_S) as resp:
             return resp.status, resp.read()
@@ -209,7 +214,8 @@ def key_from_env(name, env=None):
 
 def json_ok(status, body, what):
     if status not in (200, 201):
-        raise LocalizationError(f"{what}: HTTP {status} (corpo {len(body)} bytes) | esperado 200")
+        # 200 primeiros bytes do corpo: a causa (ex.: "error code: 1010" do WAF); a chave vai no header, não aqui
+        raise LocalizationError(f"{what}: HTTP {status} (corpo {len(body)} bytes: {body[:200]!r}) | esperado 200")
     return json.loads(body)
 
 

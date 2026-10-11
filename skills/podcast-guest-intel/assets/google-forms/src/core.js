@@ -227,6 +227,17 @@ function localizationItems(i18n, show) {
 }
 
 /** Lista ordenada de itens que forms.js materializa com FormApp. */
+/** Free: "Preparado com PodFácil" no fim da descrição, em qualquer variante. Só `branded === false`
+ *  (pago) tira a marca; o pacote local, que é o Free, não passa a opção (FLUXOS Q7). */
+function formBrandLine(i18n, branded) {
+  if (branded === false) return '';
+  var brand = i18n.invitation && i18n.invitation.footer_brand;
+  if (typeof brand !== 'string') {
+    throw new Error('i18n ' + i18n.locale + ' invitation.footer_brand=' + JSON.stringify(brand) + '; esperado texto do rodapé do Free');
+  }
+  return '\n\n' + brand;
+}
+
 function buildFormSpec(opts) {
   var i18n = opts.i18n, show = opts.show, variant = opts.variant;
   var clause = renderClause(i18n, opts.jurisdiction, show);
@@ -245,7 +256,8 @@ function buildFormSpec(opts) {
   items = items.concat(consentItems(i18n, clause)).concat(localizationItems(i18n, show));
   return {
     title: renderTemplate(i18n.form.title, { show: { name: show.name } }),
-    description: (clause.draft ? i18n.consent.draft_notice + '\n\n' : '') + i18n.form['description_' + variant], confirmation: i18n.form.confirmation,
+    description: (clause.draft ? i18n.consent.draft_notice + '\n\n' : '') + i18n.form['description_' + variant] + formBrandLine(i18n, opts.branded),
+    confirmation: i18n.form.confirmation,
     clause_id: clause.clause_id, text_version: i18n.text_version, items: items
   };
 }

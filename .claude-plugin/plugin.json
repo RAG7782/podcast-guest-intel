@@ -1,7 +1,7 @@
 {
   "name": "podcast-guest-intel",
-  "displayName": "Podcast Guest Intel",
-  "version": "1.0.3",
+  "displayName": "PodFácil",
+  "version": "1.1.0",
   "description": "Prepara episódios de podcast com convidado: convite, dossiê com fontes, pauta e roteiro.",
   "author": {
     "name": "Renato Aparecido Gomes"
@@ -21,7 +21,6 @@
       "convite-e-formulario-essencial": "free",
       "formulario-completo-e-automacoes": "paid",
       "dossie": "free",
-      "dossie-portal-e-historico": "paid",
       "pauta-1-tronco": "free",
       "pauta-3-troncos": "paid",
       "roteiro-modo-informativo": "free",

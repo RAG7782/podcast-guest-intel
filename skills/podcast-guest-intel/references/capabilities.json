@@ -1,76 +1,95 @@
 {
-  "note": "Metadado informativo; licenciamento e enforcement ficam no servidor (F9).",
+  "note": "onde=mcp: tool do servidor, o código não vem no pacote; onde=local-com-licenca: roda aqui e confere a chave (scripts/licenca.py, Apps Script licenca.js); onde=local: grátis.",
   "capabilities": [
     {
       "id": "convite-e-formulario-essencial",
       "tier": "free",
-      "description": "Convite oficial + formulário variante essencial (Apps Script), kit do convidado com rodapé de marca"
+      "description": "Convite oficial + formulário variante essencial (Apps Script), kit do convidado com rodapé de marca",
+      "onde": "local"
     },
     {
       "id": "formulario-completo-e-automacoes",
       "tier": "paid",
-      "description": "Variante completa sem marca; automações pós-envio no servidor (e-mail com kit, WhatsApp, agenda, lembrete D-1)",
+      "description": "Variante completa sem marca; automações pós-envio no Apps Script da sua conta Google (e-mail com kit, WhatsApp, agenda, lembrete D-1), liberadas pela chave de licença",
+      "onde": "local-com-licenca",
       "fallback": "convite-e-formulario-essencial"
     },
     {
       "id": "dossie",
       "tier": "free",
-      "description": "Dossiê completo, cada afirmação VERIFICADO / AUTODECLARADO / INFERÊNCIA + fonte"
-    },
-    {
-      "id": "dossie-portal-e-historico",
-      "tier": "paid",
-      "description": "Enriquecimento pelo gestor no portal, histórico do convidado, relatório de auditoria",
-      "fallback": "dossie"
+      "description": "Dossiê completo, cada afirmação VERIFICADO / AUTODECLARADO / INFERÊNCIA + fonte",
+      "onde": "local"
     },
     {
       "id": "pauta-1-tronco",
       "tier": "free",
-      "description": "Perfil do convidado × linha editorial + Google Trends/News RSS rodado pelo próprio harness"
+      "description": "Perfil do convidado × linha editorial + Google Trends/News RSS rodado pelo próprio harness",
+      "onde": "local"
     },
     {
       "id": "pauta-3-troncos",
       "tier": "paid",
       "description": "Tendências BYOK do X (chave do usuário, verificada) agregadas no servidor + continuidade com o catálogo; sem chave, Google Trends/News RSS",
+      "onde": "mcp",
+      "tools": [
+        "pauta_completa",
+        "trends_collect"
+      ],
       "fallback": "pauta-1-tronco"
     },
     {
       "id": "roteiro-modo-informativo",
       "tier": "free",
-      "description": "Roteiro no modo informativo, com versões completo, teleprompter e cartão"
+      "description": "Roteiro no modo informativo, com versões completo, teleprompter e cartão",
+      "onde": "local"
     },
     {
       "id": "roteiro-7-modos",
       "tier": "paid",
       "description": "Os 7 modos de abordagem e modos extensíveis por nicho, servidos pelo MCP",
+      "onde": "mcp",
+      "tools": [
+        "roteiro_modos"
+      ],
       "fallback": "roteiro-modo-informativo"
     },
     {
       "id": "memoria-centro-de-comando",
       "tier": "paid",
-      "description": "Catálogo, busca, perfil do host gerado dos episódios, lições e cortes",
+      "description": "Catálogo, busca, perfil do host gerado dos episódios, lições e cortes; roda no seu computador (os dados ficam com você), liberado pela chave de licença",
+      "onde": "local-com-licenca",
       "fallback": "exportacao-markdown"
     },
     {
       "id": "localizacao-local",
       "tier": "free",
-      "description": "Transcrição, tradução, legendas e checks de QA locais (BYOK)"
+      "description": "Transcrição, tradução, legendas e checks de QA locais (BYOK)",
+      "onde": "local"
     },
     {
       "id": "localizacao-servidor",
       "tier": "paid",
-      "description": "Feed por idioma, gate auditável de consentimento de voz, fila de revisão",
+      "description": "Plano de dublagem por idioma com gate auditável de consentimento de voz (LGPD art. 11), no servidor",
+      "onde": "mcp",
+      "tools": [
+        "localizacao_plano"
+      ],
       "fallback": "localizacao-local"
     },
     {
       "id": "exportacao-markdown",
       "tier": "free",
-      "description": "Saída em Markdown"
+      "description": "Saída em Markdown",
+      "onde": "local"
     },
     {
       "id": "exportacao-pdf-docx",
       "tier": "paid",
       "description": "PDF/DOCX com a marca do show",
+      "onde": "mcp",
+      "tools": [
+        "exportar_documento"
+      ],
       "fallback": "exportacao-markdown"
     }
   ]

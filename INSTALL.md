@@ -1,6 +1,6 @@
-# Como instalar o Podcast Guest Intel
+# Como instalar o PodFácil
 
-O Podcast Guest Intel ajuda a preparar episódios com convidado: convite, formulário, pesquisa
+O PodFácil ajuda a preparar episódios com convidado: convite, formulário, pesquisa
 sobre o convidado (dossiê com fontes), pauta e roteiro. Este guia é para quem **não é
 programador**. Escolha a ferramenta de IA que você já usa e siga só a seção dela.
 
@@ -120,20 +120,52 @@ Se o plugin já estiver no Claude Code, `agy plugin import claude` traz de lá.
 
 ## O que é grátis e o que é pago
 
-Tudo neste pacote é o **núcleo aberto** (licença Apache-2.0) e funciona sem servidor e sem
-conta nossa. A lista completa está em
-`dist/plugin/skills/podcast-guest-intel/references/capabilities.json`.
+O núcleo aberto (licença Apache-2.0) funciona sem servidor e sem conta nossa. A lista completa está
+em `dist/plugin/skills/podcast-guest-intel/references/capabilities.json`.
 
-| Grátis (neste pacote) | Pago (servidor, a lançar) |
+| Grátis | Pago (chave de licença) |
 |---|---|
-| Convite oficial e formulário essencial, com rodapé "Preparado com…" | Formulário completo sem marca e automações: e-mail com kit, WhatsApp, agenda, lembrete na véspera |
-| Dossiê completo, cada afirmação com status e fonte | Enriquecimento pelo gestor, histórico do convidado, relatório de auditoria |
-| Pauta com 1 tronco (perfil × linha editorial, Google Trends/News) | Pauta com 3 troncos: tendências das redes (X, TikTok, Reddit, LinkedIn) e continuidade com o catálogo |
-| Roteiro no modo informativo | Os 7 modos de abordagem e modos por nicho |
-| Legendas e tradução locais, com checks de qualidade | Feed por idioma, consentimento de voz auditável, fila de revisão |
-| Saída em Markdown | Memória do show (centro de comando) e exportação PDF/DOCX com a marca |
+| Convite oficial e formulário essencial, com rodapé "Preparado com PodFácil" | Formulário completo sem marca e automações (e-mail com kit, WhatsApp, agenda, lembrete na véspera), que rodam no Apps Script da sua conta Google |
+| Dossiê completo, cada afirmação com status e fonte | Memória do show (centro de comando): catálogo, busca, lições e cortes |
+| Pauta com 1 tronco (perfil × linha editorial, Google Trends/News) | Pauta com 3 troncos: tendências do X com a sua chave e continuidade com o catálogo |
+| Roteiro no modo informativo | Os 7 modos de abordagem do roteiro |
+| Legendas e tradução locais, com checks de qualidade | Plano de localização com gate de consentimento de voz |
+| Saída em Markdown | PDF e DOCX com a marca do show |
 
-A cobrança e a chave de licença ainda não existem. Nada no pacote liga ou desliga recurso pago.
+## Plano pago: chave de licença
+
+Depois da compra, a chave (começa com `pgi_`) chega por e-mail. O passo a passo com exemplos para
+cada assistente está na página de instalação do site, em `/instalar/`. São dois lugares:
+
+1. **Servidor MCP**, para as funções que rodam no servidor. Endereço:
+   `https://api.antecena.artesanatodigital.com/mcp`. No conector, adicione os headers
+   `Authorization: Bearer <sua chave>` e `X-Device-Id: <um nome fixo para este dispositivo>`.
+   No Claude Code:
+
+   ```bash
+   claude mcp add --transport http podfacil https://api.antecena.artesanatodigital.com/mcp \
+     --header "Authorization: Bearer $PODFACIL_LICENSE_KEY" --header "X-Device-Id: notebook"
+   ```
+
+2. **Pacote local**, a partir da versão 1.1.0. Os 7 modos de roteiro e a pauta de 3 troncos com X
+   vêm do servidor, pelo conector do passo 1. A memória e o formulário completo com automações rodam
+   no seu computador e na sua conta Google e pedem a chave. Use uma das formas (ou
+   `python3 scripts/licenca.py configurar`, que lê a chave sem mostrá-la):
+
+   ```bash
+   # variável de ambiente (ponha no ~/.zshrc ou ~/.bashrc)
+   export PODFACIL_LICENSE_KEY='pgi_...'
+
+   # ou arquivo, legível só por você
+   mkdir -p ~/.podfacil && printf '%s\n' 'pgi_...' > ~/.podfacil/licenca && chmod 600 ~/.podfacil/licenca
+   ```
+
+Na primeira checagem o pacote cria `~/.podfacil/dispositivo`. Use esse mesmo valor no `X-Device-Id`
+do conector e nas propriedades do script do formulário (`PODFACIL_LICENSE_KEY`, `PODFACIL_DEVICE_ID`);
+com valores diferentes, o Solo conta dois dispositivos. Confira com `python3 scripts/licenca.py status`.
+
+Sem chave, o pacote continua funcionando no plano grátis. Detalhes técnicos do servidor e da
+licença: `docs/LICENSING.md`.
 
 ## Confirmado × inferido
 
@@ -160,3 +192,21 @@ A cobrança e a chave de licença ainda não existem. Nada no pacote liga ou des
 - Gemini, de Gems para Skills: <https://support.google.com/gemini/answer/18560919>
 - Gems com até 10 arquivos: <https://workspace.google.com/blog/product-announcements/new-gemini-gems-deeper-knowledge-and-business-context>
 - Limite de instruções do GPT (comunidade): <https://community.openai.com/t/how-can-i-increase-the-ceiling-for-gpt-instructions-beyond-8000-characters/801867>
+
+## Plano pago: chave de licença (gerado pelo build do pacote)
+
+O grátis roda inteiro neste pacote, sem servidor e sem chave. O pago chega de dois jeitos: tools do servidor MCP (o código não vem no pacote) e recursos locais que conferem a chave antes de rodar.
+
+Configurar a chave do plano pago (vem no e-mail de compra):
+
+1. **Neste computador (memória do show):** `python3 scripts/licenca.py configurar` grava a chave em
+   `~/.podfacil/licenca` (permissão 600), sem mostrar na tela; ou exporte `PODFACIL_LICENSE_KEY`.
+   Confira com `python3 scripts/licenca.py status`. A confirmação vale 1 h sem nova consulta e até 72 h
+   se o servidor não responder.
+2. **Conector MCP (pauta em 3 troncos, 7 modos, coleta do X):** URL `https://api.antecena.artesanatodigital.com/mcp`, headers
+   `Authorization: Bearer <chave>` e `X-Device-Id: <conteúdo de ~/.podfacil/dispositivo>`. Use o mesmo
+   X-Device-Id em todo lugar: o plano conta dispositivos por ele.
+3. **Formulário (Apps Script):** em Configurações do projeto → Propriedades do script, crie
+   `PODFACIL_LICENSE_KEY` (nunca no código) e `PODFACIL_DEVICE_ID` com o mesmo valor do item 2.
+
+Sem chave, o recurso pago para e mostra onde assinar: https://antecena.artesanatodigital.com/precos/
