@@ -16,6 +16,11 @@ var HEX_RE = /^#[0-9A-Fa-f]{6}$/;
 var HTTPS_RE = /^https:\/\/\S+$/;
 var DEFAULT_COLORS = { primary: '#1F2937', background: '#FFFFFF', text: '#1F2937' };
 var LOGO_CID = 'showlogo';
+// Selo do rodapé do Free: símbolo A3 em ladrilho Estúdio (lê sobre qualquer fundo do show). Mesmo endereço em
+// mcp-server/convite_html.py (SELO_PODFACIL_URL); o teste test_convite_selo confere contra site/config.js.
+var SELO_PODFACIL_URL = 'https://antecena.artesanatodigital.com/assets/img/selo-convite-32.png';
+var SELO_PODFACIL = '<img src="' + SELO_PODFACIL_URL + '" width="16" height="16" alt="" ' +
+  'style="vertical-align:middle;margin:0 6px 0 0;border:0;">';
 
 // ---------- contraste (WCAG 2.2, SC 1.4.3) ----------
 
@@ -240,7 +245,7 @@ function footerSection(v, c) {
   return '<tr><td style="padding:16px 24px 24px;font-size:12px;line-height:1.5;color:' + c.text + ';border-top:1px solid ' + c.primary + ';">' +
     '<p style="margin:0 0 6px;">' + v.t.footer_controller + '</p><p style="margin:0 0 6px;">' + v.t.footer_purpose + '</p>' +
     '<p style="margin:0;">' + v.t.footer_optout + '</p>' +
-    (v.t.footer_brand ? '<p style="margin:6px 0 0;">' + v.t.footer_brand + '</p>' : '') + '</td></tr>';
+    (v.t.footer_brand ? '<p style="margin:6px 0 0;">' + SELO_PODFACIL + v.t.footer_brand + '</p>' : '') + '</td></tr>';
 }
 
 /** HTML do e-mail. logoSrc: URL https ou "cid:showlogo" (logo do Drive como imagem embutida); null = nome em texto. */

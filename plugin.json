@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "podcast-guest-intel",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Prepara episódios de podcast com convidado: convite, dossiê com fontes, pauta e roteiro.",
   "author": {
     "name": "Renato Aparecido Gomes"
@@ -23,7 +23,10 @@
         "shortDescription": "Prepara episódios de podcast com convidado: convite, dossiê com fontes, pauta e roteiro.",
         "longDescription": "Prepara episódios de podcast com convidado, do convite ao roteiro: convite oficial e formulário do convidado (Google Forms), dossiê com fontes (VERIFICADO / AUTODECLARADO / INFERÊNCIA), pauta ranqueada, roteiro por modo de abordagem, memória do show e localização (legendas, tradução). Use quando o usuário pedir para preparar entrevista, pesquisar convidado, montar pauta ou roteiro de podcast, convidar alguém para o programa ou legendar um episódio. EN: prepares podcast guest episodes end to end — invite, guest form, sourced guest dossier, ranked topic plan, approach-mode script, show memory, localization. Use for podcast guest research, interview prep, episode outline or script, guest invitation, subtitles.",
         "developerName": "Renato Aparecido Gomes",
-        "category": "Productivity"
+        "category": "Productivity",
+        "brandColor": "#7A1F3D",
+        "composerIcon": "./assets/icon.png",
+        "logo": "./assets/logo.png"
       }
     }
   }
