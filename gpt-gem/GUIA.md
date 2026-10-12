@@ -1,21 +1,26 @@
-# Como criar o Gem ou o GPT (sem programar)
+# Como criar o Gem (sem programar)
 
-Este pacote é a versão "sem plugin" do PodFácil, para quem usa o Gemini (Gem) ou o
-ChatGPT (GPT personalizado). Ele traz só o núcleo grátis: convite, dossiê, pauta de 1 tronco e
-roteiro no modo informativo. Sem scripts: os checks automáticos ficam na versão plugin.
+Este pacote é a versão "sem plugin" do PodFácil, para quem usa o Gemini (Gem). Ele traz só o
+núcleo grátis: convite, dossiê, pauta de 1 tronco e roteiro no modo informativo. Sem scripts: os
+checks automáticos ficam na versão plugin.
 
 ## Arquivos
 
 - `INSTRUCOES.txt`: cole no campo de instruções (cabe no limite de 8000 caracteres).
 - `conhecimento/`: envie os 8 arquivos como conhecimento.
 
-## ChatGPT — GPT personalizado
+## ChatGPT
 
-1. Abra <https://chatgpt.com/gpts/editor> e vá na aba **Configurar**.
-2. **Nome**: PodFácil. **Instruções**: cole o conteúdo de `INSTRUCOES.txt`.
-3. Em **Conhecimento**, clique em **Carregar arquivos** e envie os arquivos de `conhecimento/`.
-4. Em **Recursos**, deixe **Pesquisa na web** ligada (o dossiê precisa dela).
-5. **Criar** → escolha quem pode usar (só você, quem tiver o link, ou a GPT Store).
+Segundo a OpenAI, contas pessoais do ChatGPT (Free, Go, Plus e Pro) não podem mais criar GPTs; a
+criação ficou para workspaces Business, Enterprise e Edu
+(<https://help.openai.com/en/articles/8554397-creating-and-editing-gpts>).
+
+- Conta pessoal: use o Gem do Gemini abaixo (grátis) ou o Claude: no plano grátis, o arquivo
+  `podfacil-skill-<versão>.zip` em **Personalizar > Skills > + > Criar skill > Carregar um skill**;
+  nos planos pagos, o plugin. Passo a passo em <https://antecena.artesanatodigital.com/instalar/>.
+- Workspace Business, Enterprise ou Edu que permite criar GPTs: em <https://chatgpt.com/gpts/editor>,
+  cole `INSTRUCOES.txt` nas instruções, envie os arquivos de `conhecimento/` e deixe a pesquisa na
+  web ligada.
 
 ## Gemini — Gem (ou Skill)
 

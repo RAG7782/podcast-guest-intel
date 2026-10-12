@@ -14,10 +14,11 @@ programador**. Escolha a ferramenta de IA que você já usa e siga só a seção
 
 | Você usa | Melhor caminho | Esforço |
 |---|---|---|
-| Claude no navegador ou no app | Plugin (adicionar marketplace ou enviar `.zip`) | 1 clique + colar um endereço |
+| Claude no navegador ou no app (Pro, Max, Team, Enterprise) | Plugin (adicionar marketplace ou enviar `.zip`) | 1 clique + colar um endereço |
+| Claude grátis | Skill em `.zip` (`podfacil-skill-<versão>.zip`) | 3 cliques, sem terminal |
 | Claude Code (terminal) | Plugin | 1 comando |
 | ChatGPT (Codex ou app com plugins) | Plugin | 2 comandos |
-| ChatGPT sem plugins (plano Plus) | GPT personalizado | 5 minutos, sem programar |
+| ChatGPT, conta pessoal (Free, Go, Plus, Pro) | Codex (terminal) ou Gem/Claude | contas pessoais não criam GPTs |
 | Gemini | Gem (ou Skill) | 5 minutos, sem programar |
 | Hermes Agent | Plugin portátil ou só a skill | 1 comando |
 | OpenClaw | Plugin do marketplace do Claude | 1 comando |
@@ -31,12 +32,27 @@ programador**. Escolha a ferramenta de IA que você já usa e siga só a seção
 2. Clique em **Adicionar marketplace** e cole `RAG7782/podcast-guest-intel`.
 3. Instale **podcast-guest-intel**.
 
+Os plugins são dos planos pagos do Claude (Pro, Max, Team e Enterprise).
+
 A partir da pasta: compacte o **conteúdo** da pasta do plugin num `.zip` e use **Enviar plugin**
 (Upload plugin) na mesma tela. No Mac, abra o Terminal dentro da pasta do plugin e rode:
 
 ```bash
 zip -r ../podcast-guest-intel.zip .
 ```
+
+### Claude grátis: a skill em `.zip`, sem terminal
+
+No plano grátis não há plugins, mas dá para enviar a skill. Baixe `podfacil-skill-<versão>.zip` na
+página de releases do repositório (<https://github.com/RAG7782/podcast-guest-intel/releases>) e:
+
+1. Em **Configurações → Capacidades**, ligue **Execução de código e criação de arquivos**.
+2. Em **Personalizar → Skills**, clique em **+ → Criar skill → Carregar um skill** e escolha o `.zip`.
+3. Ative a skill na lista e peça: “prepare o episódio com <nome do convidado>”.
+
+O zip tem a pasta `podcast-guest-intel/` no topo, como o claude.ai exige
+(<https://claude.com/docs/skills/how-to#package-your-skill>). No repositório de desenvolvimento ele sai
+em `dist/podfacil-skill-<versão>.zip`, gerado por `python3 scripts/build_plugin.py`.
 
 ### Claude Code
 
@@ -66,9 +82,11 @@ codex plugin add podcast-guest-intel@guest-intel
 
 A partir da pasta: `codex plugin marketplace add ./dist/plugin` e depois o mesmo
 `codex plugin add`. No app do ChatGPT, o plugin aparece em **Plugins** depois de instalado pela
-conta. Se o seu plano não tiver plugins (por exemplo, Plus), use o **GPT personalizado** abaixo.
+conta. Contas pessoais do ChatGPT (Free, Go, Plus e Pro) não criam mais GPTs
+(<https://help.openai.com/en/articles/8554397-creating-and-editing-gpts>): nelas, use o Codex, o Gem
+ou o Claude.
 
-## Gem (Gemini) e GPT personalizado (ChatGPT)
+## Gem (Gemini) e GPT personalizado (só workspaces Business, Enterprise e Edu)
 
 É a versão sem instalação: você cria um assistente e cola as instruções. Os arquivos ficam em
 `dist/gpt-gem/`, e o passo a passo, com os links das telas, está em `dist/gpt-gem/GUIA.md`.
