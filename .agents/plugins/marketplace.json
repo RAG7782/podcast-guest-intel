@@ -5,7 +5,7 @@
   },
   "plugins": [
     {
-      "name": "podcast-guest-intel",
+      "name": "podfacil",
       "source": {
         "source": "local",
         "path": "./"

@@ -1,10 +1,10 @@
 ---
-name: podcast-guest-intel
+name: podfacil
 description: "Prepara episódios de podcast com convidado, do convite ao roteiro: convite oficial e formulário do convidado (Google Forms), dossiê com fontes (VERIFICADO / AUTODECLARADO / INFERÊNCIA), pauta ranqueada, roteiro por modo de abordagem, memória do show e localização (legendas, tradução). Use quando o usuário pedir para preparar entrevista, pesquisar convidado, montar pauta ou roteiro de podcast, convidar alguém para o programa ou legendar um episódio. EN: prepares podcast guest episodes end to end — invite, guest form, sourced guest dossier, ranked topic plan, approach-mode script, show memory, localization. Use for podcast guest research, interview prep, episode outline or script, guest invitation, subtitles."
 license: Apache-2.0
 compatibility: "Python 3.10+ com PyYAML (roteiro e check da pauta) e jsonschema (validação); recomendado uv (uv run --with pyyaml --with jsonschema python scripts/...). Busca web do harness para o dossiê e a pauta. Plano pago: chave de licença (scripts/licenca.py) e o conector MCP do PodFácil."
 metadata:
-  version: "1.1.3"
+  version: "2.0.0"
   source: "https://github.com/RAG7782/podcast-guest-intel"
 ---
 
@@ -57,7 +57,7 @@ Regras do fluxo:
 
 ## Especialistas
 
-13 especialistas (HPF v1). Mandato de cada um em `references/agents/<id>.md`; índice em `references/agents.md`. No Claude Code também são subagentes `podcast-guest-intel:<id>`.
+13 especialistas (HPF v1). Mandato de cada um em `references/agents/<id>.md`; índice em `references/agents.md`. No Claude Code também são subagentes `podfacil:<id>`.
 
 ## Grátis × pago
 

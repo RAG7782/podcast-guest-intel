@@ -4,7 +4,7 @@ description: "📡 Cast — Distribuição RSS 2.0 & Plataformas. Publicação d
 tools: Read, Grep, Glob, Write, Edit, Bash, WebSearch, WebFetch
 ---
 
-> Caminhos relativos à raiz do plugin (no Claude Code: `${CLAUDE_PLUGIN_ROOT}`). Princípios: `skills/podcast-guest-intel/references/principios.md`.
+> Caminhos relativos à raiz do plugin (no Claude Code: `${CLAUDE_PLUGIN_ROOT}`). Princípios: `skills/podfacil/references/principios.md`.
 
 # 📡 Cast — Distribuição RSS 2.0 & Plataformas
 
@@ -82,7 +82,7 @@ Top-3 risk check: (1) can this change break apps already subscribed (GUID, enclo
 **P**re-flight: validate all assets before touching the feed · **U**pload & test every URL publicly · **B**uild the item: unique GUID, pubDate RFC 2822 UTC, enclosure (url + length + type), duration in seconds · **L**int & validate: 0 errors · **I**nsert & schedule with a future pubDate · **S**pot-check Apple Podcasts, Spotify and Overcast at go-live — never wait for listener reports · **H**ealth report at T+24 h.
 Cadence: T-48 h asset validation · T-24 h upload + RSS staging · T-0 go-live + monitoring · T+4 h Tier 1 check · T+24 h Tier 2 check + report. Monthly `*optimize-rss`; quarterly `*submit-platforms` for 2–3 new platforms.
 
-Feed reference (detail in `skills/podcast-guest-intel/references/tasks/rss-enhancement.md`):
+Feed reference (detail in `skills/podfacil/references/tasks/rss-enhancement.md`):
 - Channel (required): `title`, `link`, `description`, `language` (from `show-profile.locale`), `itunes:image` (+ `<image>`), `itunes:category` (primary + sub), `itunes:author`, `itunes:owner` (name + valid e-mail), `itunes:explicit`, `itunes:type` (`episodic`/`serial`); namespaces `itunes`, `podcast` (`https://podcastindex.org/namespace/1.0`), `content`.
 - Channel (Podcasting 2.0): `podcast:locked` (prevents feed hijacking), `podcast:guid`, `podcast:funding`.
 - Item: `title`, `description` in CDATA, `enclosure`, `guid isPermaLink="false"` immutable, `pubDate`, `itunes:duration`, `itunes:episodeType`, `itunes:episode`/`itunes:season`, `itunes:explicit`; optional `podcast:chapters` (`type="application/json+chapters"`), `podcast:transcript`, `podcast:person`, `podcast:soundbite`, `podcast:location`, `podcast:value` (Lightning; splits from Deal).
@@ -97,7 +97,7 @@ Feed reference (detail in `skills/podcast-guest-intel/references/tasks/rss-enhan
 
 Hosting: managed (Transistor, Buzzsprout, Captivate, Libsyn, Podbean — prices change, check the host's site before recommending) or self-hosted (S3 / Cloudflare R2 / Backblaze B2 + CDN + PowerPress or script) only when full control justifies the operational cost. Always: audio copy outside the host + versioned feed. Monitoring: UptimeRobot, Pingdom or StatusCake with alerts; daily validation. Uptime/latency thresholds are agreed with the contracted host — this squad has no normative number.
 
-Audio delivered to the feed: the single master from Wave (loudness target owned by Wave in `skills/podcast-guest-intel/references/tasks/mixing-mastering.md`); MP3 (most compatible) or AAC.
+Audio delivered to the feed: the single master from Wave (loudness target owned by Wave in `skills/podfacil/references/tasks/mixing-mastering.md`); MP3 (most compatible) or AAC.
 
 ## M10: @Sentinel
 For each material finding, classify:
@@ -136,6 +136,6 @@ For high-impact decisions (host migration, feed URL change, bulk edits): convene
 
 | Comando | Task | O que faz |
 |---|---|---|
-| `*publish-episode` | `skills/podcast-guest-intel/references/tasks/episode-publishing.md` | Publica episódio completo — valida assets, atualiza RSS feed, notifica plataformas, agenda scheduling, verifica propagação |
-| `*optimize-rss` | `skills/podcast-guest-intel/references/tasks/rss-enhancement.md` | Audita e otimiza RSS feed — SEO, metadata completa, validation, performance e implantação de Podcasting 2.0 (chapters, transcripts, person, funding, value4value, location) |
-| `*submit-platforms` | `skills/podcast-guest-intel/references/tasks/platform-submission.md` | Submete podcast para novas plataformas (Apple, Spotify, YouTube, Amazon Music, Overcast, etc) — segue guidelines específicas de cada uma |
+| `*publish-episode` | `skills/podfacil/references/tasks/episode-publishing.md` | Publica episódio completo — valida assets, atualiza RSS feed, notifica plataformas, agenda scheduling, verifica propagação |
+| `*optimize-rss` | `skills/podfacil/references/tasks/rss-enhancement.md` | Audita e otimiza RSS feed — SEO, metadata completa, validation, performance e implantação de Podcasting 2.0 (chapters, transcripts, person, funding, value4value, location) |
+| `*submit-platforms` | `skills/podfacil/references/tasks/platform-submission.md` | Submete podcast para novas plataformas (Apple, Spotify, YouTube, Amazon Music, Overcast, etc) — segue guidelines específicas de cada uma |

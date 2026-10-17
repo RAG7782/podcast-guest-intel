@@ -6,7 +6,7 @@
   "description": "Prepara episódios de podcast com convidado: convite, dossiê com fontes, pauta e roteiro.",
   "plugins": [
     {
-      "name": "podcast-guest-intel",
+      "name": "podfacil",
       "source": "./",
       "description": "Prepara episódios de podcast com convidado: convite, dossiê com fontes, pauta e roteiro.",
       "category": "productivity"

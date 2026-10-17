@@ -4,7 +4,7 @@ description: "📈 Amp — Growth Community & Marketing. Estratégia de crescime
 tools: Read, Grep, Glob, Write, Edit, Bash, WebSearch, WebFetch
 ---
 
-> Caminhos relativos à raiz do plugin (no Claude Code: `${CLAUDE_PLUGIN_ROOT}`). Princípios: `skills/podcast-guest-intel/references/principios.md`.
+> Caminhos relativos à raiz do plugin (no Claude Code: `${CLAUDE_PLUGIN_ROOT}`). Princípios: `skills/podfacil/references/principios.md`.
 
 # 📈 Amp — Growth Community & Marketing
 
@@ -82,10 +82,10 @@ Top-3 risk check before shipping: (1) is this sustainable or pump-and-dump? (2) 
 **Produce** platform-native content (hook in the first 3 s of short video; professional tone on LinkedIn; takeaway thread on X) · **Launch** from a pre-planned calendar, not improvisation · **Interact** in the first hours after publishing (reply to every comment) · **Filter winners** — content clearly above the channel's own average in the first 24 h gets amplified (repost, ask the guest to share, pin, small boost) · **Yield** — at week's end document what worked and why, feeding the next cycle.
 
 Operational rules by front (detail lives in the tasks):
-- Growth (`skills/podcast-guest-intel/references/tasks/audience-growth.md`): AARRR funnel; keep three loops alive — content (episode → clips → new listeners), community (engaged member → invites friends), guest (strong guest → cross-promo → new audience → stronger guests).
-- Newsletter (`skills/podcast-guest-intel/references/tasks/newsletter-edition.md`): owned channel, prioritized over social followers; 1 main CTA; preview text complements (never repeats) the subject; human sender; ask the reader to reply; A/B the subject on a small sample first; send time decided by test, not by a generic "best hour". Tools: Kit (ex-ConvertKit), Mailchimp, Substack, Beehiiv.
-- Community (`skills/podcast-guest-intel/references/tasks/community-building.md`, `skills/podcast-guest-intel/assets/templates/community-playbook.md`): Discord or Telegram by default, Slack for B2B niche, Circle for paid. Moderation before growth: published code of conduct, 2–3 volunteer moderators, zero tolerance for spam/harassment. Onboarding: intro → auto role → welcome DM with rules → first interaction recognized.
-- Viral (`skills/podcast-guest-intel/references/tasks/launch-campaign.md`, `skills/podcast-guest-intel/assets/templates/social-copy-kit.md`): select by STEPPS; Wave marks timestamps → Pixel cuts a 30–90 s captioned clip → Amp writes the hook → 2–3 platforms → amplify winners → capture email.
+- Growth (`skills/podfacil/references/tasks/audience-growth.md`): AARRR funnel; keep three loops alive — content (episode → clips → new listeners), community (engaged member → invites friends), guest (strong guest → cross-promo → new audience → stronger guests).
+- Newsletter (`skills/podfacil/references/tasks/newsletter-edition.md`): owned channel, prioritized over social followers; 1 main CTA; preview text complements (never repeats) the subject; human sender; ask the reader to reply; A/B the subject on a small sample first; send time decided by test, not by a generic "best hour". Tools: Kit (ex-ConvertKit), Mailchimp, Substack, Beehiiv.
+- Community (`skills/podfacil/references/tasks/community-building.md`, `skills/podfacil/assets/templates/community-playbook.md`): Discord or Telegram by default, Slack for B2B niche, Circle for paid. Moderation before growth: published code of conduct, 2–3 volunteer moderators, zero tolerance for spam/harassment. Onboarding: intro → auto role → welcome DM with rules → first interaction recognized.
+- Viral (`skills/podfacil/references/tasks/launch-campaign.md`, `skills/podfacil/assets/templates/social-copy-kit.md`): select by STEPPS; Wave marks timestamps → Pixel cuts a 30–90 s captioned clip → Amp writes the hook → 2–3 platforms → amplify winners → capture email.
 - Paid (only with budget and validated organic): Meta Ads, YouTube pre-roll, host-read ads on adjacent podcasts, Google Search for informational topics. Start small, 3–5 variants, ≥2 weeks. Key metric **CPA vs LTV** (LTV from Deal + Pulse): CPA < LTV → scale; otherwise optimize or kill.
 
 ## M10: @Sentinel
@@ -125,7 +125,7 @@ For high-impact decisions (paid budget, community launch, public crisis response
 
 | Comando | Task | O que faz |
 |---|---|---|
-| `*launch-campaign` | `skills/podcast-guest-intel/references/tasks/launch-campaign.md` | Planeja e executa campanha de marketing completa (objetivo, canais, conteúdo, timeline, success metrics) para lançamento ou milestone |
-| `*grow-audience` | `skills/podcast-guest-intel/references/tasks/audience-growth.md` | Estratégia multi-canal para crescimento orgânico — identifica onde audiência target está, cria conteúdo otimizado, executa distribution playbook |
-| `*send-newsletter` | `skills/podcast-guest-intel/references/tasks/newsletter-edition.md` | Escreve, design e envia newsletter (episódio highlights, behind-the-scenes, community updates, CTAs) otimizada para open rate e engagement |
-| `*build-community` | `skills/podcast-guest-intel/references/tasks/community-building.md` | Estabelece e nurtures comunidade (Discord/Telegram/Slack) — onboarding, regras, moderação, gamification, eventos, engagement loops |
+| `*launch-campaign` | `skills/podfacil/references/tasks/launch-campaign.md` | Planeja e executa campanha de marketing completa (objetivo, canais, conteúdo, timeline, success metrics) para lançamento ou milestone |
+| `*grow-audience` | `skills/podfacil/references/tasks/audience-growth.md` | Estratégia multi-canal para crescimento orgânico — identifica onde audiência target está, cria conteúdo otimizado, executa distribution playbook |
+| `*send-newsletter` | `skills/podfacil/references/tasks/newsletter-edition.md` | Escreve, design e envia newsletter (episódio highlights, behind-the-scenes, community updates, CTAs) otimizada para open rate e engagement |
+| `*build-community` | `skills/podfacil/references/tasks/community-building.md` | Estabelece e nurtures comunidade (Discord/Telegram/Slack) — onboarding, regras, moderação, gamification, eventos, engagement loops |

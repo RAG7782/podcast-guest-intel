@@ -4,7 +4,7 @@ description: "💰 Deal — Monetização DAI & Parcerias. Patrocinadores, dynam
 tools: Read, Grep, Glob, Write, Edit, Bash, WebSearch, WebFetch
 ---
 
-> Caminhos relativos à raiz do plugin (no Claude Code: `${CLAUDE_PLUGIN_ROOT}`). Princípios: `skills/podcast-guest-intel/references/principios.md`.
+> Caminhos relativos à raiz do plugin (no Claude Code: `${CLAUDE_PLUGIN_ROOT}`). Princípios: `skills/podfacil/references/principios.md`.
 
 # 💰 Deal — Monetização DAI & Parcerias
 
@@ -78,7 +78,7 @@ Inventory heuristics (market practice, no source in this squad — treat as NORM
 
 ### Step 4: Drafting — VALOR · L, O, R
 **Lead** the negotiation: counter-proposal justified by own metrics (completion, engagement, promo-code history); prefer 3–6 month packages; formal contract (Dropbox Sign / DocuSign) after Sentinel vetting. **Optimize**: weekly conversion monitoring (promo codes, UTM), A/B ad-read variants via Pulse, monthly performance share with the sponsor. **Renew or not**: 30 days before term end, evaluate; positive ROI → renew with data-justified CPM increase; negative → discontinue and line up a replacement early.
-Fronts (detail in tasks): sponsors `skills/podcast-guest-intel/references/tasks/sponsor-outreach.md` (inbound media kit, outbound personalized outreach, marketplaces such as AdvertiseCast, Podcorn, Acast, Megaphone); DAI `skills/podcast-guest-intel/references/tasks/dai-setup.md` (start with the current host's DAI — Transistor, Buzzsprout, Podbean; Megaphone or AdsWizz with volume; 15/30/60 s creatives); membership `skills/podcast-guest-intel/references/tasks/membership-launch.md` (Patreon, Memberful, Glow, Buy Me a Coffee or own premium feed — fees checked on the official site on decision date); revenue `skills/podcast-guest-intel/references/tasks/revenue-report.md` (sponsors, membership, affiliates, products, events, value4value splits implemented by Cast; KPIs MoM/YoY, revenue per episode, sponsor retention, MRR/churn/LTV, diversification); media kit `skills/podcast-guest-intel/assets/templates/media-kit.md` (about, aggregated audience, engagement, packages, past sponsors, testimonials, contact; 1–2 page PDF with Pixel; only own measured metrics).
+Fronts (detail in tasks): sponsors `skills/podfacil/references/tasks/sponsor-outreach.md` (inbound media kit, outbound personalized outreach, marketplaces such as AdvertiseCast, Podcorn, Acast, Megaphone); DAI `skills/podfacil/references/tasks/dai-setup.md` (start with the current host's DAI — Transistor, Buzzsprout, Podbean; Megaphone or AdsWizz with volume; 15/30/60 s creatives); membership `skills/podfacil/references/tasks/membership-launch.md` (Patreon, Memberful, Glow, Buy Me a Coffee or own premium feed — fees checked on the official site on decision date); revenue `skills/podfacil/references/tasks/revenue-report.md` (sponsors, membership, affiliates, products, events, value4value splits implemented by Cast; KPIs MoM/YoY, revenue per episode, sponsor retention, MRR/churn/LTV, diversification); media kit `skills/podfacil/assets/templates/media-kit.md` (about, aggregated audience, engagement, packages, past sponsors, testimonials, contact; 1–2 page PDF with Pixel; only own measured metrics).
 Cadence: week 1 revenue report → Max; week 2 renewals + pipeline; week 3 negotiations + media kit refresh; week 4 next month's contracts, ad scripts with Host/Wave, DAI campaigns; quarterly diversification review.
 
 ## M10: @Sentinel
@@ -119,7 +119,7 @@ For high-impact decisions (exclusivity, long contracts, baked-in ads, membership
 
 | Comando | Task | O que faz |
 |---|---|---|
-| `*find-sponsors` | `skills/podcast-guest-intel/references/tasks/sponsor-outreach.md` | Prospecta sponsors ideais — identifica marcas com fit, outreach personalizado, negotiation de termos (CPM, duração, exclusividade) |
-| `*setup-dai` | `skills/podcast-guest-intel/references/tasks/dai-setup.md` | Configura Dynamic Ad Insertion — escolhe plataforma (Megaphone, AdsWizz), define ad breaks, tracking, optimization |
-| `*create-membership` | `skills/podcast-guest-intel/references/tasks/membership-launch.md` | Lança programa de membership — define tiers, benefits, pricing, plataforma (Patreon, premium RSS), onboarding |
-| `*revenue-report` | `skills/podcast-guest-intel/references/tasks/revenue-report.md` | Gera report financeiro completo — revenue por fonte, CPM trends, sponsor performance, forecast, recomendações |
+| `*find-sponsors` | `skills/podfacil/references/tasks/sponsor-outreach.md` | Prospecta sponsors ideais — identifica marcas com fit, outreach personalizado, negotiation de termos (CPM, duração, exclusividade) |
+| `*setup-dai` | `skills/podfacil/references/tasks/dai-setup.md` | Configura Dynamic Ad Insertion — escolhe plataforma (Megaphone, AdsWizz), define ad breaks, tracking, optimization |
+| `*create-membership` | `skills/podfacil/references/tasks/membership-launch.md` | Lança programa de membership — define tiers, benefits, pricing, plataforma (Patreon, premium RSS), onboarding |
+| `*revenue-report` | `skills/podfacil/references/tasks/revenue-report.md` | Gera report financeiro completo — revenue por fonte, CPM trends, sponsor performance, forecast, recomendações |

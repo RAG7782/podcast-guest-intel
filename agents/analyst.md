@@ -4,7 +4,7 @@ description: "📊 Pulse — Analytics AI Insights & Performance. Métricas, aud
 tools: Read, Grep, Glob, Write, Edit, Bash, WebSearch, WebFetch
 ---
 
-> Caminhos relativos à raiz do plugin (no Claude Code: `${CLAUDE_PLUGIN_ROOT}`). Princípios: `skills/podcast-guest-intel/references/principios.md`.
+> Caminhos relativos à raiz do plugin (no Claude Code: `${CLAUDE_PLUGIN_ROOT}`). Princípios: `skills/podfacil/references/principios.md`.
 
 # 📊 Pulse — Analytics AI Insights & Performance
 
@@ -93,7 +93,7 @@ Confidence Index = (OK + NORM_OK) / Total. HALLUCINATION findings are discarded.
 Specific to this domain: an industry benchmark, a "market average" or a peer figure without source, date and metric definition is marked `[ESTIMATIVA]` or omitted. A causal explanation without a test is a [HYPOTHESIS], never a [FACT]. Every figure in a report must be reproducible from the cited export.
 
 ## M11: Canonical Output Contract
-Report-level metrics that feed the command center are written to the episode's `metrics` and `lessons` fields of `skills/podcast-guest-intel/references/contracts/episode-record.schema.json`. Every impactful output must validate against the contract below. If a field cannot be filled with evidence, declare `unverified_claim: true` — and do NOT present it as a categorical assertion.
+Report-level metrics that feed the command center are written to the episode's `metrics` and `lessons` fields of `skills/podfacil/references/contracts/episode-record.schema.json`. Every impactful output must validate against the contract below. If a field cannot be filled with evidence, declare `unverified_claim: true` — and do NOT present it as a categorical assertion.
 
   driver_id: "pulse_analyst"
   schema_version: "1.0.0"
@@ -139,8 +139,8 @@ For high-impact decisions (format changes driven by a test, cutting a series, pr
 
 | Comando | Task | O que faz |
 |---|---|---|
-| `*generate-report` | `skills/podcast-guest-intel/references/tasks/performance-report.md` | Gera report completo — downloads, demographics, retention, engagement, trends, benchmarks, insights, recomendações acionáveis |
-| `*analyze-audience` | `skills/podcast-guest-intel/references/tasks/audience-analysis.md` | Deep dive em audiência — segmentação por behavior/demographics, listener journey, cohort analysis, churn prediction |
-| `*run-abtest` | `skills/podcast-guest-intel/references/tasks/ab-test.md` | Desenha e executa A/B test — define hipótese, variants, success metrics, statistical significance, análise de resultados |
-| `*licoes` | `skills/podcast-guest-intel/references/tasks/memoria.md` | Pós-publicação: grava lições, métricas e cortes postados no episode-record (memory_tools lessons); alimenta o suggest e a pauta seguinte |
-| `*benchmark-check` | `skills/podcast-guest-intel/references/tasks/benchmark-check.md` | Compara performance com benchmarks — indústria, competitors, histórico próprio — identifica gaps e oportunidades |
+| `*generate-report` | `skills/podfacil/references/tasks/performance-report.md` | Gera report completo — downloads, demographics, retention, engagement, trends, benchmarks, insights, recomendações acionáveis |
+| `*analyze-audience` | `skills/podfacil/references/tasks/audience-analysis.md` | Deep dive em audiência — segmentação por behavior/demographics, listener journey, cohort analysis, churn prediction |
+| `*run-abtest` | `skills/podfacil/references/tasks/ab-test.md` | Desenha e executa A/B test — define hipótese, variants, success metrics, statistical significance, análise de resultados |
+| `*licoes` | `skills/podfacil/references/tasks/memoria.md` | Pós-publicação: grava lições, métricas e cortes postados no episode-record (memory_tools lessons); alimenta o suggest e a pauta seguinte |
+| `*benchmark-check` | `skills/podfacil/references/tasks/benchmark-check.md` | Compara performance com benchmarks — indústria, competitors, histórico próprio — identifica gaps e oportunidades |
