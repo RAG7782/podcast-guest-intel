@@ -4,7 +4,7 @@ description: "Prepara episódios de podcast com convidado, do convite ao roteiro
 license: Apache-2.0
 compatibility: "Python 3.10+ com PyYAML (roteiro e check da pauta) e jsonschema (validação); recomendado uv (uv run --with pyyaml --with jsonschema python scripts/...). Busca web do harness para o dossiê e a pauta. Plano pago: chave de licença (scripts/licenca.py) e o conector MCP do PodFácil."
 metadata:
-  version: "2.0.0"
+  version: "2.0.1"
   source: "https://github.com/RAG7782/podcast-guest-intel"
 ---
 

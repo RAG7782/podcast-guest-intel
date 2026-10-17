@@ -30,7 +30,7 @@ programador**. Escolha a ferramenta de IA que você já usa e siga só a seção
 
 1. Abra **Personalizar** (Customize) → **Plugins**.
 2. Clique em **Adicionar marketplace** e cole `RAG7782/podcast-guest-intel`.
-3. Instale **podcast-guest-intel**.
+3. Instale **PodFácil** (`podfacil`).
 
 Os plugins são dos planos pagos do Claude (Pro, Max, Team e Enterprise).
 
@@ -38,7 +38,7 @@ A partir da pasta: compacte o **conteúdo** da pasta do plugin num `.zip` e use 
 (Upload plugin) na mesma tela. No Mac, abra o Terminal dentro da pasta do plugin e rode:
 
 ```bash
-zip -r ../podcast-guest-intel.zip .
+zip -r ../podfacil.zip .
 ```
 
 ### Claude grátis: a skill em `.zip`, sem terminal
@@ -50,7 +50,7 @@ página de releases do repositório (<https://github.com/RAG7782/podcast-guest-i
 2. Em **Personalizar → Skills**, clique em **+ → Criar skill → Carregar um skill** e escolha o `.zip`.
 3. Ative a skill na lista e peça: “prepare o episódio com <nome do convidado>”.
 
-O zip tem a pasta `podcast-guest-intel/` no topo, como o claude.ai exige
+O zip tem a pasta `podfacil/` no topo, como o claude.ai exige
 (<https://claude.com/docs/skills/how-to#package-your-skill>). No repositório de desenvolvimento ele sai
 em `dist/podfacil-skill-<versão>.zip`, gerado por `python3 scripts/build_plugin.py`.
 
@@ -181,6 +181,8 @@ cada assistente está na página de instalação do site, em `/instalar/`. São 
 Na primeira checagem o pacote cria `~/.podfacil/dispositivo`. Use esse mesmo valor no `X-Device-Id`
 do conector e nas propriedades do script do formulário (`PODFACIL_LICENSE_KEY`, `PODFACIL_DEVICE_ID`);
 com valores diferentes, o Solo conta dois dispositivos. Confira com `python3 scripts/licenca.py status`.
+**No claude.ai** o conector não envia `X-Device-Id`: no formulário, crie só `PODFACIL_LICENSE_KEY` e deixe
+`PODFACIL_DEVICE_ID` sem valor. Sem `X-Device-Id`, conector e formulário não contam como dispositivo.
 
 Sem chave, o pacote continua funcionando no plano grátis. Detalhes técnicos do servidor e da
 licença: `docs/LICENSING.md`.
@@ -194,7 +196,7 @@ licença: `docs/LICENSING.md`.
 | Hermes | `plugin.json` na raiz (Agent Plugins v1) | **Confirmado**: `hermes plugins validate` passou |
 | OpenClaw | marketplace do Claude | **Confirmado**: `openclaw plugins marketplace list` leu o plugin |
 | Codex / ChatGPT | `plugin.json` com `extensions.com.openai` + `.codex-plugin/` + `.agents/plugins/marketplace.json` | **Inferido** da documentação; não instalado nesta máquina |
-| claude.ai (upload `.zip`) | mesmo plugin do Claude Code | **Inferido** da documentação; não testado |
+| claude.ai (marketplace + conector) | mesmo plugin do Claude Code + conector personalizado | **Confirmado** em 2026-10-17 pelo dono: plugin instalado pelo marketplace, conector "Sem login" com só `Authorization`, `licenca_status` devolveu `tier: paid`. O claude.ai recusa header de nome não aprovado (`X-Device-Id`) e não deixa editar header depois de criar o conector (só excluir e criar de novo) |
 | Gem / GPT | instruções + 8 arquivos | Limite de 8.000 caracteres do GPT **relatado pela comunidade** (a página oficial respondeu 403) |
 
 ## Fontes consultadas

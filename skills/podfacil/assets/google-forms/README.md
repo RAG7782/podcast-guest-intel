@@ -64,7 +64,7 @@ Ainda em ⚙️ **Configurações do projeto**, desça até **Propriedades do sc
 | `WHATSAPP_INSTANCE` | nome da instância (Evolution) | só Evolution |
 | `WHATSAPP_SESSION` | nome da sessão (WAHA; padrão `default`) | não |
 | `PODFACIL_LICENSE_KEY` | a chave de licença do e-mail de compra (**nunca** cole no código) | só no plano pago |
-| `PODFACIL_DEVICE_ID` | o mesmo `X-Device-Id` do seu conector MCP / de `~/.podfacil/dispositivo` (assim o plano conta 1 dispositivo; sem ela, o script cria um) | não |
+| `PODFACIL_DEVICE_ID` | só se o seu conector usa `X-Device-Id` (Claude Code): o mesmo valor do conector / de `~/.podfacil/dispositivo`. **No claude.ai, deixe sem**: sem ela, o formulário não conta como dispositivo | não |
 
 > **O valor de cada propriedade aceita até 9 KB.** Se o seu show-profile for maior, crie mais um
 > arquivo de script chamado `config` e cole nele `var SHOW_PROFILE = { …seu JSON… };`.

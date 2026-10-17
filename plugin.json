@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "podfacil",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Prepara episódios de podcast com convidado: convite, dossiê com fontes, pauta e roteiro.",
   "author": {
     "name": "Renato Aparecido Gomes"

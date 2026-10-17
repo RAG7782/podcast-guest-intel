@@ -23,16 +23,17 @@ function licencaNegadaMsg_(recurso, motivo) {
   return 'O recurso "' + recurso + '" é do plano pago do PodFácil: ' + motivo + '. Planos e assinatura: ' +
     BUNDLE.produto.precos + '. Já tem a chave? Em Configurações do projeto > Propriedades do script, crie ' +
     LICENCA_PROP + ' com a chave (nunca no código) e ' + DISPOSITIVO_PROP +
-    ' com o mesmo X-Device-Id do seu conector MCP (assim o plano conta 1 dispositivo).';
+    ' só se o seu conector MCP usar X-Device-Id (Claude Code); no claude.ai, deixe sem.';
 }
 
-function dispositivo_() {
-  var p = props_(), id = p.getProperty(DISPOSITIVO_PROP);
-  if (!id) {
-    id = 'dev_' + Utilities.getUuid().replace(/-/g, '').slice(0, 16);
-    p.setProperty(DISPOSITIVO_PROP, id);
-  }
-  return id;
+/** Headers da licença. Sem PODFACIL_DEVICE_ID, não manda X-Device-Id: o servidor trata o pedido como a conta,
+ *  fora do limite de dispositivos, como o conector do claude.ai (que não pode enviar X-Device-Id).
+ *  Inventar um id aqui contava um 2º dispositivo e bloqueava o Solo (teste do dono, 2026-10-17). */
+function headersLicenca_(key) {
+  var h = { Authorization: 'Bearer ' + key, 'X-PodFacil-Cliente': 'apps-script' };
+  var id = (props_().getProperty(DISPOSITIVO_PROP) || '').trim();
+  if (id) h['X-Device-Id'] = id;
+  return h;
 }
 
 function chaveHash_(key) {
@@ -61,7 +62,7 @@ function perguntarServidor_(key) {
   try {
     resp = UrlFetchApp.fetch(BUNDLE.produto.servidor_mcp, { method: 'post', contentType: 'application/json',
       payload: JSON.stringify(rpc), muteHttpExceptions: true,
-      headers: { Authorization: 'Bearer ' + key, 'X-Device-Id': dispositivo_(), 'X-PodFacil-Cliente': 'apps-script' } });
+      headers: headersLicenca_(key) });
   } catch (err) {
     return { indisponivel: 'rede: ' + err.message };
   }
