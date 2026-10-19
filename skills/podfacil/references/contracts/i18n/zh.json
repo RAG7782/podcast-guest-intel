@@ -303,7 +303,7 @@
   },
   "messages": {
     "email_subject": "[TODO-zh] Guest kit · {{show.name}}",
-    "owner_subject": "[TODO-zh] New guest form: {{guest.preferred_name}}",
+    "owner_subject": "✅ {{guest.preferred_name}} 已填写表单 · {{show.name}}",
     "calendar_title": "[TODO-zh] {{show.name}} recording with {{guest.preferred_name}}",
     "calendar_remote_location": "[TODO-zh] Online (link from the production team)",
     "calendar_description": "[TODO-zh] Guest kit sent by email. Questions: {{controller.contact}}.",
@@ -387,5 +387,85 @@
       "dub_generic": "本集为基于{{source_language}}原版节目的AI配音版本，声音为合成语音。",
       "dub_replica": "本集为基于{{source_language}}原版节目的AI配音版本，经授权使用AI复制的说话者声音。"
     }
+  },
+  "owner": {
+    "headline": "{{name}} 已填写表单。",
+    "lead": "所有信息均已记录。以下是目前已完成的事项以及嘉宾提供的信息。",
+    "happened": "已完成事项",
+    "form_received": "已收到邀请并填写表单",
+    "attention": "需要你关注",
+    "summary": "嘉宾概要",
+    "button": "查看完整回答",
+    "next_step": "下一步：请让 Claude\"为 {{name}} 准备简报\"，以获取档案和访谈提纲。",
+    "notes": "备注",
+    "record_code": "记录编号：{{id}}",
+    "full_answers": "完整回答：{{url}}",
+    "labels": {
+      "name": "姓名",
+      "prefers": "希望被称为 {{name}}",
+      "role": "职位",
+      "bio": "简介",
+      "ideas": "核心观点",
+      "recording": "录制",
+      "email": "电子邮件",
+      "whatsapp": "WhatsApp"
+    },
+    "mode": {
+      "presencial": "现场",
+      "remoto": "远程"
+    },
+    "date_tbd": "待定",
+    "sends": {
+      "kit_email": "嘉宾资料包（电子邮件）",
+      "kit_whatsapp": "嘉宾资料包（WhatsApp）",
+      "calendar": "日历邀请",
+      "automations": "自动发送（资料包和日历）", "guest": "发送给嘉宾",
+      "other": "发送\"{{key}}\""
+    },
+    "status": {
+      "sent": "{{label}}：已发送",
+      "skipped": "{{label}}：未发送",
+      "error": "{{label}}：失败",
+      "held": "{{label}}：等待你的确认"
+    },
+    "drops": {
+      "whatsapp": "无法识别所填写的 WhatsApp 号码{{end}}。请与嘉宾确认号码。",
+      "whatsapp_end": "（尾号 {{digits}}）",
+      "accessibility": "嘉宾填写了无障碍需求，但未勾选此类数据的授权，因此该信息已被删除。如对录制很重要，请直接询问嘉宾。",
+      "sensitive": "由于嘉宾未勾选专门授权，一项敏感个人信息已被删除。",
+      "scheduled_at": "无法读取录制日期。请与嘉宾确认日期。",
+      "previous_interviews": "\"以往采访\"一栏中有一项不是链接，已忽略。",
+      "links": "其中一个链接不是有效地址，已忽略。",
+      "key_ideas": "嘉宾提交了超过 3 个核心观点，仅保留前 3 个。",
+      "other": "\"{{field}}\"栏中的一项回答已忽略。"
+    },
+    "held": "回答没有有效的邀请码：未向嘉宾发送任何内容。如果是你邀请的，请通过菜单或 confirmarIntake 确认。"
+  },
+  "sheet": {
+    "tab": "嘉宾",
+    "columns": [
+      "回答时间",
+      "姓名",
+      "希望的称呼",
+      "职位",
+      "简介",
+      "核心观点",
+      "希望推广",
+      "愿意讨论",
+      "希望避免",
+      "录制",
+      "形式",
+      "电子邮件",
+      "WhatsApp",
+      "首选联系方式",
+      "发布前审阅",
+      "已发送内容",
+      "需要关注",
+      "简报",
+      "记录编号"
+    ],
+    "not_informed": "未提供或无法识别",
+    "none": "—",
+    "briefing_link": "打开简报"
   }
 }

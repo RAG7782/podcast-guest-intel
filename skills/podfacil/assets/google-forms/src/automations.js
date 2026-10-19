@@ -100,18 +100,23 @@ function executors_(show, intake, i18n) {
       return sendWhatsapp_(intake.contacts.whatsapp, renderMessage(a.kind === 'kit' ? 'whatsapp_kit' : 'reminder_body', show, intake, i18n));
     },
     calendar: function () { return createInvite_(show, intake, i18n); },
-    owner: function (a) { return notifyOwner_(show, intake, i18n, a.results, a.dropped); }
+    owner: function (a) { return notifyOwner_(show, intake, i18n, a.results, a.dropped, a.row); }
   };
 }
 
-function notifyOwner_(show, intake, i18n, results, dropped) {
+/**
+ * Aviso ao dono em linguagem simples (convidados.js monta o HTML com a marca do show). row = linha do
+ * convidado na aba Convidados: o botão do e-mail abre direto nela; sem row, abre a planilha.
+ */
+function notifyOwner_(show, intake, i18n, results, dropped, row) {
   var owner = Session.getEffectiveUser().getEmail();
   if (!owner) throw new Error('e-mail do dono indisponível (Session.getEffectiveUser().getEmail() vazio)');
-  var body = 'intake_id: ' + intake.intake_id + '\nconvidado: ' + intake.guest.full_name +
-    '\n\nEnvios:\n' + results.map(function (r) { return '- ' + r.key + ': ' + r.status + (r.error ? ' — ' + r.error : r.reason ? ' — ' + r.reason : ''); }).join('\n') +
-    '\n\nDescartados (não guardados):\n' + (dropped.length ? dropped.map(function (d) { return '- ' + d.field + ': ' + d.reason; }).join('\n') : '- nenhum') +
-    '\n\nJSON completo na aba "intake" da planilha de respostas.';
-  MailApp.sendEmail(owner, renderMessage('owner_subject', show, intake, i18n), body);
+  var link = null;
+  try { link = row ? convidadoLink_(row) : intakeSheet_().getParent().getUrl(); } catch (err) {
+    console.error('aviso ao dono sem link da planilha: ' + maskEmails_(err.message));
+  }
+  var mail = buildOwnerEmail(show, intake, i18n, results || [], dropped || [], link);
+  MailApp.sendEmail(owner, renderMessage('owner_subject', show, intake, i18n), mail.text, { htmlBody: mail.html, name: show.name });
   return 'owner';
 }
 
@@ -149,7 +154,12 @@ function onFormSubmit(e) {
   // plano pago: sem licença, só o aviso ao dono e o registro saem (licenca.js)
   var results = automacoesLiberadas_() ? runActions(planSubmitActions(intake, show, policy), executors_(show, intake, i18n), store)
     : [semLicencaResultado_(intake.intake_id)];
-  var notify = { key: intake.intake_id + ':owner:notify', channel: 'owner', kind: 'notify', results: results, dropped: res.dropped };
+  var row = 0;
+  if (store.claim(intake.intake_id + ':convidados')) {
+    row = registrarConvidadoSeguro_(intake, results, res.dropped, i18n, false);
+    if (!row) store.release(intake.intake_id + ':convidados');   // falhou: a próxima execução tenta de novo
+  }
+  var notify = { key: intake.intake_id + ':owner:notify', channel: 'owner', kind: 'notify', results: results, dropped: res.dropped, row: row };
   results = results.concat(runActions([notify], executors_(show, intake, i18n), store));
   if (store.claim(intake.intake_id + ':record')) {
     intakeSheet_().appendRow([intake.intake_id, intake.submitted_at, JSON.stringify(intake), JSON.stringify(results), JSON.stringify(res.dropped)]);
@@ -256,6 +266,11 @@ function confirmarIntake(intakeId) {
     ? runActions(planSubmitActions(intake, show, guestPolicy_(intake.contacts.email)), executors_(show, intake, i18n), store_())
     : [semLicencaResultado_(intakeId)];
   logErrors_(results);
+  // sai do "aguardando confirmação"; o que já tinha saído antes (e não volta a sair) continua listado
+  var fresh = {}, merged = [];
+  results.forEach(function (r) { fresh[r.key] = true; });
+  JSON.parse(row[3] || '[]').forEach(function (r) { if (r.status !== 'held' && !fresh[r.key]) merged.push(r); });
+  registrarConvidadoSeguro_(intake, merged.concat(results), JSON.parse(row[4] || '[]'), i18n, false);
   return results;
 }
 
@@ -402,7 +417,7 @@ function deleteCalendarEvent_(intakeId) {
 /** O que a API deste script não alcança: o host apaga à mão (o relatório diz onde). */
 function manualLeftovers_(intakeId, intake) {
   var e = (intake.contacts && intake.contacts.email) || '<e-mail do titular>';
-  var out = ['Gmail da conta do host (MailApp não apaga): apague kit, lembrete, convite e o aviso ao dono em Enviados e' +
+  var out = ['Gmail da conta do host (MailApp não apaga): apague kit, lembrete, convite, o aviso ao dono e o e-mail do briefing em Enviados e' +
     ' Entrada; busca: to:' + e + ' OR from:' + e + ' OR "' + intakeId + '"',
     'Log de execução do Apps Script: guarda só intake_id, sem e-mail (registros de antes desta versão podem ter e-mail;' +
     ' o Google os descarta no prazo dele)'];
@@ -433,11 +448,16 @@ function esquecerTitular(intakeId) {
   var email = String((intake.contacts && intake.contacts.email) || '').trim().toLowerCase();
   var others = email ? rows.slice(1).filter(function (r) { return r[0] !== intakeId && emailOf_(r) === email; })
     .map(function (r) { return r[0]; }) : [];
-  var report = { intake_id: intakeId, form_responses: deleteFormResponses_(intakeId),
+  var convidados;   // linha legível + briefing (Google Docs) na lixeira; uma falha aqui não interrompe o resto
+  try { convidados = removerConvidado_(intakeId); } catch (err) {
+    convidados = { linhas: 0, briefing_docs: 0, pendencias: ['Aba Convidados: não consegui apagar a linha (' + maskEmails_(err.message) + '); apague à mão'] };
+  }
+  var report = { intake_id: intakeId, convidados: convidados, form_responses: deleteFormResponses_(intakeId),
     linked_rows: deleteLinkedRows_(email, intake.submitted_at, others.length > 0), calendar: deleteCalendarEvent_(intakeId),
-    pendencias_manuais: manualLeftovers_(intakeId, intake), intake_rows: deleteRows_(sheet, hit),
+    pendencias_manuais: manualLeftovers_(intakeId, intake).concat(convidados.pendencias), intake_rows: deleteRows_(sheet, hit),
     keys: deleteGuestKeys_(intakeId, email, others.length > 0, intake.scheduled_at), outros_intakes_do_titular: others };
-  console.log(maskEmails_('esquecerTitular: ' + JSON.stringify({ intake_id: intakeId, form_responses: report.form_responses,
+  console.log(maskEmails_('esquecerTitular: ' + JSON.stringify({ intake_id: intakeId, convidados: { linhas: convidados.linhas,
+    briefing_docs: convidados.briefing_docs }, form_responses: report.form_responses,
     linked_rows: report.linked_rows, calendar: report.calendar, intake_rows: report.intake_rows, keys: report.keys,
     outros_intakes_do_titular: others.length })));
   return report;

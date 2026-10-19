@@ -164,7 +164,7 @@
   },
   "messages": {
     "email_subject": "Guest kit · {{show.name}}",
-    "owner_subject": "New guest form: {{guest.preferred_name}}",
+    "owner_subject": "✅ {{guest.preferred_name}} filled in the form · {{show.name}}",
     "calendar_title": "{{show.name}} recording with {{guest.preferred_name}}",
     "calendar_remote_location": "Online (link from the production team)",
     "calendar_description": "Guest kit sent by email. Questions: {{controller.contact}}.",
@@ -247,5 +247,85 @@
       "dub_generic": "AI-dubbed version of the original {{source_language}} episode. Voices are synthetic.",
       "dub_replica": "AI-dubbed version of the original {{source_language}} episode, using authorized AI replicas of the speakers' voices."
     }
+  },
+  "owner": {
+    "headline": "{{name}} filled in the form.",
+    "lead": "Everything is recorded. Below is what has happened so far and what they told you.",
+    "happened": "What has happened",
+    "form_received": "Invitation received and form filled in",
+    "attention": "Needs your attention",
+    "summary": "Guest summary",
+    "button": "See the full answers",
+    "next_step": "Next step: ask Claude to \"prepare the briefing for {{name}}\" to get the dossier and the topic plan.",
+    "notes": "Notes",
+    "record_code": "Record code: {{id}}",
+    "full_answers": "Full answers: {{url}}",
+    "labels": {
+      "name": "Name",
+      "prefers": "prefers to be called {{name}}",
+      "role": "Role",
+      "bio": "Short bio",
+      "ideas": "Key ideas",
+      "recording": "Recording",
+      "email": "Email",
+      "whatsapp": "WhatsApp"
+    },
+    "mode": {
+      "presencial": "In person",
+      "remoto": "Remote"
+    },
+    "date_tbd": "to be agreed",
+    "sends": {
+      "kit_email": "Guest kit by email",
+      "kit_whatsapp": "Guest kit by WhatsApp",
+      "calendar": "Calendar invitation",
+      "automations": "Automatic sends (kit and calendar)", "guest": "Send to the guest",
+      "other": "Send \"{{key}}\""
+    },
+    "status": {
+      "sent": "{{label}}: sent",
+      "skipped": "{{label}}: not sent",
+      "error": "{{label}}: failed",
+      "held": "{{label}}: waiting for your confirmation"
+    },
+    "drops": {
+      "whatsapp": "The WhatsApp number provided was not recognized{{end}}. Please confirm the number with the guest.",
+      "whatsapp_end": " (ends in {{digits}})",
+      "accessibility": "The guest wrote something about accessibility but did not tick the consent for this kind of data, so it was discarded. If it matters for the recording, ask them directly.",
+      "sensitive": "A piece of sensitive personal data was discarded because the guest did not tick the specific consent.",
+      "scheduled_at": "The recording date could not be read. Please confirm the date with the guest.",
+      "previous_interviews": "The previous interviews field had an answer that was not a link; it was ignored.",
+      "links": "One of the links was not a valid address and was ignored.",
+      "key_ideas": "The guest sent more than 3 key ideas; the first 3 were kept.",
+      "other": "An answer in the \"{{field}}\" field was ignored."
+    },
+    "held": "Answer without a valid invitation code: nothing was sent to the guest. If you invited them, confirm it from the menu or with confirmarIntake."
+  },
+  "sheet": {
+    "tab": "Guests",
+    "columns": [
+      "Answered on",
+      "Name",
+      "Preferred name",
+      "Role",
+      "Short bio",
+      "Key ideas",
+      "Wants to promote",
+      "Open to debate",
+      "Prefers to avoid",
+      "Recording",
+      "Format",
+      "Email",
+      "WhatsApp",
+      "Preferred contact",
+      "Review before publishing",
+      "What was sent",
+      "Needs attention",
+      "Briefing",
+      "Record code"
+    ],
+    "not_informed": "not provided or not recognized",
+    "none": "—",
+    "briefing_link": "Open the briefing"
   }
 }

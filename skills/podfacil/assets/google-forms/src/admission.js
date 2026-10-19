@@ -89,6 +89,8 @@ function holdSubmission_(response, intake, res, policy, store, rawGone) {
   if (store.claim(intake.intake_id + ':record')) {
     intakeSheet_().appendRow([intake.intake_id, intake.submitted_at, JSON.stringify(intake), JSON.stringify([result]), JSON.stringify(res.dropped)]);
     store.set(intake.intake_id + ':record', new Date().toISOString());
+    var meta = loadMeta_();
+    registrarConvidadoSeguro_(intake, [result], res.dropped, selectLocale(BUNDLE, meta.locale, allowUnreviewed_()), true);
   }
   return [result];
 }

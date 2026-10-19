@@ -53,7 +53,7 @@ Convidado e automações por canal. Dono único: @guest-coordinator. Fica entre 
 | Sem consentimento geral + aviso de pesquisa pública | não existe intake; o dono recebe a falha |
 | Dado sensível (art. 11, I) | só entra com aceite específico e destacado; sem aceite é descartado e não guardado |
 | Acessibilidade | tratada como sensível (pode revelar saúde): aceite próprio |
-| WhatsApp | só com número E.164 **e** consentimento no canal |
+| WhatsApp | só com número válido (E.164; em show `BR-LGPD`, também DDD + número) **e** consentimento no canal |
 | Agenda / D-1 | só com data combinada **e** consentimento no canal |
 | Materiais | links no formulário; arquivos por resposta ao e-mail do kit (upload no Forms exige login Google) |
 
@@ -64,8 +64,11 @@ Convidado e automações por canal. Dono único: @guest-coordinator. Fica entre 
 3. Enviar o **Convite Oficial**, o primeiro contato: `enviarConvite({nome, email, data, modo}, variante)`.
    O e-mail sai com o logo, as cores e a assinatura do `brand` e leva o link do formulário ativo.
    O kit só é enviado depois da resposta. Quem responder SAIR vai para `registrarOptOut`.
-4. Conferir o e-mail-resumo que o dono recebe a cada resposta: canais enviados, erros e descartados.
-5. Entregar o intake (aba `intake`, coluna `intake_json`) à etapa seguinte (varredura pública/dossiê).
+4. Conferir o aviso que o dono recebe a cada resposta, em linguagem simples: o que foi enviado, o que precisa
+   da atenção dele e o botão para a linha do convidado na aba **Convidados** da planilha.
+5. Entregar o intake (aba `intake`, coluna `intake_json`, oculta) à etapa seguinte (varredura pública/dossiê).
+   O link do briefing pronto vai na coluna **Briefing** da aba Convidados, na linha cujo **Código do registro**
+   é o `intake_id`.
 6. Sem formulário: modo mínimo com nome + 1 link; registrar como lacuna no dossiê.
 
 ## Uso

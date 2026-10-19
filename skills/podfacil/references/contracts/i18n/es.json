@@ -298,7 +298,7 @@
   },
   "messages": {
     "email_subject": "[TODO-es] Guest kit · {{show.name}}",
-    "owner_subject": "[TODO-es] New guest form: {{guest.preferred_name}}",
+    "owner_subject": "✅ {{guest.preferred_name}} respondió el formulario · {{show.name}}",
     "calendar_title": "[TODO-es] {{show.name}} recording with {{guest.preferred_name}}",
     "calendar_remote_location": "[TODO-es] Online (link from the production team)",
     "calendar_description": "[TODO-es] Guest kit sent by email. Questions: {{controller.contact}}.",
@@ -382,5 +382,85 @@
       "dub_generic": "Versión doblada con inteligencia artificial a partir del episodio original en {{source_language}}. Las voces son sintéticas.",
       "dub_replica": "Versión doblada con inteligencia artificial, con réplicas autorizadas de las voces de los participantes, a partir del episodio original en {{source_language}}."
     }
+  },
+  "owner": {
+    "headline": "{{name}} respondió el formulario.",
+    "lead": "Todo quedó registrado. Abajo ves lo que ya ocurrió y lo que la persona contó.",
+    "happened": "Lo que ya ocurrió",
+    "form_received": "Invitación recibida y formulario completado",
+    "attention": "Necesita tu atención",
+    "summary": "Resumen del invitado",
+    "button": "Ver las respuestas completas",
+    "next_step": "Siguiente paso: pide a Claude \"preparar el briefing de {{name}}\" para recibir el dosier y la pauta.",
+    "notes": "Observaciones",
+    "record_code": "Código del registro: {{id}}",
+    "full_answers": "Respuestas completas: {{url}}",
+    "labels": {
+      "name": "Nombre",
+      "prefers": "prefiere que le llamen {{name}}",
+      "role": "Cargo / actividad",
+      "bio": "Presentación",
+      "ideas": "Ideas principales",
+      "recording": "Grabación",
+      "email": "Correo",
+      "whatsapp": "WhatsApp"
+    },
+    "mode": {
+      "presencial": "Presencial",
+      "remoto": "Remota"
+    },
+    "date_tbd": "por definir",
+    "sends": {
+      "kit_email": "Kit del invitado por correo",
+      "kit_whatsapp": "Kit del invitado por WhatsApp",
+      "calendar": "Invitación en la agenda",
+      "automations": "Envíos automáticos (kit y agenda)", "guest": "Envío al invitado",
+      "other": "Envío \"{{key}}\""
+    },
+    "status": {
+      "sent": "{{label}}: enviado",
+      "skipped": "{{label}}: no enviado",
+      "error": "{{label}}: falló",
+      "held": "{{label}}: esperando tu confirmación"
+    },
+    "drops": {
+      "whatsapp": "El número de WhatsApp informado no fue reconocido{{end}}. Confírmalo con el invitado.",
+      "whatsapp_end": " (termina en {{digits}})",
+      "accessibility": "El invitado escribió algo sobre accesibilidad, pero no marcó la autorización para ese tipo de dato, así que se descartó. Si es importante para la grabación, pregúntale directamente.",
+      "sensitive": "Un dato personal sensible se descartó porque el invitado no marcó la autorización específica.",
+      "scheduled_at": "No se pudo leer la fecha de grabación. Confírmala con el invitado.",
+      "previous_interviews": "En el campo de entrevistas anteriores había una respuesta que no era un enlace; se ignoró.",
+      "links": "Uno de los enlaces no era una dirección válida y se ignoró.",
+      "key_ideas": "El invitado envió más de 3 ideas principales; se quedaron las 3 primeras.",
+      "other": "Se ignoró una respuesta del campo \"{{field}}\"."
+    },
+    "held": "Respuesta sin código de invitación válido: no se envió nada al invitado. Si lo invitaste tú, confírmalo desde el menú o con confirmarIntake."
+  },
+  "sheet": {
+    "tab": "Invitados",
+    "columns": [
+      "Respondió el",
+      "Nombre",
+      "Cómo prefiere que le llamen",
+      "Cargo / actividad",
+      "Presentación",
+      "Ideas principales",
+      "Quiere divulgar",
+      "Acepta debatir",
+      "Prefiere no tratar",
+      "Grabación",
+      "Modalidad",
+      "Correo",
+      "WhatsApp",
+      "Contacto preferido",
+      "Revisión antes de publicar",
+      "Lo que ya se envió",
+      "Necesita atención",
+      "Briefing",
+      "Código del registro"
+    ],
+    "not_informed": "no informado o no reconocido",
+    "none": "—",
+    "briefing_link": "Abrir el briefing"
   }
 }

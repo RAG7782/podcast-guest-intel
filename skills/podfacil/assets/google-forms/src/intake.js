@@ -41,11 +41,31 @@ function urlList(raw, field, dropped) {
   }).filter(Boolean);
 }
 
-function toE164(raw) {
+/**
+ * Telefone → E.164. Com country='55' (show no Brasil), aceita também o jeito que o brasileiro digita:
+ * "11 94027-3663", "(011) 4002-8922", "55 11 94027-3663". null = vazio; undefined = ilegível.
+ */
+function toE164(raw, country) {
   var s = text(raw);
   if (!s) return null;
   var digits = s.replace(/[\s().-]/g, '').replace(/^00/, '+');
-  return /^\+[1-9][0-9]{7,14}$/.test(digits) ? digits : undefined;
+  if (/^\+[1-9][0-9]{7,14}$/.test(digits)) return digits;
+  if (String(country) === '55' && /^[0-9]+$/.test(digits)) {
+    // WhatsApp no Brasil = celular: DDD válido + 9 + 8 dígitos. Fixo e número de outro país sem + ficam de fora
+    // (um "415 555 2671" dos EUA não pode virar +55 41 5552-671: o kit iria para um estranho).
+    var br = digits.replace(/^0(?=[1-9]{2})/, '').replace(/^55(?=\d{11}$)/, '');
+    if (/^[1-9]{2}9[0-9]{8}$/.test(br) && BR_DDD.indexOf(br.slice(0, 2)) >= 0) return '+55' + br;
+  }
+  return undefined;
+}
+
+/** DDDs em uso no Brasil (Anatel). */
+var BR_DDD = ('11 12 13 14 15 16 17 18 19 21 22 24 27 28 31 32 33 34 35 37 38 41 42 43 44 45 46 47 48 49 51 53 54 55 ' +
+  '61 62 63 64 65 66 67 68 69 71 73 74 75 77 79 81 82 83 84 85 86 87 88 89 91 92 93 94 95 96 97 98 99').split(' ');
+
+/** País do telefone digitado sem +: o do ctx, ou o Brasil quando o show é BR-LGPD. */
+function phoneCountry(ctx) {
+  return ctx.phoneCountry ? String(ctx.phoneCountry) : ctx.jurisdiction === 'BR-LGPD' ? '55' : null;
 }
 
 function hasYes(raw) {
@@ -170,9 +190,10 @@ function channelBlock(a, out, ctx, dropped) {
     throw new Error('contacts.email inválido: ' + JSON.stringify(email && maskValue(email)) + '; esperado e-mail');
   }
   out.contacts = { email: email };
-  var phone = toE164(a['contacts.whatsapp']);
+  var phone = toE164(a['contacts.whatsapp'], phoneCountry(ctx));
   if (phone === undefined) {
-    dropped.push({ field: 'contacts.whatsapp', reason: 'número fora do E.164: ' + maskValue(a['contacts.whatsapp']) + '; esperado +<país><número>' });
+    dropped.push({ field: 'contacts.whatsapp', reason: 'número ilegível: ' + maskValue(a['contacts.whatsapp']) + '; esperado +<país><número>' +
+      (phoneCountry(ctx) === '55' ? ' ou DDD + celular' : '') });
   } else if (phone) out.contacts.whatsapp = phone;
   var chosen = Array.isArray(a.automation_consents) ? a.automation_consents : [];
   out.automation_consents = {};

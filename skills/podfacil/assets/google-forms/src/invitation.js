@@ -44,6 +44,16 @@ function requireHttps(value, field) {
   return value;
 }
 
+/** Mistura duas cores #RRGGBB (t = peso de b, 0..1). Arredonda como Math.round (a porta Python faz igual). */
+function mixHex(a, b, t) {
+  var out = '#';
+  for (var i = 1; i < 7; i += 2) {
+    var v = Math.round(parseInt(a.slice(i, i + 2), 16) * (1 - t) + parseInt(b.slice(i, i + 2), 16) * t);
+    out += ('0' + v.toString(16)).slice(-2).toUpperCase();
+  }
+  return out;
+}
+
 function brandColors(b) {
   var c = Object.assign({}, DEFAULT_COLORS, b.colors || {});
   Object.keys(c).forEach(function (k) {
@@ -57,6 +67,9 @@ function brandColors(b) {
   // destaque só se legível; botão em preto ou branco, o que contrastar mais com a primária
   c.accent = c.secondary && contrastRatio(c.secondary, c.background) >= 4.5 ? c.secondary : c.text;
   c.on_primary = contrastRatio(c.primary, '#FFFFFF') >= contrastRatio(c.primary, '#000000') ? '#FFFFFF' : '#000000';
+  // cartão dos detalhes: o fundo puxado 8% para o destaque; se o texto perder contraste AA, fica o fundo
+  var card = mixHex(c.background, c.accent, 0.08);
+  c.card = contrastRatio(c.text, card) >= 4.5 ? card : c.background;
   return c;
 }
 
@@ -65,6 +78,9 @@ function brandLogo(b) {
   if (!logo || (!logo.url && !logo.drive_file_id)) return null;
   if (!logo.alt) throw new Error('brand.logo sem alt (url=' + JSON.stringify(logo.url) + '); esperado texto alternativo');
   if (logo.url) requireHttps(logo.url, 'brand.logo.url');
+  if (logo.width !== undefined && logo.width !== null && !(Number.isInteger(logo.width) && logo.width > 0)) {
+    throw new Error('brand.logo.width=' + JSON.stringify(logo.width) + '; esperado inteiro positivo (px)');
+  }
   return { url: logo.url || null, drive_file_id: logo.drive_file_id || null, alt: logo.alt, width: logo.width || 120 };
 }
 
@@ -186,7 +202,8 @@ function headerCell(v, brand, logoSrc) {
       ';font-size:20px;font-weight:bold;color:' + c.on_primary + ';">'
     : '<span style="font-family:' + escapeHtml(brand.font) + ';font-size:24px;font-weight:bold;color:' + c.on_primary + ';">' +
       v.brand.display_name + '</span>';
-  return '<tr><td align="center" bgcolor="' + c.primary + '" style="background-color:' + c.primary + ';padding:24px;">' + inner + '</td></tr>';
+  var fullBleed = logo && logoSrc && Number(logo.width) >= 560;   // imagem de cabeçalho larga vai de ponta a ponta
+  return '<tr><td align="center" bgcolor="' + c.primary + '" style="background-color:' + c.primary + ';padding:' + (fullBleed ? '0' : '24px') + ';">' + inner + '</td></tr>';
 }
 
 function row(label, value, c) {
@@ -204,17 +221,20 @@ function detailRows(v, c) {
   } else {
     rows.push(row(t.remote_label, v.remote_link ? '<a href="' + v.remote_link + '" style="color:' + c.accent + ';">' + v.remote_link + '</a>' : t.remote_link_tbd, c));
   }
-  return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-size:15px;line-height:1.5;">' + rows.join('') + '</table>';
+  return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:8px 0 8px;"><tr>' +
+    '<td bgcolor="' + c.card + '" style="background-color:' + c.card + ';border-left:3px solid ' + c.accent + ';padding:14px 18px;">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-size:15px;line-height:1.5;">' + rows.join('') + '</table>' +
+    '</td></tr></table>';
 }
 
 /** Botão "à prova de bala": célula com bgcolor + link em bloco (funciona sem imagem e no Outlook). */
 function ctaButton(v, brand) {
   var c = brand.colors;
-  return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:16px 0;"><tr>' +
+  return '<table role="presentation" align="center" cellpadding="0" cellspacing="0" border="0" style="margin:20px auto 12px;"><tr>' +
     '<td align="center" bgcolor="' + c.primary + '" style="background-color:' + c.primary + ';border-radius:6px;">' +
     '<a href="' + v.form_url + '" target="_blank" style="display:inline-block;padding:14px 28px;font-family:' + escapeHtml(brand.font) +
     ';font-size:17px;font-weight:bold;color:' + c.on_primary + ';text-decoration:none;border-radius:6px;">' + v.t.cta_button + '</a>' +
-    '</td></tr></table><p style="margin:0;font-size:13px;color:' + c.text + ';">' + v.t.cta_fallback + '<br>' +
+    '</td></tr></table><p style="margin:0;font-size:13px;text-align:center;color:' + c.text + ';">' + v.t.cta_fallback + '<br>' +
     '<a href="' + v.form_url + '" style="color:' + c.accent + ';word-break:break-all;">' + v.form_url + '</a></p>';
 }
 
@@ -224,25 +244,27 @@ function signatureBlock(v, brand) {
   });
   var photo = s.photo_url ? '<td valign="top" style="padding-right:12px;"><img src="' + s.photo_url + '" width="56" height="56" alt="' +
     escapeHtml(brand.signature.photo_alt || brand.signature.name) + '" style="display:block;border:0;border-radius:28px;"></td>' : '';
-  return '<p style="margin:24px 0 8px;">' + v.t.signoff + '</p><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>' +
-    photo + '<td valign="top" style="color:' + c.text + ';"><b>' + s.name + '</b><br>' +
+  return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:28px 0 0;"><tr>' +
+    '<td style="border-top:1px solid ' + c.accent + ';font-size:1px;line-height:1px;">&nbsp;</td></tr></table>' +
+    '<p style="margin:20px 0 8px;text-align:center;">' + v.t.signoff + '</p><table role="presentation" align="center" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;"><tr>' +
+    photo + '<td valign="top" align="center" style="text-align:center;color:' + c.text + ';"><b style="font-size:17px;">' + s.name + '</b><br>' +
     (s.role ? s.role + ' · ' : '') + v.brand.display_name + (links.length ? '<br>' + links.join(' · ') : '') + '</td></tr></table>';
 }
 
 function bodySection(v, brand) {
   var c = brand.colors;
-  return '<p style="margin:0 0 4px;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:' + c.accent + ';">' + v.t.title + '</p>' +
-    '<h1 style="margin:0 0 16px;font-size:26px;line-height:1.25;color:' + c.text + ';">' + v.t.greeting + '</h1>' +
-    '<p style="margin:0 0 16px;">' + v.t.intro + '</p>' + detailRows(v, c) +
+  return '<p style="margin:0 0 4px;font-size:13px;letter-spacing:2px;text-transform:uppercase;text-align:center;color:' + c.accent + ';">' + v.t.title + '</p>' +
+    '<h1 style="margin:0 0 20px;font-size:26px;line-height:1.25;text-align:center;color:' + c.text + ';">' + v.t.greeting + '</h1>' +
+    '<p style="margin:0 0 16px;text-align:justify;">' + v.t.intro + '</p>' + detailRows(v, c) +
     '<h2 style="margin:24px 0 8px;font-size:18px;color:' + c.accent + ';">' + v.t.about_heading + '</h2>' +
     (v.show.tagline ? '<p style="margin:0 0 8px;font-style:italic;">' + v.show.tagline + '</p>' : '') +
-    '<p style="margin:0 0 16px;">' + v.show.editorial_line + '</p><p style="margin:0;">' + v.t.cta_intro + '</p>' +
+    '<p style="margin:0 0 16px;text-align:justify;">' + v.show.editorial_line + '</p><p style="margin:0;text-align:justify;">' + v.t.cta_intro + '</p>' +
     ctaButton(v, brand) + signatureBlock(v, brand);
 }
 
 function footerSection(v, c) {
   // rodapé com a MESMA cor de texto (cinza claro reprovaria o contraste AA)
-  return '<tr><td style="padding:16px 24px 24px;font-size:12px;line-height:1.5;color:' + c.text + ';border-top:1px solid ' + c.primary + ';">' +
+  return '<tr><td align="center" style="padding:16px 24px 24px;font-size:12px;line-height:1.5;text-align:center;color:' + c.text + ';border-top:1px solid ' + c.primary + ';">' +
     '<p style="margin:0 0 6px;">' + v.t.footer_controller + '</p><p style="margin:0 0 6px;">' + v.t.footer_purpose + '</p>' +
     '<p style="margin:0;">' + v.t.footer_optout + '</p>' +
     (v.t.footer_brand ? '<p style="margin:6px 0 0;">' + SELO_PODFACIL + v.t.footer_brand + '</p>' : '') + '</td></tr>';

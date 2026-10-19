@@ -33,14 +33,14 @@ Não é preciso servidor nem projeto no Google Cloud, e nada é instalado no seu
 1. Abra **<https://script.google.com/home/projects/create>** (já abre um projeto novo; se não abrir, vá em script.google.com → **Novo projeto**).
 2. Clique em "Projeto sem título" e dê um nome, por exemplo `Formulário do convidado`.
 
-### 2. Cole os 9 arquivos
+### 2. Cole os 10 arquivos
 No editor, para **cada** arquivo da pasta `src/` deste repositório:
 1. Clique no **+** ao lado de "Arquivos" e escolha **Script**.
-2. Dê um nome (o nome não importa; sugestão: `bundle`, `core`, `intake`, `actions`, `invitation`, `forms`, `automations`, `admission`, `licenca`).
+2. Dê um nome (o nome não importa; sugestão: `bundle`, `core`, `intake`, `actions`, `invitation`, `forms`, `automations`, `admission`, `licenca`, `convidados`).
 3. Apague o conteúdo de exemplo e cole o conteúdo do arquivo.
 
 O arquivo `Código.gs` que já vem no projeto pode ser apagado. A ordem dos arquivos não importa.
-O 10º arquivo, `drive-logo.js`, é **opcional**: cole só se o logo estiver no seu Google Drive (veja
+O 11º arquivo, `drive-logo.js`, é **opcional**: cole só se o logo estiver no seu Google Drive (veja
 "Logo e cores do convite").
 Clique em 💾 **Salvar**.
 
@@ -83,7 +83,16 @@ Ainda em ⚙️ **Configurações do projeto**, desça até **Propriedades do sc
 3. Abra o **Registro de execução** (embaixo). Lá aparecem 3 links:
    - **Link para o convidado**: é o que você envia.
    - **Editar**: o formulário, caso queira mudar algum texto.
-   - **Respostas**: a planilha. A aba `intake` guarda o JSON de cada convidado.
+   - **Respostas**: a planilha. Ela abre na aba **Convidados**: uma linha por convidado, em linguagem simples,
+     com a coluna **Briefing** para o link do dossiê e da pauta. A aba `intake` é o registro técnico (JSON) e
+     fica oculta; não apague nem edite. Se a aba Convidados sumir ou for editada à mão, rode
+     `reconstruirAbaConvidados` (os links de briefing já gravados são mantidos).
+
+A cada resposta você recebe um **aviso por e-mail** com a marca do programa: o que já foi enviado ao convidado,
+o que precisa da sua atenção (por exemplo, WhatsApp não reconhecido ou data ilegível), um resumo e o botão
+**Ver as respostas completas**, que abre direto a linha do convidado. Para reenviar um aviso, rode
+`reenviarAviso` (sem argumento, o do último convidado). Em show brasileiro (`BR-LGPD`), o WhatsApp é aceito do
+jeito que se digita (`11 91234-5678`, com ou sem o `+55`).
 
 Os dois gatilhos (envio do formulário e lembrete diário) são instalados sozinhos. Para conferir, use o
 menu ⏰ **Acionadores**. Se você rodar `criarFormulario…` de novo, ele cria **outro** formulário e
@@ -259,11 +268,15 @@ gatilho diário**, que varre a aba `intake`, e não um gatilho por convidado (o 
 - **Lógica pura** (sem Google, testável em Node): `src/core.js` (template, locale, cláusula, controlador,
   especificação do formulário), `src/intake.js` (resposta → guest-intake, regras de consentimento) e
   `src/actions.js` (kit, mensagens, plano por consentimento, D-1, WhatsApp, `runActions` idempotente) e
-  `src/invitation.js` (convite oficial: marca, contraste, HTML, texto puro, `.ics`).
+  `src/invitation.js` (convite oficial: marca, contraste, visual Cartão, HTML, texto puro, `.ics`) e a parte pura de
+  `src/convidados.js` (aviso ao dono e linha da aba Convidados).
 - **Lado Google**: `src/forms.js` (criação do Form e gatilhos), `src/automations.js` (`onFormSubmit`, `lembreteDiario`,
   `enviarConvite`, `registrarOptOut`, `confirmarIntake`), `src/admission.js` (lock das chaves de envio e
   admissão por código de convite), `src/licenca.js` (chave do plano pago conferida na tool `licenca_status`
-  do servidor; endereço em `references/contracts/produto.json`, empacotado no bundle) e o opcional `src/drive-logo.js`.
+  do servidor; endereço em `references/contracts/produto.json`, empacotado no bundle), o lado Google de `src/convidados.js`
+  (aba Convidados por `intake_id`, `reconstruirAbaConvidados`, `reenviarAviso`, briefing na lixeira ao esquecer) e o
+  opcional `src/drive-logo.js`. O HTML do convite tem porta Python em `mcp-server/convite_html.py`, com paridade
+  byte a byte (`mcp-server/tests/test_convite_paridade.py`): mude os dois juntos.
 - `src/bundle.gen.js` é **gerado** a partir de `references/contracts/i18n/*.json`, `assets/templates/guest-kit.md`,
   `assets/templates/guest-invitation-official.md`
   e de `x-form-variants` do schema. Depois de editar textos ou o template, rode:
@@ -292,7 +305,8 @@ gatilho diário**, que varre a aba `intake`, e não um gatilho por convidado (o 
 - Revogação e eliminação: `esquecerTitular('in-…')` apaga a linha da aba `intake`, a resposta no Forms
   (`Form.deleteResponse`), a linha da aba de respostas ligada ao Form (casada pelo e-mail, porque apagar a
   resposta não apaga essa linha [INFERÊNCIA: a doc do `deleteResponse` não diz]) e as chaves `sent:`/`invited:`
-  do titular e o evento da agenda criado pelo envio; devolve o relatório com as contagens e
+  do titular, o evento da agenda criado pelo envio, a linha da aba **Convidados** e o **briefing** ligado a ela
+  (o Google Docs vai para a lixeira do Drive, que se esvazia em 30 dias; se não puder, vira pendência); devolve o relatório com as contagens e
   `pendencias_manuais` (Gmail do host, histórico do WhatsApp no provedor, logs antigos), que a API deste
   script não apaga (ALQERA PRV-002). Nenhuma linha de log leva e-mail. `OPTOUT_EMAILS` fica, porque é o
   registro da oposição.

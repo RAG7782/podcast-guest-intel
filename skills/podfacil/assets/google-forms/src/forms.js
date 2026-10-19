@@ -62,6 +62,11 @@ function buildForm(variant, locale) {
       clause_id: spec.clause_id, text_version: spec.text_version })
   });
   installTriggers_(form);
+  props_().deleteProperty('CONVIDADOS_SHEET_ID');   // planilha nova: a aba Convidados nasce nela, antes de tudo
+  try {
+    convidadosSheet_(i18n);
+    ss.getSheetByName('intake').hideSheet();   // o registro técnico fica oculto; o dono vê só a aba legível
+  } catch (err) { console.error('aba Convidados: ' + err.message + '; rode reconstruirAbaConvidados depois'); }
   console.log('Formulário pronto. Link para o convidado: ' + form.getPublishedUrl() +
     '\nEditar: ' + form.getEditUrl() + '\nRespostas: ' + ss.getUrl());
   return form.getPublishedUrl();

@@ -167,7 +167,7 @@
   },
   "messages": {
     "email_subject": "Guest kit · {{show.name}}",
-    "owner_subject": "New guest form: {{guest.preferred_name}}",
+    "owner_subject": "✅ {{guest.preferred_name}} filled in the form · {{show.name}}",
     "calendar_title": "{{show.name}} recording with {{guest.preferred_name}}",
     "calendar_remote_location": "Online (link from the production team)",
     "calendar_description": "Guest kit sent by email. Questions: {{controller.contact}}.",
@@ -250,6 +250,86 @@
       "dub_generic": "AI-dubbed version of the original {{source_language}} episode. Voices are synthetic.",
       "dub_replica": "AI-dubbed version of the original {{source_language}} episode, using authorized AI replicas of the speakers' voices."
     }
+  },
+  "owner": {
+    "headline": "{{name}} filled in the form.",
+    "lead": "Everything is recorded. Below is what has happened so far and what they told you.",
+    "happened": "What has happened",
+    "form_received": "Invitation received and form filled in",
+    "attention": "Needs your attention",
+    "summary": "Guest summary",
+    "button": "See the full answers",
+    "next_step": "Next step: ask Claude to \"prepare the briefing for {{name}}\" to get the dossier and the topic plan.",
+    "notes": "Notes",
+    "record_code": "Record code: {{id}}",
+    "full_answers": "Full answers: {{url}}",
+    "labels": {
+      "name": "Name",
+      "prefers": "prefers to be called {{name}}",
+      "role": "Role",
+      "bio": "Short bio",
+      "ideas": "Key ideas",
+      "recording": "Recording",
+      "email": "Email",
+      "whatsapp": "WhatsApp"
+    },
+    "mode": {
+      "presencial": "In person",
+      "remoto": "Remote"
+    },
+    "date_tbd": "to be agreed",
+    "sends": {
+      "kit_email": "Guest kit by email",
+      "kit_whatsapp": "Guest kit by WhatsApp",
+      "calendar": "Calendar invitation",
+      "automations": "Automatic sends (kit and calendar)", "guest": "Send to the guest",
+      "other": "Send \"{{key}}\""
+    },
+    "status": {
+      "sent": "{{label}}: sent",
+      "skipped": "{{label}}: not sent",
+      "error": "{{label}}: failed",
+      "held": "{{label}}: waiting for your confirmation"
+    },
+    "drops": {
+      "whatsapp": "The WhatsApp number provided was not recognized{{end}}. Please confirm the number with the guest.",
+      "whatsapp_end": " (ends in {{digits}})",
+      "accessibility": "The guest wrote something about accessibility but did not tick the consent for this kind of data, so it was discarded. If it matters for the recording, ask them directly.",
+      "sensitive": "A piece of sensitive personal data was discarded because the guest did not tick the specific consent.",
+      "scheduled_at": "The recording date could not be read. Please confirm the date with the guest.",
+      "previous_interviews": "The previous interviews field had an answer that was not a link; it was ignored.",
+      "links": "One of the links was not a valid address and was ignored.",
+      "key_ideas": "The guest sent more than 3 key ideas; the first 3 were kept.",
+      "other": "An answer in the \"{{field}}\" field was ignored."
+    },
+    "held": "Answer without a valid invitation code: nothing was sent to the guest. If you invited them, confirm it from the menu or with confirmarIntake."
+  },
+  "sheet": {
+    "tab": "Guests",
+    "columns": [
+      "Answered on",
+      "Name",
+      "Preferred name",
+      "Role",
+      "Short bio",
+      "Key ideas",
+      "Wants to promote",
+      "Open to debate",
+      "Prefers to avoid",
+      "Recording",
+      "Format",
+      "Email",
+      "WhatsApp",
+      "Preferred contact",
+      "Review before publishing",
+      "What was sent",
+      "Needs attention",
+      "Briefing",
+      "Record code"
+    ],
+    "not_informed": "not provided or not recognized",
+    "none": "—",
+    "briefing_link": "Open the briefing"
   }
 }
 
@@ -559,7 +639,7 @@
   },
   "messages": {
     "email_subject": "[TODO-es] Guest kit · {{show.name}}",
-    "owner_subject": "[TODO-es] New guest form: {{guest.preferred_name}}",
+    "owner_subject": "✅ {{guest.preferred_name}} respondió el formulario · {{show.name}}",
     "calendar_title": "[TODO-es] {{show.name}} recording with {{guest.preferred_name}}",
     "calendar_remote_location": "[TODO-es] Online (link from the production team)",
     "calendar_description": "[TODO-es] Guest kit sent by email. Questions: {{controller.contact}}.",
@@ -643,6 +723,86 @@
       "dub_generic": "Versión doblada con inteligencia artificial a partir del episodio original en {{source_language}}. Las voces son sintéticas.",
       "dub_replica": "Versión doblada con inteligencia artificial, con réplicas autorizadas de las voces de los participantes, a partir del episodio original en {{source_language}}."
     }
+  },
+  "owner": {
+    "headline": "{{name}} respondió el formulario.",
+    "lead": "Todo quedó registrado. Abajo ves lo que ya ocurrió y lo que la persona contó.",
+    "happened": "Lo que ya ocurrió",
+    "form_received": "Invitación recibida y formulario completado",
+    "attention": "Necesita tu atención",
+    "summary": "Resumen del invitado",
+    "button": "Ver las respuestas completas",
+    "next_step": "Siguiente paso: pide a Claude \"preparar el briefing de {{name}}\" para recibir el dosier y la pauta.",
+    "notes": "Observaciones",
+    "record_code": "Código del registro: {{id}}",
+    "full_answers": "Respuestas completas: {{url}}",
+    "labels": {
+      "name": "Nombre",
+      "prefers": "prefiere que le llamen {{name}}",
+      "role": "Cargo / actividad",
+      "bio": "Presentación",
+      "ideas": "Ideas principales",
+      "recording": "Grabación",
+      "email": "Correo",
+      "whatsapp": "WhatsApp"
+    },
+    "mode": {
+      "presencial": "Presencial",
+      "remoto": "Remota"
+    },
+    "date_tbd": "por definir",
+    "sends": {
+      "kit_email": "Kit del invitado por correo",
+      "kit_whatsapp": "Kit del invitado por WhatsApp",
+      "calendar": "Invitación en la agenda",
+      "automations": "Envíos automáticos (kit y agenda)", "guest": "Envío al invitado",
+      "other": "Envío \"{{key}}\""
+    },
+    "status": {
+      "sent": "{{label}}: enviado",
+      "skipped": "{{label}}: no enviado",
+      "error": "{{label}}: falló",
+      "held": "{{label}}: esperando tu confirmación"
+    },
+    "drops": {
+      "whatsapp": "El número de WhatsApp informado no fue reconocido{{end}}. Confírmalo con el invitado.",
+      "whatsapp_end": " (termina en {{digits}})",
+      "accessibility": "El invitado escribió algo sobre accesibilidad, pero no marcó la autorización para ese tipo de dato, así que se descartó. Si es importante para la grabación, pregúntale directamente.",
+      "sensitive": "Un dato personal sensible se descartó porque el invitado no marcó la autorización específica.",
+      "scheduled_at": "No se pudo leer la fecha de grabación. Confírmala con el invitado.",
+      "previous_interviews": "En el campo de entrevistas anteriores había una respuesta que no era un enlace; se ignoró.",
+      "links": "Uno de los enlaces no era una dirección válida y se ignoró.",
+      "key_ideas": "El invitado envió más de 3 ideas principales; se quedaron las 3 primeras.",
+      "other": "Se ignoró una respuesta del campo \"{{field}}\"."
+    },
+    "held": "Respuesta sin código de invitación válido: no se envió nada al invitado. Si lo invitaste tú, confírmalo desde el menú o con confirmarIntake."
+  },
+  "sheet": {
+    "tab": "Invitados",
+    "columns": [
+      "Respondió el",
+      "Nombre",
+      "Cómo prefiere que le llamen",
+      "Cargo / actividad",
+      "Presentación",
+      "Ideas principales",
+      "Quiere divulgar",
+      "Acepta debatir",
+      "Prefiere no tratar",
+      "Grabación",
+      "Modalidad",
+      "Correo",
+      "WhatsApp",
+      "Contacto preferido",
+      "Revisión antes de publicar",
+      "Lo que ya se envió",
+      "Necesita atención",
+      "Briefing",
+      "Código del registro"
+    ],
+    "not_informed": "no informado o no reconocido",
+    "none": "—",
+    "briefing_link": "Abrir el briefing"
   }
 }
 
@@ -818,7 +978,7 @@
   },
   "messages": {
     "email_subject": "Kit do convidado · {{show.name}}",
-    "owner_subject": "Novo formulário de convidado: {{guest.preferred_name}}",
+    "owner_subject": "✅ {{guest.preferred_name}} respondeu ao formulário · {{show.name}}",
     "calendar_title": "Gravação {{show.name}} com {{guest.preferred_name}}",
     "calendar_remote_location": "Online (o link vem da produção)",
     "calendar_description": "Kit do convidado enviado por e-mail. Dúvidas: {{controller.contact}}.",
@@ -901,6 +1061,86 @@
       "dub_generic": "Versão dublada por inteligência artificial a partir do episódio original em {{source_language}}. As vozes são sintéticas.",
       "dub_replica": "Versão dublada por inteligência artificial, com réplica autorizada da voz dos participantes, a partir do episódio original em {{source_language}}."
     }
+  },
+  "owner": {
+    "headline": "{{name}} respondeu ao formulário.",
+    "lead": "Está tudo registrado. Veja abaixo o que já aconteceu e o que a pessoa contou.",
+    "happened": "O que já aconteceu",
+    "form_received": "Convite recebido e formulário preenchido",
+    "attention": "Precisa da sua atenção",
+    "summary": "Resumo do convidado",
+    "button": "Ver as respostas completas",
+    "next_step": "Próximo passo: peça ao Claude \"preparar o briefing de {{name}}\" para receber o dossiê e a pauta.",
+    "notes": "Observações",
+    "record_code": "Código do registro: {{id}}",
+    "full_answers": "Respostas completas: {{url}}",
+    "labels": {
+      "name": "Nome",
+      "prefers": "prefere ser chamado(a) de {{name}}",
+      "role": "Cargo / atuação",
+      "bio": "Apresentação",
+      "ideas": "Ideias principais",
+      "recording": "Gravação",
+      "email": "E-mail",
+      "whatsapp": "WhatsApp"
+    },
+    "mode": {
+      "presencial": "Presencial",
+      "remoto": "Remota"
+    },
+    "date_tbd": "a combinar",
+    "sends": {
+      "kit_email": "Kit do convidado por e-mail",
+      "kit_whatsapp": "Kit do convidado por WhatsApp",
+      "calendar": "Convite na agenda",
+      "automations": "Envios automáticos (kit e agenda)", "guest": "Envio ao convidado",
+      "other": "Envio \"{{key}}\""
+    },
+    "status": {
+      "sent": "{{label}}: enviado",
+      "skipped": "{{label}}: não enviado",
+      "error": "{{label}}: falhou",
+      "held": "{{label}}: aguardando sua confirmação"
+    },
+    "drops": {
+      "whatsapp": "O número de WhatsApp informado não foi reconhecido{{end}}. Confirme o número com o convidado.",
+      "whatsapp_end": " (termina em {{digits}})",
+      "accessibility": "O convidado escreveu algo sobre acessibilidade, mas não marcou a autorização para esse tipo de dado. Pela LGPD, a informação foi descartada. Se for importante para a gravação, pergunte diretamente a ele.",
+      "sensitive": "Uma informação pessoal sensível foi descartada porque o convidado não marcou a autorização específica (LGPD).",
+      "scheduled_at": "A data de gravação informada não pôde ser lida. Confirme a data com o convidado.",
+      "previous_interviews": "No campo de entrevistas anteriores havia uma resposta que não era link; ela foi ignorada.",
+      "links": "Um dos links informados não era um endereço válido e foi ignorado.",
+      "key_ideas": "O convidado mandou mais de 3 ideias principais; ficaram as 3 primeiras.",
+      "other": "Uma resposta do campo \"{{field}}\" foi ignorada."
+    },
+    "held": "Resposta sem código de convite válido: nada foi enviado ao convidado. Se foi você quem convidou, confirme pelo menu ou com confirmarIntake."
+  },
+  "sheet": {
+    "tab": "Convidados",
+    "columns": [
+      "Respondeu em",
+      "Nome",
+      "Como prefere ser chamado(a)",
+      "Cargo / atuação",
+      "Apresentação",
+      "Ideias principais",
+      "Quer divulgar",
+      "Aceita debater",
+      "Prefere não abordar",
+      "Gravação",
+      "Modalidade",
+      "E-mail",
+      "WhatsApp",
+      "Contato preferido",
+      "Revisão antes de publicar",
+      "O que já foi enviado",
+      "Precisa de atenção",
+      "Briefing",
+      "Código do registro"
+    ],
+    "not_informed": "não informado ou não reconhecido",
+    "none": "—",
+    "briefing_link": "Abrir o briefing"
   }
 }
 
@@ -1215,7 +1455,7 @@
   },
   "messages": {
     "email_subject": "[TODO-zh] Guest kit · {{show.name}}",
-    "owner_subject": "[TODO-zh] New guest form: {{guest.preferred_name}}",
+    "owner_subject": "✅ {{guest.preferred_name}} 已填写表单 · {{show.name}}",
     "calendar_title": "[TODO-zh] {{show.name}} recording with {{guest.preferred_name}}",
     "calendar_remote_location": "[TODO-zh] Online (link from the production team)",
     "calendar_description": "[TODO-zh] Guest kit sent by email. Questions: {{controller.contact}}.",
@@ -1299,6 +1539,86 @@
       "dub_generic": "本集为基于{{source_language}}原版节目的AI配音版本，声音为合成语音。",
       "dub_replica": "本集为基于{{source_language}}原版节目的AI配音版本，经授权使用AI复制的说话者声音。"
     }
+  },
+  "owner": {
+    "headline": "{{name}} 已填写表单。",
+    "lead": "所有信息均已记录。以下是目前已完成的事项以及嘉宾提供的信息。",
+    "happened": "已完成事项",
+    "form_received": "已收到邀请并填写表单",
+    "attention": "需要你关注",
+    "summary": "嘉宾概要",
+    "button": "查看完整回答",
+    "next_step": "下一步：请让 Claude\"为 {{name}} 准备简报\"，以获取档案和访谈提纲。",
+    "notes": "备注",
+    "record_code": "记录编号：{{id}}",
+    "full_answers": "完整回答：{{url}}",
+    "labels": {
+      "name": "姓名",
+      "prefers": "希望被称为 {{name}}",
+      "role": "职位",
+      "bio": "简介",
+      "ideas": "核心观点",
+      "recording": "录制",
+      "email": "电子邮件",
+      "whatsapp": "WhatsApp"
+    },
+    "mode": {
+      "presencial": "现场",
+      "remoto": "远程"
+    },
+    "date_tbd": "待定",
+    "sends": {
+      "kit_email": "嘉宾资料包（电子邮件）",
+      "kit_whatsapp": "嘉宾资料包（WhatsApp）",
+      "calendar": "日历邀请",
+      "automations": "自动发送（资料包和日历）", "guest": "发送给嘉宾",
+      "other": "发送\"{{key}}\""
+    },
+    "status": {
+      "sent": "{{label}}：已发送",
+      "skipped": "{{label}}：未发送",
+      "error": "{{label}}：失败",
+      "held": "{{label}}：等待你的确认"
+    },
+    "drops": {
+      "whatsapp": "无法识别所填写的 WhatsApp 号码{{end}}。请与嘉宾确认号码。",
+      "whatsapp_end": "（尾号 {{digits}}）",
+      "accessibility": "嘉宾填写了无障碍需求，但未勾选此类数据的授权，因此该信息已被删除。如对录制很重要，请直接询问嘉宾。",
+      "sensitive": "由于嘉宾未勾选专门授权，一项敏感个人信息已被删除。",
+      "scheduled_at": "无法读取录制日期。请与嘉宾确认日期。",
+      "previous_interviews": "\"以往采访\"一栏中有一项不是链接，已忽略。",
+      "links": "其中一个链接不是有效地址，已忽略。",
+      "key_ideas": "嘉宾提交了超过 3 个核心观点，仅保留前 3 个。",
+      "other": "\"{{field}}\"栏中的一项回答已忽略。"
+    },
+    "held": "回答没有有效的邀请码：未向嘉宾发送任何内容。如果是你邀请的，请通过菜单或 confirmarIntake 确认。"
+  },
+  "sheet": {
+    "tab": "嘉宾",
+    "columns": [
+      "回答时间",
+      "姓名",
+      "希望的称呼",
+      "职位",
+      "简介",
+      "核心观点",
+      "希望推广",
+      "愿意讨论",
+      "希望避免",
+      "录制",
+      "形式",
+      "电子邮件",
+      "WhatsApp",
+      "首选联系方式",
+      "发布前审阅",
+      "已发送内容",
+      "需要关注",
+      "简报",
+      "记录编号"
+    ],
+    "not_informed": "未提供或无法识别",
+    "none": "—",
+    "briefing_link": "打开简报"
   }
 }
 
