@@ -58,18 +58,38 @@ em `dist/podfacil-skill-<versão>.zip`, gerado por `python3 scripts/build_plugin
 
 ```bash
 claude plugin marketplace add RAG7782/podcast-guest-intel
-claude plugin install podcast-guest-intel@guest-intel
+claude plugin install podfacil@guest-intel
 ```
 
 A partir da pasta (dentro da pasta do plugin):
 
 ```bash
 claude plugin marketplace add ./
-claude plugin install podcast-guest-intel@guest-intel
+claude plugin install podfacil@guest-intel
 ```
 
 Para usar: peça "prepare o episódio com <nome do convidado>". Os especialistas aparecem como
-`podcast-guest-intel:researcher`, `podcast-guest-intel:guest-coordinator` e assim por diante.
+`podfacil:researcher`, `podfacil:guest-coordinator` e assim por diante.
+
+## Atualizar
+
+Quando sai uma versão nova, o PodFácil avisa no chat (se o conector do PodFácil estiver ligado). A
+sincronização automática do marketplace do Claude pode demorar ou não acontecer; para atualizar na hora:
+
+- **Claude no navegador ou no app:** **Personalizar → Plugins → Adicionar → Gerenciar marketplaces**. No ⋮
+  ao lado de `podcast-guest-intel`, clique em **Verificar atualizações**. Depois abra o **PodFácil** na lista
+  de plugins e, se aparecer o botão **Adicionar**, clique nele. A versão aparece ao lado do nome.
+- **Claude grátis (skill em `.zip`):** baixe o `podfacil-skill-<versão>.zip` mais novo em
+  <https://github.com/RAG7782/podcast-guest-intel/releases/latest> e carregue de novo em **Personalizar → Skills**.
+- **Claude Code:**
+
+  ```bash
+  claude plugin marketplace update guest-intel
+  claude plugin update podfacil@guest-intel
+  ```
+
+- **ChatGPT e Codex, Hermes, OpenClaw e Antigravity:** rode de novo o comando de instalação da seção da sua
+  ferramenta, abaixo; ele traz a versão mais nova do repositório.
 
 ## ChatGPT e Codex
 
@@ -77,7 +97,7 @@ O ChatGPT e o Codex usam o mesmo diretório de plugins.
 
 ```bash
 codex plugin marketplace add RAG7782/podcast-guest-intel
-codex plugin add podcast-guest-intel@guest-intel
+codex plugin add podfacil@guest-intel
 ```
 
 A partir da pasta: `codex plugin marketplace add ./dist/plugin` e depois o mesmo
@@ -102,7 +122,7 @@ Essa versão traz só o núcleo grátis e não roda os checks automáticos.
 
 O Google vai trocar os Gems por **Skills** (contas pessoais a partir de novembro de 2026). No app
 do Gemini (web ou Mac) você já pode importar o arquivo
-`dist/plugin/skills/podcast-guest-intel/SKILL.md` como Skill.
+`dist/plugin/skills/podfacil/SKILL.md` como Skill.
 
 ## Hermes Agent
 
@@ -115,7 +135,7 @@ hermes plugins install RAG7782/podcast-guest-intel --enable
 Só a skill:
 
 ```bash
-hermes skills install RAG7782/podcast-guest-intel/skills/podcast-guest-intel
+hermes skills install RAG7782/podcast-guest-intel/skills/podfacil
 ```
 
 ## OpenClaw
@@ -123,7 +143,7 @@ hermes skills install RAG7782/podcast-guest-intel/skills/podcast-guest-intel
 O OpenClaw lê o marketplace do Claude:
 
 ```bash
-openclaw plugins install podcast-guest-intel --marketplace RAG7782/podcast-guest-intel
+openclaw plugins install podfacil --marketplace RAG7782/podcast-guest-intel
 ```
 
 A partir da pasta, troque o endereço por `./dist/plugin`.
@@ -139,7 +159,7 @@ Se o plugin já estiver no Claude Code, `agy plugin import claude` traz de lá.
 ## O que é grátis e o que é pago
 
 O núcleo aberto (licença Apache-2.0) funciona sem servidor e sem conta nossa. A lista completa está
-em `dist/plugin/skills/podcast-guest-intel/references/capabilities.json`.
+em `dist/plugin/skills/podfacil/references/capabilities.json`.
 
 | Grátis | Pago (chave de licença) |
 |---|---|

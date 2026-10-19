@@ -1,7 +1,7 @@
 {
   "name": "podfacil",
   "displayName": "PodFácil",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Prepara episódios de podcast com convidado: convite, dossiê com fontes, pauta e roteiro.",
   "author": {
     "name": "Renato Aparecido Gomes"
@@ -15,22 +15,5 @@
     "pauta",
     "roteiro",
     "lgpd"
-  ],
-  "metadata": {
-    "capabilities": {
-      "convite-e-formulario-essencial": "free",
-      "formulario-completo-e-automacoes": "paid",
-      "dossie": "free",
-      "pauta-1-tronco": "free",
-      "pauta-3-troncos": "paid",
-      "roteiro-modo-informativo": "free",
-      "roteiro-7-modos": "paid",
-      "memoria-centro-de-comando": "paid",
-      "localizacao-local": "free",
-      "localizacao-servidor": "paid",
-      "exportacao-markdown": "free",
-      "exportacao-pdf-docx": "paid"
-    },
-    "capabilities_file": "./skills/podfacil/references/capabilities.json"
-  }
+  ]
 }
