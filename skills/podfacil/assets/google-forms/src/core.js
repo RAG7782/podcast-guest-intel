@@ -129,7 +129,7 @@ var FIELD_TYPES = {
   off_limits_topics: 'paragraph', wants_to_promote: 'paragraph', dream_questions: 'paragraph',
   'conflicts_of_interest.details': 'paragraph', 'companion.name': 'text', materials: 'paragraph',
   recording_mode: 'choice', scheduled_at: 'datetime', wants_prepublication_review: 'choice',
-  preferred_channel: 'choice', 'contacts.email': 'email', 'contacts.whatsapp': 'text',
+  preferred_channel: 'choice', 'contacts.email': 'email', 'contacts.whatsapp': 'phone',
   automation_consents: 'checkbox'
 };
 
@@ -143,6 +143,18 @@ var SECTIONS = [
 ];
 
 var REQUIRED = ['guest.full_name', 'guest.preferred_name', 'bio.short', 'links', 'recording_mode', 'contacts.email'];
+
+/**
+ * Padrão do WhatsApp no Forms, coerente com o toE164 do intake.js (o que passa aqui o intake aceita): no Brasil,
+ * celular (DDD + 9 + 8 dígitos, com +55 ou 0 opcionais) ou número de outro país com +; fora do Brasil, só com + ou 00.
+ * ponytail: o DDD inexistente (ex.: 20) passa aqui e cai no toE164, que confere a lista da Anatel.
+ */
+function phonePattern(jurisdiction) {
+  var intl = '(\\+|00)[1-9][0-9 ().-]{6,20}[0-9]';
+  if (jurisdiction !== 'BR-LGPD') return '^\\s*' + intl + '\\s*$';
+  var br = '(\\+?55[ .-]*)?\\(?0?[1-9]{2}\\)?[ .-]*9[ .-]*[0-9]{4}[ .-]*[0-9]{4}';
+  return '^\\s*(' + br + '|' + intl + ')\\s*$';
+}
 
 function choicesFor(key, i18n, show) {
   var c = i18n.form.choices;
@@ -170,8 +182,10 @@ function inVariant(key, variant, variants) {
 function fieldItem(key, i18n, show) {
   var label = i18n.form.fields[key];
   if (!label) throw new Error('campo "' + key + '" sem rótulo em i18n ' + i18n.locale + '.form.fields');
-  return { type: FIELD_TYPES[key] || 'paragraph', key: key, title: label.title, help: label.help,
+  var it = { type: FIELD_TYPES[key] || 'paragraph', key: key, title: label.title, help: label.help,
     required: REQUIRED.indexOf(key) >= 0, choices: choicesFor(key, i18n, show) };
+  if (it.type === 'phone') it.invalid = i18n.form.validation.phone;   // o Forms mostra ao convidado e não deixa enviar
+  return it;
 }
 
 function acceptItem(key, i18n, text, required) {
@@ -252,6 +266,7 @@ function buildFormSpec(opts) {
   var at = items.map(function (it) { return it.key; }).indexOf('contacts.email');
   items.splice(at + 1, 0, { type: 'text', key: 'invite.token', title: i18n.form.fields['invite.token'].title,
     help: i18n.form.fields['invite.token'].help, required: false });
+  items.forEach(function (it) { if (it.type === 'phone') it.pattern = phonePattern(opts.jurisdiction); });
   if (variant === 'completo') items = items.concat(sensitiveItems(i18n, show));
   items = items.concat(consentItems(i18n, clause)).concat(localizationItems(i18n, show));
   return {
@@ -267,7 +282,7 @@ if (typeof module !== 'undefined') {
     renderTemplate: renderTemplate, lookupPath: lookupPath, stripDocComment: stripDocComment,
     selectLocale: selectLocale, selectClause: selectClause, resolveController: resolveController,
     renderClause: renderClause, isDraftClause: isDraftClause, buildFormSpec: buildFormSpec, enabledChannels: enabledChannels,
-    localizationItems: localizationItems,
+    localizationItems: localizationItems, phonePattern: phonePattern,
     BASE_PURPOSES: BASE_PURPOSES
   };
 }

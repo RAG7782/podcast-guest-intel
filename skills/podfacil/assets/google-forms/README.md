@@ -33,15 +33,20 @@ Não é preciso servidor nem projeto no Google Cloud, e nada é instalado no seu
 1. Abra **<https://script.google.com/home/projects/create>** (já abre um projeto novo; se não abrir, vá em script.google.com → **Novo projeto**).
 2. Clique em "Projeto sem título" e dê um nome, por exemplo `Formulário do convidado`.
 
-### 2. Cole os 10 arquivos
+### 2. Cole os 11 arquivos e o manifesto
 No editor, para **cada** arquivo da pasta `src/` deste repositório:
 1. Clique no **+** ao lado de "Arquivos" e escolha **Script**.
-2. Dê um nome (o nome não importa; sugestão: `bundle`, `core`, `intake`, `actions`, `invitation`, `forms`, `automations`, `admission`, `licenca`, `convidados`).
+2. Dê um nome (o nome não importa; sugestão: `bundle`, `core`, `intake`, `actions`, `invitation`, `forms`, `automations`, `admission`, `licenca`, `convidados`, `drive`).
 3. Apague o conteúdo de exemplo e cole o conteúdo do arquivo.
 
 O arquivo `Código.gs` que já vem no projeto pode ser apagado. A ordem dos arquivos não importa.
-O 11º arquivo, `drive-logo.js`, é **opcional**: cole só se o logo estiver no seu Google Drive (veja
-"Logo e cores do convite").
+Depois, em ⚙️ **Configurações do projeto**, marque **Mostrar arquivo de manifesto "appsscript.json" no editor**,
+abra o `appsscript.json` e troque o conteúdo pelo do arquivo `appsscript.json` desta pasta. Ele pede ao Google só o
+acesso necessário: no Drive, só os arquivos que o próprio PodFácil cria (nada do acesso total, que o Google classifica
+como restrito). Os arquivos `menu.js` e `convites.js` trazem o menu **PodFácil** (Ativar licença, Configurar
+programa, Enviar logo, Convidar pela aba Convites, Verificar instalação, Reenviar aviso, Enviar confirmação ao
+convidado, Refazer aba Convidados, Esquecer convidado, Liberar outros dispositivos); eles só funcionam quando o
+código mora dentro da planilha, como na planilha-modelo. Num projeto avulso como este, pode pular os dois.
 Clique em 💾 **Salvar**.
 
 ### 3. Ajuste o fuso horário
@@ -173,9 +178,10 @@ Sem `brand`, o convite sai em cores neutras e com o nome do programa em texto.
 - **Trocar o logo:** troque `logo.url` por outro endereço `https://` público. Prefira **PNG com
   fundo transparente**, que se comporta melhor no modo escuro. O `alt` é obrigatório: é o texto que
   aparece quando o programa de e-mail bloqueia imagens.
-- **Logo no seu Drive**, em vez de link público: use `"logo": { "drive_file_id": "<id do arquivo>", "alt": "…" }`
-  e cole também o arquivo `src/drive-logo.js`. O logo vai **embutido** no e-mail. Esse arquivo faz o
-  Google pedir acesso ao seu Drive na autorização, e por isso é opcional.
+- **Logo no seu Drive**, em vez de link público: na planilha, use **PodFácil > Enviar logo**. O PodFácil guarda o
+  arquivo no seu Drive e preenche `"logo": { "drive_file_id": "…", "alt": "…" }`; o logo vai **embutido** no e-mail.
+  Com o acesso reduzido (`drive.file`), o PodFácil só abre o logo que ele mesmo guardou: um arquivo posto no Drive à
+  mão não abre (o convite para com a mensagem de como resolver).
 - **Sem logo:** apague o `logo`. O topo mostra o nome do programa em texto, nunca uma imagem quebrada.
 - **Trocar as cores:** `primary` pinta a faixa do topo e o botão (o texto do botão fica preto ou
   branco, o que der mais contraste). `secondary` vai nos títulos e links, e só é usada se for
@@ -274,8 +280,16 @@ gatilho diário**, que varre a aba `intake`, e não um gatilho por convidado (o 
   `enviarConvite`, `registrarOptOut`, `confirmarIntake`), `src/admission.js` (lock das chaves de envio e
   admissão por código de convite), `src/licenca.js` (chave do plano pago conferida na tool `licenca_status`
   do servidor; endereço em `references/contracts/produto.json`, empacotado no bundle), o lado Google de `src/convidados.js`
-  (aba Convidados por `intake_id`, `reconstruirAbaConvidados`, `reenviarAviso`, briefing na lixeira ao esquecer) e o
-  opcional `src/drive-logo.js`. O HTML do convite tem porta Python em `mcp-server/convite_html.py`, com paridade
+  (aba Convidados por `intake_id`, `reconstruirAbaConvidados`, `reenviarAviso`, briefing na lixeira ao esquecer),
+  `src/menu.js` (menu PodFácil da planilha: `onOpen`, janela "Ativar licença" com campo oculto, "Verificar instalação"
+  que religa gatilhos e recria a aba, reenviar/esquecer pela linha selecionada, liberar dispositivos) e o
+  `src/drive.js` (Drive pela API REST com o token do script e o escopo `drive.file`: logo enviado pelo menu, lixeira
+  do briefing que o PodFácil criou; o resto vira pendência com link) e o `src/convites.js` (fila da aba Convites:
+  "Convidar" manda as linhas pendentes pelo `enviarConvite`, marca a Situação, respeita a cota diária do MailApp e o
+  limite de 6 min, e o que sobra sai no gatilho diário; `onEdit` devolve à fila a linha corrigida). As checagens das
+  respostas (horário fora do comum, data passada, WhatsApp diferente do anotado no convite) ficam em `revisarIntake`
+  (`src/intake.js`), e a confirmação ao convidado em `buildGuestConfirmation` (`src/convidados.js`). O manifesto `appsscript.json` lista os escopos;
+  `test/manifest.test.js` recusa escopo restrito, `DriveApp` e escopo sem uso. O HTML do convite tem porta Python em `mcp-server/convite_html.py`, com paridade
   byte a byte (`mcp-server/tests/test_convite_paridade.py`): mude os dois juntos.
 - `src/bundle.gen.js` é **gerado** a partir de `references/contracts/i18n/*.json`, `assets/templates/guest-kit.md`,
   `assets/templates/guest-invitation-official.md`
@@ -347,7 +361,7 @@ Conferidas na documentação oficial em **2026-10-09**:
 | `MailApp.sendEmail` com `body` (texto) + `htmlBody`: quem lê HTML usa o `htmlBody`, os outros o texto | convite multipart | [VERIFICADO] (2026-10-09) | <https://developers.google.com/apps-script/reference/mail/mail-app> |
 | `inlineImages: {chave: Blob}` + `<img src="cid:chave">` no `htmlBody`; `attachments: BlobSource[]` | logo do Drive embutido; `.ics` | [VERIFICADO] (2026-10-09) | <https://developers.google.com/apps-script/reference/mail/mail-app> |
 | Limites por mensagem: corpo 200 KB (gratuito) / 400 KB (Workspace); anexos 25 MB | o convite tem ~6 KB | [VERIFICADO] (2026-10-09) | <https://developers.google.com/apps-script/guides/services/quotas> |
-| `DriveApp.getFileById(id)` · `File.getBlob()` | logo no Drive (opcional) | [VERIFICADO] (2026-10-09) | <https://developers.google.com/apps-script/reference/drive/drive-app> · <https://developers.google.com/apps-script/reference/drive/file> |
+| Drive API v3 `files/{id}?alt=media`, `PATCH {trashed:true}`, upload `multipart` com `ScriptApp.getOAuthToken()` | logo e lixeira com `drive.file` | [VERIFICADO] (2026-10-19) | <https://developers.google.com/workspace/drive/api/guides/api-specific-auth> |
 | `Utilities.newBlob(data, contentType, name)` | anexo `.ics` | [VERIFICADO] (2026-10-09) | <https://developers.google.com/apps-script/reference/utilities/utilities> |
 | `MailApp` em vez de `GmailApp` | escopo menor (`GmailApp` exige `https://mail.google.com/`) | [VERIFICADO] (2026-10-09) | <https://developers.google.com/apps-script/reference/gmail/gmail-app> |
 | Contraste WCAG 2.2 SC 1.4.3: 4.5:1 (texto normal); luminância relativa com limiar 0.04045 | `R-BRAND-CONTRAST` (Python e JS) | [VERIFICADO] (2026-10-09) | <https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html> |

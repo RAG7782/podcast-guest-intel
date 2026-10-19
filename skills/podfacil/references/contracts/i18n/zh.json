@@ -3,6 +3,9 @@
   "needs_native_review": true,
   "text_version": "zh/v0-skeleton",
   "form": {
+    "validation": {
+      "phone": "请输入带国家代码和区号的号码，例如：+86 138 0013 8000。"
+    },
     "title": "[TODO-zh] Guest of {{show.name}}",
     "description_essencial": "[TODO-zh] Takes about 2 minutes. It helps us prepare a good conversation for you, with no surprises.",
     "description_completo": "[TODO-zh] Takes about 8 minutes. Almost everything is optional: skip whatever you prefer.",
@@ -389,6 +392,7 @@
     }
   },
   "owner": {
+    "confirm_hint": "如需请嘉宾更正：在嘉宾标签页中点击该嘉宾所在的行，然后使用 PodFácil > 发送确认。",
     "headline": "{{name}} 已填写表单。",
     "lead": "所有信息均已记录。以下是目前已完成的事项以及嘉宾提供的信息。",
     "happened": "已完成事项",
@@ -429,6 +433,9 @@
       "held": "{{label}}：等待你的确认"
     },
     "drops": {
+      "check.time_odd": "填写的时间（{{hora}}）不太常见。请与嘉宾确认是否输入有误。",
+      "check.past": "填写的录制日期（{{data}}）已经过去。请与嘉宾确认日期。",
+      "check.whatsapp_mismatch": "填写的 WhatsApp 号码尾号为 {{agora}}，但邀请中记录的号码尾号为 {{antes}}。请确认哪个正确。",
       "whatsapp": "无法识别所填写的 WhatsApp 号码{{end}}。请与嘉宾确认号码。",
       "whatsapp_end": "（尾号 {{digits}}）",
       "accessibility": "嘉宾填写了无障碍需求，但未勾选此类数据的授权，因此该信息已被删除。如对录制很重要，请直接询问嘉宾。",
@@ -467,5 +474,207 @@
     "not_informed": "未提供或无法识别",
     "none": "—",
     "briefing_link": "打开简报"
+  },
+  "menu": {
+    "start": {
+      "guide": "图文指南，逐屏说明（英文）：",
+      "tab": "从这里开始",
+      "title": "从这里开始：大约 15 分钟，从零到发出第一份邀请",
+      "steps": [
+        "这是你的 PodFácil 表格副本，只属于你：别人看不到你在这里填写的内容。",
+        "在 Claude 聊天中说：“在 PodFácil 中设置我的节目”。Claude 会提问并保存节目资料。",
+        "在这个表格里使用 PodFácil 菜单（在顶部“帮助”旁边）。付费版：PodFácil > 激活许可证。免费版：PodFácil > 配置节目，并输入 Claude 显示的代码。如果看不到菜单，请刷新页面。",
+        "第一次使用时，Google 会请求授权并显示“Google 尚未验证此应用”的页面，开发者一栏显示的是你自己的邮箱。这是正常的：副本属于你，PodFácil 在你自己的账号里运行。点击“高级”，再点击“转至 PodFácil — planilha do programa（不安全）”和“继续”；在权限列表中保持全部勾选，然后点击“继续”。窗口会自动关闭：请再次点击你刚才选择的菜单选项。",
+        "Google 请求的权限与 PodFácil 实际所做的事：Google 会请求访问你的表格、表单和日历，因为它没有更小范围的权限可选；但 PodFácil 只处理这个表格、嘉宾表单和它自己创建的录制活动；在云端硬盘中只处理它自己创建的文件。它还会以你的名义发送邮件（邀请和通知），在 PodFácil 服务器上核验你的许可证，并且每天自动运行一次（提醒和邀请队列）。它不会读取你的邮件。",
+        "节目配置完成后，PodFácil 会创建嘉宾表单。然后在“邀请”标签页中，每位嘉宾填写一行（姓名和电子邮件即可），并使用 PodFácil > 发送邀请。",
+        "嘉宾回复后，你的邮箱会收到通知，回答会出现在“嘉宾”标签页中。"
+      ],
+      "footer": "有疑问或发现异常？请使用 PodFácil > 检查安装，或在聊天中询问 Claude。"
+    },
+    "invite": "发送邀请（邀请标签页）",
+    "confirm_guest": "向所选嘉宾发送确认",
+    "invites": {
+      "busy": "邀请队列正在运行。请稍等几分钟，再查看状态列。",
+      "tab": "邀请",
+      "columns": [
+        "姓名",
+        "电子邮件",
+        "日期和时间",
+        "录制方式",
+        "会议室链接（远程）",
+        "WhatsApp（可选）",
+        "状态"
+      ],
+      "note": "每位嘉宾一行：填写姓名和电子邮件即可；日期、录制方式、链接和 WhatsApp 知道时再填。然后使用 PodFácil > 发送邀请。状态列由 PodFácil 填写。",
+      "created": "已创建 {{aba}} 标签页。请每位嘉宾填写一行（姓名和电子邮件即可），然后再次使用 PodFácil > 发送邀请。",
+      "nothing": "{{aba}} 标签页中没有待发送的邀请。带 ✅ 或 ➖ 的行已处理：同一个人不会在同一日期收到两次邀请。",
+      "confirm": "现在发送 {{n}} 份邀请吗？",
+      "done": "完成。已发送：{{enviados}} · 已处理过：{{pulados}} · 需更正：{{corrigir}} · 失败：{{falhas}} · 稍后发送：{{depois}}。",
+      "later": "稍后发送的邀请会在明天每日提醒的时间自动发出。",
+      "need_form": "发送邀请前，需要先配置节目并创建表单。请使用 PodFácil > 检查安装。",
+      "status": {
+        "unsure": "⚠️ 无法确认是否已发送（本轮被中断）：请在 Gmail 的已发送中查看；如未发出，请再次使用发送邀请",
+        "sent": "✅ 已于 {{quando}} 发送",
+        "sent_logo": "✅ 已于 {{quando}} 发送，未附标志（请使用 PodFácil > 上传标志）",
+        "already": "➖ 之前已发送",
+        "optout": "➖ 未发送：对方要求不再接收邮件",
+        "quota": "⏳ 排队中：今日邮件配额已用完；明天发送",
+        "time": "⏳ 排队中：下一轮发送",
+        "failed": "⚠️ 失败：{{motivo}}。再次使用发送邀请可重试",
+        "fix": "❌ 请更正：{{motivo}}"
+      },
+      "errors": {
+        "past": "日期已经过去",
+        "name": "缺少姓名",
+        "email": "电子邮件无效",
+        "date": "无法识别日期和时间（请使用 2026-10-20 14:30）",
+        "mode": "无法识别录制方式（请使用 {{modos}}）",
+        "link": "会议室链接必须以 https:// 开头",
+        "whatsapp": "无法识别 WhatsApp 号码（请使用 +国家代码和号码）"
+      },
+      "digest_subject": "邀请队列：今天已发送 {{enviados}} 份",
+      "digest_body": "邀请队列今天已自动运行。已发送：{{enviados}} · 需更正：{{corrigir}} · 失败：{{falhas}} · 仍在排队：{{depois}}。请查看 {{aba}} 标签页：{{url}}"
+    },
+    "confirm": {
+      "busy": "此确认正在发送中，无需再次点击。",
+      "held": "此回答已被暂扣（提交时没有有效的邀请码）。请先确认这位嘉宾，再给其发送邮件。",
+      "title": "发送确认",
+      "ask": "向 {{nome}} 发送邮件，请其确认 {{n}} 项内容吗？\n\n{{itens}}",
+      "ask_none": "在 {{nome}} 的回答中没有发现需要更正的内容。仍然发送邮件请其确认资料吗？",
+      "again": "已于 {{quando}} 发送过确认。",
+      "done": "已向 {{nome}} 发送确认。回复会发到你的邮箱。",
+      "optout": "{{nome}} 要求不再接收节目的邮件；未发送任何内容。",
+      "quota": "今日邮件配额已用完。请明天再试。",
+      "not_found": "找不到这位嘉宾的回答（编号 {{id}}）。"
+    },
+    "title": "PodFácil",
+    "activate_license": "激活许可证",
+    "check_install": "检查安装",
+    "resend_notice": "重新发送所选嘉宾的通知",
+    "rebuild_guests": "重建嘉宾标签页",
+    "forget_guest": "删除所选嘉宾的数据（隐私）",
+    "release_devices": "释放其他设备",
+    "ask_code_title": "哪位嘉宾？",
+    "ask_code": "在嘉宾标签页中点击该嘉宾所在的行，然后再次选择此选项。或在此粘贴记录编号（最后一列）：",
+    "resend_done": "通知已重新发送到你的邮箱。",
+    "rebuild_done": "嘉宾标签页已重建，简报链接已保留。",
+    "forget_confirm": "删除 {{nome}} 的数据？这会删除回答、嘉宾行和日历事件，并把简报移到回收站。此操作无法撤销。",
+    "forget_done": "完成：已删除 {{nome}} 的数据。",
+    "forget_pending": "仍需手动处理：",
+    "error": "未成功：{{motivo}}",
+    "license": {
+      "upgrade_hint": "你的许可证解锁了完整表单：要用它替换基础表单，请使用“检查安装”。",
+      "ok_stay": "许可证已激活（{{plano}} 方案）。请复制上面需要的内容，然后关闭此窗口。",
+      "title": "激活 PodFácil 许可证",
+      "lead": "粘贴购买后通过邮件收到的密钥。它只保存在此项目中，不会显示在屏幕上。",
+      "label": "许可证密钥",
+      "button": "激活",
+      "working": "正在向服务器确认…",
+      "ok": "许可证已激活（{{plano}} 方案）。此窗口会自动关闭。",
+      "saved_offline": "密钥已保存。PodFácil 服务器暂未响应，将在下次使用时确认。",
+      "invalid": "这看起来不像许可证密钥。请从邮件中完整复制密钥，不要包含空格。",
+      "refused": "服务器拒绝了该密钥：{{motivo}}",
+      "free_key": "该密钥属于免费方案。自动化功能属于付费方案。",
+      "saved_limit": "密钥已保存。它已达到电脑数量上限：请使用 PodFácil > 释放其他设备。",
+      "offline_keep": "PodFácil 服务器暂未响应，且已保存了一个密钥；该密钥继续有效。请几分钟后再尝试更换。",
+      "unknown": "服务器无法识别该密钥。请确认已从邮件中完整复制密钥。",
+      "failed": "与 Google 通信时出错。请关闭此窗口后重试。"
+    },
+    "check": {
+      "form_gone_ask": "已登记的表单无法打开（已删除或无权限）。现在新建一个吗？嘉宾链接会改变；已收到的回复仍保留在表格中。",
+      "upgrade_ask": "你的付费许可证解锁了完整表单。现在更换吗？嘉宾链接会改变：旧链接不再接受回复，已收到的回复仍保留在表格中。",
+      "form_ask": "还没有嘉宾表单。现在创建吗？（需要几秒钟）",
+      "phone_ok": "表单中的 WhatsApp 字段已启用校验（号码不完整或含字母都无法提交）",
+      "title": "检查安装",
+      "summary_ok": "PodFácil 一切正常。",
+      "summary_fail": "有 {{n}} 项需要你处理：",
+      "show_ok": "节目设置：{{nome}}。",
+      "show_missing": "缺少节目设置（Claude 会和你一起准备）。",
+      "form_ok": "已找到嘉宾表单。",
+      "form_missing": "表单尚未创建。",
+      "form_gone": "已登记的表单无法打开（已删除或无权限）。",
+      "triggers_ok": "自动发送已开启。",
+      "triggers_fixed": "自动发送原本已关闭，现已重新开启。",
+      "guests_ok": "嘉宾标签页已就位。",
+      "guests_fixed": "嘉宾标签页不存在，现已创建。",
+      "guests_fail": "无法创建嘉宾标签页：{{motivo}}",
+      "license_none": "没有许可证：免费方案。如需付费方案，请使用 PodFácil > 激活许可证。",
+      "license_paid": "许可证有效（{{plano}} 方案）。",
+      "license_offline": "许可证已保存；服务器暂未响应。",
+      "license_fail": "许可证有问题：{{motivo}}",
+      "triggers_other": "自动发送是由账户 {{dono}} 开启的。请让此人打开 PodFácil > 检查安装。",
+      "logo_fail": "PodFácil 无法打开云端硬盘中的标志；邀请函会改用节目名称。请通过 PodFácil > 上传标志重新上传。",
+      "logo_ok": "邀请函标志已就位。"
+    },
+    "devices": {
+      "title": "释放其他设备",
+      "confirm": "这会断开与你的许可证关联的所有电脑；每台电脑在下次使用时会重新生效。每月可使用 2 次。继续吗？",
+      "done": "设备已释放。",
+      "no_key": "请先激活许可证（PodFácil > 激活许可证）。"
+    },
+    "config": {
+      "form_busy": "表单正在另一个窗口中创建。请等一分钟，然后使用“检查安装”。",
+      "form_exists": "嘉宾表单已经存在。发给嘉宾的链接：{{url}}",
+      "form_created": "已创建嘉宾表单（{{variante}}）。发给嘉宾的链接：{{url}}",
+      "form_fail": "无法创建表单：{{motivo}}",
+      "variants": {"essencial": "基础版", "completo": "完整版"},
+      "item": "配置节目",
+      "ask_code_title": "节目代码",
+      "ask_code": "请输入 Claude 在聊天中显示的 15 位字母和数字代码（可带或不带短横线）：",
+      "done": "节目“{{nome}}”已配置。详细信息在 {{aba}} 标签页中。",
+      "tab": "设置",
+      "note": "此标签页仅显示设置。如需修改，请在聊天中告诉 Claude，然后再次使用 PodFácil > 配置节目。",
+      "labels": {
+        "name": "节目",
+        "tagline": "介绍语",
+        "locale": "语言",
+        "editorial": "编辑方向",
+        "modes": "录制方式",
+        "studio": "录音室",
+        "address": "地址",
+        "colors": "颜色",
+        "logo": "标志",
+        "controller": "数据控制者",
+        "retention": "回答保存期"
+      },
+      "retention_days": "发布后 {{dias}} 天",
+      "imported": "已导入节目资料“{{nome}}”。",
+      "logo_item": "上传标志",
+      "import_failed": "节目资料已收到，但无法保存（{{motivo}}）。请让 Claude 重新保存，然后使用 PodFácil > 配置节目。",
+      "logo": {
+        "title": "邀请函标志",
+        "lead": "选择节目标志（PNG 或 JPG，最大 1 MB）。它会嵌入邀请函，并保存在你的 Google 云端硬盘中。",
+        "button": "上传",
+        "working": "正在上传…",
+        "ok": "标志已保存。之后的邀请函都会带上它。",
+        "too_big": "文件超过 1 MB。请缩小图片后重试。",
+        "bad_type": "请使用 PNG 或 JPG 文件。",
+        "need_show": "请先配置节目（PodFácil > 配置节目）。",
+        "failed": "上传标志时出错。请重试。"
+      }
+    }
+  },
+  "guest_confirm": {
+    "subject": "{{show}}：能否确认一下您参与节目的几项信息？",
+    "greeting": "{{nome}}，您好！",
+    "intro": "感谢您填写 {{show}} 的表单。录制前，我们想确认以下几点：",
+    "intro_none": "感谢您填写 {{show}} 的表单。录制前，我们想确认以下信息。",
+    "items": {
+      "contacts.whatsapp": "我们无法识别您填写的 WhatsApp 号码{{end}}。正确的号码是多少（含国家代码）？",
+      "accessibility": "您填写了无障碍方面的需求，但没有勾选允许我们保存此类信息的授权，因此未予记录。如果希望我们提前准备，请回复此邮件，我们再商量如何处理。",
+      "scheduled_at": "我们无法识别录制的日期和时间。您什么时候方便？",
+      "check.time_odd": "您填写的时间是 {{hora}}。是否正确？",
+      "check.past": "您填写的日期（{{data}}）已经过去。正确的日期是哪天？",
+      "check.whatsapp_mismatch": "您填写的 WhatsApp 号码尾号为 {{agora}}，但我们记录的号码尾号为 {{antes}}。应该使用哪个？"
+    },
+    "end": "（尾号 {{digits}}）",
+    "summary": "我们记录的信息",
+    "labels": {
+      "recording": "录制",
+      "whatsapp": "WhatsApp"
+    },
+    "whatsapp_end": "尾号 {{digits}}",
+    "closing": "直接回复此邮件告诉我们更正内容即可。如果一切无误，请回复“没问题”。",
+    "signature": "{{show}} 团队"
   }
 }

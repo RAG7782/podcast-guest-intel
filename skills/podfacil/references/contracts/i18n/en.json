@@ -3,6 +3,9 @@
   "needs_native_review": false,
   "text_version": "en/v1",
   "form": {
+    "validation": {
+      "phone": "Type the number with country and area code, e.g. +1 415 555 2671."
+    },
     "title": "Guest of {{show.name}}",
     "description_essencial": "Takes about 2 minutes. It helps us prepare a good conversation for you, with no surprises.",
     "description_completo": "Takes about 8 minutes. Almost everything is optional: skip whatever you prefer.",
@@ -249,6 +252,7 @@
     }
   },
   "owner": {
+    "confirm_hint": "To ask the guest for a correction: in the Guests tab, click their row and use PodFácil > Send confirmation.",
     "headline": "{{name}} filled in the form.",
     "lead": "Everything is recorded. Below is what has happened so far and what they told you.",
     "happened": "What has happened",
@@ -289,6 +293,9 @@
       "held": "{{label}}: waiting for your confirmation"
     },
     "drops": {
+      "check.time_odd": "The time given ({{hora}}) is unusual. Check with the guest that it is not a typo.",
+      "check.past": "The recording date given ({{data}}) has already passed. Confirm the date with the guest.",
+      "check.whatsapp_mismatch": "The WhatsApp number given ends in {{agora}}, but the one noted in the invitation ends in {{antes}}. Confirm which one is right.",
       "whatsapp": "The WhatsApp number provided was not recognized{{end}}. Please confirm the number with the guest.",
       "whatsapp_end": " (ends in {{digits}})",
       "accessibility": "The guest wrote something about accessibility but did not tick the consent for this kind of data, so it was discarded. If it matters for the recording, ask them directly.",
@@ -327,5 +334,207 @@
     "not_informed": "not provided or not recognized",
     "none": "—",
     "briefing_link": "Open the briefing"
+  },
+  "menu": {
+    "start": {
+      "guide": "Illustrated guide, screen by screen:",
+      "tab": "Start here",
+      "title": "Start here: from zero to the first invitation in about 15 minutes",
+      "steps": [
+        "This is your copy of the PodFácil spreadsheet. It is yours alone: nobody else sees what you put here.",
+        "In the Claude chat, ask: \"set up my show in PodFácil\". Claude asks the questions and saves the show profile.",
+        "Here in the spreadsheet, use the PodFácil menu (at the top, next to Help). Paid plan: PodFácil > Activate license. Free plan: PodFácil > Configure show and type the code Claude showed. If the menu does not appear, reload the page.",
+        "The first time, Google asks for authorization and shows the screen \"Google hasn't verified this app\", with YOUR email as the developer. That is expected: the copy is yours and PodFácil runs inside your account. Click Advanced, then \"Go to PodFácil — planilha do programa (unsafe)\" and Continue; in the permissions list, leave everything ticked and click Continue. The window closes by itself: click the menu option you had chosen again.",
+        "What Google asks for and what PodFácil does: Google asks for access to your spreadsheets, forms and calendars because it has no narrower permission for this, but PodFácil only touches this spreadsheet, the guest form and the recording events it creates; in Drive, only the files it creates itself. It also sends emails on your behalf (invitations and notices), checks your license on the PodFácil server and runs by itself once a day (reminders and the invitation queue). It does not read your emails.",
+        "Once the show is configured, PodFácil creates the guest form. Then, in the Invitations tab, write one row per guest (name and email are enough) and use PodFácil > Invite.",
+        "When a guest replies, a notice arrives in your email and the answer appears in the Guests tab."
+      ],
+      "footer": "Questions or something odd? Use PodFácil > Check installation or ask Claude in the chat."
+    },
+    "invite": "Invite (Invitations tab)",
+    "confirm_guest": "Send confirmation to the selected guest",
+    "invites": {
+      "busy": "The invitation queue is already running. Wait a few minutes and check the Status column.",
+      "tab": "Invitations",
+      "columns": [
+        "Name",
+        "Email",
+        "Date and time",
+        "Format",
+        "Room link (remote)",
+        "WhatsApp (optional)",
+        "Status"
+      ],
+      "note": "One row per guest: name and email are enough; date, format, link and WhatsApp when you know them. Then use PodFácil > Invite. PodFácil fills in the Status column.",
+      "created": "I created the {{aba}} tab. Fill in one row per guest (name and email are enough) and use PodFácil > Invite again.",
+      "nothing": "No pending invitations in the {{aba}} tab. Rows with ✅ or ➖ are done: the same person never gets the invitation twice for the same date.",
+      "confirm": "Send {{n}} invitation(s) now?",
+      "done": "Done. Sent: {{enviados}} · already handled: {{pulados}} · to fix: {{corrigir}} · failed: {{falhas}} · for later: {{depois}}.",
+      "later": "The ones left for later go out by themselves tomorrow, at the daily reminder time.",
+      "need_form": "Before inviting, the show must be configured and the form created. Use PodFácil > Check installation.",
+      "status": {
+        "unsure": "⚠️ Not sure it was sent (the round was cut short): check Sent in Gmail; if it did not go out, use Invite again",
+        "sent": "✅ Sent on {{quando}}",
+        "sent_logo": "✅ Sent on {{quando}}, without the logo (use PodFácil > Upload logo)",
+        "already": "➖ Already sent before",
+        "optout": "➖ Not sent: this person asked not to receive emails",
+        "quota": "⏳ Queued: today's email quota ran out; goes out tomorrow",
+        "time": "⏳ Queued: goes out in the next round",
+        "failed": "⚠️ Failed: {{motivo}}. Use Invite again to retry",
+        "fix": "❌ Fix: {{motivo}}"
+      },
+      "errors": {
+        "past": "the date has already passed",
+        "name": "name is missing",
+        "email": "invalid email",
+        "date": "date and time not recognized (use 2026-10-20 14:30)",
+        "mode": "format not recognized (use {{modos}})",
+        "link": "the room link must start with https://",
+        "whatsapp": "WhatsApp not recognized (use +country code and number)"
+      },
+      "digest_subject": "Invitation queue: {{enviados}} sent today",
+      "digest_body": "The invitation queue ran by itself today. Sent: {{enviados}} · to fix: {{corrigir}} · failed: {{falhas}} · still queued: {{depois}}. See the {{aba}} tab: {{url}}"
+    },
+    "confirm": {
+      "busy": "This confirmation is already going out; no need to click again.",
+      "held": "This answer is on hold (it arrived without a valid invitation code). Confirm the guest before emailing them.",
+      "title": "Send confirmation",
+      "ask": "Send {{nome}} an email asking them to confirm {{n}} item(s)?\n\n{{itens}}",
+      "ask_none": "I found nothing to fix in {{nome}}'s answers. Send an email asking them to confirm their details anyway?",
+      "again": "A confirmation was already sent on {{quando}}.",
+      "done": "Confirmation sent to {{nome}}. Their reply will arrive in your email.",
+      "optout": "{{nome}} asked not to receive emails from the show; nothing was sent.",
+      "quota": "Today's email quota ran out. Try again tomorrow.",
+      "not_found": "I could not find this guest's answers (code {{id}})."
+    },
+    "title": "PodFácil",
+    "activate_license": "Activate license",
+    "check_install": "Check installation",
+    "resend_notice": "Resend notice for the selected guest",
+    "rebuild_guests": "Rebuild Guests tab",
+    "forget_guest": "Forget selected guest (privacy)",
+    "release_devices": "Free other devices",
+    "ask_code_title": "Which guest?",
+    "ask_code": "In the Guests tab, click the guest's row and choose the option again. Or paste the record code here (last column):",
+    "resend_done": "Notice resent to your email.",
+    "rebuild_done": "Guests tab rebuilt, briefing links kept.",
+    "forget_confirm": "Forget {{nome}}? This deletes the answers, the Guests row and the calendar event, and moves the briefing to the trash. It cannot be undone.",
+    "forget_done": "Done: {{nome}} was forgotten.",
+    "forget_pending": "Still to do by hand:",
+    "error": "That didn't work: {{motivo}}",
+    "license": {
+      "upgrade_hint": "Your license unlocks the complete form: to replace the essential one, use Check installation.",
+      "ok_stay": "License activated ({{plano}} plan). Copy what you need above and close this window.",
+      "title": "Activate your PodFácil license",
+      "lead": "Paste the key you received by email after your purchase. It is stored only in this project and never shown on screen.",
+      "label": "License key",
+      "button": "Activate",
+      "working": "Checking with the server…",
+      "ok": "License activated ({{plano}} plan). This window closes by itself.",
+      "saved_offline": "Key saved. The PodFácil server did not answer just now; it will be checked on next use.",
+      "invalid": "That doesn't look like a license key. Copy the whole key from the email, without spaces.",
+      "refused": "The server refused the key: {{motivo}}",
+      "free_key": "That key is on the free plan. Automations are part of the paid plan.",
+      "saved_limit": "Key saved. It has reached its computer limit: use PodFácil > Free other devices.",
+      "offline_keep": "The PodFácil server did not answer just now and a key is already saved; it stays in use. Try changing it again in a few minutes.",
+      "unknown": "The server does not recognize this key. Check that you copied the whole key from the email.",
+      "failed": "Something went wrong talking to Google. Close this window and try again."
+    },
+    "check": {
+      "form_gone_ask": "The saved form does not open (deleted or no access). Create a new one now? The guest link changes; answers already received stay in the spreadsheet.",
+      "upgrade_ask": "Your paid license unlocks the complete form. Switch now? The guest link changes: the old one stops accepting answers, and answers already received stay in the spreadsheet.",
+      "form_ask": "There is no guest form yet. Create it now? (takes a few seconds)",
+      "phone_ok": "WhatsApp field in the form is validated (incomplete numbers or numbers with letters are rejected)",
+      "title": "Check installation",
+      "summary_ok": "PodFácil is all set.",
+      "summary_fail": "{{n}} item(s) need you:",
+      "show_ok": "Show settings: {{nome}}.",
+      "show_missing": "The show settings are missing (Claude prepares them with you).",
+      "form_ok": "Guest form found.",
+      "form_missing": "The form has not been created yet.",
+      "form_gone": "The saved form does not open (deleted or no access).",
+      "triggers_ok": "Automatic sends are on.",
+      "triggers_fixed": "Automatic sends were off and have been turned back on.",
+      "guests_ok": "Guests tab in place.",
+      "guests_fixed": "The Guests tab was missing and has been created.",
+      "guests_fail": "Could not create the Guests tab: {{motivo}}",
+      "license_none": "No license: free plan. For the paid plan, use PodFácil > Activate license.",
+      "license_paid": "License active ({{plano}} plan).",
+      "license_offline": "License saved; the server did not answer just now.",
+      "license_fail": "License problem: {{motivo}}",
+      "triggers_other": "Automatic sends were turned on by the account {{dono}}. Ask that person to open PodFácil > Check installation.",
+      "logo_fail": "PodFácil cannot open the Drive logo; invitations go out with the show name instead. Upload it again via PodFácil > Upload logo.",
+      "logo_ok": "Invitation logo in place."
+    },
+    "devices": {
+      "title": "Free other devices",
+      "confirm": "This disconnects every computer linked to your license; each one works again on its next use. Allowed twice a month. Continue?",
+      "done": "Devices freed.",
+      "no_key": "Activate the license first (PodFácil > Activate license)."
+    },
+    "config": {
+      "form_busy": "The form is already being created in another window. Wait a minute and use Check installation.",
+      "form_exists": "The guest form already exists. Link for the guest: {{url}}",
+      "form_created": "Guest form created ({{variante}}). Link for the guest: {{url}}",
+      "form_fail": "I could not create the form: {{motivo}}",
+      "variants": {"essencial": "essential", "completo": "complete"},
+      "item": "Configure show",
+      "ask_code_title": "Show code",
+      "ask_code": "Type the 15-character code (letters and numbers) Claude showed in the chat (with or without the dashes):",
+      "done": "Show \"{{nome}}\" configured. The details are in the {{aba}} tab.",
+      "tab": "Settings",
+      "note": "This tab only shows the settings. To change them, ask Claude in the chat and use PodFácil > Configure show again.",
+      "labels": {
+        "name": "Show",
+        "tagline": "Tagline",
+        "locale": "Language",
+        "editorial": "Editorial line",
+        "modes": "Records",
+        "studio": "Studio",
+        "address": "Address",
+        "colors": "Colors",
+        "logo": "Logo",
+        "controller": "Data controller",
+        "retention": "Answers kept"
+      },
+      "retention_days": "{{dias}} days after publishing",
+      "imported": "Show profile \"{{nome}}\" imported.",
+      "logo_item": "Upload logo",
+      "import_failed": "The show profile arrived, but it could not be saved ({{motivo}}). Ask Claude to save it again and use PodFácil > Configure show.",
+      "logo": {
+        "title": "Invitation logo",
+        "lead": "Choose the show logo (PNG or JPG, up to 1 MB). It is embedded in invitations and kept in your Google Drive.",
+        "button": "Upload",
+        "working": "Uploading…",
+        "ok": "Logo saved. The next invitations already include it.",
+        "too_big": "The file is larger than 1 MB. Make the image smaller and try again.",
+        "bad_type": "Use a PNG or JPG file.",
+        "need_show": "Configure the show first (PodFácil > Configure show).",
+        "failed": "Something went wrong uploading the logo. Try again."
+      }
+    }
+  },
+  "guest_confirm": {
+    "subject": "{{show}}: could you confirm a few details about your appearance?",
+    "greeting": "Hi {{nome}},",
+    "intro": "Thank you for filling in the {{show}} form. Before the recording, we would like to confirm a few things:",
+    "intro_none": "Thank you for filling in the {{show}} form. Before the recording, we would like to confirm the details below.",
+    "items": {
+      "contacts.whatsapp": "We could not read the WhatsApp number you gave{{end}}. What is the right number, with country code?",
+      "accessibility": "You wrote something about accessibility but did not tick the authorization for us to keep this kind of information, so it was not recorded. If you would like us to prepare, reply to this email and we will work out how.",
+      "scheduled_at": "We could not read the recording date and time. When works for you?",
+      "check.time_odd": "The time you gave was {{hora}}. Is that right?",
+      "check.past": "The date you gave ({{data}}) has already passed. What is the right date?",
+      "check.whatsapp_mismatch": "The WhatsApp number you gave ends in {{agora}}, but we had noted one ending in {{antes}}. Which should we use?"
+    },
+    "end": " (ending in {{digits}})",
+    "summary": "What we have on file",
+    "labels": {
+      "recording": "Recording",
+      "whatsapp": "WhatsApp"
+    },
+    "whatsapp_end": "ends in {{digits}}",
+    "closing": "Just reply to this email with the correction. If everything is right, reply \"all good\".",
+    "signature": "The {{show}} team"
   }
 }

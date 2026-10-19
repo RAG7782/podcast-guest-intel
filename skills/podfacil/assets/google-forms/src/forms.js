@@ -5,6 +5,7 @@
  */
 
 var PROP_SHOW = 'SHOW_PROFILE_JSON';
+var TRIGGERS_OWNER_PROP = 'TRIGGERS_OWNER';
 
 function props_() {
   return PropertiesService.getScriptProperties();
@@ -46,7 +47,8 @@ function criarFormularioCompleto() {
 
 /** Cria Form + planilha + aba "intake", grava o mapa de itens e instala os gatilhos. */
 function buildForm(variant, locale) {
-  var show = loadShow_();
+  try { garantirInstancia_(); } catch (err) { /* projeto avulso: sem planilha ativa */ }   // pelo editor também
+  var show = loadShow_(), antigo = props_().getProperty('FORM_ID');
   var loc = locale || props_().getProperty('LOCALE') || show.locale;
   var jurisdiction = props_().getProperty('JURISDICTION') || show.jurisdiction || 'BR-LGPD';
   var i18n = selectLocale(BUNDLE, loc, allowUnreviewed_());
@@ -62,6 +64,9 @@ function buildForm(variant, locale) {
       clause_id: spec.clause_id, text_version: spec.text_version })
   });
   installTriggers_(form);
+  if (antigo && antigo !== form.getId()) {   // formulário refeito: o antigo para de aceitar (ficaria sem gatilho)
+    try { FormApp.openById(antigo).setAcceptingResponses(false); } catch (err) { console.error('formulário antigo: ' + err.message); }
+  }
   props_().deleteProperty('CONVIDADOS_SHEET_ID');   // planilha nova: a aba Convidados nasce nela, antes de tudo
   try {
     convidadosSheet_(i18n);
@@ -91,6 +96,7 @@ function createItem_(form, it) {
     case 'text': return form.addTextItem();
     case 'email': return form.addTextItem().setValidation(FormApp.createTextValidation().requireTextIsEmail().build());
     case 'url': return form.addTextItem().setValidation(FormApp.createTextValidation().requireTextIsUrl().build());
+    case 'phone': return form.addTextItem().setValidation(validacaoTelefone_(it.invalid, it.pattern));
     case 'paragraph': return form.addParagraphTextItem();
     case 'choice': return form.addMultipleChoiceItem().setChoiceValues(labels);
     case 'checkbox': return form.addCheckboxItem().setChoiceValues(labels);
@@ -99,11 +105,38 @@ function createItem_(form, it) {
   }
 }
 
+/** Telefone no formulário: o padrão de core.js (phonePattern, por jurisdição) barra na hora o que o intake descartaria. */
+function validacaoTelefone_(texto, padrao) {
+  return FormApp.createTextValidation().setHelpText(texto).requireTextMatchesPattern(padrao).build();
+}
+
+/** Formulário já criado (antes da 2.2): põe a validação no campo de WhatsApp. -> true se achou o campo. */
+function validarTelefoneNoFormulario_(form, i18n) {
+  var map = JSON.parse(props_().getProperty('FORM_ITEM_MAP') || '{}');
+  var id = Object.keys(map).filter(function (k) { return map[k].key === 'contacts.whatsapp'; })[0];
+  if (!id) return false;
+  var jur = (loadMeta_() || {}).jurisdiction || 'BR-LGPD';
+  form.getItemById(Number(id)).asTextItem().setValidation(validacaoTelefone_(i18n.form.validation.phone, phonePattern(jur)));
+  return true;
+}
+
+/**
+ * Planilha das respostas. Com o código dentro da planilha (planilha-modelo, 2.2), é ELA: menu, aba Convidados e
+ * respostas no mesmo lugar, e as opções pela linha selecionada acham a linha. Projeto avulso: uma planilha nova.
+ */
+var INTAKE_HEADER = ['intake_id', 'submitted_at', 'intake_json', 'resultado_envios', 'descartados'];
+
 function linkSpreadsheet_(form, title) {
-  var ss = SpreadsheetApp.create(title + ' (respostas)');
+  var ss = null;
+  try { ss = SpreadsheetApp.getActiveSpreadsheet(); } catch (err) { ss = null; }
+  if (!ss) ss = SpreadsheetApp.create(title + ' (respostas)');
   form.setDestination(FormApp.DestinationType.SPREADSHEET, ss.getId());
-  var sheet = ss.insertSheet('intake');
-  sheet.appendRow(['intake_id', 'submitted_at', 'intake_json', 'resultado_envios', 'descartados']);
+  var velha = ss.getSheetByName('intake');
+  // formulário refeito na mesma planilha: o registro técnico CONTINUA o mesmo (Esquecer, retenção e a aba
+  // Convidados seguem achando os convidados antigos). Só um cabeçalho de outra versão vai para o lado.
+  if (velha && String(velha.getRange(1, 1, 1, INTAKE_HEADER.length).getValues()[0]) === String(INTAKE_HEADER)) return ss;
+  if (velha) velha.setName('intake (anterior ' + new Date().toISOString().slice(0, 19).replace('T', ' ') + ')');
+  ss.insertSheet('intake').appendRow(INTAKE_HEADER);
   return ss;
 }
 
@@ -121,4 +154,6 @@ function installTriggers_(form) {
   ScriptApp.newTrigger('onFormSubmit').forForm(form).onFormSubmit().create();
   var hour = Number(props_().getProperty('REMINDER_HOUR') || 9);
   ScriptApp.newTrigger('lembreteDiario').timeBased().everyDays(1).atHour(hour).create();
+  // gatilho é da conta que instalou: o "Verificar instalação" de um coeditor não cria um 2º jogo (menu.js)
+  props_().setProperty(TRIGGERS_OWNER_PROP, String(Session.getEffectiveUser().getEmail() || '').toLowerCase());
 }

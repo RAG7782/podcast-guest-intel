@@ -77,7 +77,7 @@
             "drive_file_id": {
               "type": "string",
               "pattern": "^[A-Za-z0-9_-]{20,}$",
-              "description": "Id do arquivo no Drive do dono do script (exige colar src/drive-logo.js; pede o escopo do Drive)."
+              "description": "Id de um arquivo no Google Drive guardado pelo PodFácil (PodFácil > Enviar logo). Com o acesso reduzido (drive.file), o PodFácil só abre o arquivo que ele mesmo guardou; outro id faz o convite sair com o nome do programa no lugar do logo."
             },
             "alt": { "type": "string", "minLength": 1, "x-rule": "R-BRAND-LOGO-ALT" },
             "width": { "type": "integer", "minimum": 40, "maximum": 600, "default": 120, "description": "Largura em px no e-mail." }

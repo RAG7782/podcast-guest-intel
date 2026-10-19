@@ -21,7 +21,8 @@ var LICENCA_CACHE_PROP = 'licenca_cache';
 
 function licencaNegadaMsg_(recurso, motivo) {
   return 'O recurso "' + recurso + '" é do plano pago do PodFácil: ' + motivo + '. Planos e assinatura: ' +
-    BUNDLE.produto.precos + '. Já tem a chave? Em Configurações do projeto > Propriedades do script, crie ' +
+    BUNDLE.produto.precos + '. Já tem a chave? Se a sua planilha tiver o menu PodFácil, use PodFácil > Ativar licença. ' +
+    'Sem o menu: em Configurações do projeto > Propriedades do script, crie ' +
     LICENCA_PROP + ' com a chave (nunca no código) e ' + DISPOSITIVO_PROP +
     ' só se o seu conector MCP usar X-Device-Id (Claude Code); no claude.ai, deixe sem.';
 }
@@ -55,14 +56,19 @@ function licencaCache_(key) {
   return doc;
 }
 
-/** {answer} da tool licenca_status, ou {indisponivel: motivo} (rede, 5xx, 429, formato). */
-function perguntarServidor_(key) {
-  var rpc = { jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name: 'licenca_status', arguments: {} } };
+/** {answer} da tool (padrão licenca_status) com a chave, ou {indisponivel: motivo} (rede, 5xx, 429, formato). */
+function perguntarServidor_(key, tool, args) {
+  return chamarServidor_(tool || 'licenca_status', args || {}, key);
+}
+
+/** Chamada a uma tool do servidor, com a chave ou sem ela (plano grátis: o servidor trata como anônimo). */
+function chamarServidor_(tool, args, key) {
+  var rpc = { jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name: tool, arguments: args || {} } };
   var resp;
   try {
     resp = UrlFetchApp.fetch(BUNDLE.produto.servidor_mcp, { method: 'post', contentType: 'application/json',
       payload: JSON.stringify(rpc), muteHttpExceptions: true,
-      headers: headersLicenca_(key) });
+      headers: key ? headersLicenca_(key) : { 'X-PodFacil-Cliente': 'apps-script' } });
   } catch (err) {
     return { indisponivel: 'rede: ' + err.message };
   }

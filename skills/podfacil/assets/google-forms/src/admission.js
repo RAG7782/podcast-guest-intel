@@ -62,7 +62,7 @@ function admitByToken_(token, email, responseId) {
 /** Códigos vencidos saem das Script Properties (o espaço total é limitado); roda no gatilho diário. */
 function expireInvites_(nowMs) {
   var p = props_();
-  p.getKeys().filter(function (k) { return k.indexOf('invite:') === 0; }).forEach(function (k) {
+  p.getKeys().filter(function (k) { return k.indexOf('invite:') === 0 || k.indexOf('invite_wa:') === 0; }).forEach(function (k) {
     var rec = {};
     try { rec = JSON.parse(p.getProperty(k)); } catch (err) { console.error('código de convite ilegível (' + err.message + '); removido'); }
     if (!(rec.exp > nowMs)) p.deleteProperty(k);

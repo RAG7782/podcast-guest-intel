@@ -60,6 +60,8 @@ function ownerAttention(dropped, i18n) {
       // já coberto pelo item do número
     } else if (f === 'accessibility' || f === 'scheduled_at') {
       out.push({ action: true, text: t[f] });
+    } else if (f.indexOf('check.') === 0 && t[f]) {   // revisarIntake: nada foi descartado, mas o dono confere
+      out.push({ action: true, text: fillOwner_(t[f], checkVars(d, i18n.locale)) });
     } else if (t[f] && ['sensitive', 'previous_interviews', 'links', 'key_ideas'].indexOf(f) >= 0) {
       out.push({ action: false, text: t[f] });
     } else {
@@ -67,6 +69,12 @@ function ownerAttention(dropped, i18n) {
     }
   });
   return out;
+}
+
+/** Variáveis das checagens (check.*): sempre as quatro, para o texto de qualquer idioma achar a sua. */
+function checkVars(d, locale) {
+  var v = d.vars || {};
+  return { hora: v.hora || '', data: v.data ? formatScheduled(v.data, locale) : '', agora: v.agora || '', antes: v.antes || '' };
 }
 
 function ownerDate(iso, locale, t) {
@@ -118,7 +126,8 @@ function buildOwnerEmail(show, intake, i18n, results, dropped, link) {
     sends.map(function (s) { return li(s.ok, s.text); }).join('') + '</ul>' +
     (acts.length ? '<div style="background:#FFF4E5;border-left:3px solid #B26A00;padding:12px 16px;margin:0 0 20px;">' +
       '<p style="margin:0 0 8px;font-size:15px;"><strong>' + e(t.attention) + '</strong></p>' +
-      acts.map(function (a) { return '<p style="margin:0 0 6px;font-size:15px;">• ' + e(a.text) + '</p>'; }).join('') + '</div>' : '') +
+      acts.map(function (a) { return '<p style="margin:0 0 6px;font-size:15px;">• ' + e(a.text) + '</p>'; }).join('') +
+      '<p style="margin:10px 0 0;font-size:13px;">' + e(t.confirm_hint) + '</p></div>' : '') +
     cap(t.summary) + '<table role="presentation" style="border-collapse:collapse;margin:0 0 24px;">' +
     summary.map(function (p) {
       return '<tr><td style="padding:6px 12px 6px 0;color:' + c.accent + ';font-size:13px;vertical-align:top;white-space:nowrap;">' + e(p[0]) +
@@ -134,12 +143,62 @@ function buildOwnerEmail(show, intake, i18n, results, dropped, link) {
     '</td></tr></table></div>';
   var text = fillOwner_(t.headline, { name: name }) + '\n\n' + t.happened + ':\n- ' + t.form_received + '\n' +
     sends.map(function (s) { return '- ' + s.text; }).join('\n') +
-    (acts.length ? '\n\n' + t.attention + ':\n' + acts.map(function (a) { return '- ' + a.text; }).join('\n') : '') +
+    (acts.length ? '\n\n' + t.attention + ':\n' + acts.map(function (a) { return '- ' + a.text; }).join('\n') + '\n' + t.confirm_hint : '') +
     '\n\n' + t.summary + ':\n' + summary.map(function (p) { return p[0] + ': ' + p[1]; }).join('\n') +
     (link ? '\n\n' + fillOwner_(t.full_answers, { url: link }) : '') + '\n\n' + fillOwner_(t.next_step, { name: name }) +
     (notes.length ? '\n\n' + t.notes + ':\n' + notes.map(function (a) { return '- ' + a.text; }).join('\n') : '') +
     '\n\n' + fillOwner_(t.record_code, { id: intake.intake_id });
   return { html: html, text: text };
+}
+
+// ---------- confirmação ao convidado (decisão 3.1: e-mail pronto pelo MailApp, sem acesso ao Gmail) ----------
+
+/** O que o convidado pode corrigir. O que é só do dono (link ignorado, 4ª ideia) e o dado sensível ficam de fora. */
+var GUEST_CONFIRM_FIELDS = ['scheduled_at', 'check.past', 'check.time_odd', 'contacts.whatsapp', 'check.whatsapp_mismatch',
+  'accessibility'];
+
+/** Pontos a confirmar, na ordem acima, sem repetir: [texto]. */
+function guestConfirmItems(dropped, i18n) {
+  var g = i18n.guest_confirm, by = {};
+  (dropped || []).forEach(function (d) { if (GUEST_CONFIRM_FIELDS.indexOf(d.field) >= 0 && !by[d.field]) by[d.field] = d; });
+  return GUEST_CONFIRM_FIELDS.filter(function (f) { return by[f]; }).map(function (f) {
+    var d = by[f], vars = checkVars(d, i18n.locale), end = (/\*+(\d{2,4})/.exec(String(d.reason)) || [])[1];
+    vars.end = f === 'contacts.whatsapp' && end ? fillOwner_(g.end, { digits: end }) : '';
+    return fillOwner_(g.items[f], vars);
+  });
+}
+
+/**
+ * E-mail ao convidado pedindo para confirmar o que veio com problema (ou, sem problema, os dados principais).
+ * -> {subject, text, html, itens}. Todo dado do convidado entra escapado no HTML; do WhatsApp, só o final.
+ */
+function buildGuestConfirmation(show, intake, dropped, i18n) {
+  var g = i18n.guest_confirm, t = i18n.owner, items = guestConfirmItems(dropped, i18n), e = escapeHtml;
+  var gu = intake.guest || {}, ct = intake.contacts || {}, v = { show: show.name, nome: gu.preferred_name || gu.full_name || '' };
+  var resumo = [[g.labels.recording, (t.mode[intake.recording_mode] || intake.recording_mode || '') + ' · ' +
+    ownerDate(intake.scheduled_at, i18n.locale, t)]];
+  if (ct.whatsapp) resumo.push([g.labels.whatsapp, fillOwner_(g.whatsapp_end, { digits: ct.whatsapp.slice(-4) })]);
+  var intro = fillOwner_(items.length ? g.intro : g.intro_none, v), c;
+  try { c = resolveBrand(show).colors; } catch (err) { c = resolveBrand({ name: show.name, controller: show.controller }).colors; }
+  var text = fillOwner_(g.greeting, v) + '\n\n' + intro + '\n\n' +
+    (items.length ? items.map(function (x, i) { return (i + 1) + '. ' + x; }).join('\n') + '\n\n' : '') +
+    g.summary + ':\n' + resumo.map(function (p) { return '- ' + p[0] + ': ' + p[1]; }).join('\n') + '\n\n' +
+    g.closing + '\n\n' + fillOwner_(g.signature, v);
+  var html = '<div style="background:' + c.background + ';padding:24px 12px;font-family:Georgia, serif;color:' + c.text + ';">' +
+    '<table role="presentation" width="100%" style="max-width:600px;margin:0 auto;background:#ffffff;border-collapse:collapse;">' +
+    '<tr><td style="background:' + c.primary + ';color:' + c.on_primary + ';padding:20px 24px;font-size:20px;">' + e(show.name) + '</td></tr>' +
+    '<tr><td style="padding:24px;font-size:15px;line-height:1.5;">' +
+    '<p style="margin:0 0 12px;">' + e(fillOwner_(g.greeting, v)) + '</p><p style="margin:0 0 16px;">' + e(intro) + '</p>' +
+    (items.length ? '<ol style="margin:0 0 20px;padding-left:20px;">' +
+      items.map(function (x) { return '<li style="margin:0 0 8px;">' + e(x) + '</li>'; }).join('') + '</ol>' : '') +
+    '<p style="font-size:13px;letter-spacing:1px;text-transform:uppercase;color:' + c.accent + ';margin:0 0 8px;">' + e(g.summary) + '</p>' +
+    '<table role="presentation" style="border-collapse:collapse;margin:0 0 20px;">' + resumo.map(function (p) {
+      return '<tr><td style="padding:4px 12px 4px 0;color:' + c.accent + ';font-size:13px;white-space:nowrap;">' + e(p[0]) +
+        '</td><td style="padding:4px 0;">' + e(p[1]) + '</td></tr>';
+    }).join('') + '</table>' +
+    '<p style="margin:0 0 16px;">' + e(g.closing) + '</p><p style="margin:0;">' + e(fillOwner_(g.signature, v)) + '</p>' +
+    '</td></tr></table></div>';
+  return { subject: fillOwner_(g.subject, v), text: text, html: html, itens: items };
 }
 
 /** Linha da aba Convidados (sem a coluna Briefing preenchida; o intake_id vai na última). held = retido. */
@@ -287,8 +346,9 @@ function registrarConvidadoSeguro_(intake, results, dropped, i18n, held) {
 }
 
 /**
- * Esquecer: tira a(s) linha(s) do convidado da aba Convidados e manda o briefing para a lixeira, se o Google Docs
- * for do dono do script e não estiver ligado a outro convidado. Não cria a aba. {linhas, briefing_docs, pendencias}.
+ * Esquecer: tira a(s) linha(s) do convidado da aba Convidados e manda o briefing para a lixeira se o PodFácil o criou,
+ * se for da conta que roda o script e se não estiver ligado a outro convidado; senão, pendência com o link (decisão 4.1).
+ * Não cria a aba. {linhas, briefing_docs, pendencias}.
  */
 function removerConvidado_(intakeId) {
   var out = { linhas: 0, briefing_docs: 0, pendencias: [] };
@@ -299,16 +359,16 @@ function removerConvidado_(intakeId) {
     out.pendencias.push('Aba ' + i18n.sheet.tab + ': nenhuma linha com o código ' + intakeId + '; confira se sobrou algo dele à mão');
     return out;
   }
-  var me = String(Session.getEffectiveUser().getEmail() || '').toLowerCase();
   rows.slice().reverse().forEach(function (at) {   // de baixo para cima: apagar não desloca as próximas
     var link = briefingLink_(sh.getRange(at, cc.briefing)), docId = docIdFromLink(link);
     if (docId) {
-      try {
-        var others = convidadoOutrasLinhasComDoc_(sh, cc, docId, intakeId);
-        var file = DriveApp.getFileById(docId), owner = file.getOwner && file.getOwner();
-        if (others) out.pendencias.push('Briefing ' + docId + ' também está ligado a outro convidado; não foi para a lixeira');
-        else if (owner && String(owner.getEmail()).toLowerCase() !== me) out.pendencias.push('Briefing ' + docId + ' é de outra conta; peça ao dono para apagar');
-        else { file.setTrashed(true); out.briefing_docs++; }
+      try {   // Drive só com drive.file (drive.js): o PodFácil apaga o que ele criou; o resto vira pendência com link
+        var doc = 'https://docs.google.com/document/d/' + docId + '/edit';
+        var trash = convidadoOutrasLinhasComDoc_(sh, cc, docId, intakeId) ? 'shared' : driveTrash_(docId);
+        if (trash === 'trashed') out.briefing_docs++;
+        else if (trash === 'shared') out.pendencias.push('Briefing ' + docId + ' também está ligado a outro convidado; não foi para a lixeira');
+        else if (trash === 'not_mine') out.pendencias.push('Briefing ' + docId + ' é de outra conta; peça ao dono para apagar');
+        else out.pendencias.push('Briefing: mande para a lixeira à mão (Arquivo > Mover para a lixeira), o PodFácil só apaga o que ele mesmo criou: ' + doc);
       } catch (err) {
         out.pendencias.push('Briefing no Google Drive (' + docId + ') não foi para a lixeira; apague à mão');
         console.error('briefing de ' + intakeId + ': ' + maskEmails_(err.message));
@@ -385,5 +445,6 @@ function reenviarAviso(intakeId) {
 if (typeof module !== 'undefined') {
   module.exports = { cellText: cellText, ownerSendLines: ownerSendLines, ownerAttention: ownerAttention,
     ownerSummary: ownerSummary, buildOwnerEmail: buildOwnerEmail, convidadoRow: convidadoRow, isoLocal: isoLocal,
+    guestConfirmItems: guestConfirmItems, buildGuestConfirmation: buildGuestConfirmation, checkVars: checkVars,
     docIdFromLink: docIdFromLink };
 }

@@ -4,7 +4,7 @@ description: "Prepara episódios de podcast com convidado, do convite ao roteiro
 license: Apache-2.0
 compatibility: "Python 3.10+ com PyYAML (roteiro e check da pauta) e jsonschema (validação); recomendado uv (uv run --with pyyaml --with jsonschema python scripts/...). Busca web do harness para o dossiê e a pauta. Plano pago: chave de licença (scripts/licenca.py) e o conector MCP do PodFácil."
 metadata:
-  version: "2.1.1"
+  version: "2.2.0"
   source: "https://github.com/RAG7782/podcast-guest-intel"
 ---
 
@@ -29,8 +29,8 @@ Você conduz a preparação de um episódio com convidado. Responda no idioma do
 
 ## Em toda conversa: versão nova?
 
-Esta é a versão 2.1.1 do PodFácil. Se o conector MCP do PodFácil estiver disponível, chame uma vez por
-conversa `licenca_status` com `{"plugin_version": "2.1.1"}`, mesmo que o usuário já use o PodFácil há tempo.
+Esta é a versão 2.2.0 do PodFácil. Se o conector MCP do PodFácil estiver disponível, chame uma vez por
+conversa `licenca_status` com `{"plugin_version": "2.2.0"}`, mesmo que o usuário já use o PodFácil há tempo.
 Se a resposta trouxer `atualizacao`, mostre ao usuário o texto de `atualizacao.mensagem`, uma vez, e siga com o
 pedido dele: a versão atual continua funcionando. Sem conector, sem `atualizacao` ou se a chamada der erro, não
 diga nada sobre versão nem repita a chamada.
@@ -39,7 +39,9 @@ diga nada sobre versão nem repita a chamada.
 
 1. Peça (ou ajude a preencher) o `show-profile` e o `host-profile` do usuário
    (`references/contracts/show-profile.schema.json`, `references/contracts/host-profile.schema.json`).
-   Nunca invente dados do programa.
+   Nunca invente dados do programa. Com o `show-profile` pronto e válido, se o conector do PodFácil estiver
+   disponível, chame `programa_salvar` com ele e mostre ao usuário o texto de `como_usar`: é assim que o perfil
+   chega à planilha, sem colar nada (no pago, entra ao ativar a licença; no grátis, com o código de 15 letras e números).
 2. Pergunte o que ele já tem: nome do convidado, um link, data, formulário respondido.
    Com só o nome + 1 link o fluxo já funciona (degrada, não trava).
 
@@ -111,6 +113,13 @@ Sem chave, o recurso pago para e mostra onde assinar: https://antecena.artesanat
 
 Estúdios, produtoras e redes: fale conosco em contato@artesanatodigital.com (proposta para vários programas
 ou vários hosts; não há plano de equipe em autosserviço).
+
+## Limite de dispositivos
+
+Se uma tool do PodFácil responder `device_limit`, explique em uma frase que a licença chegou ao limite de
+computadores e ofereça liberar. Com o sim do usuário, chame `licenca_liberar_dispositivos` (desconecta todos os
+computadores da licença; cada um volta no próximo uso; até 2 vezes por mês) e repita a chamada que falhou. Sem o sim,
+não chame. Se vier `reset_limit`, mostre a mensagem da tool: o suporte resolve.
 
 ## Se o servidor não responder
 

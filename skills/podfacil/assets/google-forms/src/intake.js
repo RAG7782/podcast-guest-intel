@@ -250,7 +250,31 @@ function normalizeIntake(a, ctx) {
   return { intake: out, dropped: dropped };
 }
 
+/**
+ * Checagens que não descartam nada, mas o dono precisa ver (item 7 da 2.2, os três casos reais da primeira instância):
+ * horário fora do comum (12h06: minuto que não é múltiplo de 5), data que já passou e WhatsApp diferente do anotado
+ * no convite. opts: {waAnotado: {h, end}, waHash: hash do WhatsApp do formulário} (hash, nunca o número).
+ * -> [{field, reason, vars}], no formato do dropped: vai para o aviso ao dono, a aba Convidados e a confirmação.
+ */
+function revisarIntake(intake, opts) {
+  opts = opts || {};
+  var out = [], when = intake.scheduled_at, m = when && /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(when);
+  if (m) {
+    var hora = m[4] + ':' + m[5];
+    if (Number(m[5]) % 5 !== 0) out.push({ field: 'check.time_odd', reason: 'horário fora do comum: ' + hora, vars: { hora: hora } });
+    if (Date.parse(when) < Date.parse(intake.submitted_at)) {
+      out.push({ field: 'check.past', reason: 'data de gravação já passou: ' + when.slice(0, 16), vars: { data: when } });
+    }
+  }
+  var wa = intake.contacts && intake.contacts.whatsapp, rec = opts.waAnotado;
+  if (wa && rec && rec.h && opts.waHash && rec.h !== opts.waHash) {
+    out.push({ field: 'check.whatsapp_mismatch', reason: 'WhatsApp diferente do anotado no convite: ***' + wa.slice(-4) +
+      ' x ***' + rec.end, vars: { agora: wa.slice(-4), antes: String(rec.end || '') } });
+  }
+  return out;
+}
+
 if (typeof module !== 'undefined') {
-  module.exports = { normalizeIntake: normalizeIntake, parseFormDateTime: parseFormDateTime,
+  module.exports = { normalizeIntake: normalizeIntake, revisarIntake: revisarIntake, parseFormDateTime: parseFormDateTime,
     toE164: toE164, maskValue: maskValue, lines: lines, EMAIL_RE: EMAIL_RE };
 }

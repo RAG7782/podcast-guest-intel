@@ -3,6 +3,9 @@
   "needs_native_review": false,
   "text_version": "pt-BR/v1",
   "form": {
+    "validation": {
+      "phone": "Digite o número com DDD, ex.: 11 91234-5678 (ou +55 11 91234-5678)."
+    },
     "title": "Convidado(a) do {{show.name}}",
     "description_essencial": "Leva uns 2 minutos. Com isso a gente prepara uma conversa boa para você, sem surpresa.",
     "description_completo": "Leva uns 8 minutos. Quase tudo é opcional: pule o que não quiser responder.",
@@ -249,6 +252,7 @@
     }
   },
   "owner": {
+    "confirm_hint": "Para pedir a correção ao convidado: na aba Convidados, clique na linha dele e use PodFácil > Enviar confirmação.",
     "headline": "{{name}} respondeu ao formulário.",
     "lead": "Está tudo registrado. Veja abaixo o que já aconteceu e o que a pessoa contou.",
     "happened": "O que já aconteceu",
@@ -289,6 +293,9 @@
       "held": "{{label}}: aguardando sua confirmação"
     },
     "drops": {
+      "check.time_odd": "O horário informado ({{hora}}) foge do comum. Confirme com o convidado se não houve erro de digitação.",
+      "check.past": "A data de gravação informada ({{data}}) já passou. Confirme a data com o convidado.",
+      "check.whatsapp_mismatch": "O WhatsApp informado termina em {{agora}}, mas o anotado no convite termina em {{antes}}. Confirme qual está certo.",
       "whatsapp": "O número de WhatsApp informado não foi reconhecido{{end}}. Confirme o número com o convidado.",
       "whatsapp_end": " (termina em {{digits}})",
       "accessibility": "O convidado escreveu algo sobre acessibilidade, mas não marcou a autorização para esse tipo de dado. Pela LGPD, a informação foi descartada. Se for importante para a gravação, pergunte diretamente a ele.",
@@ -327,5 +334,207 @@
     "not_informed": "não informado ou não reconhecido",
     "none": "—",
     "briefing_link": "Abrir o briefing"
+  },
+  "menu": {
+    "start": {
+      "guide": "Guia com imagens, tela por tela:",
+      "tab": "Comece aqui",
+      "title": "Comece aqui: do zero ao primeiro convite em uns 15 minutos",
+      "steps": [
+        "Esta é a sua cópia da planilha do PodFácil. Ela é só sua: ninguém mais vê o que você põe aqui.",
+        "No chat do Claude, peça: \"configurar meu programa no PodFácil\". Ele faz as perguntas e guarda o perfil do programa.",
+        "Aqui na planilha, use o menu PodFácil (lá em cima, ao lado de Ajuda). Plano pago: PodFácil > Ativar licença. Plano grátis: PodFácil > Configurar programa e digite o código que o Claude mostrou. Se o menu não aparecer, recarregue a página.",
+        "Na primeira vez, o Google pede autorização e mostra a tela \"O Google não verificou este app\", com o SEU e-mail como desenvolvedor. É esperado: a cópia é sua e o PodFácil roda dentro da sua conta. Clique em Avançado, depois em \"Acessar PodFácil — planilha do programa (não seguro)\" e em Continuar; na lista de permissões, deixe tudo marcado e clique em Continuar. A janela fecha sozinha: clique de novo na opção do menu que você tinha escolhido.",
+        "O que o Google pede e o que o PodFácil faz: o Google pede acesso às suas planilhas, formulários e agendas porque não tem uma permissão menor para isso, mas o PodFácil só mexe nesta planilha, no formulário do convidado e nos eventos de gravação que ele cria; no Drive, só nos arquivos que ele mesmo cria. Ele também envia e-mails em seu nome (convites e avisos), confere a sua licença no servidor do PodFácil e roda sozinho uma vez por dia (lembretes e fila de convites). Ele não lê seus e-mails.",
+        "Com o programa configurado, o PodFácil cria o formulário do convidado. Depois, na aba Convites, escreva uma linha por convidado (nome e e-mail bastam) e use PodFácil > Convidar.",
+        "Quando o convidado responder, chega um aviso no seu e-mail e a resposta aparece na aba Convidados."
+      ],
+      "footer": "Dúvida ou algo estranho? Use PodFácil > Verificar instalação ou pergunte ao Claude no chat."
+    },
+    "invite": "Convidar (aba Convites)",
+    "confirm_guest": "Enviar confirmação ao convidado selecionado",
+    "invites": {
+      "busy": "A fila de convites já está rodando agora. Espere uns minutos e veja a coluna Situação.",
+      "tab": "Convites",
+      "columns": [
+        "Nome",
+        "E-mail",
+        "Data e hora",
+        "Modalidade",
+        "Link da sala (remota)",
+        "WhatsApp (opcional)",
+        "Situação"
+      ],
+      "note": "Uma linha por convidado: nome e e-mail bastam; data, modalidade, link e WhatsApp quando souber. Depois use PodFácil > Convidar. A coluna Situação é preenchida pelo PodFácil.",
+      "created": "Criei a aba {{aba}}. Preencha uma linha por convidado (nome e e-mail bastam) e use PodFácil > Convidar de novo.",
+      "nothing": "Nenhum convite pendente na aba {{aba}}. Linhas com ✅ ou ➖ já foram tratadas: a mesma pessoa não recebe duas vezes o convite para a mesma data.",
+      "confirm": "Enviar {{n}} convite(s) agora?",
+      "done": "Pronto. Enviados: {{enviados}} · já tratados: {{pulados}} · para corrigir: {{corrigir}} · com falha: {{falhas}} · para depois: {{depois}}.",
+      "later": "Os que ficaram para depois saem sozinhos amanhã, no horário do lembrete diário.",
+      "need_form": "Antes de convidar, o programa precisa estar configurado e o formulário criado. Use PodFácil > Verificar instalação.",
+      "status": {
+        "unsure": "⚠️ Sem confirmação de envio (a rodada foi interrompida): confira em Enviados no Gmail; se não saiu, use Convidar de novo",
+        "sent": "✅ Enviado em {{quando}}",
+        "sent_logo": "✅ Enviado em {{quando}}, sem o logo (use PodFácil > Enviar logo)",
+        "already": "➖ Já tinha sido enviado",
+        "optout": "➖ Não enviado: a pessoa pediu para não receber",
+        "quota": "⏳ Na fila: a cota de e-mails de hoje acabou; sai amanhã",
+        "time": "⏳ Na fila: sai na próxima rodada",
+        "failed": "⚠️ Falhou: {{motivo}}. Use Convidar de novo para tentar outra vez",
+        "fix": "❌ Corrija: {{motivo}}"
+      },
+      "errors": {
+        "past": "a data já passou",
+        "name": "falta o nome",
+        "email": "e-mail inválido",
+        "date": "data e hora não reconhecidas (use 20/10/2026 14:30)",
+        "mode": "modalidade não reconhecida (use {{modos}})",
+        "link": "o link da sala precisa começar com https://",
+        "whatsapp": "WhatsApp não reconhecido (use DDD + número)"
+      },
+      "digest_subject": "Fila de convites: {{enviados}} enviado(s) hoje",
+      "digest_body": "A fila de convites rodou sozinha hoje. Enviados: {{enviados}} · para corrigir: {{corrigir}} · com falha: {{falhas}} · ainda na fila: {{depois}}. Veja a aba {{aba}}: {{url}}"
+    },
+    "confirm": {
+      "busy": "Essa confirmação já está saindo; não precisa clicar de novo.",
+      "held": "Esta resposta está retida (chegou sem código de convite válido). Confirme o convidado antes de enviar e-mail a ele.",
+      "title": "Enviar confirmação",
+      "ask": "Enviar a {{nome}} um e-mail pedindo para confirmar {{n}} ponto(s)?\n\n{{itens}}",
+      "ask_none": "Não achei nada a corrigir nas respostas de {{nome}}. Enviar mesmo assim um e-mail para a pessoa confirmar os dados?",
+      "again": "Já foi enviada uma confirmação em {{quando}}.",
+      "done": "Confirmação enviada para {{nome}}. A resposta chega no seu e-mail.",
+      "optout": "{{nome}} pediu para não receber e-mails do programa; nada foi enviado.",
+      "quota": "A cota de e-mails de hoje acabou. Tente de novo amanhã.",
+      "not_found": "Não achei as respostas desse convidado (código {{id}})."
+    },
+    "title": "PodFácil",
+    "activate_license": "Ativar licença",
+    "check_install": "Verificar instalação",
+    "resend_notice": "Reenviar aviso do convidado selecionado",
+    "rebuild_guests": "Refazer aba Convidados",
+    "forget_guest": "Esquecer convidado selecionado (LGPD)",
+    "release_devices": "Liberar outros dispositivos",
+    "ask_code_title": "Qual convidado?",
+    "ask_code": "Na aba Convidados, clique na linha do convidado e escolha a opção de novo. Ou cole aqui o código do registro (última coluna):",
+    "resend_done": "Aviso reenviado para o seu e-mail.",
+    "rebuild_done": "Aba Convidados refeita, com os links de briefing preservados.",
+    "forget_confirm": "Esquecer {{nome}}? Apaga as respostas, a linha da aba Convidados e o evento da agenda, e manda o briefing para a lixeira (LGPD). Não dá para desfazer.",
+    "forget_done": "Pronto: {{nome}} foi esquecido.",
+    "forget_pending": "Falta fazer à mão:",
+    "error": "Não deu certo: {{motivo}}",
+    "license": {
+      "upgrade_hint": "Sua licença libera o formulário completo: para trocar o essencial por ele, use Verificar instalação.",
+      "ok_stay": "Licença ativada (plano {{plano}}). Copie o que precisar acima e feche esta janela.",
+      "title": "Ativar licença do PodFácil",
+      "lead": "Cole a chave que chegou no seu e-mail depois da compra. Ela fica guardada só neste projeto e não aparece na tela.",
+      "label": "Chave de licença",
+      "button": "Ativar",
+      "working": "Conferindo com o servidor…",
+      "ok": "Licença ativada (plano {{plano}}). Esta janela fecha sozinha.",
+      "saved_offline": "Chave guardada. O servidor do PodFácil não respondeu agora; a conferência acontece no próximo uso.",
+      "invalid": "Isso não parece uma chave de licença. Copie a chave inteira do e-mail, sem espaços.",
+      "refused": "O servidor recusou a chave: {{motivo}}",
+      "free_key": "Essa chave está no plano grátis. As automações são do plano pago.",
+      "saved_limit": "Chave guardada. Ela chegou ao limite de computadores: use PodFácil > Liberar outros dispositivos.",
+      "offline_keep": "O servidor do PodFácil não respondeu agora e já existe uma chave guardada; ela continua valendo. Tente trocar de novo em alguns minutos.",
+      "unknown": "O servidor não reconhece essa chave. Confira se copiou a chave inteira do e-mail.",
+      "failed": "Algo deu errado ao falar com o Google. Feche esta janela e tente de novo."
+    },
+    "check": {
+      "form_gone_ask": "O formulário registrado não abre (apagado ou sem acesso). Criar um novo agora? O link do convidado muda; as respostas já recebidas continuam na planilha.",
+      "upgrade_ask": "Sua licença paga libera o formulário completo. Trocar agora? O link do convidado muda: o antigo deixa de aceitar respostas, e as respostas já recebidas continuam na planilha.",
+      "form_ask": "Ainda não há formulário do convidado. Criar agora? (leva uns segundos)",
+      "phone_ok": "WhatsApp do formulário com validação (número incompleto ou com letra não passa)",
+      "title": "Verificar instalação",
+      "summary_ok": "Tudo certo com o PodFácil.",
+      "summary_fail": "{{n}} ponto(s) precisam de você:",
+      "show_ok": "Configuração do programa: {{nome}}.",
+      "show_missing": "Falta a configuração do programa (o Claude prepara com você).",
+      "form_ok": "Formulário do convidado encontrado.",
+      "form_missing": "O formulário ainda não foi criado.",
+      "form_gone": "O formulário registrado não abre (apagado ou sem acesso).",
+      "triggers_ok": "Envios automáticos ligados.",
+      "triggers_fixed": "Envios automáticos estavam desligados e foram religados.",
+      "guests_ok": "Aba Convidados no lugar.",
+      "guests_fixed": "A aba Convidados não existia e foi criada.",
+      "guests_fail": "Não consegui criar a aba Convidados: {{motivo}}",
+      "license_none": "Sem licença: plano grátis. Para o plano pago, use PodFácil > Ativar licença.",
+      "license_paid": "Licença ativa (plano {{plano}}).",
+      "license_offline": "Licença guardada; o servidor não respondeu agora.",
+      "license_fail": "Licença com problema: {{motivo}}",
+      "triggers_other": "Os envios automáticos foram ligados pela conta {{dono}}. Peça para essa pessoa abrir PodFácil > Verificar instalação.",
+      "logo_fail": "O logo do Drive não abre para o PodFácil; os convites saem com o nome do programa no lugar. Envie de novo por PodFácil > Enviar logo.",
+      "logo_ok": "Logo do convite no lugar."
+    },
+    "devices": {
+      "title": "Liberar outros dispositivos",
+      "confirm": "Isto desconecta todos os computadores ligados à sua licença; cada um volta a funcionar no próximo uso. Vale 2 vezes por mês. Continuar?",
+      "done": "Dispositivos liberados.",
+      "no_key": "Ative a licença primeiro (PodFácil > Ativar licença)."
+    },
+    "config": {
+      "form_busy": "O formulário já está sendo criado em outra janela. Espere um minuto e use Verificar instalação.",
+      "form_exists": "O formulário do convidado já existe. Link para o convidado: {{url}}",
+      "form_created": "Formulário do convidado criado ({{variante}}). Link para o convidado: {{url}}",
+      "form_fail": "Não consegui criar o formulário: {{motivo}}",
+      "variants": {"essencial": "essencial", "completo": "completo"},
+      "item": "Configurar programa",
+      "ask_code_title": "Código do programa",
+      "ask_code": "Digite o código de 15 letras e números que o Claude mostrou no chat (com ou sem os traços):",
+      "done": "Programa \"{{nome}}\" configurado. Os dados estão na aba {{aba}}.",
+      "tab": "Configuração",
+      "note": "Esta aba só mostra a configuração. Para mudar, peça ao Claude no chat e use PodFácil > Configurar programa de novo.",
+      "labels": {
+        "name": "Programa",
+        "tagline": "Frase de apresentação",
+        "locale": "Idioma",
+        "editorial": "Linha editorial",
+        "modes": "Grava em",
+        "studio": "Estúdio",
+        "address": "Endereço",
+        "colors": "Cores",
+        "logo": "Logo",
+        "controller": "Responsável pelos dados (LGPD)",
+        "retention": "Guarda das respostas"
+      },
+      "retention_days": "{{dias}} dias depois da publicação",
+      "imported": "Perfil do programa \"{{nome}}\" importado.",
+      "logo_item": "Enviar logo",
+      "import_failed": "O perfil do programa chegou, mas não consegui gravá-lo ({{motivo}}). Peça ao Claude para salvar de novo e use PodFácil > Configurar programa.",
+      "logo": {
+        "title": "Logo do convite",
+        "lead": "Escolha o logo do programa (PNG ou JPG, até 1 MB). Ele vai embutido nos convites e fica guardado no seu Google Drive.",
+        "button": "Enviar",
+        "working": "Enviando…",
+        "ok": "Logo guardado. Os próximos convites já saem com ele.",
+        "too_big": "O arquivo passa de 1 MB. Diminua a imagem e tente de novo.",
+        "bad_type": "Use um arquivo PNG ou JPG.",
+        "need_show": "Configure o programa primeiro (PodFácil > Configurar programa).",
+        "failed": "Algo deu errado ao enviar o logo. Tente de novo."
+      }
+    }
+  },
+  "guest_confirm": {
+    "subject": "{{show}}: pode confirmar alguns dados da sua participação?",
+    "greeting": "Olá, {{nome}}!",
+    "intro": "Obrigado por responder ao formulário do {{show}}. Antes da gravação, queremos confirmar alguns pontos:",
+    "intro_none": "Obrigado por responder ao formulário do {{show}}. Antes da gravação, queremos confirmar os dados abaixo.",
+    "items": {
+      "contacts.whatsapp": "Não conseguimos ler o número de WhatsApp que você informou{{end}}. Qual é o número certo, com DDD?",
+      "accessibility": "Você escreveu algo sobre acessibilidade, mas não marcou a autorização para guardarmos esse tipo de informação, então ela não foi registrada. Se quiser que a gente se prepare, responda a este e-mail e combinamos como fazer.",
+      "scheduled_at": "Não conseguimos ler a data e o horário da gravação. Quando fica bom para você?",
+      "check.time_odd": "O horário que você informou foi {{hora}}. Está certo?",
+      "check.past": "A data informada ({{data}}) já passou. Qual é a data certa?",
+      "check.whatsapp_mismatch": "O WhatsApp que você informou termina em {{agora}}, mas tínhamos anotado um número que termina em {{antes}}. Qual devemos usar?"
+    },
+    "end": " (termina em {{digits}})",
+    "summary": "O que temos anotado",
+    "labels": {
+      "recording": "Gravação",
+      "whatsapp": "WhatsApp"
+    },
+    "whatsapp_end": "termina em {{digits}}",
+    "closing": "Basta responder a este e-mail com a correção. Se estiver tudo certo, responda \"está certo\".",
+    "signature": "Equipe do {{show}}"
   }
 }

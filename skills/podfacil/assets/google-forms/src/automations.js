@@ -146,6 +146,7 @@ function onFormSubmit(e) {
     purposes: { sensitive: i18n.consent.sensitive_purpose, accessibility: i18n.consent.accessibility_purpose,
       voice_replica: i18n.consent.dub_replica_purpose }, localization: show.localization || null });
   var intake = res.intake, store = store_(), policy = guestPolicy_(intake.contacts.email);
+  res.dropped = res.dropped.concat(revisarIntake(intake, waDoConvite_(intake)));   // horário, data e WhatsApp (item 7)
   // Codex #5: admissão pelo código de uso único do link do convite, nunca só pelo e-mail digitado
   policy.invited = admitByToken_(answers['invite.token'], intake.contacts.email, e.response.getId());
   var rawGone = res.dropped.some(function (d) { return SENSITIVE_DROPS.indexOf(d.field) >= 0; });
@@ -167,6 +168,14 @@ function onFormSubmit(e) {
   }
   logErrors_(results);
   return results;
+}
+
+/** WhatsApp anotado no convite (aba Convites) e o hash do digitado no formulário, para o revisarIntake comparar. */
+function waDoConvite_(intake) {
+  var wa = intake.contacts && intake.contacts.whatsapp, rec = null;
+  if (!wa || typeof hashWhatsapp_ !== 'function') return {};   // projeto avulso sem convites.js: nada a comparar
+  try { rec = JSON.parse(props_().getProperty(CONVITE_WA_PROP + normEmail_(intake.contacts.email)) || 'null'); } catch (err) { rec = null; }
+  return rec && rec.exp > Date.now() ? { waAnotado: rec, waHash: hashWhatsapp_(wa) } : {};
 }
 
 /** Gatilho diário: lembrete na véspera (D-1) para quem consentiu no canal. */
@@ -192,6 +201,8 @@ function lembreteDiario() {
   sendHeldDigest_();
   expireHeldRows_(now);
   expireInvites_(now);
+  // por último: a fila de convites usa o tempo e a cota que SOBRAM (D-1, retidos e prazos LGPD vêm antes); nunca lança
+  if (typeof filaDeConvitesDiaria_ === 'function') filaDeConvitesDiaria_(now);
   return all;
 }
 
@@ -295,15 +306,11 @@ function registrarOptOut(email) {
   return list.length;
 }
 
-function sendInvitation_(mail) {
+function sendInvitation_(mail, logoBlob) {
   var opts = { htmlBody: mail.html, name: mail.sender };
-  if (mail.logo) {
-    if (typeof logoBlobFromDrive_ !== 'function') {
-      throw new Error('brand.logo.drive_file_id=' + JSON.stringify(mail.logo.drive_file_id) +
-        ' exige o arquivo src/drive-logo.js (pede o escopo do Drive); esperado colar drive-logo.js ou usar brand.logo.url');
-    }
+  if (mail.logo) {   // logo do Drive embutido no e-mail (cid), lido com drive.file (drive.js)
     opts.inlineImages = {};
-    opts.inlineImages[mail.logo.cid] = logoBlobFromDrive_(mail.logo.drive_file_id);
+    opts.inlineImages[mail.logo.cid] = logoBlob || driveBlob_(mail.logo.drive_file_id);
   }
   if (mail.ics) opts.attachments = [Utilities.newBlob(mail.ics, 'text/calendar', 'convite.ics')];
   MailApp.sendEmail(mail.to, mail.subject, mail.text, opts);
@@ -327,13 +334,23 @@ function enviarConvite(convidado, variante) {
   var invitee = normalizeInvitee(convidado, show), key = invitationKey(invitee);
   if (optOutList_().indexOf(invitee.email.toLowerCase()) >= 0) return { key: key, status: 'skipped', reason: 'opt-out' };
   var i18n = selectLocale(BUNDLE, meta.locale, allowUnreviewed_());
+  // logo do Drive que o PodFácil não abre (drive.file): o convite sai com o nome do programa no lugar, com aviso
+  var logo = show.brand && show.brand.logo, logoBlob = null, aviso = null;
+  if (logo && logo.drive_file_id && !logo.url) {
+    try { logoBlob = driveBlob_(logo.drive_file_id); } catch (err) {
+      aviso = 'logo: ' + err.message;
+      show = JSON.parse(JSON.stringify(show));
+      delete show.brand.logo;
+    }
+  }
   var res = runActions([{ key: key, channel: 'email', kind: 'convite' }], { email: function () {
     var link = issueInviteLink_(invitee.email);   // código de uso único só quando o convite sai de fato (Codex #5)
-    return sendInvitation_(buildInvitationEmail(BUNDLE.invitationTemplate, show, invitee, i18n, { formUrl: link, variant: variant }));
+    return sendInvitation_(buildInvitationEmail(BUNDLE.invitationTemplate, show, invitee, i18n, { formUrl: link, variant: variant }), logoBlob);
   } }, store_())[0];
+  if (aviso) res.aviso = aviso;
   if (res.status !== 'error') markInvited_(invitee.email, 'enviarConvite');   // libera o pós-formulário dele
   logErrors_([res]);
-  console.log(maskEmails_('convite ' + key + ': ' + res.status + (res.error ? ' — ' + res.error : '')));
+  console.log(maskEmails_('convite ' + key + ': ' + res.status + (res.error ? ' — ' + res.error : '') + (aviso ? ' — ' + aviso : '')));
   return res;
 }
 
@@ -391,7 +408,7 @@ function deleteGuestKeys_(intakeId, email, hasOthers, scheduledAt) {
   var mine = p.getKeys().filter(function (k) {
     if (k.indexOf('sent:' + intakeId + ':') === 0) return true;
     if (!e) return false;
-    if (!hasOthers) return k === 'invited:' + e || k.indexOf('sent:convite:' + e + ':') === 0 || inviteOf_(p, k) === e;
+    if (!hasOthers) return k === 'invited:' + e || k === 'invite_wa:' + e || k.indexOf('sent:convite:' + e + ':') === 0 || inviteOf_(p, k) === e;
     return !!day && k.indexOf('sent:convite:' + e + ':' + day) === 0;
   });
   mine.forEach(function (k) { p.deleteProperty(k); });
@@ -451,6 +468,11 @@ function esquecerTitular(intakeId) {
   var convidados;   // linha legível + briefing (Google Docs) na lixeira; uma falha aqui não interrompe o resto
   try { convidados = removerConvidado_(intakeId); } catch (err) {
     convidados = { linhas: 0, briefing_docs: 0, pendencias: ['Aba Convidados: não consegui apagar a linha (' + maskEmails_(err.message) + '); apague à mão'] };
+  }
+  if (email && !others.length && typeof removerConvites_ === 'function') {   // linha da aba Convites (nome, e-mail, data)
+    try { convidados.convites = removerConvites_(email); } catch (err) {
+      convidados.pendencias.push('Aba Convites: não consegui apagar a linha (' + maskEmails_(err.message) + '); apague à mão');
+    }
   }
   var report = { intake_id: intakeId, convidados: convidados, form_responses: deleteFormResponses_(intakeId),
     linked_rows: deleteLinkedRows_(email, intake.submitted_at, others.length > 0), calendar: deleteCalendarEvent_(intakeId),
