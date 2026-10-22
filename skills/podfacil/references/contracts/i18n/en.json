@@ -28,7 +28,7 @@
       "guest.photo_url": { "title": "Link to a photo of you for promotion", "help": "Optional. A public link (website, LinkedIn, shared Drive)." },
       "bio.short": { "title": "Short bio, up to 2 lines", "help": "This is what we read in the intro." },
       "bio.long": { "title": "Full bio", "help": "Optional." },
-      "links": { "title": "Your main links", "help": "Website, profiles, portfolio. One per line." },
+      "links": { "title": "Your main links", "help": "Website, profiles, portfolio. One per line. If you have none, leave it blank." },
       "social_handles": { "title": "Handles to tag when we promote", "help": "One per line, as network: @user (e.g. instagram: @ana)." },
       "previous_interviews": { "title": "Interviews you have given", "help": "Links, one per line. Helps us avoid repeating questions." },
       "key_ideas": { "title": "Up to 3 ideas you want the audience to take away", "help": "One per line." },
@@ -252,6 +252,10 @@
     }
   },
   "owner": {
+    "failed": {
+      "subject": "PodFácil: a form answer was not processed",
+      "body": "A guest form answer arrived on {{quando}}, but PodFácil could not process it.\n\nReason: {{motivo}}\n\nThe guest may not have received the kit or the calendar invitation. The answer is saved in the \"Form responses\" tab of your spreadsheet. Show this email to Claude in the chat to sort it out."
+    },
     "confirm_hint": "To ask the guest for a correction: in the Guests tab, click their row and use PodFácil > Send confirmation.",
     "headline": "{{name}} filled in the form.",
     "lead": "Everything is recorded. Below is what has happened so far and what they told you.",
@@ -289,6 +293,7 @@
     "status": {
       "sent": "{{label}}: sent",
       "skipped": "{{label}}: not sent",
+      "off": "{{label}}: WhatsApp is not set up in this spreadsheet",
       "error": "{{label}}: failed",
       "held": "{{label}}: waiting for your confirmation"
     },
@@ -336,6 +341,18 @@
     "briefing_link": "Open the briefing"
   },
   "menu": {
+    "forget_yes": "Forget {{nome}}",
+    "window": {
+      "cancel": "Cancel",
+      "not_now": "Not now",
+      "continue": "Continue",
+      "working": "Working…",
+      "failed": "Something went wrong talking to Google. Close this window and try again.",
+      "ok": "Close",
+      "copy": "Copy",
+      "copied": "Copied ✓",
+      "open": "Open"
+    },
     "start": {
       "guide": "Illustrated guide, screen by screen:",
       "tab": "Start here",
@@ -344,7 +361,7 @@
         "This is your copy of the PodFácil spreadsheet. It is yours alone: nobody else sees what you put here.",
         "In the Claude chat, ask: \"set up my show in PodFácil\". Claude asks the questions and saves the show profile.",
         "Here in the spreadsheet, use the PodFácil menu (at the top, next to Help). Paid plan: PodFácil > Activate license. Free plan: PodFácil > Configure show and type the code Claude showed. If the menu does not appear, reload the page.",
-        "The first time, Google asks for authorization and shows the screen \"Google hasn't verified this app\", with YOUR email as the developer. That is expected: the copy is yours and PodFácil runs inside your account. Click Advanced, then \"Go to PodFácil — planilha do programa (unsafe)\" and Continue; in the permissions list, leave everything ticked and click Continue. The window closes by itself: click the menu option you had chosen again.",
+        "The first time, Google asks for authorization and shows the screen \"Google hasn't verified this app\", with YOUR email as the developer. That is expected: the copy is yours and PodFácil runs inside your account. Click Advanced, then \"Go to PodFácil — planilha do programa (unsafe)\" and Continue; in the permissions list, leave everything ticked and click Continue. The window closes by itself and the option you chose usually carries on by itself; if nothing appears within a few seconds, click the menu option again.",
         "What Google asks for and what PodFácil does: Google asks for access to your spreadsheets, forms and calendars because it has no narrower permission for this, but PodFácil only touches this spreadsheet, the guest form and the recording events it creates; in Drive, only the files it creates itself. It also sends emails on your behalf (invitations and notices), checks your license on the PodFácil server and runs by itself once a day (reminders and the invitation queue). It does not read your emails.",
         "Once the show is configured, PodFácil creates the guest form. Then, in the Invitations tab, write one row per guest (name and email are enough) and use PodFácil > Invite.",
         "When a guest replies, a notice arrives in your email and the answer appears in the Guests tab."
@@ -354,6 +371,9 @@
     "invite": "Invite (Invitations tab)",
     "confirm_guest": "Send confirmation to the selected guest",
     "invites": {
+      "wait": "Checking the Invitations tab…",
+      "send_button": "Send {{n}} invitation(s)",
+      "wait_send": "Sending the invitations…",
       "busy": "The invitation queue is already running. Wait a few minutes and check the Status column.",
       "tab": "Invitations",
       "columns": [
@@ -369,7 +389,14 @@
       "created": "I created the {{aba}} tab. Fill in one row per guest (name and email are enough) and use PodFácil > Invite again.",
       "nothing": "No pending invitations in the {{aba}} tab. Rows with ✅ or ➖ are done: the same person never gets the invitation twice for the same date.",
       "confirm": "Send {{n}} invitation(s) now?",
-      "done": "Done. Sent: {{enviados}} · already handled: {{pulados}} · to fix: {{corrigir}} · failed: {{falhas}} · for later: {{depois}}.",
+      "done": "Done.",
+      "done_lines": {
+        "enviados": "✅ Invitations sent: {{n}}",
+        "pulados": "➖ Already received (not resent): {{n}}",
+        "corrigir": "❌ To fix (see the Status column): {{n}}",
+        "falhas": "⚠️ Failed (use Invite again): {{n}}",
+        "depois": "⏳ Left for later: {{n}}"
+      },
       "later": "The ones left for later go out by themselves tomorrow, at the daily reminder time.",
       "need_form": "Before inviting, the show must be configured and the form created. Use PodFácil > Check installation.",
       "status": {
@@ -396,6 +423,8 @@
       "digest_body": "The invitation queue ran by itself today. Sent: {{enviados}} · to fix: {{corrigir}} · failed: {{falhas}} · still queued: {{depois}}. See the {{aba}} tab: {{url}}"
     },
     "confirm": {
+      "send_button": "Send the confirmation",
+      "wait": "Sending…",
       "busy": "This confirmation is already going out; no need to click again.",
       "held": "This answer is on hold (it arrived without a valid invitation code). Confirm the guest before emailing them.",
       "title": "Send confirmation",
@@ -423,8 +452,16 @@
     "forget_pending": "Still to do by hand:",
     "error": "That didn't work: {{motivo}}",
     "license": {
+      "plans": {
+        "free": "Free",
+        "individual_solo": "Individual Solo",
+        "individual_duo": "Individual Duo",
+        "enterprise_10": "Studio, up to 10 people",
+        "enterprise_20": "Studio, up to 20 people"
+      },
       "upgrade_hint": "Your license unlocks the complete form: to replace the essential one, use Check installation.",
       "ok_stay": "License activated ({{plano}} plan). Copy what you need above and close this window.",
+      "ok_read": "License activated ({{plano}} plan). Read the note below and close this window.",
       "title": "Activate your PodFácil license",
       "lead": "Paste the key you received by email after your purchase. It is stored only in this project and never shown on screen.",
       "label": "License key",
@@ -432,7 +469,7 @@
       "working": "Checking with the server…",
       "ok": "License activated ({{plano}} plan). This window closes by itself.",
       "saved_offline": "Key saved. The PodFácil server did not answer just now; it will be checked on next use.",
-      "invalid": "That doesn't look like a license key. Copy the whole key from the email, without spaces.",
+      "invalid": "That doesn't look like a license key. The key starts with pgi_ and has 47 letters, digits, - and _. In the email, don't double-click (it stops at the first hyphen): select by dragging from the start to the end of the key, copy and paste it here.",
       "refused": "The server refused the key: {{motivo}}",
       "free_key": "That key is on the free plan. Automations are part of the paid plan.",
       "saved_limit": "Key saved. It has reached its computer limit: use PodFácil > Free other devices.",
@@ -441,6 +478,10 @@
       "failed": "Something went wrong talking to Google. Close this window and try again."
     },
     "check": {
+      "wait": "Checking the installation…",
+      "form_ask_yes": "Create the form",
+      "form_gone_yes": "Create a new one",
+      "upgrade_yes": "Switch to complete",
       "form_gone_ask": "The saved form does not open (deleted or no access). Create a new one now? The guest link changes; answers already received stay in the spreadsheet.",
       "upgrade_ask": "Your paid license unlocks the complete form. Switch now? The guest link changes: the old one stops accepting answers, and answers already received stay in the spreadsheet.",
       "form_ask": "There is no guest form yet. Create it now? (takes a few seconds)",
@@ -467,15 +508,21 @@
       "logo_ok": "Invitation logo in place."
     },
     "devices": {
+      "confirm_yes": "Release the devices",
       "title": "Free other devices",
       "confirm": "This disconnects every computer linked to your license; each one works again on its next use. Allowed twice a month. Continue?",
       "done": "Devices freed.",
       "no_key": "Activate the license first (PodFácil > Activate license)."
     },
     "config": {
+      "tz_label": "Time zone for dates",
+      "ask_code_button": "Set up",
+      "wait_profile": "Fetching the show profile…",
+      "wait_form": "Creating the guest form in Google Forms. It takes 1 to 2 minutes: you can leave this window open.",
+      "form_link": "Guest form link",
       "form_busy": "The form is already being created in another window. Wait a minute and use Check installation.",
       "form_exists": "The guest form already exists. Link for the guest: {{url}}",
-      "form_created": "Guest form created ({{variante}}). Link for the guest: {{url}}",
+      "form_created": "Guest form created ({{variante}}). Link for the guest: {{url}} The link is also kept in the Configuration tab.",
       "form_fail": "I could not create the form: {{motivo}}",
       "variants": {"essencial": "essential", "completo": "complete"},
       "item": "Configure show",

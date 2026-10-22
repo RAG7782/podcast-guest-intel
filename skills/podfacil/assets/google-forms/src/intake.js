@@ -87,7 +87,10 @@ function parseFormDateTime(raw, offset) {
   var s = text(raw);
   if (!s) return null;
   var m = /^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/.exec(s);
-  return m ? m[1] + '-' + m[2] + '-' + m[3] + 'T' + m[4] + ':' + m[5] + ':00' + offset : undefined;
+  if (!m) return undefined;
+  // offset: "-03:00" (o de hoje) ou função (y, mo, d, h, mi) -> "-03:00" com o horário de verão DAQUELA data
+  var off = typeof offset === 'function' ? offset(+m[1], +m[2], +m[3], +m[4], +m[5]) : offset;
+  return m[1] + '-' + m[2] + '-' + m[3] + 'T' + m[4] + ':' + m[5] + ':00' + off;
 }
 
 function guestBlock(a) {
@@ -239,7 +242,9 @@ function normalizeIntake(a, ctx) {
   out.guest = guestBlock(a);
   out.bio = bioBlock(a);
   out.links = urlList(a.links, 'links', dropped);
-  if (!out.links.length) throw new Error('links sem nenhuma URL válida: ' + JSON.stringify(lines(a.links)) + '; esperado ao menos 1 link');
+  // "não tenho" num campo opcional não pode derrubar a resposta inteira (teste de ponta a ponta da 2.2): sem link, a
+  // pesquisa parte do nome; o dono vê o aviso em "Precisa de atenção"
+  if (!out.links.length) dropped.push({ field: 'links', reason: 'nenhum link válido informado; a pesquisa parte do nome' });
   contentBlock(a, out, dropped);
   logisticsBlock(a, out, c, dropped);
   channelBlock(a, out, c, dropped);

@@ -44,6 +44,7 @@ function ownerSendLines(results, i18n) {
     if (r.status === 'sent') return { ok: true, text: fillOwner_(t.status.sent, { label: label }) };
     if (r.status === 'held') return { ok: null, text: fillOwner_(t.status.held, { label: label }) };
     if (r.status === 'skipped') return { ok: null, text: fillOwner_(t.status.skipped, { label: label }) };
+    if (r.status === 'off') return { ok: null, text: fillOwner_(t.status.off || t.status.skipped, { label: label }) };
     return { ok: false, text: fillOwner_(t.status.error, { label: label }) };
   });
 }

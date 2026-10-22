@@ -22,9 +22,41 @@ function store_() {
   };
 }
 
-/** "-0300" → {iso: "-03:00", minutes: -180}, no fuso do script. */
+/**
+ * Fuso do PROGRAMA (onde o dono grava e digita as datas). O fuso do script e o da planilha vêm "de fábrica" da conta
+ * que criou o modelo (a do produto é dos EUA) e erravam o horário do convite em horas (teste de ponta a ponta, 2.2).
+ * Ordem: o gravado na 1ª configuração; o da Agenda do dono (onde o evento vai entrar); o do país do programa; o do
+ * script. Gravado uma vez; a planilha passa a usar o mesmo fuso, para a data digitada e a lida baterem.
+ */
+var FUSO_PROP = 'PROGRAM_TZ';
+var FUSO_DA_JURISDICAO = { 'BR-LGPD': 'America/Sao_Paulo', 'CN-PIPL': 'Asia/Shanghai' };
+
+function fusoDoPrograma_() {
+  var p = props_(), tz = p.getProperty(FUSO_PROP);
+  if (tz) return tz;
+  try { tz = CalendarApp.getDefaultCalendar().getTimeZone(); } catch (err) { tz = ''; }
+  if (!tz) {
+    var jur = p.getProperty('JURISDICTION');
+    if (!jur) { try { jur = loadShow_().jurisdiction; } catch (err) { jur = ''; } }
+    tz = FUSO_DA_JURISDICAO[jur] || Session.getScriptTimeZone();
+  }
+  p.setProperty(FUSO_PROP, tz);
+  try {
+    var ss = planilhaDoPodFacil_();
+    if (ss && ss.getSpreadsheetTimeZone() !== tz) ss.setSpreadsheetTimeZone(tz);
+  } catch (err) { console.error('fuso da planilha: ' + err.message); }
+  return tz;
+}
+
+/** (y, mo, d, h, mi) -> "-03:00" no fuso do programa NAQUELA data (horário de verão), para a data do formulário. */
+function offsetDaData_() {
+  var ctx = typeof ctxDatas_ === 'function' ? ctxDatas_(null) : null;
+  return ctx ? function (y, mo, d, h, mi) { return offsetIso_(ctx.offsetAt(y, mo, d, h, mi)); } : tzOffset_().iso;
+}
+
+/** "-0300" → {iso: "-03:00", minutes: -180}, no fuso do programa. */
 function tzOffset_() {
-  var z = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'Z');
+  var z = Utilities.formatDate(new Date(), fusoDoPrograma_(), 'Z');
   var m = /^([+-])(\d{2})(\d{2})$/.exec(z);
   if (!m) throw new Error('offset de fuso inesperado: ' + JSON.stringify(z) + '; esperado ±HHMM');
   var sign = m[1] === '-' ? -1 : 1;
@@ -49,6 +81,32 @@ function intakeSheet_() {
   var sheet = id && SpreadsheetApp.openById(id).getSheetByName('intake');
   if (!sheet) throw new Error('aba "intake" não encontrada (SHEET_ID=' + JSON.stringify(id) + '); rode criarFormulario* de novo');
   return sheet;
+}
+
+/** Licença paga ativa (com cache; sem rede quase sempre)? O pago sai sem a marca do PodFácil (FLUXOS Q7). */
+var PLANO_PAGO_CACHE_ = null;   // uma consulta por execução (a fila de convites chama a cada convite)
+
+function planoPago_() {
+  if (PLANO_PAGO_CACHE_ !== null) return PLANO_PAGO_CACHE_;
+  try { PLANO_PAGO_CACHE_ = typeof licencaPaga_ === 'function' && licencaPaga_().ok === true; } catch (err) { PLANO_PAGO_CACHE_ = false; }
+  return PLANO_PAGO_CACHE_;
+}
+
+/** WhatsApp só sai com um provedor configurado na planilha (WHATSAPP_URL). */
+function whatsappLigado_() {
+  return !!PropertiesService.getScriptProperties().getProperty('WHATSAPP_URL');
+}
+
+/**
+ * Tira do plano o WhatsApp quando a planilha não tem provedor: o dono vê "não ligado nesta planilha", não "falhou"
+ * (teste de ponta a ponta da 2.2). -> {acoes, desligadas: [{key, status: 'off'}]}.
+ */
+function semWhatsappDesligado_(acoes) {
+  if (whatsappLigado_()) return { acoes: acoes, desligadas: [] };
+  return {
+    acoes: acoes.filter(function (a) { return a.channel !== 'whatsapp'; }),
+    desligadas: acoes.filter(function (a) { return a.channel === 'whatsapp'; }).map(function (a) { return { key: a.key, status: 'off' }; })
+  };
 }
 
 function whatsappCfg_() {
@@ -137,12 +195,44 @@ function onFormSubmit(e) {
     throw new Error('onFormSubmit sem e.response (recebido ' + JSON.stringify(e && Object.keys(e)) +
       '); esperado execução pelo gatilho instalado por criarFormulario*, não pelo botão Executar');
   }
+  try {
+    return processarResposta_(e);
+  } catch (err) {
+    // sem consentimento a resposta é descartada por regra; qualquer outro erro: o dono fica sabendo na hora
+    if (!/consentimento geral ausente/.test(String(err && err.message))) avisarRespostaComErro_(e, err);
+    throw err;   // e continua como "Falha" nas Execuções do Apps Script
+  }
+}
+
+/**
+ * Uma resposta que não deu para processar não pode sumir calada (teste de ponta a ponta da 2.2: um "não tenho" no
+ * campo de links travava tudo e ninguém sabia). E-mail ao dono, uma vez por resposta, sem dado do convidado.
+ */
+function avisarRespostaComErro_(e, err) {
+  try {
+    var chave = 'sent:erro:' + e.response.getId();
+    if (props_().getProperty(chave)) return;
+    var meta = {};
+    try { meta = loadMeta_(); } catch (x) { meta = {}; }
+    var i18n = selectLocale(BUNDLE, meta.locale || 'pt-BR', allowUnreviewed_()), t = i18n.owner.failed;
+    var dono = Session.getEffectiveUser().getEmail();
+    if (!dono || !t) return;
+    var br = i18n.locale === 'pt-BR' || i18n.locale === 'es';
+    var quando = Utilities.formatDate(e.response.getTimestamp(), fusoDoPrograma_(), br ? 'dd/MM/yyyy HH:mm' : 'yyyy-MM-dd HH:mm');
+    // o motivo técnico pode citar o que o convidado escreveu (entre aspas): fica só a parte técnica
+    var motivo = maskEmails_(String(err && err.message)).replace(/"(?:[^"\\]|\\.)*"/g, '"…"').slice(0, 300);
+    MailApp.sendEmail(dono, t.subject, renderTemplate(t.body, { quando: quando, motivo: motivo }));
+    props_().setProperty(chave, new Date().toISOString());
+  } catch (x) { console.error('aviso de resposta com erro não saiu: ' + x.message); }
+}
+
+function processarResposta_(e) {
   var show = loadShow_(), meta = loadMeta_(), props = PropertiesService.getScriptProperties();
   var i18n = selectLocale(BUNDLE, meta.locale, allowUnreviewed_());
   var answers = readAnswers_(e.response, JSON.parse(props.getProperty('FORM_ITEM_MAP')));
   var res = normalizeIntake(answers, { responseId: e.response.getId(), submittedAt: e.response.getTimestamp().toISOString(),
     variant: meta.variant, locale: meta.locale, jurisdiction: meta.jurisdiction, clauseId: meta.clause_id,
-    textVersion: meta.text_version, offset: tzOffset_().iso,
+    textVersion: meta.text_version, offset: offsetDaData_(),
     purposes: { sensitive: i18n.consent.sensitive_purpose, accessibility: i18n.consent.accessibility_purpose,
       voice_replica: i18n.consent.dub_replica_purpose }, localization: show.localization || null });
   var intake = res.intake, store = store_(), policy = guestPolicy_(intake.contacts.email);
@@ -153,7 +243,8 @@ function onFormSubmit(e) {
   if (rawGone) discardRaw_(e.response, intake);
   if (!policy.invited || policy.optedOut) return holdSubmission_(e.response, intake, res, policy, store, rawGone);
   // plano pago: sem licença, só o aviso ao dono e o registro saem (licenca.js)
-  var results = automacoesLiberadas_() ? runActions(planSubmitActions(intake, show, policy), executors_(show, intake, i18n), store)
+  var plano = semWhatsappDesligado_(planSubmitActions(intake, show, policy));
+  var results = automacoesLiberadas_() ? runActions(plano.acoes, executors_(show, intake, i18n), store).concat(plano.desligadas)
     : [semLicencaResultado_(intake.intake_id)];
   var row = 0;
   if (store.claim(intake.intake_id + ':convidados')) {
@@ -194,7 +285,7 @@ function lembreteDiario() {
       return;
     }
     var acts = !admittedRow_(row, store) ? [] :   // retido e não aprovado: nem o D-1 sai (Codex #5)
-      planReminderActions(intake, show, now, tz.minutes, guestPolicy_(intake.contacts && intake.contacts.email));
+      semWhatsappDesligado_(planReminderActions(intake, show, now, tz.minutes, guestPolicy_(intake.contacts && intake.contacts.email))).acoes;
     all = all.concat(runActions(acts, executors_(show, intake, i18n), store));
   });
   logErrors_(all);
@@ -345,7 +436,8 @@ function enviarConvite(convidado, variante) {
   }
   var res = runActions([{ key: key, channel: 'email', kind: 'convite' }], { email: function () {
     var link = issueInviteLink_(invitee.email);   // código de uso único só quando o convite sai de fato (Codex #5)
-    return sendInvitation_(buildInvitationEmail(BUNDLE.invitationTemplate, show, invitee, i18n, { formUrl: link, variant: variant }), logoBlob);
+    return sendInvitation_(buildInvitationEmail(BUNDLE.invitationTemplate, show, invitee, i18n,
+      { formUrl: link, variant: variant, branded: !planoPago_() }), logoBlob);   // pago: sem "Preparado com PodFácil"
   } }, store_())[0];
   if (aviso) res.aviso = aviso;
   if (res.status !== 'error') markInvited_(invitee.email, 'enviarConvite');   // libera o pós-formulário dele

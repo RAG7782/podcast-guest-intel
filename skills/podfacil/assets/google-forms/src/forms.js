@@ -6,6 +6,7 @@
 
 var PROP_SHOW = 'SHOW_PROFILE_JSON';
 var TRIGGERS_OWNER_PROP = 'TRIGGERS_OWNER';
+var GATILHO_FUSO_PROP = 'TRIGGERS_TZ';   // fuso em que o lembrete diário foi agendado
 
 function props_() {
   return PropertiesService.getScriptProperties();
@@ -52,7 +53,8 @@ function buildForm(variant, locale) {
   var loc = locale || props_().getProperty('LOCALE') || show.locale;
   var jurisdiction = props_().getProperty('JURISDICTION') || show.jurisdiction || 'BR-LGPD';
   var i18n = selectLocale(BUNDLE, loc, allowUnreviewed_());
-  var spec = buildFormSpec({ i18n: i18n, show: show, variant: variant, jurisdiction: jurisdiction, variants: BUNDLE.variants });
+  var spec = buildFormSpec({ i18n: i18n, show: show, variant: variant, jurisdiction: jurisdiction, variants: BUNDLE.variants,
+    branded: !planoPago_() });   // pago: formulário sem "Preparado com PodFácil"
   var form = FormApp.create(spec.title).setDescription(spec.description).setConfirmationMessage(spec.confirmation);
   var itemMap = {};
   spec.items.forEach(function (it) { addItem_(form, it, itemMap); });
@@ -67,6 +69,8 @@ function buildForm(variant, locale) {
   if (antigo && antigo !== form.getId()) {   // formulário refeito: o antigo para de aceitar (ficaria sem gatilho)
     try { FormApp.openById(antigo).setAcceptingResponses(false); } catch (err) { console.error('formulário antigo: ' + err.message); }
   }
+  arrumarAbasDeRespostas_(ss, form.getId(), antigo);
+  if (typeof anotarLinkDoFormulario_ === 'function') anotarLinkDoFormulario_();
   props_().deleteProperty('CONVIDADOS_SHEET_ID');   // planilha nova: a aba Convidados nasce nela, antes de tudo
   try {
     convidadosSheet_(i18n);
@@ -140,6 +144,23 @@ function linkSpreadsheet_(form, title) {
   return ss;
 }
 
+/**
+ * Abas "Respostas ao formulário N" que o Google cria: a do formulário antigo (trocado) fica oculta, com os dados, para
+ * não confundir; a do novo vai para o fim da fila de abas (o dono lê a aba Convidados).
+ */
+function arrumarAbasDeRespostas_(ss, novo, antigo) {
+  try {
+    SpreadsheetApp.flush();
+    var ativa = ss.getActiveSheet ? ss.getActiveSheet() : null;
+    ss.getSheets().forEach(function (sh) {
+      var url = String((sh.getFormUrl && sh.getFormUrl()) || '');
+      if (antigo && url.indexOf(antigo) >= 0) sh.hideSheet();
+      else if (url.indexOf(novo) >= 0 && ss.moveActiveSheet) { ss.setActiveSheet(sh); ss.moveActiveSheet(ss.getNumSheets()); }
+    });
+    if (ativa && ss.setActiveSheet) ss.setActiveSheet(ativa);
+  } catch (err) { console.error('abas de respostas: ' + err.message); }
+}
+
 /** setPublished existe só em forms que suportam publicação; o padrão é publicado. */
 function publish_(form) {
   if (form.supportsAdvancedResponderPermissions() && !form.isPublished()) form.setPublished(true);
@@ -153,7 +174,9 @@ function installTriggers_(form) {
   });
   ScriptApp.newTrigger('onFormSubmit').forForm(form).onFormSubmit().create();
   var hour = Number(props_().getProperty('REMINDER_HOUR') || 9);
-  ScriptApp.newTrigger('lembreteDiario').timeBased().everyDays(1).atHour(hour).create();
+  var fuso = fusoDoPrograma_();
+  ScriptApp.newTrigger('lembreteDiario').timeBased().everyDays(1).atHour(hour).inTimezone(fuso).create();   // 9 h do dono, não do fuso do script
+  props_().setProperty(GATILHO_FUSO_PROP, fuso);
   // gatilho é da conta que instalou: o "Verificar instalação" de um coeditor não cria um 2º jogo (menu.js)
   props_().setProperty(TRIGGERS_OWNER_PROP, String(Session.getEffectiveUser().getEmail() || '').toLowerCase());
 }

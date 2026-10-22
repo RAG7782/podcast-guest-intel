@@ -53,11 +53,21 @@ function dataDoConvite(v, display, ctx) {
   if (typeof v === 'object' && typeof v.getTime === 'function') {
     if (isNaN(v.getTime()) || !/\d[:h]\d/.test(String(display || ''))) return undefined;
     var p = ctx.partes(v);
-    return p.y < 1900 ? undefined : isoDe_(p.y, p.mo, p.d, p.h, p.mi, ctx);   // 1899 = célula só com hora
+    if (p.y < 1900) return undefined;   // 1899 = célula só com hora
+    // o que o dono VÊ vale para a HORA (o fuso da planilha e o do script já discordaram: 19:00 virou 12:00), mas só
+    // se o DIA bater com a data guardada: planilha em inglês mostra 5/10 para 10 de maio (revisão da 2.2.1)
+    var vista = textoParaIso_(String(display).trim(), ctx);
+    if (vista && +vista.slice(0, 4) === p.y && +vista.slice(5, 7) === p.mo && +vista.slice(8, 10) === p.d) return vista;
+    return isoDe_(p.y, p.mo, p.d, p.h, p.mi, ctx);
   }
-  var s = String(v).trim(), m = /^(\d{4})-(\d{1,2})-(\d{1,2})[ T,]+(\d{1,2})[:h](\d{2})?$/i.exec(s);
+  return textoParaIso_(String(v).trim(), ctx);
+}
+
+/** "2026-10-20 14:30[:00]" em qualquer idioma; "20/10/2026 14:30[:00]", "14h30", "às 14h" em pt-BR e es. */
+function textoParaIso_(s, ctx) {
+  var m = /^(\d{4})-(\d{1,2})-(\d{1,2})[ T,]+(\d{1,2})[:h](\d{2})?(?::\d{2})?$/i.exec(s);
   if (m) return isoDe_(+m[1], +m[2], +m[3], +m[4], +(m[5] || 0), ctx);
-  m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})[ ,]+(?:às\s+|a las\s+)?(\d{1,2})[:h](\d{2})?$/i.exec(s);
+  m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})[ ,]+(?:às\s+|a las\s+)?(\d{1,2})[:h](\d{2})?(?::\d{2})?$/i.exec(s);
   if (m && (ctx.locale === 'pt-BR' || ctx.locale === 'es')) return isoDe_(+m[3], +m[2], +m[1], +m[4], +(m[5] || 0), ctx);
   return undefined;
 }
@@ -142,8 +152,10 @@ function cotaDaFila(restante, inicial) {
 
 /** Resumo da rodada no idioma do programa. */
 function resumoConvites(cont, i18n) {
-  var t = i18n.menu.invites;
-  return renderTemplate(t.done, cont) + (cont.depois ? '\n\n' + t.later : '');
+  var t = i18n.menu.invites, l = t.done_lines || {};
+  var linhas = ['enviados', 'pulados', 'corrigir', 'falhas', 'depois'].filter(function (k) { return cont[k] && l[k]; })
+    .map(function (k) { return renderTemplate(l[k], { n: cont[k] }); });   // só o que aconteceu, uma linha cada
+  return t.done + (linhas.length ? '\n\n' + linhas.join('\n') : '') + (cont.depois ? '\n\n' + t.later : '');
 }
 
 // ── lado Google ──────────────────────────────────────────────────────────
@@ -176,21 +188,32 @@ function convitesSheet_(i18n, show) {
   var regra = SpreadsheetApp.newDataValidation().requireValueInList(modosDoPrograma(i18n, show), true)
     .setAllowInvalid(true).build();   // aceita digitar, mas mostra a lista
   sh.getRange(2, 4, 500, 1).setDataValidation(regra);
+  // formato fixo: o que aparece é o que o PodFácil lê (dataDoConvite), em qualquer idioma da planilha
+  var br = i18n.locale === 'pt-BR' || i18n.locale === 'es';
+  sh.getRange(2, 3, 500, 1).setNumberFormat(br ? 'dd/mm/yyyy hh:mm' : 'yyyy-mm-dd hh:mm');
+  [170, 230, 150, 130, 230, 170, 300].forEach(function (px, i) { sh.setColumnWidth(i + 1, px); });   // títulos inteiros
   return { sheet: sh, i18n: i18n, criada: true };
 }
 
-/** Datas no fuso da PLANILHA (onde o dono digita), com o deslocamento certo de cada data (horário de verão). */
+/**
+ * Datas do convite: a hora é a do PROGRAMA (fusoDoPrograma_), com o deslocamento certo de cada data (horário de verão).
+ * partes(Date da célula) usa o fuso da planilha, que é como o Google converteu o que foi digitado; só vale quando o
+ * texto da célula não dá para ler (dataDoConvite lê primeiro o que aparece na tela).
+ */
 function ctxDatas_(ss) {
-  var tz = (ss && ss.getSpreadsheetTimeZone && ss.getSpreadsheetTimeZone()) || Session.getScriptTimeZone();
+  var tz = fusoDoPrograma_(), tzPlanilha = tz;
+  try { tzPlanilha = (ss && ss.getSpreadsheetTimeZone()) || tz; } catch (err) { tzPlanilha = tz; }
+  var partesEm = function (d, fuso) {
+    var m = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})$/.exec(Utilities.formatDate(d, fuso, 'yyyy-MM-dd HH:mm'));
+    return { y: +m[1], mo: +m[2], d: +m[3], h: +m[4], mi: +m[5] };
+  };
   var minutosEm = function (ms) {
     var m = /^([+-])(\d{2})(\d{2})$/.exec(Utilities.formatDate(new Date(ms), tz, 'Z'));
     return m ? (m[1] === '-' ? -1 : 1) * (Number(m[2]) * 60 + Number(m[3])) : 0;
   };
   return {
-    partes: function (d) {
-      var m = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})$/.exec(Utilities.formatDate(d, tz, 'yyyy-MM-dd HH:mm'));
-      return { y: +m[1], mo: +m[2], d: +m[3], h: +m[4], mi: +m[5] };
-    },
+    partes: function (d) { return partesEm(d, tzPlanilha); },
+    agoraPartes: function () { return partesEm(new Date(), tz); },
     offsetAt: function (y, mo, d, h, mi) {   // 2 passos: o fuso da hora "local" tomada como UTC, depois corrigido
       var local = Date.UTC(y, mo - 1, d, h, mi), off = minutosEm(local);
       return minutosEm(local - off * 60000);
@@ -199,7 +222,7 @@ function ctxDatas_(ss) {
 }
 
 function agoraLocal_(i18n, ctx) {
-  var p = ctx.partes(new Date());
+  var p = ctx.agoraPartes ? ctx.agoraPartes() : ctx.partes(new Date());
   return formatScheduled(isoDe_(p.y, p.mo, p.d, p.h, p.mi, ctx), i18n.locale);
 }
 
@@ -310,21 +333,33 @@ function rodarFila_(manual, inicio, show, meta, cont) {
   });
 }
 
+
+var PASSOS_ = PASSOS_ || {};   // passos do diálogo (dialogo.js); a ordem dos arquivos não importa
+
 /** PodFácil > Convidar. O tempo da execução conta desde já (o dono pensando no SIM também gasta os 6 min). */
 function menuConvidar() {
-  var inicio = Date.now(), ui = SpreadsheetApp.getUi(), m = menuI18n_().menu, show;
-  try { show = loadShow_(); loadMeta_(); } catch (err) { ui.alert(convitesI18n_().menu.invites.need_form); return; }
-  if (!props_().getProperty('FORM_URL')) { ui.alert(convitesI18n_().menu.invites.need_form); return; }
-  try {
-    var r = convitesSheet_(convitesI18n_(), show), t = r.i18n.menu.invites;
-    if (r.criada) { ui.alert(renderTemplate(t.created, { aba: t.tab })); return; }
-    var pend = pendentesNaAba_(r.sheet, t);
-    if (!pend) { ui.alert(renderTemplate(t.nothing, { aba: r.sheet.getName() })); return; }
-    if (ui.alert(t.tab, renderTemplate(t.confirm, { n: pend }), ui.ButtonSet.YES_NO) !== ui.Button.YES) return;
-    var cont = convidarPendentes_(true, inicio);
-    ui.alert(cont.ocupada ? t.busy : resumoConvites(cont, r.i18n));
-  } catch (err) { ui.alert(renderTemplate(m.error, { motivo: maskEmails_(err.message) })); }
+  var m = menuI18n_().menu;
+  abrirDialogo_(m.invite, telaEspera(convitesI18n_().menu.invites.wait, 'convidar'));
 }
+
+PASSOS_.convidar = function () {
+  var m = menuI18n_().menu, show;
+  try { show = loadShow_(); loadMeta_(); } catch (err) { return telaResultado(convitesI18n_().menu.invites.need_form); }
+  if (!props_().getProperty('FORM_URL')) return telaResultado(convitesI18n_().menu.invites.need_form);
+  var r = convitesSheet_(convitesI18n_(), show), t = r.i18n.menu.invites;
+  if (r.criada) return telaResultado(renderTemplate(t.created, { aba: t.tab }));
+  var pend = pendentesNaAba_(r.sheet, t);
+  if (!pend) return telaResultado(renderTemplate(t.nothing, { aba: r.sheet.getName() }));
+  return telaPergunta(renderTemplate(t.confirm, { n: pend }),
+    { rotulo: renderTemplate(t.send_button, { n: pend }), passo: 'convidar_enviar', espera: t.wait_send },
+    { rotulo: m.window.not_now });
+};
+
+PASSOS_.convidar_enviar = function () {
+  var show = loadShow_(), r = convitesSheet_(convitesI18n_(), show), t = r.i18n.menu.invites;
+  var cont = convidarPendentes_(true, Date.now());
+  return telaResultado(cont.ocupada ? t.busy : resumoConvites(cont, r.i18n));
+};
 
 /** Quantas linhas com nome ou e-mail entram numa rodada manual. */
 function pendentesNaAba_(sh, t) {

@@ -142,7 +142,7 @@ var SECTIONS = [
   ['channels', ['contacts.email', 'contacts.whatsapp', 'preferred_channel', 'automation_consents']]
 ];
 
-var REQUIRED = ['guest.full_name', 'guest.preferred_name', 'bio.short', 'links', 'recording_mode', 'contacts.email'];
+var REQUIRED = ['guest.full_name', 'guest.preferred_name', 'bio.short', 'recording_mode', 'contacts.email'];   // links: opcional (2.2.1)
 
 /**
  * Padrão do WhatsApp no Forms, coerente com o toE164 do intake.js (o que passa aqui o intake aceita): no Brasil,

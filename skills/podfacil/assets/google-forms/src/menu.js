@@ -40,6 +40,30 @@ function convidadoDaLinha(header, row, i18n) {
 }
 
 /** Tem o formato das chaves emitidas pelo servidor (pgi_ + base64url, license_store.py)? A conferência é do servidor. */
+/**
+ * Chave colada do e-mail: tira espaços, quebras de linha e caracteres invisíveis (o e-mail quebra a chave longa em
+ * duas linhas) e acha o pgi_… no meio de um texto maior ("Sua chave: pgi_…"). Sem chave reconhecível: o texto limpo.
+ */
+var CHAVE_CORPO = 43;   // pgi_ + secrets.token_urlsafe(32) no servidor (license_store.generate_key)
+
+function extrairChave(texto) {
+  var s = String(texto == null ? '' : texto), i = s.indexOf('pgi_');
+  if (i < 0) return s.replace(/[\s\u200B-\u200D\u2060\uFEFF]+/g, '');
+  var corpo = '';
+  for (var j = i + 4; j < s.length && corpo.length < CHAVE_CORPO; j++) {
+    var ch = s.charAt(j);
+    if (/[A-Za-z0-9_-]/.test(ch)) corpo += ch;
+    else if (!/[\s\u200B-\u200D\u2060\uFEFF]/.test(ch)) break;   // quebra de linha no meio passa; pontuação para
+  }
+  return 'pgi_' + corpo;
+}
+
+/** "enterprise_20" -> "Estúdio, até 20 pessoas" (nunca o nome técnico na tela). */
+function nomeDoPlano(plano, i18n) {
+  var nomes = (i18n.menu.license && i18n.menu.license.plans) || {};
+  return nomes[plano] || String(plano || '').replace(/_/g, ' ');
+}
+
 function chaveComFormato(key) {
   return typeof key === 'string' && /^pgi_[A-Za-z0-9_-]{40,200}$/.test(key.trim());
 }
@@ -66,23 +90,35 @@ function relatorioInstalacao(checks, i18n) {
 }
 
 /** HTML da janela "Ativar licença". O campo é de senha; a chave é apagada do campo antes de seguir ao servidor. */
-function licencaHtml(t) {
+function licencaHtml(t, w) {
+  var css = typeof cssJanela === 'function' ? cssJanela() : '', copiar = w && typeof scriptCopiar === 'function' ? scriptCopiar(w) : '';
   var e = escapeHtml, js = function (s) { return JSON.stringify(String(s)).replace(/</g, '\\u003c'); };
   return '<!DOCTYPE html><html><head><base target="_top"><style>' +
     'body{font-family:Arial,sans-serif;font-size:14px;line-height:1.4;margin:16px;color:#202124}' +
     'input{width:100%;box-sizing:border-box;padding:8px;font-size:14px;margin:6px 0 12px}' +
-    'button{padding:8px 18px;font-size:14px;cursor:pointer}#msg{margin-top:12px;white-space:pre-wrap;' +
-    'word-break:break-all;user-select:text}</style></head><body>' +
+    'button{padding:8px 18px;font-size:14px;cursor:pointer}#msg{margin-top:12px}' + css +
+    'body{padding-bottom:18px}</style></head><body>' +
     '<p>' + e(t.lead) + '</p><label for="k">' + e(t.label) + '</label>' +
     '<input id="k" type="password" autocomplete="off" spellcheck="false" autofocus>' +
     '<button id="b" type="button">' + e(t.button) + '</button><div id="msg" role="status" aria-live="polite"></div>' +
     '<script>var W=' + js(t.working) + ',b=document.getElementById("b"),k=document.getElementById("k"),' +
     'm=document.getElementById("msg");' +
-    'function done(r){m.textContent=r.texto;b.disabled=false;if(r.ok&&!r.fica){setTimeout(function(){google.script.host.close();},2500);}}' +
+    // resposta montada com textContent/createElement (nunca HTML vindo de fora); link vira caixa com Copiar e Abrir
+    'var CP=' + js(w ? w.copy : 'Copiar') + ',AB=' + js(w ? w.open : 'Abrir') + ';' +
+    'function pinta(t){m.textContent="";String(t||"").split(/\\n\\s*\\n/).forEach(function(bl,i){var p=document.createElement("p");' +
+    'if(i===0)p.className="lead";bl.split(/(https:\\/\\/[^\\s<>"\']+)/).forEach(function(x,j){if(!x)return;if(j%2===0){' +
+    'x.split("\\n").forEach(function(l,n){if(n)p.appendChild(document.createElement("br"));p.appendChild(document.createTextNode(l));});return;}' +
+    'var s=document.createElement("span"),c=document.createElement("code"),bt=document.createElement("button"),a=document.createElement("a");' +
+    's.className="link";c.textContent=x;bt.type="button";bt.className="copiar";bt.setAttribute("data-url",x);bt.textContent=CP;' +
+    'a.href=x;a.target="_blank";a.rel="noopener";a.textContent=AB;s.appendChild(c);s.appendChild(bt);s.appendChild(a);p.appendChild(s);});' +
+    'm.appendChild(p);});}' +
+    'function done(r){pinta(r.texto);b.disabled=false;' +
+    'if(r.ok&&!r.fica){setTimeout(function(){google.script.host.close();},2500);}}' +
     'function go(){var v=k.value;k.value="";if(!v)return;b.disabled=true;m.textContent=W;' +
     'google.script.run.withSuccessHandler(done).withFailureHandler(function(){done({ok:false,texto:' + js(t.failed) + '});})' +
     '.licencaSalvar(v);}' +
-    'b.addEventListener("click",go);k.addEventListener("keydown",function(ev){if(ev.key==="Enter")go();});</script>' +
+    'b.addEventListener("click",go);k.addEventListener("keydown",function(ev){if(ev.key==="Enter")go();});' +
+    copiar + '</script>' +
     '</body></html>';
 }
 
@@ -224,7 +260,7 @@ function formularioParaTrocar_() {
 
 function menuAtivarLicenca() {
   var t = menuI18n_().menu.license;
-  SpreadsheetApp.getUi().showModalDialog(HtmlService.createHtmlOutput(licencaHtml(t)).setWidth(440).setHeight(280), t.title);
+  SpreadsheetApp.getUi().showModalDialog(HtmlService.createHtmlOutput(licencaHtml(t, menuI18n_().menu.window)).setWidth(480).setHeight(420), t.title);
 }
 
 /**
@@ -235,7 +271,7 @@ function menuAtivarLicenca() {
  */
 function licencaSalvar(key) {
   var t = menuI18n_().menu.license, old = (props_().getProperty(LICENCA_PROP) || '').trim();
-  key = String(key == null ? '' : key).trim();
+  key = extrairChave(key);
   if (!chaveComFormato(key)) return { ok: false, texto: t.invalid };
   var r = perguntarServidor_(key);
   var importado = function () {   // pago: numa planilha ainda SEM programa, o perfil salvo no chat entra junto
@@ -269,7 +305,11 @@ function licencaSalvar(key) {
   props_().setProperty(LICENCA_CACHE_PROP, JSON.stringify({ chave: chaveHash_(key), plano: info.plan,
     confirmado_em: new Date().toISOString() }));
   var extra = importado();   // com texto (link do formulário, falha, dica): a janela fica aberta para o dono ler
-  return { ok: true, fica: !!extra, texto: extra + renderTemplate(extra ? t.ok_stay : t.ok, { plano: String(info.plan || '') }) };
+  // "copie acima" só quando há um link para copiar; dica sem link: a janela fica, mas sem mandar copiar nada
+  var comLink = /https:\/\//.test(extra), i18n = menuI18n_();
+  var texto = renderTemplate(comLink ? t.ok_stay : (extra ? t.ok_read : t.ok), { plano: nomeDoPlano(info.plan, i18n) }) +
+    (extra ? '\n\n' + extra.trim() : '');
+  return { ok: true, fica: !!extra, texto: texto };
 }
 
 /** A planilha do PodFácil: a que tem o código dentro (modelo) ou, no projeto avulso, a das respostas. */
@@ -298,6 +338,7 @@ function aplicarPerfil_(show) {
     show.brand = Object.assign({ colors: Object.assign({}, DEFAULT_COLORS) }, show.brand || {}, { logo: logo });
   }
   props_().setProperty(PROP_SHOW, JSON.stringify(show));
+  try { fusoDoPrograma_(); } catch (err) { console.error('fuso do programa: ' + err.message); }   // e a planilha no mesmo fuso
   var i18n = menuI18n_(), c = i18n.menu.config, ss = planilhaDoPodFacil_();
   if (!ss) return;
   var sh = ss.getSheetByName(c.tab) || abaConfigEmOutroIdioma_(ss) || ss.insertSheet(c.tab);
@@ -305,6 +346,23 @@ function aplicarPerfil_(show) {
   var rows = [[c.note, '']].concat(linhasConfiguracao(show, i18n)), last = sh.getLastRow();
   if (last) sh.getRange(1, 1, last, 2).clearContent();
   sh.getRange(1, 1, rows.length, 2).setValues(rows);
+  anotarLinkDoFormulario_();
+}
+
+/** Link do formulário do convidado na aba Configuração: sempre à mão para copiar (a janela some). */
+function anotarLinkDoFormulario_() {
+  try {
+    var url = props_().getProperty('FORM_URL'), ss = planilhaDoPodFacil_();
+    if (!url || !ss) return;
+    var c = menuI18n_().menu.config, sh = ss.getSheetByName(c.tab);
+    if (!sh) return;
+    var last = sh.getLastRow(), rotulos = last ? sh.getRange(1, 1, last, 1).getValues() : [], at = last + 1;
+    for (var k = 0; k < rotulos.length; k++) if (String(rotulos[k][0]) === c.form_link) { at = k + 1; break; }
+    sh.getRange(at, 1, 1, 2).setValues([[c.form_link, url]]);
+    var linhaFuso = at + 1;   // o fuso das datas fica à vista (vem da Agenda do dono): errado aqui = horário errado
+    for (var f = 0; f < rotulos.length; f++) if (String(rotulos[f][0]) === c.tz_label) { linhaFuso = f + 1; break; }
+    sh.getRange(linhaFuso, 1, 1, 2).setValues([[c.tz_label, fusoDoPrograma_()]]);
+  } catch (err) { console.error('link do formulário na Configuração: ' + err.message); }
 }
 
 function menuEnviarLogo() {
@@ -347,44 +405,84 @@ function abaConfigEmOutroIdioma_(ss) {
   return null;
 }
 
+var PASSOS_ = PASSOS_ || {};   // passos do diálogo (dialogo.js); a ordem dos arquivos não importa
+
 /** Pago: busca pela licença; sem licença (ou sem perfil guardado nela), pede o código de 15 letras e números. O código vai
- *  SEM a chave: uma chave suspensa não pode barrar um código válido. Servidor fora do ar: avisa na hora. */
+ *  SEM a chave: uma chave suspensa não pode barrar um código válido. Servidor fora do ar: avisa na hora. Tudo no diálogo
+ *  (dialogo.js): o pedido do código, a espera ("Criando o formulário…") e o resultado com o link. */
 function menuConfigurarPrograma() {
-  var ui = SpreadsheetApp.getUi(), m = menuI18n_().menu, c = m.config;
-  var key = (props_().getProperty(LICENCA_PROP) || '').trim(), got = key ? buscarPerfil_(key, null) : null;
-  if (got && !got.show && !got.code) { ui.alert(renderTemplate(m.error, { motivo: got.erro })); return; }
-  if (!got || !got.show) {
-    var r = ui.prompt(c.ask_code_title, c.ask_code, ui.ButtonSet.OK_CANCEL);
-    if (r.getSelectedButton() !== ui.Button.OK) return;
-    got = buscarPerfil_(null, String(r.getResponseText() || '').trim());
-  }
-  if (!got.show) { ui.alert(renderTemplate(m.error, { motivo: got.erro })); return; }
-  aplicarPerfil_(got.show);
-  c = menuI18n_().menu.config;   // o idioma pode ter mudado com o perfil novo
-  var form = props_().getProperty('FORM_ID') ? '' : '\n\n' + criarFormularioPeloMenu_();   // 1ª configuração: já sai com formulário
-  ui.alert(renderTemplate(c.done, { nome: String(got.show.name || ''), aba: c.tab }) + form);
+  var m = menuI18n_().menu;
+  abrirDialogo_(m.config.item, telaEspera(m.config.wait_profile, 'config_inicio'));
 }
 
-/** Confere configuração, formulário, gatilhos, aba Convidados e licença; religa gatilhos e recria a aba. */
+PASSOS_.config_inicio = function () {
+  var m = menuI18n_().menu, c = m.config;
+  var key = (props_().getProperty(LICENCA_PROP) || '').trim(), got = key ? buscarPerfil_(key, null) : null;
+  if (got && !got.show && !got.code) return telaResultado(renderTemplate(m.error, { motivo: got.erro }));
+  if (got && got.show) return aplicarEContinuar_(got.show);
+  return pedirCodigo_('');
+};
+
+PASSOS_.config_codigo = function (args) {
+  var m = menuI18n_().menu, got = buscarPerfil_(null, String(args.valor || '').trim());
+  return got.show ? aplicarEContinuar_(got.show) : pedirCodigo_(renderTemplate(m.error, { motivo: got.erro }));
+};
+
+function pedirCodigo_(erro) {
+  var m = menuI18n_().menu, c = m.config;
+  return telaEntrada(c.ask_code, c.ask_code_title, { rotulo: c.ask_code_button, passo: 'config_codigo', espera: c.wait_profile },
+    { rotulo: m.window.cancel }, erro);
+}
+
+/** Grava o perfil; na 1ª configuração já cria o formulário (com a tela de espera, que é a parte lenta). */
+function aplicarEContinuar_(show) {
+  aplicarPerfil_(show);
+  var c = menuI18n_().menu.config;   // o idioma pode ter mudado com o perfil novo
+  var feito = renderTemplate(c.done, { nome: String(show.name || ''), aba: c.tab });
+  if (props_().getProperty('FORM_ID')) return telaResultado(feito);
+  return telaEspera(feito + '\n\n' + c.wait_form, 'criar_formulario', { antes: feito });
+}
+
+PASSOS_.criar_formulario = function (args) {
+  return telaResultado((args.antes ? args.antes + '\n\n' : '') + criarFormularioPeloMenu_(!!args.trocar));
+};
+
+/** Confere configuração, formulário, gatilhos, aba Convidados e licença; religa gatilhos e recria a aba. As perguntas
+ *  (criar, refazer, trocar pelo completo) vêm antes do relatório, no mesmo diálogo, com a espera na parte lenta. */
 function menuVerificarInstalacao() {
-  var ui = SpreadsheetApp.getUi();   // antes de mexer em algo: sem tela (projeto avulso), não conserta às cegas
+  var c = menuI18n_().menu.check;
+  abrirDialogo_(c.title, telaEspera(c.wait, 'verificar'));
+}
+
+PASSOS_.verificar = function (args) {
+  var m = menuI18n_().menu, c = m.check, cfg = m.config;
+  if (!args.respondido) {
+    var temShow = true;
+    try { loadShow_(); } catch (err) { temShow = false; }
+    var formId = props_().getProperty('FORM_ID'), acao = null, texto = null, rotulo = null;
+    if (!formId && temShow) { acao = 'criar'; texto = c.form_ask; rotulo = c.form_ask_yes; }
+    else if (formId) {
+      try { FormApp.openById(formId); } catch (err) { acao = 'refazer'; texto = c.form_gone_ask; rotulo = c.form_gone_yes; }
+      if (!acao && formularioParaTrocar_()) { acao = 'trocar'; texto = c.upgrade_ask; rotulo = c.upgrade_yes; }
+    }
+    if (acao) {
+      return telaPergunta(texto, { rotulo: rotulo, passo: 'verificar_acao', args: { acao: acao }, espera: cfg.wait_form },
+        { rotulo: m.window.not_now, passo: 'verificar', args: { respondido: true } });
+    }
+  }
+  return telaResultado(relatorioVerificacao_(args.criado || null));
+};
+
+PASSOS_.verificar_acao = function (args) {
+  var criado = criarFormularioPeloMenu_(args.acao !== 'criar');
+  return PASSOS_.verificar({ respondido: true, criado: criado });
+};
+
+function relatorioVerificacao_(criado) {
   var i18n = menuI18n_(), c = i18n.menu.check, checks = [], form = null;
   try { checks.push({ status: 'ok', text: renderTemplate(c.show_ok, { nome: String(loadShow_().name || '') }) }); }
   catch (err) { checks.push({ status: 'fail', text: c.show_missing }); }
-  var formId = props_().getProperty('FORM_ID'), criado = null;
-  if (!formId && checks[0].status === 'ok' && ui.alert(c.title, c.form_ask, ui.ButtonSet.YES_NO) === ui.Button.YES) {
-    criado = criarFormularioPeloMenu_();   // com programa e sem formulário: cria aqui mesmo, sem ir ao editor
-    formId = props_().getProperty('FORM_ID');
-  }
-  if (formId && !criado) {
-    try { FormApp.openById(formId); } catch (err) {   // apagado: sem o editor, o dono só sai daqui pelo menu
-      if (ui.alert(c.title, c.form_gone_ask, ui.ButtonSet.YES_NO) === ui.Button.YES) criado = criarFormularioPeloMenu_(true);
-    }
-    if (!criado && formularioParaTrocar_() && ui.alert(c.title, c.upgrade_ask, ui.ButtonSet.YES_NO) === ui.Button.YES) {
-      criado = criarFormularioPeloMenu_(true);
-    }
-    formId = props_().getProperty('FORM_ID');
-  }
+  var formId = props_().getProperty('FORM_ID');
   if (!formId) checks.push({ status: 'fail', text: criado || c.form_missing });
   else {
     try { form = FormApp.openById(formId); checks.push({ status: criado ? 'fixed' : 'ok', text: criado || c.form_ok }); }
@@ -399,13 +497,14 @@ function menuVerificarInstalacao() {
   var logoCheck = logoNoLugar_(c);
   if (logoCheck) checks.push(logoCheck);
   checks.push(licencaNoLugar_(c));
-  ui.alert(c.title, relatorioInstalacao(checks, i18n), ui.ButtonSet.OK);
+  return relatorioInstalacao(checks, i18n);
 }
 
 /** Gatilhos são por conta: um coeditor não vê os do dono e não deve criar um 2º jogo em nome dele (revisão 2.2). */
 function gatilhosNoLugar_(form, c) {
   var have = ScriptApp.getProjectTriggers().map(function (t) { return t.getHandlerFunction(); });
-  if (have.indexOf('onFormSubmit') >= 0 && have.indexOf('lembreteDiario') >= 0) return { status: 'ok', text: c.triggers_ok };
+  var noFuso = props_().getProperty(GATILHO_FUSO_PROP) === fusoDoPrograma_();   // gatilho de antes do fuso do programa: refaz
+  if (have.indexOf('onFormSubmit') >= 0 && have.indexOf('lembreteDiario') >= 0 && noFuso) return { status: 'ok', text: c.triggers_ok };
   var dono = String(props_().getProperty(TRIGGERS_OWNER_PROP) || ''), eu = String(Session.getEffectiveUser().getEmail() || '').toLowerCase();
   if (dono && eu && dono !== eu) return { status: 'warn', text: renderTemplate(c.triggers_other, { dono: dono }) };
   installTriggers_(form);
@@ -449,12 +548,12 @@ function licencaNoLugar_(c) {
   var r = licencaPaga_();
   if (!r.ok) return { status: 'fail', text: renderTemplate(c.license_fail, { motivo: r.motivo }) };
   if (r.offline) return { status: 'warn', text: c.license_offline };
-  return { status: 'ok', text: renderTemplate(c.license_paid, { plano: String(r.plano || '') }) };
+  return { status: 'ok', text: renderTemplate(c.license_paid, { plano: nomeDoPlano(r.plano, menuI18n_()) }) };
 }
 
-/** Convidado da linha selecionada na aba Convidados; sem seleção válida, pede o código do registro. */
-function convidadoSelecionado_(i18n, ui) {
-  var m = i18n.menu, sh = SpreadsheetApp.getActiveSheet(), sel = sh && sh.getActiveRange();
+/** Convidado da linha selecionada na aba Convidados, ou null (aí o diálogo pede o código do registro). */
+function convidadoSelecionado_(i18n) {
+  var sh = SpreadsheetApp.getActiveSheet(), sel = sh && sh.getActiveRange();
   var tabId = props_().getProperty('CONVIDADOS_SHEET_ID'), tab = i18n;   // a aba usa o idioma do formulário
   try { tab = selectLocale(BUNDLE, loadMeta_().locale, allowUnreviewed_()); } catch (err) { tab = i18n; }
   var abaCerta = sh && (!tabId || String(sh.getSheetId()) === tabId);
@@ -463,90 +562,137 @@ function convidadoSelecionado_(i18n, ui) {
     var hit = convidadoDaLinha(header, sh.getRange(sel.getRow(), 1, 1, n).getValues()[0], tab);
     if (hit) return hit;
   }
-  var r = ui.prompt(m.ask_code_title, m.ask_code, ui.ButtonSet.OK_CANCEL);
-  if (r.getSelectedButton() !== ui.Button.OK) return null;
-  var id = String(r.getResponseText() || '').trim();
-  return id ? { id: id, nome: id } : null;
+  return null;
 }
 
-function menuReenviarAviso() {
-  var i18n = menuI18n_(), m = i18n.menu, ui = SpreadsheetApp.getUi(), who = convidadoSelecionado_(i18n, ui);
-  if (!who) return;
-  try { reenviarAviso(who.id); ui.alert(m.resend_done); }
-  catch (err) { ui.alert(renderTemplate(m.error, { motivo: err.message })); }
+/** Quem: o código digitado no diálogo (args.valor) ou a linha selecionada; nenhum -> null. */
+function quem_(args) {
+  var id = String((args && args.valor) || '').trim();
+  return id ? { id: id, nome: id } : convidadoSelecionado_(menuI18n_());
 }
+
+/** Tela que pede o código do registro (quando nenhuma linha da aba Convidados está selecionada). */
+function pedirRegistro_(passo) {
+  var m = menuI18n_().menu;
+  return telaEntrada(m.ask_code, m.ask_code_title, { rotulo: m.window.continue, passo: passo, espera: m.window.working },
+    { rotulo: m.window.cancel });
+}
+
+/** Abre o diálogo da opção já com o convidado da linha selecionada (lida AGORA, antes de a janela abrir). */
+function abrirComConvidado_(titulo, passo) {
+  var who = convidadoSelecionado_(menuI18n_()), w = menuI18n_().menu.window;
+  abrirDialogo_(titulo, who ? telaEspera(w.working, passo, { valor: who.id, nome: who.nome }) : pedirRegistro_(passo));
+}
+
+function menuReenviarAviso() { abrirComConvidado_(menuI18n_().menu.resend_notice, 'reenviar'); }
+
+PASSOS_.reenviar = function (args) {
+  var m = menuI18n_().menu, who = quem_(args);
+  if (!who) return pedirRegistro_('reenviar');
+  reenviarAviso(who.id);
+  return telaResultado(m.resend_done);
+};
 
 /**
  * Decisão 3.1: e-mail pronto ao convidado da linha selecionada, pedindo para confirmar o que veio com problema.
  * Só depois do SIM do dono; nunca a quem pediu para sair nem a resposta retida (e-mail não confirmado: Codex #5).
  * A resposta do convidado volta para o e-mail do dono (replyTo).
  */
-function menuEnviarConfirmacao() {
-  var i18n = menuI18n_(), m = i18n.menu, t = m.confirm, ui = SpreadsheetApp.getUi(), who = convidadoSelecionado_(i18n, ui);
-  if (!who) return;
-  try {
-    var row = intakeSheet_().getDataRange().getValues().slice(1).filter(function (r) { return r[0] === who.id; })[0];
-    if (!row) { ui.alert(renderTemplate(t.not_found, { id: who.id })); return; }
-    var intake = JSON.parse(row[2]), nome = who.nome, email = intake.contacts && intake.contacts.email;
-    if (!admittedRow_(row, store_())) { ui.alert(t.held); return; }
-    if (guestPolicy_(email).optedOut) { ui.alert(renderTemplate(t.optout, { nome: nome })); return; }
-    var lang = selectLocale(BUNDLE, intake.locale || loadMeta_().locale, allowUnreviewed_());   // no idioma do formulário
-    var mail = buildGuestConfirmation(loadShow_(), intake, JSON.parse(row[4] || '[]'), lang);
-    var key = 'sent:' + who.id + ':email:confirmacao', antes = props_().getProperty(key);
-    var pergunta = mail.itens.length
-      ? renderTemplate(t.ask, { nome: nome, n: mail.itens.length, itens: mail.itens.map(function (x) { return '• ' + x; }).join('\n') })
-      : renderTemplate(t.ask_none, { nome: nome });
-    if (antes) pergunta += '\n\n' + renderTemplate(t.again, { quando: formatScheduled(isoLocal(antes.replace(/^pending:/, ''), intake), i18n.locale) });
-    if (ui.alert(t.title, pergunta, ui.ButtonSet.YES_NO) !== ui.Button.YES) return;
-    if (MailApp.getRemainingDailyQuota() < 1) { ui.alert(t.quota); return; }
-    var livre = withScriptLock_(function () {   // 2 cliques seguidos: só o 1º manda
-      if (props_().getProperty(key) !== antes) return false;
-      props_().setProperty(key, 'pending:' + new Date().toISOString());
-      return true;
-    });
-    if (!livre) { ui.alert(t.busy); return; }
-    var show = loadShow_(), dono = String(props_().getProperty(TRIGGERS_OWNER_PROP) || '') || Session.getEffectiveUser().getEmail();
-    try {   // a resposta volta para o dono do programa, mesmo se quem clicou for um coeditor
-      MailApp.sendEmail(email, mail.subject, mail.text, { htmlBody: mail.html, name: show.name, replyTo: dono });
-    } catch (err) {
-      if (antes) props_().setProperty(key, antes); else props_().deleteProperty(key);
-      throw err;
-    }
-    props_().setProperty(key, new Date().toISOString());
-    ui.alert(renderTemplate(t.done, { nome: nome }));
-  } catch (err) { ui.alert(renderTemplate(m.error, { motivo: maskEmails_(err.message) })); }
+function menuEnviarConfirmacao() { abrirComConvidado_(menuI18n_().menu.confirm.title, 'confirmar'); }
+
+/** Mensagem pronta do convidado (ou a tela de recusa). -> {tela} | {intake, nome, email, mail, key, antes}. */
+function confirmacaoDe_(args) {
+  var i18n = menuI18n_(), t = i18n.menu.confirm, who = quem_(args);
+  if (!who) return { tela: pedirRegistro_('confirmar') };
+  var row = intakeSheet_().getDataRange().getValues().slice(1).filter(function (r) { return r[0] === who.id; })[0];
+  if (!row) return { tela: telaResultado(renderTemplate(t.not_found, { id: who.id })) };
+  var intake = JSON.parse(row[2]), nome = args.nome || who.nome, email = intake.contacts && intake.contacts.email;
+  if (!admittedRow_(row, store_())) return { tela: telaResultado(t.held) };
+  if (guestPolicy_(email).optedOut) return { tela: telaResultado(renderTemplate(t.optout, { nome: nome })) };
+  var lang = selectLocale(BUNDLE, intake.locale || loadMeta_().locale, allowUnreviewed_());   // no idioma do formulário
+  var mail = buildGuestConfirmation(loadShow_(), intake, JSON.parse(row[4] || '[]'), lang);
+  var key = 'sent:' + who.id + ':email:confirmacao';
+  return { id: who.id, intake: intake, nome: nome, email: email, mail: mail, key: key, antes: props_().getProperty(key) };
 }
+
+PASSOS_.confirmar = function (args) {
+  var i18n = menuI18n_(), m = i18n.menu, t = m.confirm, d = confirmacaoDe_(args);
+  if (d.tela) return d.tela;
+  var pergunta = d.mail.itens.length
+    ? renderTemplate(t.ask, { nome: d.nome, n: d.mail.itens.length, itens: d.mail.itens.map(function (x) { return '• ' + x; }).join('\n') })
+    : renderTemplate(t.ask_none, { nome: d.nome });
+  if (d.antes) pergunta += '\n\n' + renderTemplate(t.again, { quando: formatScheduled(isoLocal(d.antes.replace(/^pending:/, ''), d.intake), i18n.locale) });
+  return telaPergunta(pergunta, { rotulo: t.send_button, passo: 'confirmar_enviar', args: { valor: d.id, nome: d.nome, antes: d.antes || '' }, espera: t.wait },
+    { rotulo: m.window.not_now });
+};
+
+PASSOS_.confirmar_enviar = function (args) {
+  var t = menuI18n_().menu.confirm, d = confirmacaoDe_(args);
+  if (d.tela) return d.tela;
+  var antes = args.antes || null;
+  if (MailApp.getRemainingDailyQuota() < 1) return telaResultado(t.quota);
+  var livre = withScriptLock_(function () {   // 2 cliques seguidos: só o 1º manda
+    if (props_().getProperty(d.key) !== antes) return false;
+    props_().setProperty(d.key, 'pending:' + new Date().toISOString());
+    return true;
+  });
+  if (!livre) return telaResultado(t.busy);
+  var show = loadShow_(), dono = String(props_().getProperty(TRIGGERS_OWNER_PROP) || '') || Session.getEffectiveUser().getEmail();
+  try {   // a resposta volta para o dono do programa, mesmo se quem clicou for um coeditor
+    MailApp.sendEmail(d.email, d.mail.subject, d.mail.text, { htmlBody: d.mail.html, name: show.name, replyTo: dono });
+  } catch (err) {
+    if (antes) props_().setProperty(d.key, antes); else props_().deleteProperty(d.key);
+    throw err;
+  }
+  props_().setProperty(d.key, new Date().toISOString());
+  return telaResultado(renderTemplate(t.done, { nome: d.nome }));
+};
 
 function menuRefazerAbaConvidados() {
-  var m = menuI18n_().menu, ui = SpreadsheetApp.getUi();
-  try { reconstruirAbaConvidados(); ui.alert(m.rebuild_done); }
-  catch (err) { ui.alert(renderTemplate(m.error, { motivo: err.message })); }
+  var m = menuI18n_().menu;
+  abrirDialogo_(m.rebuild_guests, telaEspera(m.window.working, 'refazer_convidados'));
 }
 
+PASSOS_.refazer_convidados = function () {
+  reconstruirAbaConvidados();
+  return telaResultado(menuI18n_().menu.rebuild_done);
+};
+
 /** LGPD: pede confirmação com o nome; só então chama esquecerTitular. Pendências manuais aparecem na tela. */
-function menuEsquecerConvidado() {
-  var i18n = menuI18n_(), m = i18n.menu, ui = SpreadsheetApp.getUi(), who = convidadoSelecionado_(i18n, ui);
-  if (!who) return;
-  if (ui.alert(m.forget_guest, renderTemplate(m.forget_confirm, { nome: who.nome }), ui.ButtonSet.YES_NO) !== ui.Button.YES) return;
-  try {
-    var rep = esquecerTitular(who.id), notas = [rep.calendar && rep.calendar.note, rep.form_responses && rep.form_responses.note];
-    var pend = (rep.pendencias_manuais || []).concat(notas.filter(Boolean));   // nada sobra escondido atrás do "Pronto"
-    ui.alert(renderTemplate(m.forget_done, { nome: who.nome }) +
-      (pend.length ? '\n\n' + m.forget_pending + '\n- ' + pend.join('\n- ') : ''));
-  } catch (err) { ui.alert(renderTemplate(m.error, { motivo: err.message })); }
-}
+function menuEsquecerConvidado() { abrirComConvidado_(menuI18n_().menu.forget_guest, 'esquecer'); }
+
+PASSOS_.esquecer = function (args) {
+  var m = menuI18n_().menu, who = quem_(args);
+  if (!who) return pedirRegistro_('esquecer');
+  var nome = args.nome || who.nome;
+  return telaPergunta(renderTemplate(m.forget_confirm, { nome: nome }),
+    { rotulo: renderTemplate(m.forget_yes, { nome: nome }), passo: 'esquecer_ja', args: { valor: who.id, nome: nome }, espera: m.window.working },
+    { rotulo: m.window.cancel });
+};
+
+PASSOS_.esquecer_ja = function (args) {
+  var m = menuI18n_().menu, rep = esquecerTitular(args.valor);
+  var notas = [rep.calendar && rep.calendar.note, rep.form_responses && rep.form_responses.note];
+  var pend = (rep.pendencias_manuais || []).concat(notas.filter(Boolean));   // nada sobra escondido atrás do "Pronto"
+  return telaResultado(renderTemplate(m.forget_done, { nome: args.nome || args.valor }) +
+    (pend.length ? '\n\n' + m.forget_pending + '\n' + pend.map(function (x) { return '• ' + x; }).join('\n') : ''));
+};
 
 /** Troca de computador sem suporte: chama licenca_liberar_dispositivos no servidor (2 vezes por mês). */
 function menuLiberarDispositivos() {
-  var m = menuI18n_().menu, t = m.devices, ui = SpreadsheetApp.getUi();
-  var key = (props_().getProperty(LICENCA_PROP) || '').trim();
-  if (!key) { ui.alert(t.no_key); return; }
-  if (ui.alert(t.title, t.confirm, ui.ButtonSet.YES_NO) !== ui.Button.YES) return;
-  var r = perguntarServidor_(key, 'licenca_liberar_dispositivos');
-  if (r.indisponivel) { ui.alert(renderTemplate(m.error, { motivo: r.indisponivel })); return; }
-  if (r.answer.error) { ui.alert(renderTemplate(m.error, { motivo: String(r.answer.message || r.answer.error) })); return; }
-  ui.alert(t.done);
+  var m = menuI18n_().menu, t = m.devices;
+  if (!(props_().getProperty(LICENCA_PROP) || '').trim()) { mostrar_(m.release_devices, t.no_key); return; }
+  abrirDialogo_(m.release_devices, telaPergunta(t.confirm, { rotulo: t.confirm_yes, passo: 'liberar', espera: m.window.working },
+    { rotulo: m.window.cancel }));
 }
+
+PASSOS_.liberar = function () {
+  var m = menuI18n_().menu, t = m.devices, key = (props_().getProperty(LICENCA_PROP) || '').trim();
+  var r = perguntarServidor_(key, 'licenca_liberar_dispositivos');
+  if (r.indisponivel) return telaResultado(renderTemplate(m.error, { motivo: r.indisponivel }));
+  if (r.answer.error) return telaResultado(renderTemplate(m.error, { motivo: String(r.answer.message || r.answer.error) }));
+  return telaResultado(t.done);
+};
 
 if (typeof module !== 'undefined') {
   module.exports = { menuItens: menuItens, convidadoDaLinha: convidadoDaLinha, chaveComFormato: chaveComFormato,
