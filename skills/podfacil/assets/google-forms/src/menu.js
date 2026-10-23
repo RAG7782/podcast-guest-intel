@@ -23,7 +23,7 @@ function menuItens(i18n) {
   return [[m.activate_license, 'menuAtivarLicenca'], [m.config.item, 'menuConfigurarPrograma'],
     [m.config.logo_item, 'menuEnviarLogo'], [m.invite, 'menuConvidar'],
     [m.check_install, 'menuVerificarInstalacao'], null,
-    [m.resend_notice, 'menuReenviarAviso'], [m.confirm_guest, 'menuEnviarConfirmacao'], [m.rebuild_guests, 'menuRefazerAbaConvidados'],
+    [m.resend_notice, 'menuReenviarAviso'], [m.confirm_guest, 'menuEnviarConfirmacao'], [m.rebuild_guests, 'menuRefazerAbaConvidados'], [m.import.item, 'menuImportar'],
     [m.forget_guest, 'menuEsquecerConvidado'], null, [m.release_devices, 'menuLiberarDispositivos']];
 }
 

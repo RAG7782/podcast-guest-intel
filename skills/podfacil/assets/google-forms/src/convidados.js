@@ -396,10 +396,10 @@ function convidadoOutrasLinhasComDoc_(sh, cc, docId, intakeId) {
 }
 
 /** Refaz a aba Convidados a partir da aba intake. Monta tudo antes de apagar: uma linha ruim não esvazia a aba. */
-function reconstruirAbaConvidados() {
+function reconstruirAbaConvidados(briefingDeFora) {
   var intake = intakeSheet_(), ss = intake.getParent(), meta = loadMeta_();
   var i18n = selectLocale(BUNDLE, meta.locale, allowUnreviewed_()), sh = convidadosSheet_(i18n), store = store_();
-  var cc = convidadosCols_(sh, i18n), briefing = {};
+  var cc = convidadosCols_(sh, i18n), briefing = Object.assign({}, briefingDeFora || {});   // de outra planilha (importar.js)
   var last = sh.getLastRow();
   for (var r = 2; r <= last; r++) {   // guarda o briefing de cada código: fórmula, ou o texto rico com o link
     var id = sh.getRange(r, cc.id).getValue(), cell = sh.getRange(r, cc.briefing);
