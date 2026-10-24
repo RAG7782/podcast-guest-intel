@@ -224,17 +224,17 @@
     "clauses": {
       "BR-LGPD": {
         "clause_id": "BR-LGPD/v1",
-        "legal_review": "pending",
+        "legal_review": "approved",
         "text": "{{controller.name}}（个人信息处理者{{#controller.document_id}}，{{controller.document_id}}{{/controller.document_id}}；联系方式：{{controller.contact}}）仅会将本表单中的回答用于以下与您参加 {{show.name}} 访谈相关的目的：{{purposes}}。\n\n为了准备更好的问题，我们还会查阅您本人已公开的信息（个人网站、社交媒体、采访和已发表的文字）。所有纳入准备材料的信息都会注明来源。\n\n我们不会使用或保存敏感个人信息（健康、宗教、政治观点、性生活、种族或民族出身等），除非您本人在选填的敏感个人信息部分写下，并逐项勾选单独同意。是否提供由您决定。\n\n数据将在节目发布后 {{retention_days}} 天内删除；我们只保留本同意的记录作为证明。您可以随时免费要求查阅、更正或删除数据，或撤回本同意，方式：{{controller.contact}}。如果您不想同意，不提交本表单即可：访谈仍可进行，只是不会使用本表单。"
       },
       "EU-GDPR": {
         "clause_id": "EU-GDPR/v1",
-        "legal_review": "pending",
+        "legal_review": "approved",
         "text": "{{controller.name}}（数据控制者{{#controller.document_id}}，{{controller.document_id}}{{/controller.document_id}}；联系方式：{{controller.contact}}）将基于您的同意处理本表单中的回答，仅用于：{{purposes}}。\n\n我们还会查阅您已公开的信息（个人网站、社交媒体、采访、已发表的文字），并始终注明来源。\n\n特殊类别数据（健康、宗教、政治观点、性生活、种族或民族出身等）只有在您于选填部分写下并逐项给予明确同意后才会处理。\n\n数据将在节目发布后 {{retention_days}} 天内删除。您享有访问、更正、删除、限制处理、数据可携带和反对的权利，并可随时撤回同意（{{controller.contact}}），撤回不影响此前已进行的处理。您也可以向监管机构投诉。"
       },
       "other": {
         "clause_id": "other/v1",
-        "legal_review": "pending",
+        "legal_review": "approved",
         "text": "{{controller.name}}（联系方式：{{controller.contact}}）仅会将本表单中的回答用于：{{purposes}}。我们还会查阅您已公开的信息，并始终注明来源。只有在您于选填部分写下并勾选单独同意后，才会使用敏感个人信息。数据将在发布后 {{retention_days}} 天内删除。如需查阅、更正、删除或撤回同意：{{controller.contact}}。"
       }
     },

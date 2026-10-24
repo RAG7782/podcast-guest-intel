@@ -332,11 +332,10 @@ gatilho diário**, que varre a aba `intake`, e não um gatilho por convidado (o 
 - Locales `es` e `zh` foram **liberados em 2026-10-24** com tradução automática, sem revisão de falante nativo
   (decisão do dono). O bloqueio `needs_native_review: true` continua valendo para um locale novo. A cláusula
   `CN-PIPL` não existe: show sob o PIPL é recusado até um advogado redigir a cláusula.
-- As cláusulas (`legal_review: pendente`) são um **rascunho técnico, não um parecer**. Precisam de
-  revisão de advogado antes do uso comercial. Enquanto a cláusula não tiver `legal_review: aprovado`
-  (ou `approved`), o formulário mostra ao convidado, na descrição e no topo da cláusula, o aviso
-  `consent.draft_notice` ("RASCUNHO (v0) em revisão jurídica"). Mitigação R-07, aceita pelo dono em
-  2026-10-10 só para o beta; o aviso some sozinho quando o advogado aprova e a flag muda.
+- As cláusulas BR-LGPD, EU-GDPR e `other` foram **revisadas e aprovadas pelo dono (advogado) em 2026-10-24**,
+  nos quatro idiomas (`legal_review: aprovado`/`approved`). Cláusula nova ou alterada volta para `pendente`
+  e o formulário mostra de novo ao convidado o aviso `consent.draft_notice` ("RASCUNHO (v0) em revisão
+  jurídica") até nova aprovação (mitigação R-07).
 
 ---
 

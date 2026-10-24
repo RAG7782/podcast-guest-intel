@@ -89,17 +89,17 @@
     "clauses": {
       "BR-LGPD": {
         "clause_id": "BR-LGPD/v1",
-        "legal_review": "pendente",
+        "legal_review": "aprovado",
         "text": "{{controller.name}} (controlador dos dados{{#controller.document_id}}, {{controller.document_id}}{{/controller.document_id}}; contato: {{controller.contact}}) vai usar as respostas deste formulário somente para as finalidades abaixo, ligadas à sua entrevista no {{show.name}}: {{purposes}}.\n\nPara preparar perguntas melhores, também vamos consultar informações que você mesmo(a) tornou públicas (site, redes, entrevistas e textos publicados). Tudo o que entrar no material de preparo terá a fonte indicada.\n\nNão vamos usar nem guardar dados sensíveis (saúde, religião, opinião política, vida sexual, origem racial ou étnica, entre outros), a menos que você mesmo(a) os escreva na seção opcional de dados sensíveis e marque o aceite específico de cada um. A decisão é sua.\n\nOs dados são apagados até {{retention_days}} dias após a publicação do episódio; guardamos só o registro deste consentimento, como prova. A qualquer momento e sem custo você pode pedir acesso, correção ou exclusão, ou retirar este consentimento, {{controller.contact}}. Se não quiser consentir, basta não enviar o formulário: a entrevista ainda pode acontecer, sem o uso dele."
       },
       "EU-GDPR": {
         "clause_id": "EU-GDPR/v1",
-        "legal_review": "pendente",
+        "legal_review": "aprovado",
         "text": "{{controller.name}} (controlador dos dados{{#controller.document_id}}, {{controller.document_id}}{{/controller.document_id}}; contato: {{controller.contact}}) vai tratar as respostas deste formulário com base no seu consentimento, somente para: {{purposes}}.\n\nTambém vamos consultar informações que você tornou publicamente acessíveis (site, redes, entrevistas, textos publicados), sempre com a fonte indicada.\n\nDados de categorias especiais (saúde, religião, opinião política, vida sexual, origem racial ou étnica, entre outros) só serão tratados se você os escrever na seção opcional e der o consentimento explícito de cada um.\n\nOs dados são apagados até {{retention_days}} dias após a publicação do episódio. Você tem direito de acesso, retificação, apagamento, limitação, portabilidade e oposição, e pode retirar o consentimento a qualquer momento ({{controller.contact}}), sem afetar o tratamento já feito. Você também pode reclamar a uma autoridade de controle."
       },
       "other": {
         "clause_id": "other/v1",
-        "legal_review": "pendente",
+        "legal_review": "aprovado",
         "text": "{{controller.name}} (contato: {{controller.contact}}) vai usar as respostas deste formulário somente para: {{purposes}}. Também vamos consultar informações que você tornou públicas, sempre com fonte. Dados sensíveis só entram se você os escrever na seção opcional e marcar o aceite específico. Os dados são apagados até {{retention_days}} dias após a publicação. Para acessar, corrigir, apagar ou retirar o consentimento: {{controller.contact}}."
       }
     },

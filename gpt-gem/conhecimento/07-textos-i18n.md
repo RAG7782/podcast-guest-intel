@@ -92,17 +92,17 @@
     "clauses": {
       "BR-LGPD": {
         "clause_id": "BR-LGPD/v1",
-        "legal_review": "pending",
+        "legal_review": "approved",
         "text": "{{controller.name}} (data controller{{#controller.document_id}}, {{controller.document_id}}{{/controller.document_id}}; contact: {{controller.contact}}) will use the answers to this form only for the purposes below, related to your interview on {{show.name}}: {{purposes}}.\n\nTo prepare better questions, we will also look at information you have made public yourself (website, social media, interviews and published texts). Everything that goes into the preparation material will cite its source.\n\nWe will not use or keep sensitive data (health, religion, political opinion, sex life, racial or ethnic origin, among others) unless you write it yourself in the optional sensitive-data section and tick the specific consent for each item. It is your decision.\n\nThe data is deleted within {{retention_days}} days after the episode is published; we keep only the record of this consent, as proof. At any time and free of charge you may request access, correction or deletion, or withdraw this consent, {{controller.contact}}. If you do not want to consent, simply do not submit the form: the interview can still happen without it."
       },
       "EU-GDPR": {
         "clause_id": "EU-GDPR/v1",
-        "legal_review": "pending",
+        "legal_review": "approved",
         "text": "{{controller.name}} (data controller{{#controller.document_id}}, {{controller.document_id}}{{/controller.document_id}}; contact: {{controller.contact}}) will process the answers to this form based on your consent, only for: {{purposes}}.\n\nWe will also look at information you have made publicly accessible (website, social media, interviews, published texts), always citing the source.\n\nSpecial categories of data (health, religion, political opinion, sex life, racial or ethnic origin, among others) are processed only if you write them in the optional section and give explicit consent for each item.\n\nThe data is deleted within {{retention_days}} days after the episode is published. You have the right of access, rectification, erasure, restriction, portability and objection, and you may withdraw consent at any time ({{controller.contact}}) without affecting processing already carried out. You may also lodge a complaint with a supervisory authority."
       },
       "other": {
         "clause_id": "other/v1",
-        "legal_review": "pending",
+        "legal_review": "approved",
         "text": "{{controller.name}} (contact: {{controller.contact}}) will use the answers to this form only for: {{purposes}}. We will also look at information you have made public, always citing the source. Sensitive data is used only if you write it in the optional section and tick the specific consent. The data is deleted within {{retention_days}} days after publication. To access, correct, delete or withdraw consent: {{controller.contact}}."
       }
     },
@@ -845,17 +845,17 @@
     "clauses": {
       "BR-LGPD": {
         "clause_id": "BR-LGPD/v1",
-        "legal_review": "pending",
+        "legal_review": "approved",
         "text": "{{controller.name}} (responsable del tratamiento de los datos{{#controller.document_id}}, {{controller.document_id}}{{/controller.document_id}}; contacto: {{controller.contact}}) usará las respuestas de este formulario únicamente para las finalidades siguientes, relacionadas con su entrevista en {{show.name}}: {{purposes}}.\n\nPara preparar mejores preguntas, también consultaremos información que usted mismo(a) hizo pública (sitio web, redes sociales, entrevistas y textos publicados). Todo lo que se incluya en el material de preparación indicará su fuente.\n\nNo usaremos ni conservaremos datos sensibles (salud, religión, opinión política, vida sexual, origen racial o étnico, entre otros), a menos que usted mismo(a) los escriba en la sección opcional de datos sensibles y marque el consentimiento específico de cada uno. La decisión es suya.\n\nLos datos se eliminan en un plazo de hasta {{retention_days}} días después de la publicación del episodio; conservamos solo el registro de este consentimiento, como prueba. En cualquier momento y sin costo, usted puede solicitar el acceso, la corrección o la eliminación de sus datos, o revocar este consentimiento, {{controller.contact}}. Si no desea dar su consentimiento, basta con no enviar el formulario: la entrevista puede realizarse igualmente, sin usarlo."
       },
       "EU-GDPR": {
         "clause_id": "EU-GDPR/v1",
-        "legal_review": "pending",
+        "legal_review": "approved",
         "text": "{{controller.name}} (responsable del tratamiento{{#controller.document_id}}, {{controller.document_id}}{{/controller.document_id}}; contacto: {{controller.contact}}) tratará las respuestas de este formulario sobre la base de su consentimiento, únicamente para: {{purposes}}.\n\nTambién consultaremos información que usted haya hecho accesible públicamente (sitio web, redes sociales, entrevistas, textos publicados), siempre indicando la fuente.\n\nLas categorías especiales de datos (salud, religión, opinión política, vida sexual, origen racial o étnico, entre otras) solo se tratarán si usted las escribe en la sección opcional y da su consentimiento explícito para cada una.\n\nLos datos se suprimen en un plazo de hasta {{retention_days}} días después de la publicación del episodio. Usted tiene derecho de acceso, rectificación, supresión, limitación del tratamiento, portabilidad y oposición, y puede retirar su consentimiento en cualquier momento ({{controller.contact}}), sin que ello afecte a la licitud del tratamiento ya realizado. También puede presentar una reclamación ante una autoridad de control."
       },
       "other": {
         "clause_id": "other/v1",
-        "legal_review": "pending",
+        "legal_review": "approved",
         "text": "{{controller.name}} (contacto: {{controller.contact}}) usará las respuestas de este formulario únicamente para: {{purposes}}. También consultaremos información que usted haya hecho pública, siempre indicando la fuente. Los datos sensibles solo se usan si usted los escribe en la sección opcional y marca el consentimiento específico. Los datos se eliminan en un plazo de hasta {{retention_days}} días después de la publicación. Para acceder, corregir, eliminar o revocar el consentimiento: {{controller.contact}}."
       }
     },
@@ -1464,17 +1464,17 @@
     "clauses": {
       "BR-LGPD": {
         "clause_id": "BR-LGPD/v1",
-        "legal_review": "pendente",
+        "legal_review": "aprovado",
         "text": "{{controller.name}} (controlador dos dados{{#controller.document_id}}, {{controller.document_id}}{{/controller.document_id}}; contato: {{controller.contact}}) vai usar as respostas deste formulário somente para as finalidades abaixo, ligadas à sua entrevista no {{show.name}}: {{purposes}}.\n\nPara preparar perguntas melhores, também vamos consultar informações que você mesmo(a) tornou públicas (site, redes, entrevistas e textos publicados). Tudo o que entrar no material de preparo terá a fonte indicada.\n\nNão vamos usar nem guardar dados sensíveis (saúde, religião, opinião política, vida sexual, origem racial ou étnica, entre outros), a menos que você mesmo(a) os escreva na seção opcional de dados sensíveis e marque o aceite específico de cada um. A decisão é sua.\n\nOs dados são apagados até {{retention_days}} dias após a publicação do episódio; guardamos só o registro deste consentimento, como prova. A qualquer momento e sem custo você pode pedir acesso, correção ou exclusão, ou retirar este consentimento, {{controller.contact}}. Se não quiser consentir, basta não enviar o formulário: a entrevista ainda pode acontecer, sem o uso dele."
       },
       "EU-GDPR": {
         "clause_id": "EU-GDPR/v1",
-        "legal_review": "pendente",
+        "legal_review": "aprovado",
         "text": "{{controller.name}} (controlador dos dados{{#controller.document_id}}, {{controller.document_id}}{{/controller.document_id}}; contato: {{controller.contact}}) vai tratar as respostas deste formulário com base no seu consentimento, somente para: {{purposes}}.\n\nTambém vamos consultar informações que você tornou publicamente acessíveis (site, redes, entrevistas, textos publicados), sempre com a fonte indicada.\n\nDados de categorias especiais (saúde, religião, opinião política, vida sexual, origem racial ou étnica, entre outros) só serão tratados se você os escrever na seção opcional e der o consentimento explícito de cada um.\n\nOs dados são apagados até {{retention_days}} dias após a publicação do episódio. Você tem direito de acesso, retificação, apagamento, limitação, portabilidade e oposição, e pode retirar o consentimento a qualquer momento ({{controller.contact}}), sem afetar o tratamento já feito. Você também pode reclamar a uma autoridade de controle."
       },
       "other": {
         "clause_id": "other/v1",
-        "legal_review": "pendente",
+        "legal_review": "aprovado",
         "text": "{{controller.name}} (contato: {{controller.contact}}) vai usar as respostas deste formulário somente para: {{purposes}}. Também vamos consultar informações que você tornou públicas, sempre com fonte. Dados sensíveis só entram se você os escrever na seção opcional e marcar o aceite específico. Os dados são apagados até {{retention_days}} dias após a publicação. Para acessar, corrigir, apagar ou retirar o consentimento: {{controller.contact}}."
       }
     },
@@ -2217,17 +2217,17 @@
     "clauses": {
       "BR-LGPD": {
         "clause_id": "BR-LGPD/v1",
-        "legal_review": "pending",
+        "legal_review": "approved",
         "text": "{{controller.name}}（个人信息处理者{{#controller.document_id}}，{{controller.document_id}}{{/controller.document_id}}；联系方式：{{controller.contact}}）仅会将本表单中的回答用于以下与您参加 {{show.name}} 访谈相关的目的：{{purposes}}。\n\n为了准备更好的问题，我们还会查阅您本人已公开的信息（个人网站、社交媒体、采访和已发表的文字）。所有纳入准备材料的信息都会注明来源。\n\n我们不会使用或保存敏感个人信息（健康、宗教、政治观点、性生活、种族或民族出身等），除非您本人在选填的敏感个人信息部分写下，并逐项勾选单独同意。是否提供由您决定。\n\n数据将在节目发布后 {{retention_days}} 天内删除；我们只保留本同意的记录作为证明。您可以随时免费要求查阅、更正或删除数据，或撤回本同意，方式：{{controller.contact}}。如果您不想同意，不提交本表单即可：访谈仍可进行，只是不会使用本表单。"
       },
       "EU-GDPR": {
         "clause_id": "EU-GDPR/v1",
-        "legal_review": "pending",
+        "legal_review": "approved",
         "text": "{{controller.name}}（数据控制者{{#controller.document_id}}，{{controller.document_id}}{{/controller.document_id}}；联系方式：{{controller.contact}}）将基于您的同意处理本表单中的回答，仅用于：{{purposes}}。\n\n我们还会查阅您已公开的信息（个人网站、社交媒体、采访、已发表的文字），并始终注明来源。\n\n特殊类别数据（健康、宗教、政治观点、性生活、种族或民族出身等）只有在您于选填部分写下并逐项给予明确同意后才会处理。\n\n数据将在节目发布后 {{retention_days}} 天内删除。您享有访问、更正、删除、限制处理、数据可携带和反对的权利，并可随时撤回同意（{{controller.contact}}），撤回不影响此前已进行的处理。您也可以向监管机构投诉。"
       },
       "other": {
         "clause_id": "other/v1",
-        "legal_review": "pending",
+        "legal_review": "approved",
         "text": "{{controller.name}}（联系方式：{{controller.contact}}）仅会将本表单中的回答用于：{{purposes}}。我们还会查阅您已公开的信息，并始终注明来源。只有在您于选填部分写下并勾选单独同意后，才会使用敏感个人信息。数据将在发布后 {{retention_days}} 天内删除。如需查阅、更正、删除或撤回同意：{{controller.contact}}。"
       }
     },

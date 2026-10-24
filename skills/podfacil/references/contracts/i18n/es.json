@@ -224,17 +224,17 @@
     "clauses": {
       "BR-LGPD": {
         "clause_id": "BR-LGPD/v1",
-        "legal_review": "pending",
+        "legal_review": "approved",
         "text": "{{controller.name}} (responsable del tratamiento de los datos{{#controller.document_id}}, {{controller.document_id}}{{/controller.document_id}}; contacto: {{controller.contact}}) usará las respuestas de este formulario únicamente para las finalidades siguientes, relacionadas con su entrevista en {{show.name}}: {{purposes}}.\n\nPara preparar mejores preguntas, también consultaremos información que usted mismo(a) hizo pública (sitio web, redes sociales, entrevistas y textos publicados). Todo lo que se incluya en el material de preparación indicará su fuente.\n\nNo usaremos ni conservaremos datos sensibles (salud, religión, opinión política, vida sexual, origen racial o étnico, entre otros), a menos que usted mismo(a) los escriba en la sección opcional de datos sensibles y marque el consentimiento específico de cada uno. La decisión es suya.\n\nLos datos se eliminan en un plazo de hasta {{retention_days}} días después de la publicación del episodio; conservamos solo el registro de este consentimiento, como prueba. En cualquier momento y sin costo, usted puede solicitar el acceso, la corrección o la eliminación de sus datos, o revocar este consentimiento, {{controller.contact}}. Si no desea dar su consentimiento, basta con no enviar el formulario: la entrevista puede realizarse igualmente, sin usarlo."
       },
       "EU-GDPR": {
         "clause_id": "EU-GDPR/v1",
-        "legal_review": "pending",
+        "legal_review": "approved",
         "text": "{{controller.name}} (responsable del tratamiento{{#controller.document_id}}, {{controller.document_id}}{{/controller.document_id}}; contacto: {{controller.contact}}) tratará las respuestas de este formulario sobre la base de su consentimiento, únicamente para: {{purposes}}.\n\nTambién consultaremos información que usted haya hecho accesible públicamente (sitio web, redes sociales, entrevistas, textos publicados), siempre indicando la fuente.\n\nLas categorías especiales de datos (salud, religión, opinión política, vida sexual, origen racial o étnico, entre otras) solo se tratarán si usted las escribe en la sección opcional y da su consentimiento explícito para cada una.\n\nLos datos se suprimen en un plazo de hasta {{retention_days}} días después de la publicación del episodio. Usted tiene derecho de acceso, rectificación, supresión, limitación del tratamiento, portabilidad y oposición, y puede retirar su consentimiento en cualquier momento ({{controller.contact}}), sin que ello afecte a la licitud del tratamiento ya realizado. También puede presentar una reclamación ante una autoridad de control."
       },
       "other": {
         "clause_id": "other/v1",
-        "legal_review": "pending",
+        "legal_review": "approved",
         "text": "{{controller.name}} (contacto: {{controller.contact}}) usará las respuestas de este formulario únicamente para: {{purposes}}. También consultaremos información que usted haya hecho pública, siempre indicando la fuente. Los datos sensibles solo se usan si usted los escribe en la sección opcional y marca el consentimiento específico. Los datos se eliminan en un plazo de hasta {{retention_days}} días después de la publicación. Para acceder, corregir, eliminar o revocar el consentimiento: {{controller.contact}}."
       }
     },
