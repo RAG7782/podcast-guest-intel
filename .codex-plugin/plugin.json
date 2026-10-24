@@ -1,6 +1,6 @@
 {
   "name": "podfacil",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "Prepara episódios de podcast com convidado: convite, dossiê com fontes, pauta e roteiro.",
   "skills": "./skills/",
   "interface": {

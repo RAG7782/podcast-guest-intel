@@ -44,7 +44,7 @@ Convidado e automações por canal. Dono único: @guest-coordinator. Fica entre 
 - Variante `essencial` ou `completo` (mesmo contrato, só `form_variant` muda; campos da essencial
   em `x-form-variants` do schema).
 - `locale`/`jurisdiction`: `references/contracts/i18n/<locale>.json` → rótulos e cláusula
-  (`BR-LGPD`, `EU-GDPR`, `other`; `CN-PIPL` só esqueleto em `zh`).
+  (`BR-LGPD`, `EU-GDPR`, `other`; `CN-PIPL` sem cláusula: recusado até redação por advogado).
 
 ## Saida
 

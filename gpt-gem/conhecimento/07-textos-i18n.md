@@ -621,377 +621,378 @@
 ```json
 {
   "locale": "es",
-  "needs_native_review": true,
-  "text_version": "es/v0-skeleton",
+  "needs_native_review": false,
+  "_release_note": "Liberado pelo dono em 2026-10-24 com tradução automática, sem revisão de falante nativo.",
+  "text_version": "es/v1-auto",
   "form": {
     "validation": {
-      "phone": "Escribe el número con código de país y de área, ej.: +34 612 345 678."
+      "phone": "Escriba el número con código de país y de área, ej.: +34 612 345 678."
     },
-    "title": "[TODO-es] Guest of {{show.name}}",
-    "description_essencial": "[TODO-es] Takes about 2 minutes. It helps us prepare a good conversation for you, with no surprises.",
-    "description_completo": "[TODO-es] Takes about 8 minutes. Almost everything is optional: skip whatever you prefer.",
-    "confirmation": "[TODO-es] Thank you! If you allowed email, the guest kit is on its way. To send files (PDFs, slides, photos), just reply to that email with attachments.",
+    "title": "Invitado(a) de {{show.name}}",
+    "description_essencial": "Toma unos 2 minutos. Así preparamos una buena conversación para usted, sin sorpresas.",
+    "description_completo": "Toma unos 8 minutos. Casi todo es opcional: omita lo que prefiera no responder.",
+    "confirmation": "¡Gracias! Si autorizó el correo electrónico, el kit del invitado llegará en unos instantes. Para enviar archivos (PDF, diapositivas, fotos), basta con responder a ese correo con los adjuntos.",
     "sections": {
-      "about": "[TODO-es] About you",
-      "content": "[TODO-es] The conversation",
-      "logistics": "[TODO-es] Recording",
-      "channels": "[TODO-es] How we reach you",
-      "consent": "[TODO-es] Your data and this interview",
-      "sensitive": "[TODO-es] Sensitive data (optional)",
-      "localization": "[TODO-es] Other languages (optional)"
+      "about": "Sobre usted",
+      "content": "La conversación",
+      "logistics": "Grabación",
+      "channels": "Cómo nos comunicamos con usted",
+      "consent": "Sus datos y esta entrevista",
+      "sensitive": "Datos sensibles (opcional)",
+      "localization": "Otros idiomas (opcional)"
     },
     "fields": {
       "guest.full_name": {
-        "title": "[TODO-es] Full name",
+        "title": "Nombre completo",
         "help": ""
       },
       "guest.preferred_name": {
-        "title": "[TODO-es] What should we call you on air?",
-        "help": "[TODO-es] E.g. Ana, Dr. Ana, Professor Silva."
+        "title": "¿Cómo prefiere que le llamemos al aire?",
+        "help": "Ej.: Ana, Dra. Ana, Profesor Silva."
       },
       "guest.name_pronunciation": {
-        "title": "[TODO-es] How is your name pronounced?",
-        "help": "[TODO-es] Only if we might get it wrong."
+        "title": "¿Cómo se pronuncia su nombre?",
+        "help": "Solo si hay riesgo de que lo pronunciemos mal."
       },
       "guest.pronouns": {
-        "title": "[TODO-es] Pronouns",
-        "help": "[TODO-es] Optional. E.g. she/her."
+        "title": "Pronombres",
+        "help": "Opcional. Ej.: ella."
       },
       "guest.role_title": {
-        "title": "[TODO-es] Role or occupation",
+        "title": "Cargo u ocupación",
         "help": ""
       },
       "guest.photo_url": {
-        "title": "[TODO-es] Link to a photo of you for promotion",
-        "help": "[TODO-es] Optional. A public link (website, LinkedIn, shared Drive)."
+        "title": "Enlace a una foto suya para la difusión",
+        "help": "Opcional. Un enlace público (sitio web, LinkedIn, Drive compartido)."
       },
       "bio.short": {
-        "title": "[TODO-es] Short bio, up to 2 lines",
-        "help": "[TODO-es] This is what we read in the intro."
+        "title": "Minibiografía de hasta 2 líneas",
+        "help": "Es lo que leeremos en la presentación."
       },
       "bio.long": {
-        "title": "[TODO-es] Full bio",
-        "help": "[TODO-es] Optional."
+        "title": "Biografía completa",
+        "help": "Opcional."
       },
       "links": {
-        "title": "[TODO-es] Your main links",
-        "help": "[TODO-es] Website, profiles, portfolio. One per line. If you have none, leave it blank."
+        "title": "Sus enlaces principales",
+        "help": "Sitio web, perfiles, portafolio. Uno por línea. Si no tiene, déjelo en blanco."
       },
       "social_handles": {
-        "title": "[TODO-es] Handles to tag when we promote",
-        "help": "[TODO-es] One per line, as network: @user (e.g. instagram: @ana)."
+        "title": "Usuarios (@) para etiquetarle en la difusión",
+        "help": "Uno por línea, con el formato red: @usuario (ej.: instagram: @ana)."
       },
       "previous_interviews": {
-        "title": "[TODO-es] Interviews you have given",
-        "help": "[TODO-es] Links, one per line. Helps us avoid repeating questions."
+        "title": "Entrevistas que ya ha dado",
+        "help": "Enlaces, uno por línea. Nos ayuda a no repetir preguntas."
       },
       "key_ideas": {
-        "title": "[TODO-es] Up to 3 ideas you want the audience to take away",
-        "help": "[TODO-es] One per line."
+        "title": "Hasta 3 ideas que quiere dejarle al público",
+        "help": "Una por línea."
       },
       "stories_to_tell": {
-        "title": "[TODO-es] Stories you like to tell",
-        "help": "[TODO-es] One per line."
+        "title": "Historias que le gusta contar",
+        "help": "Una por línea."
       },
       "controversies.accepts": {
-        "title": "[TODO-es] Controversial topics you are happy to discuss",
-        "help": "[TODO-es] One per line."
+        "title": "Temas polémicos que acepta discutir",
+        "help": "Uno por línea."
       },
       "controversies.declines": {
-        "title": "[TODO-es] Controversial topics you would rather avoid",
-        "help": "[TODO-es] One per line."
+        "title": "Temas polémicos que prefiere evitar",
+        "help": "Uno por línea."
       },
       "off_limits_topics": {
-        "title": "[TODO-es] Off-limits topics",
-        "help": "[TODO-es] We will not touch these. One per line."
+        "title": "Temas prohibidos",
+        "help": "No tocaremos estos temas. Uno por línea."
       },
       "wants_to_promote": {
-        "title": "[TODO-es] Anything you want to promote?",
-        "help": "[TODO-es] Book, course, event, project. One per line."
+        "title": "¿Hay algo que quiera difundir?",
+        "help": "Libro, curso, evento, proyecto. Uno por línea."
       },
       "dream_questions": {
-        "title": "[TODO-es] Questions you would love to be asked",
-        "help": "[TODO-es] One per line."
+        "title": "Preguntas que le encantaría recibir",
+        "help": "Una por línea."
       },
       "conflicts_of_interest.details": {
-        "title": "[TODO-es] Conflicts of interest or sponsorships related to the topics",
-        "help": "[TODO-es] Leave blank if none."
+        "title": "Conflictos de interés o patrocinios relacionados con los temas",
+        "help": "Déjelo en blanco si no hay."
       },
       "companion.name": {
-        "title": "[TODO-es] Bringing someone along? Who?",
-        "help": "[TODO-es] Leave blank if coming alone."
+        "title": "¿Vendrá con un acompañante? ¿Quién?",
+        "help": "Déjelo en blanco si viene solo(a)."
       },
       "materials": {
-        "title": "[TODO-es] Supporting materials (links)",
-        "help": "[TODO-es] Talks, books, articles, videos. One link per line. Files: reply to the kit email with attachments."
+        "title": "Materiales de apoyo (enlaces)",
+        "help": "Charlas, libros, artículos, videos. Un enlace por línea. Archivos: responda al correo del kit con los adjuntos."
       },
       "recording_mode": {
-        "title": "[TODO-es] How will we record?",
+        "title": "¿Cómo será la grabación?",
         "help": ""
       },
       "scheduled_at": {
-        "title": "[TODO-es] Date and time already agreed with us",
-        "help": "[TODO-es] Only if already agreed. Used for the calendar invite and the day-before reminder."
+        "title": "Fecha y hora ya acordadas con nosotros",
+        "help": "Solo si ya lo acordó. Sirve para la invitación en la agenda y el recordatorio del día anterior."
       },
       "wants_prepublication_review": {
-        "title": "[TODO-es] Would you like to see the episode before we publish?",
+        "title": "¿Quiere ver el episodio antes de que lo publiquemos?",
         "help": ""
       },
       "preferred_channel": {
-        "title": "[TODO-es] Preferred channel to reach you",
+        "title": "Canal preferido para comunicarnos con usted",
         "help": ""
       },
       "contacts.email": {
-        "title": "[TODO-es] Your email",
+        "title": "Su correo electrónico",
         "help": ""
       },
       "invite.token": {
         "title": "Código de invitación",
-        "help": "Viene completado por el enlace de la invitación que recibiste por correo. No lo cambies. Si está vacío, envía igual: el programa lo confirmará contigo antes de enviar nada."
+        "help": "Viene completado por el enlace de la invitación que recibió por correo. No lo cambie. Si está vacío, envíe el formulario igualmente: el programa lo confirmará con usted antes de enviar nada."
       },
       "contacts.whatsapp": {
-        "title": "[TODO-es] Your WhatsApp",
-        "help": "[TODO-es] Optional. With country code, e.g. +44 7700 900123."
+        "title": "Su WhatsApp",
+        "help": "Opcional. Con código de país y de área, ej.: +34 612 345 678."
       },
       "automation_consents": {
-        "title": "[TODO-es] May we use these channels to send you the kit and reminders?",
-        "help": "[TODO-es] Tick only what you want. Nothing ticked = nothing sent through that channel."
+        "title": "¿Podemos usar estos canales para enviarle el kit y los recordatorios?",
+        "help": "Marque solo lo que quiera. Nada marcado = nada enviado por ese canal."
       },
       "image_voice": {
-        "title": "[TODO-es] Image and voice",
+        "title": "Imagen y voz",
         "help": ""
       },
       "consent.general": {
-        "title": "[TODO-es] Consent",
+        "title": "Consentimiento",
         "help": ""
       },
       "consent.public_research": {
-        "title": "[TODO-es] Research in public sources",
+        "title": "Investigación en fuentes públicas",
         "help": ""
       },
       "consent.divulgacao": {
-        "title": "[TODO-es] Promotion (optional)",
+        "title": "Difusión (opcional)",
         "help": ""
       },
       "accessibility.needs": {
-        "title": "[TODO-es] SENSITIVE DATA — Do you need any accessibility accommodation?",
-        "help": "[TODO-es] Optional. It may reveal health information: it is only used if you tick the consent right below."
+        "title": "DATO SENSIBLE — ¿Necesita alguna adaptación de accesibilidad?",
+        "help": "Opcional. Puede revelar información de salud: solo se usará si marca el consentimiento justo debajo."
       },
       "accessibility.accept": {
-        "title": "[TODO-es] SENSITIVE DATA — Specific consent (accessibility)",
+        "title": "DATO SENSIBLE — Consentimiento específico (accesibilidad)",
         "help": ""
       },
       "sensitive.category": {
-        "title": "[TODO-es] SENSITIVE DATA — What is it about?",
-        "help": "[TODO-es] Optional."
+        "title": "DATO SENSIBLE — ¿Sobre qué es?",
+        "help": "Opcional."
       },
       "sensitive.value": {
-        "title": "[TODO-es] SENSITIVE DATA — What you want us to know",
-        "help": "[TODO-es] Optional. Write only what you want in the preparation."
+        "title": "DATO SENSIBLE — Lo que quiere que sepamos",
+        "help": "Opcional. Escriba solo lo que quiera que se use en la preparación."
       },
       "sensitive.accept": {
-        "title": "[TODO-es] SENSITIVE DATA — Specific consent",
+        "title": "DATO SENSIBLE — Consentimiento específico",
         "help": ""
       },
       "localization.translation_text": {
-        "title": "[TODO-es] Translated subtitles and texts",
+        "title": "Subtítulos y textos traducidos",
         "help": ""
       },
       "localization.dub_generic_voice": {
-        "title": "[TODO-es] Dubbing with a generic synthetic voice",
+        "title": "Doblaje con voz sintética genérica",
         "help": ""
       },
       "localization.dub_voice_replica": {
-        "title": "[TODO-es] SENSITIVE DATA — Artificial replica of your voice",
+        "title": "DATO SENSIBLE — Réplica artificial de su voz",
         "help": ""
       }
     },
     "choices": {
       "recording_mode": {
-        "presencial": "[TODO-es] In person, at the studio",
-        "remoto": "[TODO-es] Remote, online"
+        "presencial": "Presencial, en el estudio",
+        "remoto": "Remota, en línea"
       },
       "yes_no": {
-        "yes": "[TODO-es] Yes",
-        "no": "[TODO-es] No"
+        "yes": "Sí",
+        "no": "No"
       },
       "preferred_channel": {
-        "email": "[TODO-es] Email",
-        "whatsapp": "[TODO-es] WhatsApp",
-        "phone": "[TODO-es] Phone",
-        "other": "[TODO-es] Other"
+        "email": "Correo electrónico",
+        "whatsapp": "WhatsApp",
+        "phone": "Teléfono",
+        "other": "Otro"
       },
       "channels": {
-        "email": "[TODO-es] Email: guest kit and a day-before reminder",
-        "whatsapp": "[TODO-es] WhatsApp: kit and a day-before reminder",
-        "calendar": "[TODO-es] Calendar: invite with date and address"
+        "email": "Correo electrónico: kit del invitado y recordatorio el día anterior",
+        "whatsapp": "WhatsApp: kit y recordatorio el día anterior",
+        "calendar": "Agenda: invitación con fecha y dirección"
       },
       "sensitive_category": {
-        "origem_racial_etnica": "[TODO-es] Racial or ethnic origin",
-        "conviccao_religiosa": "[TODO-es] Religious belief",
-        "opiniao_politica": "[TODO-es] Political opinion",
-        "filiacao_sindical_religiosa_filosofica_politica": "[TODO-es] Trade union or religious, philosophical or political membership",
-        "saude": "[TODO-es] Health",
-        "vida_sexual": "[TODO-es] Sex life",
-        "genetico": "[TODO-es] Genetic data",
-        "biometrico": "[TODO-es] Biometric data"
+        "origem_racial_etnica": "Origen racial o étnico",
+        "conviccao_religiosa": "Convicción religiosa",
+        "opiniao_politica": "Opinión política",
+        "filiacao_sindical_religiosa_filosofica_politica": "Afiliación a un sindicato o a una organización religiosa, filosófica o política",
+        "saude": "Salud",
+        "vida_sexual": "Vida sexual",
+        "genetico": "Dato genético",
+        "biometrico": "Dato biométrico"
       }
     }
   },
   "consent": {
-    "contact_email": "[TODO-es] by email at {{email}}",
-    "contact_reply_to_email": "[TODO-es] by replying to any email from this show (including the invitation or the guest kit)",
+    "contact_email": "por correo electrónico a {{email}}",
+    "contact_reply_to_email": "respondiendo a cualquier correo de este programa (incluidos la invitación o el kit del invitado)",
     "clauses": {
       "BR-LGPD": {
         "clause_id": "BR-LGPD/v1",
         "legal_review": "pending",
-        "text": "[TODO-es] {{controller.name}} (data controller{{#controller.document_id}}, {{controller.document_id}}{{/controller.document_id}}; contact: {{controller.contact}}) will use the answers to this form only for the purposes below, related to your interview on {{show.name}}: {{purposes}}.\n\nTo prepare better questions, we will also look at information you have made public yourself (website, social media, interviews and published texts). Everything that goes into the preparation material will cite its source.\n\nWe will not use or keep sensitive data (health, religion, political opinion, sex life, racial or ethnic origin, among others) unless you write it yourself in the optional sensitive-data section and tick the specific consent for each item. It is your decision.\n\nThe data is deleted within {{retention_days}} days after the episode is published; we keep only the record of this consent, as proof. At any time and free of charge you may request access, correction or deletion, or withdraw this consent, {{controller.contact}}. If you do not want to consent, simply do not submit the form: the interview can still happen without it."
+        "text": "{{controller.name}} (responsable del tratamiento de los datos{{#controller.document_id}}, {{controller.document_id}}{{/controller.document_id}}; contacto: {{controller.contact}}) usará las respuestas de este formulario únicamente para las finalidades siguientes, relacionadas con su entrevista en {{show.name}}: {{purposes}}.\n\nPara preparar mejores preguntas, también consultaremos información que usted mismo(a) hizo pública (sitio web, redes sociales, entrevistas y textos publicados). Todo lo que se incluya en el material de preparación indicará su fuente.\n\nNo usaremos ni conservaremos datos sensibles (salud, religión, opinión política, vida sexual, origen racial o étnico, entre otros), a menos que usted mismo(a) los escriba en la sección opcional de datos sensibles y marque el consentimiento específico de cada uno. La decisión es suya.\n\nLos datos se eliminan en un plazo de hasta {{retention_days}} días después de la publicación del episodio; conservamos solo el registro de este consentimiento, como prueba. En cualquier momento y sin costo, usted puede solicitar el acceso, la corrección o la eliminación de sus datos, o revocar este consentimiento, {{controller.contact}}. Si no desea dar su consentimiento, basta con no enviar el formulario: la entrevista puede realizarse igualmente, sin usarlo."
       },
       "EU-GDPR": {
         "clause_id": "EU-GDPR/v1",
         "legal_review": "pending",
-        "text": "[TODO-es] {{controller.name}} (data controller{{#controller.document_id}}, {{controller.document_id}}{{/controller.document_id}}; contact: {{controller.contact}}) will process the answers to this form based on your consent, only for: {{purposes}}.\n\nWe will also look at information you have made publicly accessible (website, social media, interviews, published texts), always citing the source.\n\nSpecial categories of data (health, religion, political opinion, sex life, racial or ethnic origin, among others) are processed only if you write them in the optional section and give explicit consent for each item.\n\nThe data is deleted within {{retention_days}} days after the episode is published. You have the right of access, rectification, erasure, restriction, portability and objection, and you may withdraw consent at any time ({{controller.contact}}) without affecting processing already carried out. You may also lodge a complaint with a supervisory authority."
+        "text": "{{controller.name}} (responsable del tratamiento{{#controller.document_id}}, {{controller.document_id}}{{/controller.document_id}}; contacto: {{controller.contact}}) tratará las respuestas de este formulario sobre la base de su consentimiento, únicamente para: {{purposes}}.\n\nTambién consultaremos información que usted haya hecho accesible públicamente (sitio web, redes sociales, entrevistas, textos publicados), siempre indicando la fuente.\n\nLas categorías especiales de datos (salud, religión, opinión política, vida sexual, origen racial o étnico, entre otras) solo se tratarán si usted las escribe en la sección opcional y da su consentimiento explícito para cada una.\n\nLos datos se suprimen en un plazo de hasta {{retention_days}} días después de la publicación del episodio. Usted tiene derecho de acceso, rectificación, supresión, limitación del tratamiento, portabilidad y oposición, y puede retirar su consentimiento en cualquier momento ({{controller.contact}}), sin que ello afecte a la licitud del tratamiento ya realizado. También puede presentar una reclamación ante una autoridad de control."
       },
       "other": {
         "clause_id": "other/v1",
         "legal_review": "pending",
-        "text": "[TODO-es] {{controller.name}} (contact: {{controller.contact}}) will use the answers to this form only for: {{purposes}}. We will also look at information you have made public, always citing the source. Sensitive data is used only if you write it in the optional section and tick the specific consent. The data is deleted within {{retention_days}} days after publication. To access, correct, delete or withdraw consent: {{controller.contact}}."
+        "text": "{{controller.name}} (contacto: {{controller.contact}}) usará las respuestas de este formulario únicamente para: {{purposes}}. También consultaremos información que usted haya hecho pública, siempre indicando la fuente. Los datos sensibles solo se usan si usted los escribe en la sección opcional y marca el consentimiento específico. Los datos se eliminan en un plazo de hasta {{retention_days}} días después de la publicación. Para acceder, corregir, eliminar o revocar el consentimiento: {{controller.contact}}."
       }
     },
     "purposes": {
-      "preparo_entrevista": "[TODO-es] preparing your interview",
-      "dossie": "[TODO-es] building the preparation material (with sources)",
-      "memoria_episodio": "[TODO-es] recording the episode in the show's archive",
-      "divulgacao": "[TODO-es] promoting the episode with your short bio, photo and handle"
+      "preparo_entrevista": "preparar su entrevista",
+      "dossie": "elaborar el material de preparación (con fuentes)",
+      "memoria_episodio": "registrar el episodio en el archivo del programa",
+      "divulgacao": "difundir el episodio con su minibiografía, foto y usuario (@)"
     },
-    "draft_notice": "[TODO-es] NOTICE: this consent text is a DRAFT (v0) under legal review and may change. If the final version changes anything, we will ask for your consent again.",
-    "general_accept": "[TODO-es] I have read the text above and agree to the use of my answers for these purposes.",
-    "public_research_accept": "[TODO-es] I understand that information I have made public myself will be consulted, always citing the source.",
-    "divulgacao_accept": "[TODO-es] I also allow my short bio, photo and handle to be used to promote the episode.",
-    "image_voice_accept": "[TODO-es] I authorise the recording and publication of my image and voice in this episode.",
-    "sensitive_intro": "[TODO-es] This section is entirely optional and the decision is yours. Everything here is SENSITIVE DATA: it is used only if you write it and tick the specific consent right below each field. Without consent the information is discarded and not kept.",
-    "sensitive_accept": "[TODO-es] SENSITIVE DATA — I give specific, explicit consent to the use of the information I wrote above only to prepare and conduct this interview.",
-    "accessibility_accept": "[TODO-es] SENSITIVE DATA (may reveal health) — I allow the accessibility need above to be used only to organise the recording logistics.",
-    "sensitive_purpose": "[TODO-es] prepare and conduct this interview",
-    "accessibility_purpose": "[TODO-es] organise the recording logistics",
-    "localization_intro": "[TODO-es] This section is optional and each permission is separate: tick only what you want. None of them is a condition for the interview, and none comes pre-ticked. You can withdraw any of them at any time, free of charge, through the same contact given in the data section.",
-    "translation_accept": "[TODO-es] I allow my speech to be transcribed and translated subtitles and texts of this episode (including the description) to be published in: {{locales}}.",
-    "dub_generic_accept": "[TODO-es] I allow a dubbed version of this episode with a generic synthetic voice (not my voice), speaking the translation of my words, disclosed to the audience as AI dubbing, in: {{locales}}.",
-    "dub_replica_accept": "[TODO-es] SENSITIVE DATA — I give specific, explicit consent to the creation of an artificial replica of my voice solely to dub THIS episode in {{locales}}, by the provider {{provider}} ({{country}}), with my voice model deleted within {{days}} days after dubbing. The dubbed version will be disclosed to the audience as AI-made. I can withdraw at any time.",
-    "dub_replica_purpose": "[TODO-es] dub this episode with an artificial replica of the data subject's voice"
+    "draft_notice": "AVISO: este texto de consentimiento es un BORRADOR (v0) en revisión jurídica y puede cambiar. Si la versión final cambia algo, le pediremos de nuevo su consentimiento.",
+    "general_accept": "He leído el texto anterior y acepto el uso de mis respuestas para esas finalidades.",
+    "public_research_accept": "Entiendo que se consultará información que yo mismo(a) hice pública, siempre indicando la fuente.",
+    "divulgacao_accept": "También autorizo el uso de mi minibiografía, foto y usuario (@) en la difusión del episodio.",
+    "image_voice_accept": "Autorizo la grabación y la publicación de mi imagen y mi voz en este episodio.",
+    "sensitive_intro": "Esta sección es totalmente opcional y la decisión es suya. Todo lo que hay aquí es DATO SENSIBLE: solo se usará si usted lo escribe y marca el consentimiento específico justo debajo de cada campo. Sin el consentimiento, la información se descarta y no se conserva.",
+    "sensitive_accept": "DATO SENSIBLE — Doy mi consentimiento específico y explícito para el uso de la información que escribí arriba únicamente para preparar y conducir esta entrevista.",
+    "accessibility_accept": "DATO SENSIBLE (puede revelar información de salud) — Autorizo el uso de la necesidad de accesibilidad indicada arriba únicamente para organizar la logística de la grabación.",
+    "sensitive_purpose": "preparar y conducir esta entrevista",
+    "accessibility_purpose": "organizar la logística de la grabación",
+    "localization_intro": "Esta sección es opcional y cada autorización es independiente: marque solo lo que quiera. Ninguna es condición para la entrevista, y ninguna viene marcada. Puede revocar cualquiera de ellas en cualquier momento, sin costo, a través del mismo contacto indicado en la sección de datos.",
+    "translation_accept": "Autorizo que se transcriba lo que diga y que se publiquen subtítulos y textos traducidos de este episodio (incluida la descripción) en: {{locales}}.",
+    "dub_generic_accept": "Autorizo una versión doblada de este episodio con una voz sintética genérica (no es mi voz), que diga la traducción de mis palabras y que se identifique ante el público como doblaje con IA, en: {{locales}}.",
+    "dub_replica_accept": "DATO SENSIBLE — Doy mi consentimiento específico y explícito para que se cree una réplica artificial de mi voz únicamente para doblar ESTE episodio en {{locales}}, por el proveedor {{provider}} ({{country}}), y para que el modelo de mi voz se elimine en un plazo de hasta {{days}} días después del doblaje. La versión doblada se identificará ante el público como hecha con IA. Puedo revocarlo en cualquier momento.",
+    "dub_replica_purpose": "doblar este episodio con una réplica artificial de la voz del titular de los datos"
   },
   "kit": {
-    "title": "[TODO-es] Guest kit",
-    "greeting": "[TODO-es] Hello, {{guest.preferred_name}}!",
-    "thanks": "[TODO-es] We are glad to have you on {{show.name}}. This kit gathers what you need to know before the recording. Read it calmly, whenever you can.",
-    "about_heading": "[TODO-es] What {{show.name}} is",
-    "pillars_heading": "[TODO-es] The topics we cover",
-    "when_heading": "[TODO-es] When",
-    "when_tbd": "[TODO-es] The date is still to be agreed with the production team.",
-    "where_heading": "[TODO-es] Where (in-person recording)",
-    "address_label": "[TODO-es] Address",
-    "landmarks_label": "[TODO-es] Landmarks",
-    "gps_label": "[TODO-es] In your GPS or ride app, type",
-    "parking_label": "[TODO-es] Parking",
-    "arrive": "[TODO-es] Please arrive {{arrive.min}} to {{arrive.max}} minutes early, to have some water and test the sound without rushing.",
-    "remote_heading": "[TODO-es] Remote recording: what you need",
+    "title": "Kit del invitado",
+    "greeting": "¡Hola, {{guest.preferred_name}}!",
+    "thanks": "Nos alegra mucho contar con usted en {{show.name}}. Este kit reúne lo que necesita saber antes de la grabación. Léalo con calma, cuando pueda.",
+    "about_heading": "Qué es {{show.name}}",
+    "pillars_heading": "Los temas que tratamos",
+    "when_heading": "Cuándo",
+    "when_tbd": "La fecha aún se acordará con el equipo de producción.",
+    "where_heading": "Dónde (grabación presencial)",
+    "address_label": "Dirección",
+    "landmarks_label": "Puntos de referencia",
+    "gps_label": "En el GPS o en la app de transporte, escriba",
+    "parking_label": "Estacionamiento",
+    "arrive": "Llegue entre {{arrive.min}} y {{arrive.max}} minutos antes, para tomar un poco de agua y probar el sonido sin prisa.",
+    "remote_heading": "Grabación remota: lo que necesita",
     "remote_default": [
-      "[TODO-es] Headphones (wired, if you have them)",
-      "[TODO-es] A quiet room with little echo",
-      "[TODO-es] A stable connection; cable rather than Wi-Fi if possible",
-      "[TODO-es] Computer charged or plugged in"
+      "Auriculares (con cable, si tiene)",
+      "Un lugar silencioso y con poco eco",
+      "Internet estable; si puede, por cable en lugar de Wi-Fi",
+      "Computadora con batería o conectada a la corriente"
     ],
-    "conduct_heading": "[TODO-es] So you can feel at ease",
+    "conduct_heading": "Para que esté tranquilo(a)",
     "conduct_default": [
-      "[TODO-es] There are no wrong answers: it is a conversation, not an exam.",
-      "[TODO-es] If you stumble or want to redo an answer, just say so. We edit.",
-      "[TODO-es] You can ask not to discuss a topic at any moment.",
-      "[TODO-es] Water whenever you like, and breaks too."
+      "No hay respuestas incorrectas: es una conversación, no un examen.",
+      "Si se traba o quiere repetir una respuesta, solo dígalo. Nosotros editamos.",
+      "Puede pedir no hablar de un tema en cualquier momento.",
+      "Agua a su gusto, y pausas también."
     ],
-    "materials_heading": "[TODO-es] Materials (optional)",
-    "materials_text": "[TODO-es] Want to send slides, PDFs, photos or links? Reply to this email with attachments. No account needed anywhere.",
-    "privacy_heading": "[TODO-es] Your data",
-    "privacy_text": "[TODO-es] We use your answers only to prepare this interview. To access, correct, delete or withdraw consent: {{controller.contact}}.",
-    "signoff": "[TODO-es] See you soon!",
+    "materials_heading": "Materiales (opcional)",
+    "materials_text": "¿Quiere enviar diapositivas, PDF, fotos o enlaces? Responda a este correo con los adjuntos. No necesita crear una cuenta en ningún sitio.",
+    "privacy_heading": "Sus datos",
+    "privacy_text": "Usamos sus respuestas solo para preparar esta entrevista. Para acceder, corregir, eliminar o revocar el consentimiento: {{controller.contact}}.",
+    "signoff": "¡Hasta pronto!",
     "parking": {
-      "disponivel": "[TODO-es] available on site",
-      "indisponivel": "[TODO-es] no parking on site",
-      "pago_proximo": "[TODO-es] paid parking nearby",
-      "pendente": "[TODO-es] to be confirmed by the production team"
+      "disponivel": "disponible en el lugar",
+      "indisponivel": "no hay estacionamiento en el lugar",
+      "pago_proximo": "estacionamiento de pago en las cercanías",
+      "pendente": "por confirmar con el equipo de producción"
     }
   },
   "messages": {
-    "email_subject": "[TODO-es] Guest kit · {{show.name}}",
+    "email_subject": "Kit del invitado · {{show.name}}",
     "owner_subject": "✅ {{guest.preferred_name}} respondió el formulario · {{show.name}}",
-    "calendar_title": "[TODO-es] {{show.name}} recording with {{guest.preferred_name}}",
-    "calendar_remote_location": "[TODO-es] Online (link from the production team)",
-    "calendar_description": "[TODO-es] Guest kit sent by email. Questions: {{controller.contact}}.",
-    "whatsapp_kit": "[TODO-es] Hello, {{guest.preferred_name}}! This is {{show.name}}. We got your form, thank you! The guest kit with all the details is in your email.{{#address_line}} Address: {{address_line}}.{{/address_line}}{{#gps_hint}} In your GPS, type: {{gps_hint}}.{{/gps_hint}}",
-    "reminder_subject": "[TODO-es] Tomorrow: recording at {{show.name}}",
-    "reminder_body": "[TODO-es] Hello, {{guest.preferred_name}}! Reminder: the {{show.name}} recording is tomorrow, {{scheduled_text}}.{{#address_line}} Address: {{address_line}}.{{/address_line}}{{#gps_hint}} In your GPS, type: {{gps_hint}}.{{/gps_hint}}{{#arrive}} Please arrive {{arrive.min}} to {{arrive.max}} minutes early.{{/arrive}} Any questions, just reply."
+    "calendar_title": "Grabación de {{show.name}} con {{guest.preferred_name}}",
+    "calendar_remote_location": "En línea (el enlace lo envía el equipo de producción)",
+    "calendar_description": "Kit del invitado enviado por correo electrónico. Dudas: {{controller.contact}}.",
+    "whatsapp_kit": "¡Hola, {{guest.preferred_name}}! Le escribimos de {{show.name}}. Recibimos su formulario, ¡gracias! El kit del invitado con todos los detalles está en su correo.{{#address_line}} Dirección: {{address_line}}.{{/address_line}}{{#gps_hint}} En el GPS, escriba: {{gps_hint}}.{{/gps_hint}}",
+    "reminder_subject": "Mañana: grabación en {{show.name}}",
+    "reminder_body": "¡Hola, {{guest.preferred_name}}! Recordatorio: la grabación en {{show.name}} es mañana, {{scheduled_text}}.{{#address_line}} Dirección: {{address_line}}.{{/address_line}}{{#gps_hint}} En el GPS, escriba: {{gps_hint}}.{{/gps_hint}}{{#arrive}} Llegue entre {{arrive.min}} y {{arrive.max}} minutos antes.{{/arrive}} Si tiene cualquier duda, solo responda a este mensaje."
   },
-  "_note": "ESQUELETO: textos copiados do en e marcados [TODO-es]. Precisa de tradução e revisão nativa (e jurídica) antes de uso. O build do formulário recusa este locale enquanto needs_native_review=true, salvo ALLOW_UNREVIEWED_LOCALE=true.",
+  "_note": "Tradução automática liberada pelo dono em 2026-10-24, sem revisão de nativo; revisar quando houver revisor.",
   "invitation": {
-    "subject": "[TODO-es] Official invitation · {{show.name}}",
-    "preheader": "[TODO-es] {{show.name}} invites you to a conversation. Date, place and form inside.",
-    "title": "[TODO-es] Official invitation",
-    "greeting": "[TODO-es] Hello, {{guest.name}}!",
+    "subject": "Invitación oficial · {{show.name}}",
+    "preheader": "{{show.name}} le invita a una conversación. Fecha, lugar y formulario aquí dentro.",
+    "title": "Invitación oficial",
+    "greeting": "¡Hola, {{guest.name}}!",
     "intro": {
-      "formal": "[TODO-es] We are honored to invite you to be a guest on {{show.name}}.",
-      "cordial": "[TODO-es] It is a pleasure to invite you for a conversation on {{show.name}}.",
-      "descontraido": "[TODO-es] Let's record? We'd love to have you on {{show.name}}."
+      "formal": "Tenemos el honor de invitarle a participar como invitado(a) en {{show.name}}.",
+      "cordial": "Es una alegría invitarle a una conversación en {{show.name}}.",
+      "descontraido": "¿Grabamos? Nos encantaría tenerle en {{show.name}}."
     },
-    "when_label": "[TODO-es] Date and time",
-    "when_tbd": "[TODO-es] to be agreed with the production team",
-    "where_label": "[TODO-es] Place",
-    "gps_label": "[TODO-es] In your GPS or ride app, type",
-    "arrival_label": "[TODO-es] How to get there",
-    "arrive": "[TODO-es] Please arrive {{arrive.min}} to {{arrive.max}} minutes early.",
-    "remote_label": "[TODO-es] Remote recording, room link",
-    "remote_link_tbd": "[TODO-es] the room link will arrive by e-mail before the recording",
-    "about_heading": "[TODO-es] What {{show.name}} is",
+    "when_label": "Fecha y hora",
+    "when_tbd": "por acordar con el equipo de producción",
+    "where_label": "Lugar",
+    "gps_label": "En el GPS o en la app de transporte, escriba",
+    "arrival_label": "Cómo llegar",
+    "arrive": "Llegue entre {{arrive.min}} y {{arrive.max}} minutos antes.",
+    "remote_label": "Grabación remota, enlace de la sala",
+    "remote_link_tbd": "el enlace de la sala llegará por correo electrónico antes de la grabación",
+    "about_heading": "Qué es {{show.name}}",
     "cta_intro": {
-      "essencial": "[TODO-es] So we can prepare a conversation worthy of you, please fill in the guest form. It takes about 2 minutes.",
-      "completo": "[TODO-es] So we can prepare a conversation worthy of you, please fill in the guest form. It takes about 8 minutes, and almost everything is optional."
+      "essencial": "Para preparar una conversación a su altura, complete el formulario del invitado. Toma unos 2 minutos.",
+      "completo": "Para preparar una conversación a su altura, complete el formulario del invitado. Toma unos 8 minutos, y casi todo es opcional."
     },
-    "cta_button": "[TODO-es] Fill in the form",
-    "cta_fallback": "[TODO-es] If the button does not open, copy and paste this address into your browser:",
-    "signoff": "[TODO-es] Kind regards,",
-    "footer_controller": "[TODO-es] Sent by: {{controller.name}}, data controller. Contact: {{controller.contact}}.",
-    "footer_purpose": "[TODO-es] You received this invitation because {{signature.name}} suggested you as a guest. We use your name and e-mail only for this invitation and to organize the interview; the guest kit arrives after you answer the form.",
-    "footer_optout": "[TODO-es] Don't want to hear from {{show.name}} again? Reply to this e-mail with the word STOP and we will not send anything else.",
-    "footer_brand": "[TODO-es] Prepared with PodFácil",
-    "ics_description": "[TODO-es] Official invitation from {{show.name}}. Guest form: {{form_url}}"
+    "cta_button": "Completar el formulario",
+    "cta_fallback": "Si el botón no se abre, copie y pegue esta dirección en su navegador:",
+    "signoff": "Cordialmente,",
+    "footer_controller": "Envía: {{controller.name}}, responsable del tratamiento de los datos. Contacto: {{controller.contact}}.",
+    "footer_purpose": "Recibió esta invitación porque {{signature.name}} le propuso como invitado(a). Usamos su nombre y su correo electrónico solo para esta invitación y para organizar la entrevista; el kit del invitado llegará después de que responda al formulario.",
+    "footer_optout": "¿No quiere recibir más mensajes de {{show.name}}? Responda a este correo con la palabra BAJA y no le enviaremos nada más.",
+    "footer_brand": "Preparado con PodFácil",
+    "ics_description": "Invitación oficial de {{show.name}}. Formulario del invitado: {{form_url}}"
   },
   "decision": {
     "ack": {
-      "v1": "[TODO-es] I have read the alerts above. I understand the plugin only recommends: the decision to go against the recommendation is mine, and the editorial and legal responsibility for what is recorded and published is mine (or of whom I represent), not the plugin's nor its authors'."
+      "v1": "Leí las alertas anteriores. Entiendo que el plugin solo recomienda: la decisión de actuar en contra de la recomendación es mía, y la responsabilidad editorial y jurídica por lo que se grabe y publique es mía (o de quien yo represente), no del plugin ni de sus autores."
     },
     "alerts": {
-      "R-CLAIM-CONDUTA-FONTES": "[TODO-es] This statement about someone's conduct lacks the recommended backing (verified status with 1 primary source or 2 independent press sources). Using it on air may create defamation liability.",
-      "R-CLAIM-CONDUTA-INDEPENDENCIA": "[TODO-es] The press sources for this conduct statement may not be independent (same domain, author or agency). Check author, outlet and agency before deciding.",
-      "R-ROTEIRO-GATE-PENDENTE": "[TODO-es] The @guardian review (fact-check) has not been done yet for a mode that recommends it before recording.",
-      "R-ROTEIRO-GATE-AJUSTES": "[TODO-es] The @guardian recommended adjustments that are not recorded as applied.",
-      "R-ROTEIRO-GATE-VETADO": "[TODO-es] The @guardian recommended NOT recording this script as is. Recording against that recommendation is your decision and your responsibility.",
-      "R-ROTEIRO-CONTRADITORIO": "[TODO-es] This mode recommends hearing the named party before recording, and no right-of-reply request is recorded.",
-      "R-ROTEIRO-REVISAO-JURIDICA": "[TODO-es] This mode carries high legal risk and the recommended human legal review is still pending.",
-      "R-ROTEIRO-SEM-LASTRO": "[TODO-es] Some factual statements have no dossier claim nor source. Saying unbacked things on air is your editorial risk.",
-      "R-ROTEIRO-INFERENCIA-COMO-FATO": "[TODO-es] An inference (hypothesis) appears as a factual statement. The recommendation is to turn it into a question or hypothesis.",
-      "R-ROTEIRO-RIGOR": "[TODO-es] The mode asks for sources for numbers, dates and quotes, and this statement rests only on self-declared information.",
-      "R-ROTEIRO-DEGRADADO": "[TODO-es] The dossier is incomplete and this block uses its statements without a caveat to confirm with the guest.",
-      "R-ROTEIRO-TIMING": "[TODO-es] The sum of block durations is more than 15% away from the target duration.",
-      "R-FACTCHECK-SEM-FONTE": "[TODO-es] The fact-check found no source for this statement.",
-      "R-FACTCHECK-DISCLOSURE": "[TODO-es] The recommended advertising or sponsorship disclosure is missing.",
-      "R-FACTCHECK-LGPD": "[TODO-es] Third-party personal data is cited without a clear legal basis. (Sensitive data not self-declared is not an alert: it is forbidden.)",
-      "R-PUBLICACAO-GATE": "[TODO-es] The episode quality gate did not recommend publication (REQUEST CHANGES or HOLD).",
-      "R-MEMORIA-ROTEIRO-PENDENTE": "[TODO-es] No script linked to this episode is ready to record (pronto_para_gravar). Recording anyway is your decision and responsibility.",
-      "R-LOCALIZACAO-REVISAO-HUMANA": "[TODO-es] Machine translation: review source and translation side by side (names, numbers, glossary terms) before publishing.",
-      "R-LOCALIZACAO-SEM-ACEITE-TRADUCAO": "[TODO-es] There is no recorded guest consent for translated subtitles and texts in this language. Publishing anyway is your decision and responsibility.",
-      "R-LOCALIZACAO-SEM-ACEITE-VOZ-GENERICA": "[TODO-es] There is no recorded guest consent for dubbing with a generic synthetic voice in this language. Publishing anyway is your decision and responsibility.",
-      "R-LOCALIZACAO-AGENTE-POLITICO": "[TODO-es] The guest is flagged as a candidate or political figure. Synthetic content with candidates' voices is subject to electoral rules in Brazil (TSE Resolution 23.732/2024; secondary source, check the current text): verify the electoral calendar and labelling before publishing the dub.",
-      "R-LOCALIZACAO-GLOSSARIO": "[TODO-es] Show glossary terms do not appear as expected in the translation (proper name, acronym or do-not-translate term).",
-      "R-LOCALIZACAO-NUMEROS": "[TODO-es] Some numbers from the source (dates, rates, statute articles) do not appear in the translation.",
-      "R-LOCALIZACAO-CPS": "[TODO-es] Some subtitles exceed the reading-speed limit (characters per second)."
+      "R-CLAIM-CONDUTA-FONTES": "Esta afirmación sobre la conducta de alguien no tiene el respaldo recomendado (estado verificado con 1 fuente primaria o 2 fuentes de prensa independientes). Usarla al aire puede generar responsabilidad por difamación.",
+      "R-CLAIM-CONDUTA-INDEPENDENCIA": "Las fuentes de prensa de esta afirmación sobre conducta pueden no ser independientes (mismo dominio, autor o agencia). Revisa autor, medio y agencia antes de decidir.",
+      "R-ROTEIRO-GATE-PENDENTE": "La revisión de @guardian (fact-check) aún no se ha hecho, y este modo la recomienda antes de grabar.",
+      "R-ROTEIRO-GATE-AJUSTES": "@guardian recomendó ajustes que aún no constan como aplicados.",
+      "R-ROTEIRO-GATE-VETADO": "@guardian recomendó NO grabar este guion tal como está. Grabar en contra de esa recomendación es decisión y responsabilidad tuya.",
+      "R-ROTEIRO-CONTRADITORIO": "Este modo recomienda escuchar a la parte mencionada antes de grabar, y no hay ninguna solicitud de derecho de réplica registrada.",
+      "R-ROTEIRO-REVISAO-JURIDICA": "Este modo tiene un riesgo jurídico alto y la revisión jurídica humana recomendada aún está pendiente.",
+      "R-ROTEIRO-SEM-LASTRO": "Hay afirmaciones de hecho sin claim del dosier ni fuente. Decir al aire algo sin respaldo es un riesgo editorial tuyo.",
+      "R-ROTEIRO-INFERENCIA-COMO-FATO": "Una inferencia (hipótesis) aparece como afirmación de hecho. Lo recomendado es convertirla en pregunta o hipótesis.",
+      "R-ROTEIRO-RIGOR": "El modo exige fuente para números, fechas y citas, y esta afirmación se apoya solo en lo autodeclarado.",
+      "R-ROTEIRO-DEGRADADO": "El dosier llegó incompleto y este bloque usa afirmaciones suyas sin la salvedad de confirmarlas con el invitado.",
+      "R-ROTEIRO-TIMING": "La suma de las duraciones de los bloques se aleja más de un 15% de la duración objetivo.",
+      "R-FACTCHECK-SEM-FONTE": "El fact-check no encontró fuente para esta afirmación.",
+      "R-FACTCHECK-DISCLOSURE": "Falta la identificación recomendada de publicidad o patrocinio.",
+      "R-FACTCHECK-LGPD": "Se cita un dato personal de un tercero sin una base clara para su tratamiento. (Un dato sensible no autodeclarado no es una alerta: está prohibido.)",
+      "R-PUBLICACAO-GATE": "El quality gate del episodio no recomendó la publicación (REQUEST CHANGES o HOLD).",
+      "R-MEMORIA-ROTEIRO-PENDENTE": "Ningún guion vinculado a este episodio está listo para grabar (pronto_para_gravar). Grabar así es decisión y responsabilidad tuya.",
+      "R-LOCALIZACAO-REVISAO-HUMANA": "Traducción automática: revisa el original y la traducción lado a lado (nombres, números, términos del glosario) antes de publicar.",
+      "R-LOCALIZACAO-SEM-ACEITE-TRADUCAO": "No hay consentimiento registrado del invitado para subtítulos y textos traducidos en este idioma. Publicar así es decisión y responsabilidad tuya.",
+      "R-LOCALIZACAO-SEM-ACEITE-VOZ-GENERICA": "No hay consentimiento registrado del invitado para doblaje con voz sintética genérica en este idioma. Publicar así es decisión y responsabilidad tuya.",
+      "R-LOCALIZACAO-AGENTE-POLITICO": "El invitado está marcado como candidato o figura política. El contenido sintético con la voz de candidatos está sujeto a normas electorales en Brasil (Resolución TSE 23.732/2024; fuente secundaria, consulta el texto vigente): verifica el calendario electoral y el etiquetado antes de publicar el doblaje.",
+      "R-LOCALIZACAO-GLOSSARIO": "Algunos términos del glosario del programa no aparecen como se esperaba en la traducción (nombre propio, sigla o término que no se traduce).",
+      "R-LOCALIZACAO-NUMEROS": "Hay números del original (fechas, tasas, artículos de ley) que no aparecen en la traducción.",
+      "R-LOCALIZACAO-CPS": "Algunos subtítulos superan el límite de velocidad de lectura (caracteres por segundo)."
     }
   },
   "localization": {
@@ -1002,7 +1003,7 @@
       "zh": "chino"
     },
     "disclosure": {
-      "subtitles": "[TODO-es] Machine translation reviewed by {{show}}.",
+      "subtitles": "Traducción automática revisada por {{show}}.",
       "dub_generic": "Versión doblada con inteligencia artificial a partir del episodio original en {{source_language}}. Las voces son sintéticas.",
       "dub_replica": "Versión doblada con inteligencia artificial, con réplicas autorizadas de las voces de los participantes, a partir del episodio original en {{source_language}}."
     }
@@ -1342,17 +1343,17 @@
     }
   },
   "guest_confirm": {
-    "subject": "{{show}}: ¿puedes confirmar algunos datos de tu participación?",
+    "subject": "{{show}}: ¿puede confirmar algunos datos de su participación?",
     "greeting": "¡Hola, {{nome}}!",
     "intro": "Gracias por responder al formulario de {{show}}. Antes de la grabación, queremos confirmar algunos puntos:",
     "intro_none": "Gracias por responder al formulario de {{show}}. Antes de la grabación, queremos confirmar los datos de abajo.",
     "items": {
-      "contacts.whatsapp": "No pudimos leer el número de WhatsApp que indicaste{{end}}. ¿Cuál es el número correcto, con código de país?",
-      "accessibility": "Escribiste algo sobre accesibilidad, pero no marcaste la autorización para guardar este tipo de información, así que no se registró. Si quieres que nos preparemos, responde a este correo y acordamos cómo hacerlo.",
-      "scheduled_at": "No pudimos leer la fecha y la hora de la grabación. ¿Cuándo te viene bien?",
-      "check.time_odd": "La hora que indicaste fue {{hora}}. ¿Es correcta?",
+      "contacts.whatsapp": "No pudimos leer el número de WhatsApp que indicó{{end}}. ¿Cuál es el número correcto, con código de país?",
+      "accessibility": "Escribió algo sobre accesibilidad, pero no marcó la autorización para guardar este tipo de información, así que no se registró. Si quiere que nos preparemos, responda a este correo y acordamos cómo hacerlo.",
+      "scheduled_at": "No pudimos leer la fecha y la hora de la grabación. ¿Cuándo le viene bien?",
+      "check.time_odd": "La hora que indicó fue {{hora}}. ¿Es correcta?",
       "check.past": "La fecha indicada ({{data}}) ya pasó. ¿Cuál es la fecha correcta?",
-      "check.whatsapp_mismatch": "El WhatsApp que indicaste termina en {{agora}}, pero teníamos anotado uno que termina en {{antes}}. ¿Cuál usamos?"
+      "check.whatsapp_mismatch": "El WhatsApp que indicó termina en {{agora}}, pero teníamos anotado uno que termina en {{antes}}. ¿Cuál usamos?"
     },
     "end": " (termina en {{digits}})",
     "summary": "Lo que tenemos anotado",
@@ -1361,7 +1362,7 @@
       "whatsapp": "WhatsApp"
     },
     "whatsapp_end": "termina en {{digits}}",
-    "closing": "Basta con responder a este correo con la corrección. Si todo está bien, responde \"está bien\".",
+    "closing": "Basta con responder a este correo con la corrección. Si todo está bien, responda \"está bien\".",
     "signature": "Equipo de {{show}}"
   }
 }
@@ -1992,128 +1993,129 @@
 ```json
 {
   "locale": "zh",
-  "needs_native_review": true,
-  "text_version": "zh/v0-skeleton",
+  "needs_native_review": false,
+  "_release_note": "Liberado pelo dono em 2026-10-24 com tradução automática, sem revisão de falante nativo.",
+  "text_version": "zh/v1-auto",
   "form": {
     "validation": {
       "phone": "请输入带国家代码和区号的号码，例如：+86 138 0013 8000。"
     },
-    "title": "[TODO-zh] Guest of {{show.name}}",
-    "description_essencial": "[TODO-zh] Takes about 2 minutes. It helps us prepare a good conversation for you, with no surprises.",
-    "description_completo": "[TODO-zh] Takes about 8 minutes. Almost everything is optional: skip whatever you prefer.",
-    "confirmation": "[TODO-zh] Thank you! If you allowed email, the guest kit is on its way. To send files (PDFs, slides, photos), just reply to that email with attachments.",
+    "title": "{{show.name}} 嘉宾信息表",
+    "description_essencial": "大约需要 2 分钟。这能帮助我们为您准备一场精彩的对话，不会让您措手不及。",
+    "description_completo": "大约需要 8 分钟。几乎所有问题都是选填的：不想回答的可以跳过。",
+    "confirmation": "谢谢！如果您允许我们使用电子邮件，嘉宾资料包很快就会送达。如需发送文件（PDF、幻灯片、照片），直接回复那封邮件并添加附件即可。",
     "sections": {
-      "about": "[TODO-zh] About you",
-      "content": "[TODO-zh] The conversation",
-      "logistics": "[TODO-zh] Recording",
-      "channels": "[TODO-zh] How we reach you",
-      "consent": "[TODO-zh] Your data and this interview",
-      "sensitive": "[TODO-zh] Sensitive data (optional)",
-      "localization": "[TODO-zh] Other languages (optional)"
+      "about": "关于您",
+      "content": "访谈内容",
+      "logistics": "录制",
+      "channels": "如何联系您",
+      "consent": "您的个人信息与本次访谈",
+      "sensitive": "敏感个人信息（选填）",
+      "localization": "其他语言（选填）"
     },
     "fields": {
       "guest.full_name": {
-        "title": "[TODO-zh] Full name",
+        "title": "姓名（全名）",
         "help": ""
       },
       "guest.preferred_name": {
-        "title": "[TODO-zh] What should we call you on air?",
-        "help": "[TODO-zh] E.g. Ana, Dr. Ana, Professor Silva."
+        "title": "节目中我们该如何称呼您？",
+        "help": "例如：王芳、王博士、李教授。"
       },
       "guest.name_pronunciation": {
-        "title": "[TODO-zh] How is your name pronounced?",
-        "help": "[TODO-zh] Only if we might get it wrong."
+        "title": "您的名字怎么读？",
+        "help": "仅在我们可能读错时填写。"
       },
       "guest.pronouns": {
-        "title": "[TODO-zh] Pronouns",
-        "help": "[TODO-zh] Optional. E.g. she/her."
+        "title": "人称代词",
+        "help": "选填。例如：她（she/her）。"
       },
       "guest.role_title": {
-        "title": "[TODO-zh] Role or occupation",
+        "title": "职位或职业",
         "help": ""
       },
       "guest.photo_url": {
-        "title": "[TODO-zh] Link to a photo of you for promotion",
-        "help": "[TODO-zh] Optional. A public link (website, LinkedIn, shared Drive)."
+        "title": "用于节目宣传的个人照片链接",
+        "help": "选填。请提供公开链接（个人网站、LinkedIn、公开共享的云盘）。"
       },
       "bio.short": {
-        "title": "[TODO-zh] Short bio, up to 2 lines",
-        "help": "[TODO-zh] This is what we read in the intro."
+        "title": "简短介绍（不超过 2 行）",
+        "help": "我们会在节目开场时朗读这段介绍。"
       },
       "bio.long": {
-        "title": "[TODO-zh] Full bio",
-        "help": "[TODO-zh] Optional."
+        "title": "完整简介",
+        "help": "选填。"
       },
       "links": {
-        "title": "[TODO-zh] Your main links",
-        "help": "[TODO-zh] Website, profiles, portfolio. One per line. If you have none, leave it blank."
+        "title": "您的主要链接",
+        "help": "个人网站、社交账号、作品集。每行一个。没有的话请留空。"
       },
       "social_handles": {
-        "title": "[TODO-zh] Handles to tag when we promote",
-        "help": "[TODO-zh] One per line, as network: @user (e.g. instagram: @ana)."
+        "title": "宣传时可以 @ 您的账号",
+        "help": "每行一个，格式为“平台: @账号”（例如：instagram: @ana）。"
       },
       "previous_interviews": {
-        "title": "[TODO-zh] Interviews you have given",
-        "help": "[TODO-zh] Links, one per line. Helps us avoid repeating questions."
+        "title": "您接受过的采访",
+        "help": "链接，每行一个。帮助我们避免重复提问。"
       },
       "key_ideas": {
-        "title": "[TODO-zh] Up to 3 ideas you want the audience to take away",
-        "help": "[TODO-zh] One per line."
+        "title": "最多 3 个您希望听众记住的观点",
+        "help": "每行一个。"
       },
       "stories_to_tell": {
-        "title": "[TODO-zh] Stories you like to tell",
-        "help": "[TODO-zh] One per line."
+        "title": "您喜欢讲的故事",
+        "help": "每行一个。"
       },
       "controversies.accepts": {
-        "title": "[TODO-zh] Controversial topics you are happy to discuss",
-        "help": "[TODO-zh] One per line."
+        "title": "您愿意讨论的争议话题",
+        "help": "每行一个。"
       },
       "controversies.declines": {
-        "title": "[TODO-zh] Controversial topics you would rather avoid",
-        "help": "[TODO-zh] One per line."
+        "title": "您希望避免的争议话题",
+        "help": "每行一个。"
       },
       "off_limits_topics": {
-        "title": "[TODO-zh] Off-limits topics",
-        "help": "[TODO-zh] We will not touch these. One per line."
+        "title": "禁止涉及的话题",
+        "help": "我们不会触及这些话题。每行一个。"
       },
       "wants_to_promote": {
-        "title": "[TODO-zh] Anything you want to promote?",
-        "help": "[TODO-zh] Book, course, event, project. One per line."
+        "title": "有什么想推广的吗？",
+        "help": "书籍、课程、活动、项目。每行一个。"
       },
       "dream_questions": {
-        "title": "[TODO-zh] Questions you would love to be asked",
-        "help": "[TODO-zh] One per line."
+        "title": "您很希望被问到的问题",
+        "help": "每行一个。"
       },
       "conflicts_of_interest.details": {
-        "title": "[TODO-zh] Conflicts of interest or sponsorships related to the topics",
-        "help": "[TODO-zh] Leave blank if none."
+        "title": "与话题相关的利益冲突或赞助关系",
+        "help": "没有请留空。"
       },
       "companion.name": {
-        "title": "[TODO-zh] Bringing someone along? Who?",
-        "help": "[TODO-zh] Leave blank if coming alone."
+        "title": "会带同伴来吗？是谁？",
+        "help": "如果您一个人来，请留空。"
       },
       "materials": {
-        "title": "[TODO-zh] Supporting materials (links)",
-        "help": "[TODO-zh] Talks, books, articles, videos. One link per line. Files: reply to the kit email with attachments."
+        "title": "参考资料（链接）",
+        "help": "演讲、书籍、文章、视频。每行一个链接。如有文件，请回复资料包邮件并添加附件。"
       },
       "recording_mode": {
-        "title": "[TODO-zh] How will we record?",
+        "title": "以什么方式录制？",
         "help": ""
       },
       "scheduled_at": {
-        "title": "[TODO-zh] Date and time already agreed with us",
-        "help": "[TODO-zh] Only if already agreed. Used for the calendar invite and the day-before reminder."
+        "title": "已与我们约定的日期和时间",
+        "help": "仅在已约定时填写。用于日历邀请和录制前一天的提醒。"
       },
       "wants_prepublication_review": {
-        "title": "[TODO-zh] Would you like to see the episode before we publish?",
+        "title": "发布前，您想先看一下这期节目吗？",
         "help": ""
       },
       "preferred_channel": {
-        "title": "[TODO-zh] Preferred channel to reach you",
+        "title": "首选联系方式",
         "help": ""
       },
       "contacts.email": {
-        "title": "[TODO-zh] Your email",
+        "title": "您的电子邮件",
         "help": ""
       },
       "invite.token": {
@@ -2121,253 +2123,248 @@
         "help": "已由您收到的邀请邮件中的链接自动填写，请勿修改。如果为空，也请照常提交：节目方会先与您确认，再发送任何内容。"
       },
       "contacts.whatsapp": {
-        "title": "[TODO-zh] Your WhatsApp",
-        "help": "[TODO-zh] Optional. With country code, e.g. +44 7700 900123."
+        "title": "您的 WhatsApp",
+        "help": "选填。请带国家代码，例如：+86 138 0013 8000。"
       },
       "automation_consents": {
-        "title": "[TODO-zh] May we use these channels to send you the kit and reminders?",
-        "help": "[TODO-zh] Tick only what you want. Nothing ticked = nothing sent through that channel."
+        "title": "我们可以通过这些渠道向您发送资料包和提醒吗？",
+        "help": "只勾选您愿意的选项。未勾选 = 该渠道不会发送任何内容。"
       },
       "image_voice": {
-        "title": "[TODO-zh] Image and voice",
+        "title": "肖像与声音",
         "help": ""
       },
       "consent.general": {
-        "title": "[TODO-zh] Consent",
+        "title": "同意",
         "help": ""
       },
       "consent.public_research": {
-        "title": "[TODO-zh] Research in public sources",
+        "title": "公开来源检索",
         "help": ""
       },
       "consent.divulgacao": {
-        "title": "[TODO-zh] Promotion (optional)",
+        "title": "节目宣传（选填）",
         "help": ""
       },
       "accessibility.needs": {
-        "title": "[TODO-zh] SENSITIVE DATA — Do you need any accessibility accommodation?",
-        "help": "[TODO-zh] Optional. It may reveal health information: it is only used if you tick the consent right below."
+        "title": "敏感个人信息——您是否需要任何无障碍方面的安排？",
+        "help": "选填。这可能透露健康信息：只有在您勾选下方的单独同意后才会使用。"
       },
       "accessibility.accept": {
-        "title": "[TODO-zh] SENSITIVE DATA — Specific consent (accessibility)",
+        "title": "敏感个人信息——单独同意（无障碍）",
         "help": ""
       },
       "sensitive.category": {
-        "title": "[TODO-zh] SENSITIVE DATA — What is it about?",
-        "help": "[TODO-zh] Optional."
+        "title": "敏感个人信息——涉及哪方面？",
+        "help": "选填。"
       },
       "sensitive.value": {
-        "title": "[TODO-zh] SENSITIVE DATA — What you want us to know",
-        "help": "[TODO-zh] Optional. Write only what you want in the preparation."
+        "title": "敏感个人信息——您希望我们了解的内容",
+        "help": "选填。只写您希望用于访谈准备的内容。"
       },
       "sensitive.accept": {
-        "title": "[TODO-zh] SENSITIVE DATA — Specific consent",
+        "title": "敏感个人信息——单独同意",
         "help": ""
       },
       "localization.translation_text": {
-        "title": "[TODO-zh] Translated subtitles and texts",
+        "title": "翻译字幕和文字",
         "help": ""
       },
       "localization.dub_generic_voice": {
-        "title": "[TODO-zh] Dubbing with a generic synthetic voice",
+        "title": "使用通用合成语音配音",
         "help": ""
       },
       "localization.dub_voice_replica": {
-        "title": "[TODO-zh] SENSITIVE DATA — Artificial replica of your voice",
+        "title": "敏感个人信息——用 AI 复制您的声音",
         "help": ""
       }
     },
     "choices": {
       "recording_mode": {
-        "presencial": "[TODO-zh] In person, at the studio",
-        "remoto": "[TODO-zh] Remote, online"
+        "presencial": "现场录制，在录音室",
+        "remoto": "远程录制，线上进行"
       },
       "yes_no": {
-        "yes": "[TODO-zh] Yes",
-        "no": "[TODO-zh] No"
+        "yes": "是",
+        "no": "否"
       },
       "preferred_channel": {
-        "email": "[TODO-zh] Email",
-        "whatsapp": "[TODO-zh] WhatsApp",
-        "phone": "[TODO-zh] Phone",
-        "other": "[TODO-zh] Other"
+        "email": "电子邮件",
+        "whatsapp": "WhatsApp",
+        "phone": "电话",
+        "other": "其他"
       },
       "channels": {
-        "email": "[TODO-zh] Email: guest kit and a day-before reminder",
-        "whatsapp": "[TODO-zh] WhatsApp: kit and a day-before reminder",
-        "calendar": "[TODO-zh] Calendar: invite with date and address"
+        "email": "电子邮件：嘉宾资料包和录制前一天的提醒",
+        "whatsapp": "WhatsApp：资料包和录制前一天的提醒",
+        "calendar": "日历：包含日期和地址的邀请"
       },
       "sensitive_category": {
-        "origem_racial_etnica": "[TODO-zh] Racial or ethnic origin",
-        "conviccao_religiosa": "[TODO-zh] Religious belief",
-        "opiniao_politica": "[TODO-zh] Political opinion",
-        "filiacao_sindical_religiosa_filosofica_politica": "[TODO-zh] Trade union or religious, philosophical or political membership",
-        "saude": "[TODO-zh] Health",
-        "vida_sexual": "[TODO-zh] Sex life",
-        "genetico": "[TODO-zh] Genetic data",
-        "biometrico": "[TODO-zh] Biometric data"
+        "origem_racial_etnica": "种族或民族出身",
+        "conviccao_religiosa": "宗教信仰",
+        "opiniao_politica": "政治观点",
+        "filiacao_sindical_religiosa_filosofica_politica": "加入工会或宗教、哲学、政治组织",
+        "saude": "健康",
+        "vida_sexual": "性生活",
+        "genetico": "基因数据",
+        "biometrico": "生物识别数据"
       }
     }
   },
   "consent": {
-    "contact_email": "[TODO-zh] by email at {{email}}",
-    "contact_reply_to_email": "[TODO-zh] by replying to any email from this show (including the invitation or the guest kit)",
+    "contact_email": "发送电子邮件至 {{email}}",
+    "contact_reply_to_email": "回复本节目发出的任何一封邮件（包括邀请函或嘉宾资料包）",
     "clauses": {
       "BR-LGPD": {
         "clause_id": "BR-LGPD/v1",
         "legal_review": "pending",
-        "text": "[TODO-zh] {{controller.name}} (data controller{{#controller.document_id}}, {{controller.document_id}}{{/controller.document_id}}; contact: {{controller.contact}}) will use the answers to this form only for the purposes below, related to your interview on {{show.name}}: {{purposes}}.\n\nTo prepare better questions, we will also look at information you have made public yourself (website, social media, interviews and published texts). Everything that goes into the preparation material will cite its source.\n\nWe will not use or keep sensitive data (health, religion, political opinion, sex life, racial or ethnic origin, among others) unless you write it yourself in the optional sensitive-data section and tick the specific consent for each item. It is your decision.\n\nThe data is deleted within {{retention_days}} days after the episode is published; we keep only the record of this consent, as proof. At any time and free of charge you may request access, correction or deletion, or withdraw this consent, {{controller.contact}}. If you do not want to consent, simply do not submit the form: the interview can still happen without it."
+        "text": "{{controller.name}}（个人信息处理者{{#controller.document_id}}，{{controller.document_id}}{{/controller.document_id}}；联系方式：{{controller.contact}}）仅会将本表单中的回答用于以下与您参加 {{show.name}} 访谈相关的目的：{{purposes}}。\n\n为了准备更好的问题，我们还会查阅您本人已公开的信息（个人网站、社交媒体、采访和已发表的文字）。所有纳入准备材料的信息都会注明来源。\n\n我们不会使用或保存敏感个人信息（健康、宗教、政治观点、性生活、种族或民族出身等），除非您本人在选填的敏感个人信息部分写下，并逐项勾选单独同意。是否提供由您决定。\n\n数据将在节目发布后 {{retention_days}} 天内删除；我们只保留本同意的记录作为证明。您可以随时免费要求查阅、更正或删除数据，或撤回本同意，方式：{{controller.contact}}。如果您不想同意，不提交本表单即可：访谈仍可进行，只是不会使用本表单。"
       },
       "EU-GDPR": {
         "clause_id": "EU-GDPR/v1",
         "legal_review": "pending",
-        "text": "[TODO-zh] {{controller.name}} (data controller{{#controller.document_id}}, {{controller.document_id}}{{/controller.document_id}}; contact: {{controller.contact}}) will process the answers to this form based on your consent, only for: {{purposes}}.\n\nWe will also look at information you have made publicly accessible (website, social media, interviews, published texts), always citing the source.\n\nSpecial categories of data (health, religion, political opinion, sex life, racial or ethnic origin, among others) are processed only if you write them in the optional section and give explicit consent for each item.\n\nThe data is deleted within {{retention_days}} days after the episode is published. You have the right of access, rectification, erasure, restriction, portability and objection, and you may withdraw consent at any time ({{controller.contact}}) without affecting processing already carried out. You may also lodge a complaint with a supervisory authority."
+        "text": "{{controller.name}}（数据控制者{{#controller.document_id}}，{{controller.document_id}}{{/controller.document_id}}；联系方式：{{controller.contact}}）将基于您的同意处理本表单中的回答，仅用于：{{purposes}}。\n\n我们还会查阅您已公开的信息（个人网站、社交媒体、采访、已发表的文字），并始终注明来源。\n\n特殊类别数据（健康、宗教、政治观点、性生活、种族或民族出身等）只有在您于选填部分写下并逐项给予明确同意后才会处理。\n\n数据将在节目发布后 {{retention_days}} 天内删除。您享有访问、更正、删除、限制处理、数据可携带和反对的权利，并可随时撤回同意（{{controller.contact}}），撤回不影响此前已进行的处理。您也可以向监管机构投诉。"
       },
       "other": {
         "clause_id": "other/v1",
         "legal_review": "pending",
-        "text": "[TODO-zh] {{controller.name}} (contact: {{controller.contact}}) will use the answers to this form only for: {{purposes}}. We will also look at information you have made public, always citing the source. Sensitive data is used only if you write it in the optional section and tick the specific consent. The data is deleted within {{retention_days}} days after publication. To access, correct, delete or withdraw consent: {{controller.contact}}."
-      },
-      "CN-PIPL": {
-        "clause_id": "CN-PIPL/v0",
-        "legal_review": "pending",
-        "text": "[TODO-zh] PIPL clause not drafted. Requires separate consent for sensitive personal information (PIPL art. 29) and native legal review before use. {{controller.name}} {{controller.contact}} {{purposes}} {{retention_days}}"
+        "text": "{{controller.name}}（联系方式：{{controller.contact}}）仅会将本表单中的回答用于：{{purposes}}。我们还会查阅您已公开的信息，并始终注明来源。只有在您于选填部分写下并勾选单独同意后，才会使用敏感个人信息。数据将在发布后 {{retention_days}} 天内删除。如需查阅、更正、删除或撤回同意：{{controller.contact}}。"
       }
     },
     "purposes": {
-      "preparo_entrevista": "[TODO-zh] preparing your interview",
-      "dossie": "[TODO-zh] building the preparation material (with sources)",
-      "memoria_episodio": "[TODO-zh] recording the episode in the show's archive",
-      "divulgacao": "[TODO-zh] promoting the episode with your short bio, photo and handle"
+      "preparo_entrevista": "准备您的访谈",
+      "dossie": "整理访谈准备材料（附来源）",
+      "memoria_episodio": "将本期节目存入节目档案",
+      "divulgacao": "使用您的简短介绍、照片和社交账号宣传本期节目"
     },
-    "draft_notice": "[TODO-zh] NOTICE: this consent text is a DRAFT (v0) under legal review and may change. If the final version changes anything, we will ask for your consent again.",
-    "general_accept": "[TODO-zh] I have read the text above and agree to the use of my answers for these purposes.",
-    "public_research_accept": "[TODO-zh] I understand that information I have made public myself will be consulted, always citing the source.",
-    "divulgacao_accept": "[TODO-zh] I also allow my short bio, photo and handle to be used to promote the episode.",
-    "image_voice_accept": "[TODO-zh] I authorise the recording and publication of my image and voice in this episode.",
-    "sensitive_intro": "[TODO-zh] This section is entirely optional and the decision is yours. Everything here is SENSITIVE DATA: it is used only if you write it and tick the specific consent right below each field. Without consent the information is discarded and not kept.",
-    "sensitive_accept": "[TODO-zh] SENSITIVE DATA — I give specific, explicit consent to the use of the information I wrote above only to prepare and conduct this interview.",
-    "accessibility_accept": "[TODO-zh] SENSITIVE DATA (may reveal health) — I allow the accessibility need above to be used only to organise the recording logistics.",
-    "sensitive_purpose": "[TODO-zh] prepare and conduct this interview",
-    "accessibility_purpose": "[TODO-zh] organise the recording logistics",
-    "localization_intro": "[TODO-zh] This section is optional and each permission is separate: tick only what you want. None of them is a condition for the interview, and none comes pre-ticked. You can withdraw any of them at any time, free of charge, through the same contact given in the data section.",
-    "translation_accept": "[TODO-zh] I allow my speech to be transcribed and translated subtitles and texts of this episode (including the description) to be published in: {{locales}}.",
-    "dub_generic_accept": "[TODO-zh] I allow a dubbed version of this episode with a generic synthetic voice (not my voice), speaking the translation of my words, disclosed to the audience as AI dubbing, in: {{locales}}.",
-    "dub_replica_accept": "[TODO-zh] SENSITIVE DATA — I give specific, explicit consent to the creation of an artificial replica of my voice solely to dub THIS episode in {{locales}}, by the provider {{provider}} ({{country}}), with my voice model deleted within {{days}} days after dubbing. The dubbed version will be disclosed to the audience as AI-made. I can withdraw at any time.",
-    "dub_replica_purpose": "[TODO-zh] dub this episode with an artificial replica of the data subject's voice"
+    "draft_notice": "注意：本同意文本为草稿（v0），正在接受法律审核，可能会有变动。如果最终版本有任何改动，我们会再次征求您的同意。",
+    "general_accept": "我已阅读上述文字，同意将我的回答用于上述目的。",
+    "public_research_accept": "我知悉节目方会查阅我本人已公开的信息，并始终注明来源。",
+    "divulgacao_accept": "我也同意在宣传本期节目时使用我的简短介绍、照片和社交账号。",
+    "image_voice_accept": "我授权在本期节目中录制并发布我的肖像和声音。",
+    "sensitive_intro": "本部分完全选填，是否填写由您决定。此处的所有内容均为敏感个人信息：只有在您填写并勾选每个字段下方的单独同意后才会使用。未勾选同意的信息将被丢弃，不会保存。",
+    "sensitive_accept": "敏感个人信息——我单独、明确地同意，仅为准备和进行本次访谈而使用我在上方填写的信息。",
+    "accessibility_accept": "敏感个人信息（可能涉及健康）——我同意仅为安排录制事务而使用上方填写的无障碍需求。",
+    "sensitive_purpose": "准备和进行本次访谈",
+    "accessibility_purpose": "安排录制相关事务",
+    "localization_intro": "本部分为选填，每项授权相互独立：只勾选您愿意的选项。任何一项都不是参加访谈的条件，也都不会预先勾选。您可以随时免费撤回任何一项授权，联系方式与个人信息部分所列相同。",
+    "translation_accept": "我同意转写我的发言，并以下列语言发布本期节目的翻译字幕和文字（包括节目简介）：{{locales}}。",
+    "dub_generic_accept": "我同意制作本期节目的配音版本：使用通用合成语音（不是我的声音）讲述我发言的译文，并向听众标明为 AI 配音，语言：{{locales}}。",
+    "dub_replica_accept": "敏感个人信息——我单独、明确地同意，仅为将本期节目配音为 {{locales}} 而创建我声音的 AI 复制版本，由服务提供商 {{provider}}（{{country}}）完成，我的声音模型将在配音完成后 {{days}} 天内删除。配音版本将向听众标明为 AI 制作。我可以随时撤回同意。",
+    "dub_replica_purpose": "使用个人信息主体声音的 AI 复制版本为本期节目配音"
   },
   "kit": {
-    "title": "[TODO-zh] Guest kit",
-    "greeting": "[TODO-zh] Hello, {{guest.preferred_name}}!",
-    "thanks": "[TODO-zh] We are glad to have you on {{show.name}}. This kit gathers what you need to know before the recording. Read it calmly, whenever you can.",
-    "about_heading": "[TODO-zh] What {{show.name}} is",
-    "pillars_heading": "[TODO-zh] The topics we cover",
-    "when_heading": "[TODO-zh] When",
-    "when_tbd": "[TODO-zh] The date is still to be agreed with the production team.",
-    "where_heading": "[TODO-zh] Where (in-person recording)",
-    "address_label": "[TODO-zh] Address",
-    "landmarks_label": "[TODO-zh] Landmarks",
-    "gps_label": "[TODO-zh] In your GPS or ride app, type",
-    "parking_label": "[TODO-zh] Parking",
-    "arrive": "[TODO-zh] Please arrive {{arrive.min}} to {{arrive.max}} minutes early, to have some water and test the sound without rushing.",
-    "remote_heading": "[TODO-zh] Remote recording: what you need",
+    "title": "嘉宾资料包",
+    "greeting": "{{guest.preferred_name}}，您好！",
+    "thanks": "很高兴邀请到您参加 {{show.name}}。本资料包汇总了录制前您需要了解的信息，方便时请从容阅读。",
+    "about_heading": "{{show.name}} 是什么样的节目",
+    "pillars_heading": "我们关注的话题",
+    "when_heading": "时间",
+    "when_tbd": "日期仍需与制作团队商定。",
+    "where_heading": "地点（现场录制）",
+    "address_label": "地址",
+    "landmarks_label": "地标参照",
+    "gps_label": "在导航或打车软件中输入",
+    "parking_label": "停车",
+    "arrive": "请提前 {{arrive.min}} 至 {{arrive.max}} 分钟到达，喝点水，从容地试音。",
+    "remote_heading": "远程录制：您需要准备",
     "remote_default": [
-      "[TODO-zh] Headphones (wired, if you have them)",
-      "[TODO-zh] A quiet room with little echo",
-      "[TODO-zh] A stable connection; cable rather than Wi-Fi if possible",
-      "[TODO-zh] Computer charged or plugged in"
+      "耳机（如有，最好是有线耳机）",
+      "安静、回声少的房间",
+      "稳定的网络；如有可能，用网线代替 Wi-Fi",
+      "电脑电量充足或接通电源"
     ],
-    "conduct_heading": "[TODO-zh] So you can feel at ease",
+    "conduct_heading": "让您安心的几点",
     "conduct_default": [
-      "[TODO-zh] There are no wrong answers: it is a conversation, not an exam.",
-      "[TODO-zh] If you stumble or want to redo an answer, just say so. We edit.",
-      "[TODO-zh] You can ask not to discuss a topic at any moment.",
-      "[TODO-zh] Water whenever you like, and breaks too."
+      "没有错误答案：这是一场对话，不是考试。",
+      "如果卡住或想重新回答，直接说就好，我们会剪辑。",
+      "您随时可以要求不谈某个话题。",
+      "水随时可以喝，也可以随时休息。"
     ],
-    "materials_heading": "[TODO-zh] Materials (optional)",
-    "materials_text": "[TODO-zh] Want to send slides, PDFs, photos or links? Reply to this email with attachments. No account needed anywhere.",
-    "privacy_heading": "[TODO-zh] Your data",
-    "privacy_text": "[TODO-zh] We use your answers only to prepare this interview. To access, correct, delete or withdraw consent: {{controller.contact}}.",
-    "signoff": "[TODO-zh] See you soon!",
+    "materials_heading": "资料（选填）",
+    "materials_text": "想发送幻灯片、PDF、照片或链接？直接回复本邮件并添加附件即可，无需在任何地方注册账号。",
+    "privacy_heading": "您的个人信息",
+    "privacy_text": "我们仅将您的回答用于准备本次访谈。如需查阅、更正、删除或撤回同意：{{controller.contact}}。",
+    "signoff": "期待与您见面！",
     "parking": {
-      "disponivel": "[TODO-zh] available on site",
-      "indisponivel": "[TODO-zh] no parking on site",
-      "pago_proximo": "[TODO-zh] paid parking nearby",
-      "pendente": "[TODO-zh] to be confirmed by the production team"
+      "disponivel": "现场有停车位",
+      "indisponivel": "现场没有停车位",
+      "pago_proximo": "附近有收费停车场",
+      "pendente": "待制作团队确认"
     }
   },
   "messages": {
-    "email_subject": "[TODO-zh] Guest kit · {{show.name}}",
+    "email_subject": "嘉宾资料包 · {{show.name}}",
     "owner_subject": "✅ {{guest.preferred_name}} 已填写表单 · {{show.name}}",
-    "calendar_title": "[TODO-zh] {{show.name}} recording with {{guest.preferred_name}}",
-    "calendar_remote_location": "[TODO-zh] Online (link from the production team)",
-    "calendar_description": "[TODO-zh] Guest kit sent by email. Questions: {{controller.contact}}.",
-    "whatsapp_kit": "[TODO-zh] Hello, {{guest.preferred_name}}! This is {{show.name}}. We got your form, thank you! The guest kit with all the details is in your email.{{#address_line}} Address: {{address_line}}.{{/address_line}}{{#gps_hint}} In your GPS, type: {{gps_hint}}.{{/gps_hint}}",
-    "reminder_subject": "[TODO-zh] Tomorrow: recording at {{show.name}}",
-    "reminder_body": "[TODO-zh] Hello, {{guest.preferred_name}}! Reminder: the {{show.name}} recording is tomorrow, {{scheduled_text}}.{{#address_line}} Address: {{address_line}}.{{/address_line}}{{#gps_hint}} In your GPS, type: {{gps_hint}}.{{/gps_hint}}{{#arrive}} Please arrive {{arrive.min}} to {{arrive.max}} minutes early.{{/arrive}} Any questions, just reply."
+    "calendar_title": "{{show.name}} 录制：{{guest.preferred_name}}",
+    "calendar_remote_location": "线上（链接由制作团队提供）",
+    "calendar_description": "嘉宾资料包已通过电子邮件发送。如有疑问：{{controller.contact}}。",
+    "whatsapp_kit": "{{guest.preferred_name}}，您好！这里是 {{show.name}}。我们已收到您的表单，谢谢！包含全部细节的嘉宾资料包已发送到您的电子邮箱。{{#address_line}}地址：{{address_line}}。{{/address_line}}{{#gps_hint}}导航中请输入：{{gps_hint}}。{{/gps_hint}}",
+    "reminder_subject": "明天：{{show.name}} 录制",
+    "reminder_body": "{{guest.preferred_name}}，您好！提醒您：{{show.name}} 的录制在明天，{{scheduled_text}}。{{#address_line}}地址：{{address_line}}。{{/address_line}}{{#gps_hint}}导航中请输入：{{gps_hint}}。{{/gps_hint}}{{#arrive}}请提前 {{arrive.min}} 至 {{arrive.max}} 分钟到达。{{/arrive}}如有任何问题，直接回复即可。"
   },
-  "_note": "ESQUELETO: textos copiados do en e marcados [TODO-zh]. Precisa de tradução e revisão nativa (e jurídica) antes de uso. O build do formulário recusa este locale enquanto needs_native_review=true, salvo ALLOW_UNREVIEWED_LOCALE=true.",
+  "_note": "Tradução automática liberada pelo dono em 2026-10-24, sem revisão de nativo; revisar quando houver revisor.",
   "invitation": {
-    "subject": "[TODO-zh] Official invitation · {{show.name}}",
-    "preheader": "[TODO-zh] {{show.name}} invites you to a conversation. Date, place and form inside.",
-    "title": "[TODO-zh] Official invitation",
-    "greeting": "[TODO-zh] Hello, {{guest.name}}!",
+    "subject": "正式邀请 · {{show.name}}",
+    "preheader": "{{show.name}} 诚邀您参加一场对话。日期、地点和表单详见邮件。",
+    "title": "正式邀请",
+    "greeting": "{{guest.name}}，您好！",
     "intro": {
-      "formal": "[TODO-zh] We are honored to invite you to be a guest on {{show.name}}.",
-      "cordial": "[TODO-zh] It is a pleasure to invite you for a conversation on {{show.name}}.",
-      "descontraido": "[TODO-zh] Let's record? We'd love to have you on {{show.name}}."
+      "formal": "我们荣幸地邀请您作为嘉宾参加 {{show.name}}。",
+      "cordial": "非常高兴邀请您来 {{show.name}} 聊一聊。",
+      "descontraido": "一起录一期吧？我们非常希望您来 {{show.name}}。"
     },
-    "when_label": "[TODO-zh] Date and time",
-    "when_tbd": "[TODO-zh] to be agreed with the production team",
-    "where_label": "[TODO-zh] Place",
-    "gps_label": "[TODO-zh] In your GPS or ride app, type",
-    "arrival_label": "[TODO-zh] How to get there",
-    "arrive": "[TODO-zh] Please arrive {{arrive.min}} to {{arrive.max}} minutes early.",
-    "remote_label": "[TODO-zh] Remote recording, room link",
-    "remote_link_tbd": "[TODO-zh] the room link will arrive by e-mail before the recording",
-    "about_heading": "[TODO-zh] What {{show.name}} is",
+    "when_label": "日期和时间",
+    "when_tbd": "待与制作团队商定",
+    "where_label": "地点",
+    "gps_label": "在导航或打车软件中输入",
+    "arrival_label": "如何到达",
+    "arrive": "请提前 {{arrive.min}} 至 {{arrive.max}} 分钟到达。",
+    "remote_label": "远程录制，会议室链接",
+    "remote_link_tbd": "会议室链接将在录制前通过电子邮件发送",
+    "about_heading": "{{show.name}} 是什么样的节目",
     "cta_intro": {
-      "essencial": "[TODO-zh] So we can prepare a conversation worthy of you, please fill in the guest form. It takes about 2 minutes.",
-      "completo": "[TODO-zh] So we can prepare a conversation worthy of you, please fill in the guest form. It takes about 8 minutes, and almost everything is optional."
+      "essencial": "为了准备一场配得上您的对话，请填写嘉宾表单，大约需要 2 分钟。",
+      "completo": "为了准备一场配得上您的对话，请填写嘉宾表单，大约需要 8 分钟，而且几乎所有问题都是选填的。"
     },
-    "cta_button": "[TODO-zh] Fill in the form",
-    "cta_fallback": "[TODO-zh] If the button does not open, copy and paste this address into your browser:",
-    "signoff": "[TODO-zh] Kind regards,",
-    "footer_controller": "[TODO-zh] Sent by: {{controller.name}}, data controller. Contact: {{controller.contact}}.",
-    "footer_purpose": "[TODO-zh] You received this invitation because {{signature.name}} suggested you as a guest. We use your name and e-mail only for this invitation and to organize the interview; the guest kit arrives after you answer the form.",
-    "footer_optout": "[TODO-zh] Don't want to hear from {{show.name}} again? Reply to this e-mail with the word STOP and we will not send anything else.",
-    "footer_brand": "[TODO-zh] Prepared with PodFácil",
-    "ics_description": "[TODO-zh] Official invitation from {{show.name}}. Guest form: {{form_url}}"
+    "cta_button": "填写表单",
+    "cta_fallback": "如果按钮无法打开，请将此地址复制并粘贴到浏览器中：",
+    "signoff": "谨致问候，",
+    "footer_controller": "发件方：{{controller.name}}，个人信息处理者。联系方式：{{controller.contact}}。",
+    "footer_purpose": "您收到此邀请，是因为 {{signature.name}} 推荐您担任嘉宾。我们仅将您的姓名和电子邮件用于本次邀请和安排访谈；您填写表单后，我们才会发送嘉宾资料包。",
+    "footer_optout": "不想再收到 {{show.name}} 的消息？请回复本邮件并写上“退订”，我们将不再向您发送任何内容。",
+    "footer_brand": "由 PodFácil 协助准备",
+    "ics_description": "{{show.name}} 的正式邀请。嘉宾表单：{{form_url}}"
   },
   "decision": {
     "ack": {
-      "v1": "[TODO-zh] I have read the alerts above. I understand the plugin only recommends: the decision to go against the recommendation is mine, and the editorial and legal responsibility for what is recorded and published is mine (or of whom I represent), not the plugin's nor its authors'."
+      "v1": "我已阅读上述提示。我理解本插件仅提供建议：违背建议继续操作是我的决定，录制和发布内容的编辑与法律责任由我（或我所代表的一方）承担，而非本插件或其作者。"
     },
     "alerts": {
-      "R-CLAIM-CONDUTA-FONTES": "[TODO-zh] This statement about someone's conduct lacks the recommended backing (verified status with 1 primary source or 2 independent press sources). Using it on air may create defamation liability.",
-      "R-CLAIM-CONDUTA-INDEPENDENCIA": "[TODO-zh] The press sources for this conduct statement may not be independent (same domain, author or agency). Check author, outlet and agency before deciding.",
-      "R-ROTEIRO-GATE-PENDENTE": "[TODO-zh] The @guardian review (fact-check) has not been done yet for a mode that recommends it before recording.",
-      "R-ROTEIRO-GATE-AJUSTES": "[TODO-zh] The @guardian recommended adjustments that are not recorded as applied.",
-      "R-ROTEIRO-GATE-VETADO": "[TODO-zh] The @guardian recommended NOT recording this script as is. Recording against that recommendation is your decision and your responsibility.",
-      "R-ROTEIRO-CONTRADITORIO": "[TODO-zh] This mode recommends hearing the named party before recording, and no right-of-reply request is recorded.",
-      "R-ROTEIRO-REVISAO-JURIDICA": "[TODO-zh] This mode carries high legal risk and the recommended human legal review is still pending.",
-      "R-ROTEIRO-SEM-LASTRO": "[TODO-zh] Some factual statements have no dossier claim nor source. Saying unbacked things on air is your editorial risk.",
-      "R-ROTEIRO-INFERENCIA-COMO-FATO": "[TODO-zh] An inference (hypothesis) appears as a factual statement. The recommendation is to turn it into a question or hypothesis.",
-      "R-ROTEIRO-RIGOR": "[TODO-zh] The mode asks for sources for numbers, dates and quotes, and this statement rests only on self-declared information.",
-      "R-ROTEIRO-DEGRADADO": "[TODO-zh] The dossier is incomplete and this block uses its statements without a caveat to confirm with the guest.",
-      "R-ROTEIRO-TIMING": "[TODO-zh] The sum of block durations is more than 15% away from the target duration.",
-      "R-FACTCHECK-SEM-FONTE": "[TODO-zh] The fact-check found no source for this statement.",
-      "R-FACTCHECK-DISCLOSURE": "[TODO-zh] The recommended advertising or sponsorship disclosure is missing.",
-      "R-FACTCHECK-LGPD": "[TODO-zh] Third-party personal data is cited without a clear legal basis. (Sensitive data not self-declared is not an alert: it is forbidden.)",
-      "R-PUBLICACAO-GATE": "[TODO-zh] The episode quality gate did not recommend publication (REQUEST CHANGES or HOLD).",
-      "R-MEMORIA-ROTEIRO-PENDENTE": "[TODO-zh] No script linked to this episode is ready to record (pronto_para_gravar). Recording anyway is your decision and responsibility.",
-      "R-LOCALIZACAO-REVISAO-HUMANA": "[TODO-zh] Machine translation: review source and translation side by side (names, numbers, glossary terms) before publishing.",
-      "R-LOCALIZACAO-SEM-ACEITE-TRADUCAO": "[TODO-zh] There is no recorded guest consent for translated subtitles and texts in this language. Publishing anyway is your decision and responsibility.",
-      "R-LOCALIZACAO-SEM-ACEITE-VOZ-GENERICA": "[TODO-zh] There is no recorded guest consent for dubbing with a generic synthetic voice in this language. Publishing anyway is your decision and responsibility.",
-      "R-LOCALIZACAO-AGENTE-POLITICO": "[TODO-zh] The guest is flagged as a candidate or political figure. Synthetic content with candidates' voices is subject to electoral rules in Brazil (TSE Resolution 23.732/2024; secondary source, check the current text): verify the electoral calendar and labelling before publishing the dub.",
-      "R-LOCALIZACAO-GLOSSARIO": "[TODO-zh] Show glossary terms do not appear as expected in the translation (proper name, acronym or do-not-translate term).",
-      "R-LOCALIZACAO-NUMEROS": "[TODO-zh] Some numbers from the source (dates, rates, statute articles) do not appear in the translation.",
-      "R-LOCALIZACAO-CPS": "[TODO-zh] Some subtitles exceed the reading-speed limit (characters per second)."
+      "R-CLAIM-CONDUTA-FONTES": "这条关于某人行为的陈述缺乏建议的依据（已核实状态，需有 1 个一手来源或 2 个相互独立的媒体来源）。在节目中使用可能引发诽谤责任。",
+      "R-CLAIM-CONDUTA-INDEPENDENCIA": "这条关于行为的陈述所依据的媒体来源可能并不独立（同一域名、作者或通讯社）。决定前请核对作者、媒体和通讯社。",
+      "R-ROTEIRO-GATE-PENDENTE": "当前模式建议录制前先由 @guardian 审核（事实核查），但审核尚未完成。",
+      "R-ROTEIRO-GATE-AJUSTES": "@guardian 建议的修改尚未记录为已采纳。",
+      "R-ROTEIRO-GATE-VETADO": "@guardian 建议不要按现状录制此脚本。违背此建议录制，由你决定并承担责任。",
+      "R-ROTEIRO-CONTRADITORIO": "当前模式建议录制前先听取被提及一方的意见，但没有记录任何回应请求。",
+      "R-ROTEIRO-REVISAO-JURIDICA": "当前模式法律风险较高，建议的人工法律审核仍未完成。",
+      "R-ROTEIRO-SEM-LASTRO": "有些事实陈述既没有档案中的 claim，也没有来源。在节目中说出没有依据的内容，编辑风险由你承担。",
+      "R-ROTEIRO-INFERENCIA-COMO-FATO": "一项推断（假设）被表述成了事实陈述。建议改为提问或假设。",
+      "R-ROTEIRO-RIGOR": "当前模式要求数字、日期和引语注明来源，而这条陈述仅依据自我申报的信息。",
+      "R-ROTEIRO-DEGRADADO": "档案不完整，本段使用了其中的陈述，但没有注明需与嘉宾确认。",
+      "R-ROTEIRO-TIMING": "各段时长之和与目标时长相差超过 15%。",
+      "R-FACTCHECK-SEM-FONTE": "事实核查未找到这条陈述的来源。",
+      "R-FACTCHECK-DISCLOSURE": "缺少建议的广告或赞助标识。",
+      "R-FACTCHECK-LGPD": "引用了第三方的个人信息，但缺乏明确的处理依据。（非本人申报的敏感个人信息不属于提示范围：而是禁止使用。）",
+      "R-PUBLICACAO-GATE": "本期节目的质量关卡不建议发布（REQUEST CHANGES 或 HOLD）。",
+      "R-MEMORIA-ROTEIRO-PENDENTE": "与本期节目关联的脚本均未处于可录制状态（pronto_para_gravar）。仍要录制，由你决定并承担责任。",
+      "R-LOCALIZACAO-REVISAO-HUMANA": "机器翻译：发布前请将原文和译文并排审校（人名、数字、术语表词汇）。",
+      "R-LOCALIZACAO-SEM-ACEITE-TRADUCAO": "没有记录嘉宾对此语言翻译字幕和文字的同意。仍要发布，由你决定并承担责任。",
+      "R-LOCALIZACAO-SEM-ACEITE-VOZ-GENERICA": "没有记录嘉宾对此语言通用合成语音配音的同意。仍要发布，由你决定并承担责任。",
+      "R-LOCALIZACAO-AGENTE-POLITICO": "该嘉宾被标记为候选人或政治人物。在巴西，使用候选人声音的合成内容须遵守选举规则（TSE 第 23.732/2024 号决议；二手来源，请核对现行文本）：发布配音前，请核实选举日程和标识要求。",
+      "R-LOCALIZACAO-GLOSSARIO": "节目术语表中的词汇未按预期出现在译文中（专有名词、缩写或不翻译的术语）。",
+      "R-LOCALIZACAO-NUMEROS": "原文中的部分数字（日期、税率、法律条款）未出现在译文中。",
+      "R-LOCALIZACAO-CPS": "部分字幕超出了阅读速度上限（每秒字符数）。"
     }
   },
   "localization": {
@@ -2378,7 +2375,7 @@
       "zh": "中文"
     },
     "disclosure": {
-      "subtitles": "[TODO-zh] Machine translation reviewed by {{show}}.",
+      "subtitles": "机器翻译，已由 {{show}} 审校。",
       "dub_generic": "本集为基于{{source_language}}原版节目的AI配音版本，声音为合成语音。",
       "dub_replica": "本集为基于{{source_language}}原版节目的AI配音版本，经授权使用AI复制的说话者声音。"
     }

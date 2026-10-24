@@ -78,12 +78,26 @@ function escapeHtml(s) {
 /** Markdown do kit → HTML simples (títulos, negrito, itálico, listas, parágrafos). */
 function mdToHtml(md) {
   return escapeHtml(md).split(/\n{2,}/).map(function (block) {
-    var b = block.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/(^|\s)_(.+?)_(?=\s|$)/g, '$1<i>$2</i>');
+    var b = block.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/(^|\s)_(.+?)_(?=[\s.,;:!?)]|$)/g, '$1<i>$2</i>');
     var h = /^(#{1,3}) (.*)$/.exec(b);
     if (h) return '<h' + (h[1].length + 1) + '>' + h[2] + '</h' + (h[1].length + 1) + '>';
     if (/^- /.test(b)) return '<ul>' + b.split('\n').map(function (l) { return '<li>' + l.replace(/^- /, '') + '</li>'; }).join('') + '</ul>';
     return '<p>' + b.replace(/\n/g, '<br>') + '</p>';
   }).join('\n');
+}
+
+/**
+ * Mesma marcação, para a versão em texto simples do e-mail (2.2.3: aparecia "**", "#" e "- ").
+ * Negrito/itálico sem os sinais; título em maiúsculas; item de lista com "•"; [texto](url) vira "texto: url".
+ */
+function mdToText(md) {
+  return String(md).split(/\n{2,}/).map(function (block) {
+    var b = block.replace(/\*\*(.+?)\*\*/g, '$1').replace(/(^|\s)_(.+?)_(?=[\s.,;:!?)]|$)/g, '$1$2')
+      .replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '$1: $2');
+    var h = /^(#{1,3}) (.*)$/.exec(b);
+    if (h) return h[2].toUpperCase();
+    return b.split('\n').map(function (l) { return l.replace(/^- /, '• '); }).join('\n');
+  }).join('\n\n');
 }
 
 // ---------- plano de envio ----------
@@ -198,7 +212,7 @@ function runActions(actions, executors, store) {
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = { renderKit: renderKit, renderMessage: renderMessage, mdToHtml: mdToHtml, escapeHtml: escapeHtml,
+  module.exports = { renderKit: renderKit, renderMessage: renderMessage, mdToHtml: mdToHtml, mdToText: mdToText, escapeHtml: escapeHtml,
     addressLine: addressLine, formatScheduled: formatScheduled, planSubmitActions: planSubmitActions,
     planReminderActions: planReminderActions, isDMinus1: isDMinus1, guestAllowed: guestAllowed,
     buildWhatsappRequest: buildWhatsappRequest, runActions: runActions };

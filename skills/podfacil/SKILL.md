@@ -4,7 +4,7 @@ description: "Prepara episódios de podcast com convidado, do convite ao roteiro
 license: Apache-2.0
 compatibility: "Python 3.10+ com PyYAML (roteiro e check da pauta) e jsonschema (validação); recomendado uv (uv run --with pyyaml --with jsonschema python scripts/...). Busca web do harness para o dossiê e a pauta. Plano pago: chave de licença (scripts/licenca.py) e o conector MCP do PodFácil."
 metadata:
-  version: "2.2.2"
+  version: "2.2.3"
   source: "https://github.com/RAG7782/podcast-guest-intel"
 ---
 
@@ -29,8 +29,8 @@ Você conduz a preparação de um episódio com convidado. Responda no idioma do
 
 ## Em toda conversa: versão nova?
 
-Esta é a versão 2.2.2 do PodFácil. Se o conector MCP do PodFácil estiver disponível, chame uma vez por
-conversa `licenca_status` com `{"plugin_version": "2.2.2"}`, mesmo que o usuário já use o PodFácil há tempo.
+Esta é a versão 2.2.3 do PodFácil. Se o conector MCP do PodFácil estiver disponível, chame uma vez por
+conversa `licenca_status` com `{"plugin_version": "2.2.3"}`, mesmo que o usuário já use o PodFácil há tempo.
 Se a resposta trouxer `atualizacao`, mostre ao usuário o texto de `atualizacao.mensagem`, uma vez, e siga com o
 pedido dele: a versão atual continua funcionando. Sem conector, sem `atualizacao` ou se a chamada der erro, não
 diga nada sobre versão nem repita a chamada.

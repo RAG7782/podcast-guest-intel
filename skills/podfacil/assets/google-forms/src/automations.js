@@ -147,7 +147,7 @@ function executors_(show, intake, i18n) {
     email: function (a) {
       if (a.kind === 'kit') {
         var md = renderKit(BUNDLE.kitTemplate, show, intake, i18n);
-        MailApp.sendEmail(to, renderMessage('email_subject', show, intake, i18n), md, { htmlBody: mdToHtml(md), name: show.name });
+        MailApp.sendEmail(to, renderMessage('email_subject', show, intake, i18n), mdToText(md), { htmlBody: mdToHtml(md), name: show.name });
       } else {
         MailApp.sendEmail(to, renderMessage('reminder_subject', show, intake, i18n),
           renderMessage('reminder_body', show, intake, i18n), { name: show.name });
@@ -208,6 +208,22 @@ function onFormSubmit(e) {
  * Uma resposta que não deu para processar não pode sumir calada (teste de ponta a ponta da 2.2: um "não tenho" no
  * campo de links travava tudo e ninguém sabia). E-mail ao dono, uma vez por resposta, sem dado do convidado.
  */
+/**
+ * Marcas "sent:erro:<resposta>" (um aviso ao dono por resposta com erro) com mais de 30 dias saem no lembrete
+ * diário (2.2.3): só servem para não repetir o aviso, e as propriedades do script têm cota (500 KB).
+ * Valor fora do formato de data é mantido (não é nosso). -> quantas saíram.
+ */
+var AVISO_ERRO_DIAS = 30;
+function limparAvisosDeErro_(now) {
+  var p = PropertiesService.getScriptProperties(), limite = now.getTime() - AVISO_ERRO_DIAS * 86400000, n = 0;
+  p.getKeys().forEach(function (k) {
+    if (k.indexOf('sent:erro:') !== 0) return;
+    var t = Date.parse(p.getProperty(k));
+    if (!isNaN(t) && t < limite) { p.deleteProperty(k); n++; }
+  });
+  return n;
+}
+
 function avisarRespostaComErro_(e, err) {
   try {
     var chave = 'sent:erro:' + e.response.getId();
@@ -292,6 +308,7 @@ function lembreteDiario() {
   sendHeldDigest_();
   expireHeldRows_(now);
   expireInvites_(now);
+  try { limparAvisosDeErro_(now); } catch (err) { console.error('limpeza de avisos de erro: ' + err.message); }
   // por último: a fila de convites usa o tempo e a cota que SOBRAM (D-1, retidos e prazos LGPD vêm antes); nunca lança
   if (typeof filaDeConvitesDiaria_ === 'function') filaDeConvitesDiaria_(now);
   return all;

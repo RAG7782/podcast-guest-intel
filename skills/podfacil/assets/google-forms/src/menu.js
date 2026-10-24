@@ -90,19 +90,33 @@ function relatorioInstalacao(checks, i18n) {
 }
 
 /** HTML da janela "Ativar licença". O campo é de senha; a chave é apagada do campo antes de seguir ao servidor. */
+/** Campo e botões no mesmo visual do diálogo (dialogo.js): campo com contorno, botão principal cheio embaixo,
+ *  o outro só com contorno (2.2.3: a janela da licença e a do logo estavam com os botões do navegador). */
+function cssCampos_() {
+  return 'label{display:block;font-weight:600;margin:4px 0 6px}' +
+    'input#k{width:100%;box-sizing:border-box;padding:10px 12px;font:15px Menlo,monospace;border:1px solid var(--borda);' +
+    'border-radius:10px;background:#fff}input#k:focus{outline:3px solid #F2B33D;border-color:var(--veludo)}' +
+    'input#f{margin:6px 0 4px;font:14px Arial,sans-serif;color:var(--nevoa)}#msg{margin-top:14px}' +
+    'input#f::file-selector-button{font:600 13px Arial,sans-serif;padding:7px 14px;margin-right:10px;border-radius:999px;' +
+    'border:1px solid var(--veludo);background:#fff;color:var(--veludo);cursor:pointer}' +
+    '.fim button.sec{background:transparent;color:var(--veludo);border:1px solid var(--veludo);margin-right:8px}' +
+    '.fim button:disabled{opacity:.55;cursor:default}';
+}
+
 function licencaHtml(t, w) {
   var css = typeof cssJanela === 'function' ? cssJanela() : '', copiar = w && typeof scriptCopiar === 'function' ? scriptCopiar(w) : '';
   var e = escapeHtml, js = function (s) { return JSON.stringify(String(s)).replace(/</g, '\\u003c'); };
-  return '<!DOCTYPE html><html><head><base target="_top"><style>' +
-    'body{font-family:Arial,sans-serif;font-size:14px;line-height:1.4;margin:16px;color:#202124}' +
-    'input{width:100%;box-sizing:border-box;padding:8px;font-size:14px;margin:6px 0 12px}' +
-    'button{padding:8px 18px;font-size:14px;cursor:pointer}#msg{margin-top:12px}' + css +
-    'body{padding-bottom:18px}</style></head><body>' +
+  var fechar = (w && w.ok) || 'Fechar', cancelar = (w && w.cancel) || 'Cancelar';
+  return '<!DOCTYPE html><html><head><base target="_top"><meta charset="utf-8"><style>' + css + cssCampos_() +
+    '</style></head><body>' +
     '<p>' + e(t.lead) + '</p><label for="k">' + e(t.label) + '</label>' +
     '<input id="k" type="password" autocomplete="off" spellcheck="false" autofocus>' +
-    '<button id="b" type="button">' + e(t.button) + '</button><div id="msg" role="status" aria-live="polite"></div>' +
-    '<script>var W=' + js(t.working) + ',b=document.getElementById("b"),k=document.getElementById("k"),' +
-    'm=document.getElementById("msg");' +
+    '<div id="msg" role="status" aria-live="polite"></div>' +
+    '<div class="fim"><button id="x" type="button" class="sec">' + e(cancelar) + '</button>' +
+    '<button id="b" type="button">' + e(t.button) + '</button></div>' +
+    '<script>var W=' + js(t.working) + ',FE=' + js(fechar) + ',b=document.getElementById("b"),k=document.getElementById("k"),' +
+    'm=document.getElementById("msg"),x=document.getElementById("x"),pronta=false;' +
+    'x.addEventListener("click",function(){google.script.host.close();});' +
     // resposta montada com textContent/createElement (nunca HTML vindo de fora); link vira caixa com Copiar e Abrir
     'var CP=' + js(w ? w.copy : 'Copiar') + ',AB=' + js(w ? w.open : 'Abrir') + ';' +
     'function pinta(t){m.textContent="";String(t||"").split(/\\n\\s*\\n/).forEach(function(bl,i){var p=document.createElement("p");' +
@@ -112,9 +126,12 @@ function licencaHtml(t, w) {
     's.className="link";c.textContent=x;bt.type="button";bt.className="copiar";bt.setAttribute("data-url",x);bt.textContent=CP;' +
     'a.href=x;a.target="_blank";a.rel="noopener";a.textContent=AB;s.appendChild(c);s.appendChild(bt);s.appendChild(a);p.appendChild(s);});' +
     'm.appendChild(p);});}' +
+    // ativada: o principal vira "Fechar" (o campo some); com link na resposta, a janela fica para copiar
     'function done(r){pinta(r.texto);b.disabled=false;' +
+    'if(r.ok){pronta=true;b.textContent=FE;x.style.display="none";k.style.display="none";' +
+    'var lb=document.querySelector("label");if(lb)lb.style.display="none";}' +
     'if(r.ok&&!r.fica){setTimeout(function(){google.script.host.close();},2500);}}' +
-    'function go(){var v=k.value;k.value="";if(!v)return;b.disabled=true;m.textContent=W;' +
+    'function go(){if(pronta){google.script.host.close();return;}var v=k.value;k.value="";if(!v)return;b.disabled=true;m.textContent=W;' +
     'google.script.run.withSuccessHandler(done).withFailureHandler(function(){done({ok:false,texto:' + js(t.failed) + '});})' +
     '.licencaSalvar(v);}' +
     'b.addEventListener("click",go);k.addEventListener("keydown",function(ev){if(ev.key==="Enter")go();});' +
@@ -123,15 +140,17 @@ function licencaHtml(t, w) {
 }
 
 /** HTML da janela "Enviar logo": confere tipo e tamanho antes de mandar; o servidor confere de novo. */
-function logoHtml(t) {
+function logoHtml(t, w) {
   var e = escapeHtml, js = function (s) { return JSON.stringify(String(s)).replace(/</g, '\\u003c'); };
-  return '<!DOCTYPE html><html><head><base target="_top"><style>' +
-    'body{font-family:Arial,sans-serif;font-size:14px;line-height:1.4;margin:16px;color:#202124}' +
-    'input{margin:8px 0 12px}button{padding:8px 18px;font-size:14px;cursor:pointer}#msg{margin-top:12px}</style>' +
-    '</head><body><p>' + e(t.lead) + '</p><input id="f" type="file" accept="image/png,image/jpeg"><br>' +
-    '<button id="b" type="button">' + e(t.button) + '</button><div id="msg" role="status" aria-live="polite"></div>' +
+  var css = typeof cssJanela === 'function' ? cssJanela() : '', cancelar = (w && w.cancel) || 'Cancelar';
+  return '<!DOCTYPE html><html><head><base target="_top"><meta charset="utf-8"><style>' + css + cssCampos_() + '</style>' +
+    '</head><body><p>' + e(t.lead) + '</p><input id="f" type="file" accept="image/png,image/jpeg">' +
+    '<div id="msg" role="status" aria-live="polite"></div>' +
+    '<div class="fim"><button id="x" type="button" class="sec">' + e(cancelar) + '</button>' +
+    '<button id="b" type="button">' + e(t.button) + '</button></div>' +
     '<script>var T={working:' + js(t.working) + ',big:' + js(t.too_big) + ',type:' + js(t.bad_type) + ',fail:' + js(t.failed) +
     '},b=document.getElementById("b"),f=document.getElementById("f"),m=document.getElementById("msg");' +
+    'document.getElementById("x").addEventListener("click",function(){google.script.host.close();});' +
     'function done(r){m.textContent=r.texto;b.disabled=false;if(r.ok){setTimeout(function(){google.script.host.close();},2500);}}' +
     'b.addEventListener("click",function(){var x=f.files&&f.files[0];if(!x)return;' +
     'if(x.type!=="image/png"&&x.type!=="image/jpeg"){m.textContent=T.type;return;}' +
@@ -260,7 +279,7 @@ function formularioParaTrocar_() {
 
 function menuAtivarLicenca() {
   var t = menuI18n_().menu.license;
-  SpreadsheetApp.getUi().showModalDialog(HtmlService.createHtmlOutput(licencaHtml(t, menuI18n_().menu.window)).setWidth(480).setHeight(420), t.title);
+  SpreadsheetApp.getUi().showModalDialog(HtmlService.createHtmlOutput(licencaHtml(t, menuI18n_().menu.window)).setWidth(500).setHeight(460), t.title);
 }
 
 /**
@@ -367,7 +386,7 @@ function anotarLinkDoFormulario_() {
 
 function menuEnviarLogo() {
   var t = menuI18n_().menu.config.logo;
-  SpreadsheetApp.getUi().showModalDialog(HtmlService.createHtmlOutput(logoHtml(t)).setWidth(440).setHeight(260), t.title);
+  SpreadsheetApp.getUi().showModalDialog(HtmlService.createHtmlOutput(logoHtml(t, menuI18n_().menu.window)).setWidth(480).setHeight(320), t.title);
 }
 
 /**

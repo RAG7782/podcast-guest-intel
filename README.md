@@ -1,4 +1,4 @@
-# PodFácil 2.2.2
+# PodFácil 2.2.3
 
 Prepara episódios de podcast com convidado: convite, formulário, dossiê com fontes, pauta,
 roteiro, memória e localização. Núcleo aberto (Apache-2.0). Repositório: https://github.com/RAG7782/podcast-guest-intel.

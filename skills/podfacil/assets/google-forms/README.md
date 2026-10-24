@@ -329,8 +329,9 @@ gatilho diário**, que varre a aba `intake`, e não um gatilho por convidado (o 
   Script Properties desliga): o gatilho diário roda `aplicarRetencao`, que conta `retention_days_after_publish` a partir da **gravação** (a planilha não
   sabe a data de publicação), então apaga mais cedo que o prazo declarado, nunca mais tarde. Para o prazo
   exato, grave `published_at` na aba `intake` e conte dele.
-- Locales `es` e `zh` são **esqueletos** (`needs_native_review: true`). O script recusa usá-los, a menos
-  que `ALLOW_UNREVIEWED_LOCALE=true`.
+- Locales `es` e `zh` foram **liberados em 2026-10-24** com tradução automática, sem revisão de falante nativo
+  (decisão do dono). O bloqueio `needs_native_review: true` continua valendo para um locale novo. A cláusula
+  `CN-PIPL` não existe: show sob o PIPL é recusado até um advogado redigir a cláusula.
 - As cláusulas (`legal_review: pendente`) são um **rascunho técnico, não um parecer**. Precisam de
   revisão de advogado antes do uso comercial. Enquanto a cláusula não tiver `legal_review: aprovado`
   (ou `approved`), o formulário mostra ao convidado, na descrição e no topo da cláusula, o aviso
